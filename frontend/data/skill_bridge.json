@@ -1,0 +1,387 @@
+{
+  "users": [
+    {
+      "id": "admin-system-account-id",
+      "email": "admin@gmail.com",
+      "role": "student",
+      "passwordHash": "7676aaafb027c825bd9abab78b234070e702752f625b752e55e55b48e607e358",
+      "fullName": "System Administrator",
+      "isVerified": true,
+      "isAdmin": true,
+      "createdAt": "2026-09-05T17:58:53.549Z"
+    },
+    {
+      "id": "2e1e1e0b-de7f-4a1d-aa15-138bb5182dfc",
+      "email": "test_student_1788629331716@university.edu",
+      "role": "student",
+      "passwordHash": "b926e929192ee30e047ab90fc9d1e0d811a4ccc5f0411da2047abfccc8cd8f60",
+      "fullName": "Alex Rivera",
+      "isVerified": true,
+      "createdAt": "2026-09-05T17:28:55.389Z"
+    },
+    {
+      "id": "11b3532a-57d5-4dad-9dff-637ad64ea73a",
+      "email": "flood_1788629336542_0@test.com",
+      "role": "student",
+      "passwordHash": "a109e36947ad56de1dca1cc49f0ef8ac9ad9a7b1aa0df41fb3c4cb73c1ff01ea",
+      "fullName": "Burst User 0",
+      "isVerified": false,
+      "createdAt": "2026-09-05T17:28:56.621Z"
+    },
+    {
+      "id": "9ad2244e-6b8a-428b-a163-ad10e5e5cb36",
+      "email": "flood_1788629336643_1@test.com",
+      "role": "student",
+      "passwordHash": "a109e36947ad56de1dca1cc49f0ef8ac9ad9a7b1aa0df41fb3c4cb73c1ff01ea",
+      "fullName": "Burst User 1",
+      "isVerified": false,
+      "createdAt": "2026-09-05T17:28:56.737Z"
+    },
+    {
+      "id": "f76b079d-7ccb-421d-a03a-8ea4ec79d6ce",
+      "email": "flood_1788629336764_2@test.com",
+      "role": "student",
+      "passwordHash": "a109e36947ad56de1dca1cc49f0ef8ac9ad9a7b1aa0df41fb3c4cb73c1ff01ea",
+      "fullName": "Burst User 2",
+      "isVerified": false,
+      "createdAt": "2026-09-05T17:28:56.848Z"
+    },
+    {
+      "id": "02113d58-64de-4f3a-b00d-33564eaa32c4",
+      "email": "flood_1788629336870_3@test.com",
+      "role": "student",
+      "passwordHash": "a109e36947ad56de1dca1cc49f0ef8ac9ad9a7b1aa0df41fb3c4cb73c1ff01ea",
+      "fullName": "Burst User 3",
+      "isVerified": false,
+      "createdAt": "2026-09-05T17:28:56.960Z"
+    },
+    {
+      "id": "0402ec2d-30e3-4e4f-beb5-c71bb64679b9",
+      "email": "flood_1788629336985_4@test.com",
+      "role": "student",
+      "passwordHash": "a109e36947ad56de1dca1cc49f0ef8ac9ad9a7b1aa0df41fb3c4cb73c1ff01ea",
+      "fullName": "Burst User 4",
+      "isVerified": false,
+      "createdAt": "2026-09-05T17:28:57.125Z"
+    },
+    {
+      "id": "47fc1671-0e5d-4f66-af79-ca34f5e10ec5",
+      "email": "ayanparmar54@gmail.com",
+      "role": "student",
+      "passwordHash": "bc0d1176cbd5e71af0059c983012d1e1e0ec6f1498e7989d5bfbddb019496d3b",
+      "fullName": "Ayan Parmar",
+      "isVerified": true,
+      "createdAt": "2026-09-05T17:30:25.145Z"
+    },
+    {
+      "id": "cb380b28-3221-4e32-a232-47452d0e6eaf",
+      "email": "multi_role_1788629974479@university.edu",
+      "role": "student",
+      "passwordHash": "9c20dbb208b419399a5558798693795445b93e21a5d494bb2de7b43919fadb22",
+      "fullName": "Jordan Lee",
+      "isVerified": true,
+      "createdAt": "2026-09-05T17:39:36.283Z"
+    },
+    {
+      "id": "9f777fbc-fc93-49cc-8e9c-cb9aa8953e4f",
+      "email": "multi_role_1788629974479@university.edu",
+      "role": "faculty",
+      "passwordHash": "b09c1785c0d1bff3e38152f4ab4c029891548b6cfcd5fec6eae0fc5442609697",
+      "fullName": "Professor Jordan Lee",
+      "isVerified": true,
+      "createdAt": "2026-09-05T17:39:37.091Z"
+    },
+    {
+      "id": "e93a2f49-3cc2-4f48-be9f-63f53dedae96",
+      "email": "ayanparmar54@gmail.com",
+      "role": "industry",
+      "passwordHash": "e6c770e886175ed0de041e1af778a4953cc635a9f48b7eac16dac76a558787f1",
+      "fullName": "Ayan Parmar",
+      "isVerified": true,
+      "createdAt": "2026-09-05T17:40:58.796Z"
+    },
+    {
+      "id": "7facd4ab-e160-47f0-909b-68388b9f4109",
+      "email": "auth_test_1788630279102@university.edu",
+      "role": "student",
+      "passwordHash": "51f8518985ee0afa9e37c88a40df6ff41fb7c0691b740ea43a5dea89e6a13b84",
+      "fullName": "Morgan Taylor",
+      "isVerified": true,
+      "createdAt": "2026-09-05T17:44:40.293Z"
+    }
+  ],
+  "profiles": [
+    {
+      "userId": "admin-system-account-id",
+      "role": "student",
+      "metadata": {
+        "institution": "Skill-Bridge Central Administration",
+        "degree": "Executive Administration",
+        "graduationYear": "Permanent"
+      }
+    },
+    {
+      "userId": "2e1e1e0b-de7f-4a1d-aa15-138bb5182dfc",
+      "role": "student",
+      "metadata": {
+        "institution": "National Institute of Technology",
+        "degree": "B.Tech Computer Science",
+        "graduationYear": "2026"
+      }
+    },
+    {
+      "userId": "11b3532a-57d5-4dad-9dff-637ad64ea73a",
+      "role": "student",
+      "metadata": {
+        "institution": "Test Inst"
+      }
+    },
+    {
+      "userId": "9ad2244e-6b8a-428b-a163-ad10e5e5cb36",
+      "role": "student",
+      "metadata": {
+        "institution": "Test Inst"
+      }
+    },
+    {
+      "userId": "f76b079d-7ccb-421d-a03a-8ea4ec79d6ce",
+      "role": "student",
+      "metadata": {
+        "institution": "Test Inst"
+      }
+    },
+    {
+      "userId": "02113d58-64de-4f3a-b00d-33564eaa32c4",
+      "role": "student",
+      "metadata": {
+        "institution": "Test Inst"
+      }
+    },
+    {
+      "userId": "0402ec2d-30e3-4e4f-beb5-c71bb64679b9",
+      "role": "student",
+      "metadata": {
+        "institution": "Test Inst"
+      }
+    },
+    {
+      "userId": "47fc1671-0e5d-4f66-af79-ca34f5e10ec5",
+      "role": "student",
+      "metadata": {
+        "institution": "Christ College, Rajkot",
+        "degree": "BCA",
+        "graduationYear": "2028"
+      }
+    },
+    {
+      "userId": "cb380b28-3221-4e32-a232-47452d0e6eaf",
+      "role": "student",
+      "metadata": {
+        "institution": "MIT",
+        "degree": "B.S. CS",
+        "graduationYear": "2026"
+      }
+    },
+    {
+      "userId": "9f777fbc-fc93-49cc-8e9c-cb9aa8953e4f",
+      "role": "faculty",
+      "metadata": {
+        "institution": "MIT",
+        "department": "Computer Science",
+        "designation": "Prof"
+      }
+    },
+    {
+      "userId": "e93a2f49-3cc2-4f48-be9f-63f53dedae96",
+      "role": "industry",
+      "metadata": {
+        "companyName": "tcs",
+        "industryDomain": "IT AND CONCULTANCY",
+        "workTitle": "CEO"
+      }
+    },
+    {
+      "userId": "7facd4ab-e160-47f0-909b-68388b9f4109",
+      "role": "student",
+      "metadata": {
+        "institution": "Stanford",
+        "degree": "CS",
+        "graduationYear": "2025"
+      }
+    }
+  ],
+  "otps": [
+    {
+      "id": "e704b3b8-e603-44b1-92e2-45321b2dcfda",
+      "email": "test_student_1788629331716@university.edu",
+      "otpCode": "555519",
+      "expiresAt": "2026-09-05T17:38:55.410Z",
+      "attempts": 1,
+      "verified": true,
+      "createdAt": "2026-09-05T17:28:55.410Z"
+    },
+    {
+      "id": "0f6748e3-d55a-4787-8d3c-bf65431d3cbe",
+      "email": "flood_1788629336542_0@test.com",
+      "otpCode": "441445",
+      "expiresAt": "2026-09-05T17:38:56.628Z",
+      "attempts": 0,
+      "verified": false,
+      "createdAt": "2026-09-05T17:28:56.628Z"
+    },
+    {
+      "id": "113685e0-c26d-42ae-b28a-e4a0056ce538",
+      "email": "flood_1788629336643_1@test.com",
+      "otpCode": "407475",
+      "expiresAt": "2026-09-05T17:38:56.745Z",
+      "attempts": 0,
+      "verified": false,
+      "createdAt": "2026-09-05T17:28:56.745Z"
+    },
+    {
+      "id": "99b08282-8d6e-4095-82e0-7b3c347d82e1",
+      "email": "flood_1788629336764_2@test.com",
+      "otpCode": "347674",
+      "expiresAt": "2026-09-05T17:38:56.855Z",
+      "attempts": 0,
+      "verified": false,
+      "createdAt": "2026-09-05T17:28:56.855Z"
+    },
+    {
+      "id": "5e696fff-a4e5-415a-888a-333f67c99b3b",
+      "email": "flood_1788629336870_3@test.com",
+      "otpCode": "821599",
+      "expiresAt": "2026-09-05T17:38:56.974Z",
+      "attempts": 0,
+      "verified": false,
+      "createdAt": "2026-09-05T17:28:56.974Z"
+    },
+    {
+      "id": "7066f772-169b-4f7d-b693-a09c09666f4a",
+      "email": "flood_1788629336985_4@test.com",
+      "otpCode": "573311",
+      "expiresAt": "2026-09-05T17:38:57.137Z",
+      "attempts": 0,
+      "verified": false,
+      "createdAt": "2026-09-05T17:28:57.137Z"
+    },
+    {
+      "id": "a8c1034b-853d-4a50-a2d0-97b0c9201340",
+      "email": "ayanparmar54@gmail.com",
+      "otpCode": "987199",
+      "expiresAt": "2026-09-05T17:40:25.153Z",
+      "attempts": 0,
+      "verified": true,
+      "createdAt": "2026-09-05T17:30:25.153Z"
+    },
+    {
+      "id": "7fcb7df9-3905-4822-b63f-a8f66e95905f",
+      "email": "multi_role_1788629974479@university.edu",
+      "role": "student",
+      "otpCode": "576298",
+      "expiresAt": "2026-09-05T17:49:36.310Z",
+      "attempts": 0,
+      "verified": true,
+      "createdAt": "2026-09-05T17:39:36.310Z"
+    },
+    {
+      "id": "c69c60a1-5627-444a-a88f-abf3e9d4f538",
+      "email": "multi_role_1788629974479@university.edu",
+      "role": "faculty",
+      "otpCode": "752126",
+      "expiresAt": "2026-09-05T17:49:37.103Z",
+      "attempts": 0,
+      "verified": true,
+      "createdAt": "2026-09-05T17:39:37.103Z"
+    },
+    {
+      "id": "0502522e-1947-4535-a0a2-f1c354654f69",
+      "email": "ayanparmar54@gmail.com",
+      "role": "industry",
+      "otpCode": "852173",
+      "expiresAt": "2026-09-05T17:50:58.837Z",
+      "attempts": 0,
+      "verified": true,
+      "createdAt": "2026-09-05T17:40:58.837Z"
+    },
+    {
+      "id": "60615a86-6a4f-498f-8fbe-fdfcbcc61b8c",
+      "email": "auth_test_1788630279102@university.edu",
+      "role": "student",
+      "otpCode": "415119",
+      "expiresAt": "2026-09-05T17:54:40.316Z",
+      "attempts": 0,
+      "verified": true,
+      "createdAt": "2026-09-05T17:44:40.316Z"
+    }
+  ],
+  "hiringRequests": [
+    {
+      "id": "hire-req-1",
+      "companyName": "Infosys Technologies",
+      "industryDomain": "Software & Cloud Services",
+      "jobTitle": "Systems Engineer (Fresher 2025/2026)",
+      "positions": 120,
+      "applicants": 128,
+      "status": "frozen",
+      "isFrozen": true,
+      "updatedAt": "2026-09-05T18:11:55.510Z",
+      "freezeReason": "Suspicious fraudulent job openings detected by compliance"
+    },
+    {
+      "id": "hire-req-2",
+      "companyName": "Apex Dynamics Corp",
+      "industryDomain": "AI Research & Data Systems",
+      "jobTitle": "Junior ML Pipeline Specialist",
+      "positions": 8,
+      "applicants": 34,
+      "status": "active",
+      "isFrozen": false,
+      "updatedAt": "2026-09-05T17:59:39.896Z"
+    },
+    {
+      "id": "hire-req-3",
+      "companyName": "Zenith Financial Solutions",
+      "industryDomain": "FinTech & Payments",
+      "jobTitle": "Backend Developer - Go / Python",
+      "positions": 12,
+      "applicants": 62,
+      "status": "active",
+      "isFrozen": false,
+      "updatedAt": "2026-09-05T17:59:32.424Z"
+    }
+  ],
+  "campusRequests": [
+    {
+      "id": "campus-req-1",
+      "campusName": "Delhi Technological University (DTU)",
+      "code": "C-18492",
+      "requestType": "Placement Drive",
+      "studentsEnrolled": 850,
+      "status": "frozen",
+      "isFrozen": true,
+      "updatedAt": "2026-09-05T18:11:55.611Z",
+      "freezeReason": "Unverified accreditation documentation submitted"
+    },
+    {
+      "id": "campus-req-2",
+      "campusName": "National Institute of Technology, Trichy",
+      "code": "C-29381",
+      "requestType": "Curriculum Verification",
+      "studentsEnrolled": 640,
+      "status": "active",
+      "isFrozen": false,
+      "updatedAt": "2026-09-05T18:00:31.543Z"
+    },
+    {
+      "id": "campus-req-3",
+      "campusName": "Birla Institute of Technology and Science",
+      "code": "C-30114",
+      "requestType": "Student Batch Upload",
+      "studentsEnrolled": 490,
+      "status": "active",
+      "isFrozen": false,
+      "updatedAt": "2026-09-05T17:58:53.550Z"
+    }
+  ]
+}
