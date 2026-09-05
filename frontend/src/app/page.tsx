@@ -89,13 +89,19 @@ export default function LoginPage() {
 
       if (data.redirectUrl) {
         if (typeof window !== "undefined") {
-          sessionStorage.setItem("skill_bridge_admin", "true");
+          if (data.isAdmin) {
+            sessionStorage.setItem("skill_bridge_admin", "true");
+          }
           sessionStorage.setItem("skill_bridge_user", JSON.stringify(data.user));
         }
-        setSuccessMessage("Admin authentication successful. Entering Admin Panel...");
+        setSuccessMessage(
+          data.isAdmin
+            ? "Admin authentication successful. Entering Admin Panel..."
+            : `Welcome, ${data.user.fullName}! Entering Student Portal...`
+        );
         setTimeout(() => {
           router.push(data.redirectUrl);
-        }, 400);
+        }, 350);
         return;
       }
 

@@ -68,12 +68,17 @@ export async function POST(request: Request) {
 
     // 5. Success
     const isAdmin = Boolean(user.isAdmin || user.email === "admin@gmail.com");
+    const redirectUrl = isAdmin
+      ? "/admin"
+      : user.role === "student"
+      ? "/student"
+      : undefined;
 
     return NextResponse.json({
       success: true,
       message: isAdmin ? "Welcome, Administrator!" : `Welcome back, ${user.fullName}!`,
       isAdmin,
-      redirectUrl: isAdmin ? "/admin" : undefined,
+      redirectUrl,
       user: {
         id: user.id,
         email: user.email,

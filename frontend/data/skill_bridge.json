@@ -108,6 +108,60 @@
       "fullName": "Morgan Taylor",
       "isVerified": true,
       "createdAt": "2026-09-05T17:44:40.293Z"
+    },
+    {
+      "id": "864c1f98-d1f6-47a1-b587-ffd9c944b8c8",
+      "email": "student_tester_1788634149344@university.edu",
+      "role": "student",
+      "passwordHash": "ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f",
+      "fullName": "Alex Rivera",
+      "isVerified": false,
+      "createdAt": "2026-09-05T18:49:11.159Z"
+    },
+    {
+      "id": "f0c745e2-4519-4aeb-9b05-08bdb2bb5dc3",
+      "email": "student_tester_1788634184724@university.edu",
+      "role": "student",
+      "passwordHash": "ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f",
+      "fullName": "Alex Rivera",
+      "isVerified": true,
+      "createdAt": "2026-09-05T18:49:45.257Z"
+    },
+    {
+      "id": "7e612090-1a8d-44bb-aed1-6f5c1aac02d8",
+      "email": "student_tester_1788635119088@university.edu",
+      "role": "student",
+      "passwordHash": "ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f",
+      "fullName": "Alex Rivera",
+      "isVerified": true,
+      "createdAt": "2026-09-05T19:05:20.125Z"
+    },
+    {
+      "id": "61fc49ae-2554-4e20-89bf-f042efff1c70",
+      "email": "student_tester_1788636383399@university.edu",
+      "role": "student",
+      "passwordHash": "ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f",
+      "fullName": "Alex Rivera",
+      "isVerified": true,
+      "createdAt": "2026-09-05T19:26:24.436Z"
+    },
+    {
+      "id": "940f2d64-e9f4-419e-82fb-db243ddcbf9d",
+      "email": "student_tester_1788636404740@university.edu",
+      "role": "student",
+      "passwordHash": "ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f",
+      "fullName": "Alex Rivera",
+      "isVerified": true,
+      "createdAt": "2026-09-05T19:26:45.141Z"
+    },
+    {
+      "id": "4b8cbdf6-f1d6-44a6-843a-da4a91dd5f29",
+      "email": "student_tester_1788636538476@university.edu",
+      "role": "student",
+      "passwordHash": "ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f",
+      "fullName": "Alex Rivera",
+      "isVerified": true,
+      "createdAt": "2026-09-05T19:28:59.239Z"
     }
   ],
   "profiles": [
@@ -207,6 +261,66 @@
         "institution": "Stanford",
         "degree": "CS",
         "graduationYear": "2025"
+      }
+    },
+    {
+      "userId": "864c1f98-d1f6-47a1-b587-ffd9c944b8c8",
+      "role": "student",
+      "metadata": {
+        "department": "Computer Science & Engineering",
+        "course": "B.Tech CSE",
+        "semester": 6,
+        "rollNumber": "NIT-CSE-2022-042"
+      }
+    },
+    {
+      "userId": "f0c745e2-4519-4aeb-9b05-08bdb2bb5dc3",
+      "role": "student",
+      "metadata": {
+        "department": "Computer Science & Engineering",
+        "course": "B.Tech CSE",
+        "semester": 6,
+        "rollNumber": "NIT-CSE-2022-042"
+      }
+    },
+    {
+      "userId": "7e612090-1a8d-44bb-aed1-6f5c1aac02d8",
+      "role": "student",
+      "metadata": {
+        "department": "Computer Science & Engineering",
+        "course": "B.Tech CSE",
+        "semester": 6,
+        "rollNumber": "NIT-CSE-2022-042"
+      }
+    },
+    {
+      "userId": "61fc49ae-2554-4e20-89bf-f042efff1c70",
+      "role": "student",
+      "metadata": {
+        "department": "Computer Science & Engineering",
+        "course": "B.Tech CSE",
+        "semester": 6,
+        "rollNumber": "NIT-CSE-2022-042"
+      }
+    },
+    {
+      "userId": "940f2d64-e9f4-419e-82fb-db243ddcbf9d",
+      "role": "student",
+      "metadata": {
+        "department": "Computer Science & Engineering",
+        "course": "B.Tech CSE",
+        "semester": 6,
+        "rollNumber": "NIT-CSE-2022-042"
+      }
+    },
+    {
+      "userId": "4b8cbdf6-f1d6-44a6-843a-da4a91dd5f29",
+      "role": "student",
+      "metadata": {
+        "department": "Computer Science & Engineering",
+        "course": "B.Tech CSE",
+        "semester": 6,
+        "rollNumber": "NIT-CSE-2022-042"
       }
     }
   ],
@@ -313,6 +427,66 @@
       "attempts": 0,
       "verified": true,
       "createdAt": "2026-09-05T17:44:40.316Z"
+    },
+    {
+      "id": "939e559f-431b-4454-afe2-0ff3d23c5124",
+      "email": "student_tester_1788634149344@university.edu",
+      "role": "student",
+      "otpCode": "127258",
+      "expiresAt": "2026-09-05T18:59:11.179Z",
+      "attempts": 0,
+      "verified": false,
+      "createdAt": "2026-09-05T18:49:11.179Z"
+    },
+    {
+      "id": "c2d5c5ad-55df-4bcf-8f37-0a0eda26d8d8",
+      "email": "student_tester_1788634184724@university.edu",
+      "role": "student",
+      "otpCode": "811792",
+      "expiresAt": "2026-09-05T18:59:45.267Z",
+      "attempts": 0,
+      "verified": true,
+      "createdAt": "2026-09-05T18:49:45.267Z"
+    },
+    {
+      "id": "554ce87b-f710-47aa-8d81-74dc41d9d1e1",
+      "email": "student_tester_1788635119088@university.edu",
+      "role": "student",
+      "otpCode": "898647",
+      "expiresAt": "2026-09-05T19:15:20.131Z",
+      "attempts": 0,
+      "verified": true,
+      "createdAt": "2026-09-05T19:05:20.131Z"
+    },
+    {
+      "id": "3c4619fe-7e44-4da3-a388-9615fecf5a0b",
+      "email": "student_tester_1788636383399@university.edu",
+      "role": "student",
+      "otpCode": "679267",
+      "expiresAt": "2026-09-05T19:36:24.455Z",
+      "attempts": 0,
+      "verified": true,
+      "createdAt": "2026-09-05T19:26:24.455Z"
+    },
+    {
+      "id": "8af02d07-9aa8-482c-9c04-e1f3a8ae4688",
+      "email": "student_tester_1788636404740@university.edu",
+      "role": "student",
+      "otpCode": "702948",
+      "expiresAt": "2026-09-05T19:36:45.164Z",
+      "attempts": 0,
+      "verified": true,
+      "createdAt": "2026-09-05T19:26:45.164Z"
+    },
+    {
+      "id": "07b8a26c-acc2-463c-b809-2b122a2f3ef3",
+      "email": "student_tester_1788636538476@university.edu",
+      "role": "student",
+      "otpCode": "596918",
+      "expiresAt": "2026-09-05T19:38:59.258Z",
+      "attempts": 0,
+      "verified": true,
+      "createdAt": "2026-09-05T19:28:59.258Z"
     }
   ],
   "hiringRequests": [
@@ -382,6 +556,273 @@
       "status": "active",
       "isFrozen": false,
       "updatedAt": "2026-09-05T17:58:53.550Z"
+    }
+  ],
+  "interestProfiles": [
+    {
+      "id": "profile_1788636362774_30whq",
+      "studentId": "stu-2024-042",
+      "sessionId": "session_1788636362773",
+      "confirmedMainDomain": "Cybersecurity & Defense",
+      "confirmedMainDomainId": "security",
+      "confirmedSpecificInterest": "Application Security & Vulnerability Research",
+      "explanation": "Your answers demonstrate an inclination for finding obscure code weaknesses, analyzing data validation flaws, and safeguarding user applications before deployment.",
+      "confidence": 0.87,
+      "interestSignals": {},
+      "candidateDomainScores": {},
+      "phase1AnswerCount": 5,
+      "phase2AnswerCount": 3,
+      "confirmedAt": "2026-09-05T19:26:02.775Z"
+    },
+    {
+      "id": "profile_1788636526758_2135m",
+      "studentId": "sec_tester_1788636524786",
+      "sessionId": "session_1788636524981_udgcb",
+      "confirmedMainDomain": "Cybersecurity & Defense",
+      "confirmedMainDomainId": "security",
+      "confirmedSpecificInterest": "Application Security & Vulnerability Research",
+      "explanation": "Your answers demonstrate an inclination for finding obscure code weaknesses, analyzing data validation flaws, and safeguarding user applications before deployment.",
+      "confidence": 0.87,
+      "interestSignals": {
+        "investigation": 5.5,
+        "problemSolving": 1.5,
+        "building": 0.7,
+        "creativity": 0,
+        "analysis": 0.7,
+        "experimentation": 0,
+        "optimization": 0,
+        "systemsThinking": 1.1,
+        "dataOrientation": 0,
+        "automation": 0.6,
+        "securityMindset": 3.4
+      },
+      "candidateDomainScores": {
+        "ai-ml": 0.11,
+        "cloud": 0.21,
+        "web": 0.18,
+        "security": 1,
+        "software": 0.28
+      },
+      "phase1AnswerCount": 4,
+      "phase2AnswerCount": 3,
+      "confirmedAt": "2026-09-05T19:28:46.759Z"
+    },
+    {
+      "id": "profile_1788636707873_1zykz",
+      "studentId": "47fc1671-0e5d-4f66-af79-ca34f5e10ec5",
+      "sessionId": "session_1788636618176_1takm",
+      "confirmedMainDomain": "Cloud & Infrastructure",
+      "confirmedMainDomainId": "cloud",
+      "confirmedSpecificInterest": "Serverless & Distributed Edge Systems",
+      "explanation": "You prefer event-driven architectures that scale on demand to zero, minimizing cold starts and deploying logic nearest to global users.",
+      "confidence": 0.87,
+      "interestSignals": {
+        "investigation": 0,
+        "problemSolving": 0.8,
+        "building": 1.2,
+        "creativity": 0.7,
+        "analysis": 0.8,
+        "experimentation": 0.8,
+        "optimization": 2.2,
+        "systemsThinking": 3,
+        "dataOrientation": 0.9,
+        "automation": 1.4,
+        "securityMindset": 0
+      },
+      "candidateDomainScores": {
+        "ai-ml": 0.4,
+        "cloud": 1,
+        "web": 0.71,
+        "security": 0.34,
+        "software": 0.8
+      },
+      "phase1AnswerCount": 4,
+      "phase2AnswerCount": 3,
+      "confirmedAt": "2026-09-05T19:31:47.874Z"
+    }
+  ],
+  "interestSessions": [
+    {
+      "studentId": "stu_test_1788636523329",
+      "sessionId": "session_1788636524073_1553k",
+      "phase": 1,
+      "answers": [
+        {
+          "questionId": "p1-q1-anomaly",
+          "questionText": "You notice that a web application produces an unexpected, distorted response whenever a user enters non-standard characters in an input form. What would you be most excited to do?",
+          "selectedOptionId": "p1-q1-opt-b",
+          "selectedOptionText": "Analyze the server's input-handling logic and optimize the parsing function so it executes cleanly and safely without crashing.",
+          "phase": 1,
+          "signalDelta": {
+            "problemSolving": 0.8,
+            "optimization": 0.7,
+            "building": 0.4
+          },
+          "domainDelta": {
+            "software": 0.8,
+            "web": 0.5
+          }
+        },
+        {
+          "questionId": "p1-q2-data-records",
+          "questionText": "You are handed a raw dataset containing millions of event records from an online platform over the past year. Where does your curiosity take you first?",
+          "selectedOptionId": "p1-q2-opt-b",
+          "selectedOptionText": "Inspect timestamps and authentication logs to trace any suspicious access patterns or unauthorized privileges.",
+          "phase": 1,
+          "signalDelta": {
+            "investigation": 0.8,
+            "securityMindset": 0.8,
+            "analysis": 0.7
+          },
+          "domainDelta": {
+            "security": 0.85
+          }
+        },
+        {
+          "questionId": "p1-q3-repetitive-task",
+          "questionText": "A development team manually spends four hours every Friday packaging and deploying software releases to multiple servers. What is your reaction?",
+          "selectedOptionId": "p1-q3-opt-b",
+          "selectedOptionText": "Embed automated vulnerability scanners and integrity checks into the pipeline to block insecure releases.",
+          "phase": 1,
+          "signalDelta": {
+            "securityMindset": 0.9,
+            "automation": 0.6,
+            "investigation": 0.6
+          },
+          "domainDelta": {
+            "security": 0.85
+          }
+        },
+        {
+          "questionId": "p1-q4-system-failure",
+          "questionText": "A critical service begins freezing during peak hours, yet no crash error logs are generated. What approach do you instinctively reach for?",
+          "selectedOptionId": "p1-q4-opt-b",
+          "selectedOptionText": "Audit incoming network packets and connection states to verify whether an external entity is exhausting server connections deliberately.",
+          "phase": 1,
+          "signalDelta": {
+            "investigation": 0.9,
+            "securityMindset": 0.8,
+            "systemsThinking": 0.6
+          },
+          "domainDelta": {
+            "security": 0.85
+          }
+        }
+      ],
+      "signalScores": {
+        "investigation": 2.3,
+        "problemSolving": 0.8,
+        "building": 0.4,
+        "creativity": 0,
+        "analysis": 0.7,
+        "experimentation": 0,
+        "optimization": 0.7,
+        "systemsThinking": 0.6,
+        "dataOrientation": 0,
+        "automation": 0.6,
+        "securityMindset": 2.5
+      },
+      "domainScores": {
+        "ai-ml": 0.14,
+        "cloud": 0.33,
+        "web": 0.21,
+        "security": 1,
+        "software": 0.36
+      },
+      "status": "phase1_revealed",
+      "updatedAt": "2026-09-05T19:28:44.758Z",
+      "broadDomain": "security"
+    },
+    {
+      "studentId": "47fc1671-0e5d-4f66-af79-ca34f5e10ec5",
+      "sessionId": "session_1788636735157_zi9no",
+      "phase": 1,
+      "answers": [
+        {
+          "questionId": "p1-q1-anomaly",
+          "questionText": "You notice that a web application produces an unexpected, distorted response whenever a user enters non-standard characters in an input form. What would you be most excited to do?",
+          "selectedOptionId": "p1-q1-opt-b",
+          "selectedOptionText": "Analyze the server's input-handling logic and optimize the parsing function so it executes cleanly and safely without crashing.",
+          "phase": 1,
+          "signalDelta": {
+            "problemSolving": 0.8,
+            "optimization": 0.7,
+            "building": 0.4
+          },
+          "domainDelta": {
+            "software": 0.8,
+            "web": 0.5
+          }
+        },
+        {
+          "questionId": "p1-q2-data-records",
+          "questionText": "You are handed a raw dataset containing millions of event records from an online platform over the past year. Where does your curiosity take you first?",
+          "selectedOptionId": "p1-q2-opt-d",
+          "selectedOptionText": "Transform the raw numbers into an interactive, visual analytics dashboard that team members can filter and explore.",
+          "phase": 1,
+          "signalDelta": {
+            "building": 0.8,
+            "creativity": 0.8,
+            "analysis": 0.5
+          },
+          "domainDelta": {
+            "web": 0.85
+          }
+        },
+        {
+          "questionId": "p1-q3-repetitive-task",
+          "questionText": "A development team manually spends four hours every Friday packaging and deploying software releases to multiple servers. What is your reaction?",
+          "selectedOptionId": "p1-q3-opt-c",
+          "selectedOptionText": "Rewrite the build tool's compiler steps in a high-performance language to cut build execution time from 20 minutes down to seconds.",
+          "phase": 1,
+          "signalDelta": {
+            "optimization": 0.9,
+            "problemSolving": 0.8,
+            "systemsThinking": 0.6
+          },
+          "domainDelta": {
+            "software": 0.9
+          }
+        },
+        {
+          "questionId": "p1-q4-system-failure",
+          "questionText": "A critical service begins freezing during peak hours, yet no crash error logs are generated. What approach do you instinctively reach for?",
+          "selectedOptionId": "p1-q4-opt-b",
+          "selectedOptionText": "Audit incoming network packets and connection states to verify whether an external entity is exhausting server connections deliberately.",
+          "phase": 1,
+          "signalDelta": {
+            "investigation": 0.9,
+            "securityMindset": 0.8,
+            "systemsThinking": 0.6
+          },
+          "domainDelta": {
+            "security": 0.85
+          }
+        }
+      ],
+      "signalScores": {
+        "investigation": 0.9,
+        "problemSolving": 1.6,
+        "building": 1.2,
+        "creativity": 0.8,
+        "analysis": 0.5,
+        "experimentation": 0,
+        "optimization": 1.6,
+        "systemsThinking": 1.2,
+        "dataOrientation": 0,
+        "automation": 0,
+        "securityMindset": 0.8
+      },
+      "domainScores": {
+        "ai-ml": 0.24,
+        "cloud": 0.64,
+        "web": 0.6,
+        "security": 0.71,
+        "software": 1
+      },
+      "status": "phase1_revealed",
+      "updatedAt": "2026-09-05T19:32:25.428Z",
+      "broadDomain": "software"
     }
   ]
 }

@@ -1,0 +1,198 @@
+/**
+ * Skill Bridge — Student Data Architecture & Workflow Definitions
+ * Clean TypeScript interfaces and realistic institutional defaults for the Student experience.
+ */
+
+export interface StudentProfileData {
+  id: string;
+  fullName: string;
+  email: string;
+  rollNumber: string;
+  department: string;
+  course: string;
+  semester: number;
+  batchYear: string;
+  institution: string;
+  currentWorkflowStage: number; // 1 to 7
+}
+
+export interface WorkflowStage {
+  id: number;
+  slug: string;
+  name: string;
+  shortDescription: string;
+  status: "current" | "completed" | "upcoming";
+  route: string;
+}
+
+export interface InterestDomain {
+  id: string;
+  name: string;
+  tagline: string;
+  description: string;
+  subDisciplines: string[];
+  keyQuestionsExamined: string[];
+}
+
+// 7-Stage Core Workflow Journey
+export const studentWorkflowStages: WorkflowStage[] = [
+  {
+    id: 1,
+    slug: "interest-finder",
+    name: "Interest Finder",
+    shortDescription: "Discover your technical niche within broad engineering domains",
+    status: "current",
+    route: "/student/interest-finder",
+  },
+  {
+    id: 2,
+    slug: "knowledge-testing",
+    name: "Knowledge Testing",
+    shortDescription: "Benchmark foundational and practical technical proficiency",
+    status: "upcoming",
+    route: "/student/knowledge-testing",
+  },
+  {
+    id: 3,
+    slug: "documents",
+    name: "Document Verification",
+    shortDescription: "Authenticate academic transcripts and vendor certifications",
+    status: "upcoming",
+    route: "/student/documents",
+  },
+  {
+    id: 4,
+    slug: "skill-gap",
+    name: "Skill Gap & Suggestions",
+    shortDescription: "Identify curriculum deficits vs. corporate recruitment criteria",
+    status: "upcoming",
+    route: "/student/skill-gap",
+  },
+  {
+    id: 5,
+    slug: "resume",
+    name: "Resume Builder",
+    shortDescription: "Generate verified, skill-validated technical portfolios",
+    status: "upcoming",
+    route: "/student/resume",
+  },
+  {
+    id: 6,
+    slug: "opportunities",
+    name: "Jobs & Internships",
+    shortDescription: "Explore curated institutional campus drives and internships",
+    status: "upcoming",
+    route: "/student/opportunities",
+  },
+  {
+    id: 7,
+    slug: "applications",
+    name: "Track Applications",
+    shortDescription: "Monitor interview schedules, shortlists, and offer status",
+    status: "upcoming",
+    route: "/student/applications",
+  },
+];
+
+// The 5 Broad Technical Domains for Interest Finder Entry
+export const interestDomains: InterestDomain[] = [
+  {
+    id: "ai-ml",
+    name: "AI / Machine Learning",
+    tagline: "From statistical foundations to intelligent systems",
+    description:
+      "Explores data-driven intelligence, pattern discovery, and automation. If you like mathematics, experimentation, or intelligent software, this domain examines where you excel.",
+    subDisciplines: [
+      "Deep Learning & Computer Vision",
+      "Natural Language Processing & LLMs",
+      "Machine Learning Operations (MLOps)",
+      "Data Engineering & Analytics",
+    ],
+    keyQuestionsExamined: [
+      "Do you prefer mathematical modeling or building the data pipeline around the model?",
+      "Are you more drawn to vision/audio processing or language semantics?",
+    ],
+  },
+  {
+    id: "cloud",
+    name: "Cloud & Infrastructure",
+    tagline: "Scalability, distributed topology, and reliability engineering",
+    description:
+      "Focuses on how modern global software runs, scales, and stays resilient under heavy load. If you like systems, automation, and architecture, this domain maps your inclinations.",
+    subDisciplines: [
+      "Cloud Solutions Architecture (AWS/Azure)",
+      "Site Reliability Engineering (SRE)",
+      "DevOps & Automated CI/CD Pipelines",
+      "Serverless & Edge Compute",
+    ],
+    keyQuestionsExamined: [
+      "Do you enjoy designing high-availability architecture or automating deployments?",
+      "Are you interested in infrastructure-as-code or cost/latency optimization?",
+    ],
+  },
+  {
+    id: "web",
+    name: "Web & Full-Stack Systems",
+    tagline: "Interactive user interfaces and high-performance backend services",
+    description:
+      "Spans user-facing responsiveness to scalable server-side APIs. If you enjoy building things people interact with directly or high-throughput distributed backends, discover your exact balance.",
+    subDisciplines: [
+      "Modern Frontend Architecture (React/Next.js)",
+      "High-Throughput Backend APIs & Microservices",
+      "Full-Stack Application Engineering",
+      "Web Performance & Accessibility",
+    ],
+    keyQuestionsExamined: [
+      "Do you lean toward crafting crisp interactive UIs or designing low-latency server APIs?",
+      "Do you prefer state management and component UX or schema design and caching?",
+    ],
+  },
+  {
+    id: "security",
+    name: "Cybersecurity & Defense",
+    tagline: "Protecting systems, verifying trust, and threat mitigation",
+    description:
+      "Centers on defending digital infrastructure against adversarial vulnerabilities, ensuring privacy, and establishing cryptographic proof.",
+    subDisciplines: [
+      "Application Security & Code Auditing",
+      "Network Defense & Threat Operations (SOC)",
+      "Penetration Testing & Ethical Hacking",
+      "Cloud & Identity Governance (IAM)",
+    ],
+    keyQuestionsExamined: [
+      "Are you more fascinated by finding vulnerabilities or architecting defensive bastions?",
+      "Do you prefer network traffic analysis or application-level security audits?",
+    ],
+  },
+  {
+    id: "software",
+    name: "Software & Core Systems",
+    tagline: "Algorithms, low-level engineering, and performant logic",
+    description:
+      "Dives into the computational engine beneath all applications: memory allocation, kernel interactions, compiler optimizations, and robust object-oriented designs.",
+    subDisciplines: [
+      "Systems Programming (C++, Rust, Go)",
+      "Embedded Systems & IoT Firmware",
+      "Distributed Database Engines",
+      "Algorithmic Problem Solving & SDKs",
+    ],
+    keyQuestionsExamined: [
+      "Do you enjoy writing performant close-to-the-metal code or designing reusable system abstractions?",
+      "Are you excited by concurrency and threading or memory management and CPU efficiency?",
+    ],
+  },
+];
+
+// Realistic Institutional Default Student Record
+export const defaultStudentProfile: StudentProfileData = {
+  id: "stu-2024-042",
+  fullName: "Alex Rivera",
+  email: "alex.rivera@nit.edu",
+  rollNumber: "NIT-CSE-2022-042",
+  department: "Department of Computer Science & Engineering",
+  course: "B.Tech Computer Science",
+  semester: 6,
+  batchYear: "2022–2026",
+  institution: "National Institute of Technology",
+  currentWorkflowStage: 1,
+};

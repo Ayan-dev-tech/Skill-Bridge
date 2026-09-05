@@ -57,12 +57,50 @@ export interface CampusRequest {
   updatedAt: string;
 }
 
+export interface InterestProfileRecord {
+  id: string;
+  studentId: string;
+  sessionId: string;
+  confirmedMainDomain: string;
+  confirmedMainDomainId: string;
+  confirmedSpecificInterest: string;
+  explanation: string;
+  confidence: number;
+  interestSignals: Record<string, number>;
+  candidateDomainScores: Record<string, number>;
+  phase1AnswerCount: number;
+  phase2AnswerCount: number;
+  confirmedAt: string;
+}
+
+export interface InterestSessionRecord {
+  studentId: string;
+  sessionId: string;
+  phase: 1 | 2;
+  broadDomain?: string;
+  answers: {
+    questionId: string;
+    questionText: string;
+    selectedOptionId: string;
+    selectedOptionText: string;
+    phase: 1 | 2;
+    signalDelta?: Record<string, number>;
+    domainDelta?: Record<string, number>;
+  }[];
+  signalScores: Record<string, number>;
+  domainScores: Record<string, number>;
+  status: "intro" | "phase1_in_progress" | "phase1_revealed" | "phase2_in_progress" | "phase2_ready" | "confirmed";
+  updatedAt: string;
+}
+
 interface DatabaseSchema {
   users: User[];
   profiles: Profile[];
   otps: OtpVerification[];
   hiringRequests: HiringRequest[];
   campusRequests: CampusRequest[];
+  interestProfiles: InterestProfileRecord[];
+  interestSessions: InterestSessionRecord[];
 }
 
 const DATA_DIR = path.join(process.cwd(), "data");
@@ -90,6 +128,8 @@ function ensureDbExists(): DatabaseSchema {
       otps: [],
       hiringRequests: [],
       campusRequests: [],
+      interestProfiles: [],
+      interestSessions: [],
     };
   } else {
     try {
@@ -97,6 +137,8 @@ function ensureDbExists(): DatabaseSchema {
       data = JSON.parse(content) as DatabaseSchema;
       if (!data.hiringRequests) data.hiringRequests = [];
       if (!data.campusRequests) data.campusRequests = [];
+      if (!data.interestProfiles) data.interestProfiles = [];
+      if (!data.interestSessions) data.interestSessions = [];
     } catch {
       data = {
         users: [],
@@ -104,6 +146,8 @@ function ensureDbExists(): DatabaseSchema {
         otps: [],
         hiringRequests: [],
         campusRequests: [],
+        interestProfiles: [],
+        interestSessions: [],
       };
     }
   }
@@ -542,5 +586,66 @@ export const db = {
     Object.assign(item, updates, { updatedAt: new Date().toISOString() });
     saveDb(data);
     return item;
+  },
+
+  // ================= INTEREST FINDER PERSISTENCE =================
+
+  async saveInterestProfile(record: InterestProfileRecord): Promise<void> {
+    const data = ensureDbExists();
+    if (!data.interestProfiles) data.interestProfiles = [];
+
+    const existingIndex = data.interestProfiles.findIndex(
+      (p) => p.studentId === record.studentId
+    );
+
+    if (existingIndex >= 0) {
+      data.interestProfiles[existingIndex] = record;
+    } else {
+      data.interestProfiles.push(record);
+    }
+
+    saveDb(data);
+  },
+
+  async getInterestProfile(studentId: string): Promise<InterestProfileRecord | null> {
+    const data = ensureDbExists();
+    if (!data.interestProfiles) return null;
+    return (
+      data.interestProfiles.find((p) => p.studentId === studentId) || null
+    );
+  },
+
+  async saveInterestSession(session: InterestSessionRecord): Promise<void> {
+    const data = ensureDbExists();
+    if (!data.interestSessions) data.interestSessions = [];
+
+    const existingIndex = data.interestSessions.findIndex(
+      (s) => s.studentId === session.studentId
+    );
+
+    if (existingIndex >= 0) {
+      data.interestSessions[existingIndex] = session;
+    } else {
+      data.interestSessions.push(session);
+    }
+
+    saveDb(data);
+  },
+
+  async getInterestSession(studentId: string): Promise<InterestSessionRecord | null> {
+    const data = ensureDbExists();
+    if (!data.interestSessions) return null;
+    return (
+      data.interestSessions.find((s) => s.studentId === studentId) || null
+    );
+  },
+
+  async clearInterestSession(studentId: string): Promise<void> {
+    const data = ensureDbExists();
+    if (!data.interestSessions) return;
+    data.interestSessions = data.interestSessions.filter(
+      (s) => s.studentId !== studentId
+    );
+    saveDb(data);
   },
 };
