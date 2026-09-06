@@ -6,33 +6,29 @@ import { useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
-  FileCheck,
   Shield,
-  Camera,
   CheckCircle2,
   AlertCircle,
   ArrowRight,
-  ArrowLeft,
   Loader2,
   Lock,
-  Sparkles,
-  IdCard,
-  GraduationCap,
-  RefreshCw,
+  ExternalLink,
+  X,
+  FileText,
+  Clock,
+  Check,
 } from "lucide-react";
-import { DocumentUploadCard } from "./document-upload-card";
-import { FaceCaptureCard } from "./face-capture-card";
-import type {
-  ConfigurableDocumentType,
-  StudentVerificationRecord,
+import { DocumentItemCard } from "./document-item-card";
+import { ProfessionalProfilesCard } from "./professional-profiles-card";
+import {
+  DOCUMENT_CATEGORIES,
+  type StudentVerificationRecord,
+  type VerificationDocumentRecord,
 } from "@/lib/verification/types";
 
 function getAuthStudentId(): string {
@@ -51,19 +47,29 @@ function getAuthStudentId(): string {
   return "";
 }
 
+// 6 Canonical Student Journey Stages for Compact Stepper
+const JOURNEY_STEPS = [
+  { step: "01", name: "Document Submission", route: "/student/document-verification" },
+  { step: "02", name: "Interest Finder", route: "/student/interest-finder" },
+  { step: "03", name: "Knowledge Testing", route: "/student/knowledge-testing" },
+  { step: "04", name: "Skill Gap", route: "/student/skill-gap" },
+  { step: "05", name: "Learning", route: "/student/learning" },
+  { step: "06", name: "Opportunities", route: "/student/opportunities" },
+];
+
 export function DocumentVerificationContainer() {
   const router = useRouter();
 
   const [loading, setLoading] = React.useState(true);
   const [verification, setVerification] = React.useState<StudentVerificationRecord | null>(null);
-  const [documentTypes, setDocumentTypes] = React.useState<ConfigurableDocumentType[]>([]);
-  const [activeStep, setActiveStep] = React.useState<1 | 2 | 3>(1);
-
-  const [isUploading, setIsUploading] = React.useState(false);
-  const [isProcessingFace, setIsProcessingFace] = React.useState(false);
   const [isFinalizing, setIsFinalizing] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
   const [successNotice, setSuccessNotice] = React.useState<string | null>(null);
+
+  // Modals state
+  const [previewDoc, setPreviewDoc] = React.useState<VerificationDocumentRecord | null>(null);
+  const [deleteCandidate, setDeleteCandidate] = React.useState<VerificationDocumentRecord | null>(null);
+  const [isDeleting, setIsDeleting] = React.useState(false);
 
   // 1. Fetch initial verification state
   const fetchVerificationState = React.useCallback(async () => {
@@ -77,19 +83,10 @@ export function DocumentVerificationContainer() {
 
       if (data.success) {
         setVerification(data.verification);
-        setDocumentTypes(data.documentTypes || []);
-
-        if (data.isVerified) {
-          setActiveStep(3);
-        } else if (data.allRequiredUploaded && !data.faceCaptured) {
-          setActiveStep(2);
-        } else {
-          setActiveStep(1);
-        }
       }
     } catch (err) {
-      console.error("Failed to load verification status:", err);
-      setErrorMessage("Network error connecting to verification service.");
+      console.error("Failed to load submission status:", err);
+      setErrorMessage("Network error connecting to student submission service.");
     } finally {
       setLoading(false);
     }
@@ -99,45 +96,40 @@ export function DocumentVerificationContainer() {
     fetchVerificationState();
   }, [fetchVerificationState]);
 
-  // 2. Handle Document Upload
-  const handleUploadDocument = async (docType: string, file: File) => {
-    setIsUploading(true);
+  // 2. Upload Document Handler
+  const handleUploadDocument = async (categoryId: string, file: File, replaceDocId?: string) => {
     setErrorMessage(null);
     setSuccessNotice(null);
 
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("documentType", docType);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("documentType", categoryId);
+    if (replaceDocId) {
+      formData.append("replaceDocumentId", replaceDocId);
+    }
 
-      const sid = getAuthStudentId();
-      const res = await fetch("/api/student/verification/upload-document", {
-        method: "POST",
-        headers: sid ? { "x-student-id": sid } : {},
-        body: formData,
-      });
+    const sid = getAuthStudentId();
+    const res = await fetch("/api/student/verification/upload-document", {
+      method: "POST",
+      headers: sid ? { "x-student-id": sid } : {},
+      body: formData,
+    });
 
-      const data = await res.json();
-      if (data.success) {
-        setVerification(data.verification);
-        setSuccessNotice(`${file.name} uploaded and parsed by OCR successfully.`);
-      } else {
-        throw new Error(data.error || "Failed to process document.");
-      }
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Document upload failed.";
-      setErrorMessage(msg);
-      throw err;
-    } finally {
-      setIsUploading(false);
+    const data = await res.json();
+    if (data.success) {
+      setVerification(data.verification);
+      setSuccessNotice(`${file.name} uploaded successfully.`);
+      setTimeout(() => setSuccessNotice(null), 3500);
+    } else {
+      throw new Error(data.error || "Failed to upload document.");
     }
   };
 
-  // 3. Handle Document Deletion
-  const handleDeleteDocument = async (docId: string) => {
-    setIsUploading(true);
-    setErrorMessage(null);
+  // 3. Confirm Delete Handler
+  const handleConfirmDelete = async () => {
+    if (!deleteCandidate) return;
     try {
+      setIsDeleting(true);
       const sid = getAuthStudentId();
       const res = await fetch("/api/student/verification/delete-document", {
         method: "POST",
@@ -145,56 +137,50 @@ export function DocumentVerificationContainer() {
           "Content-Type": "application/json",
           ...(sid ? { "x-student-id": sid } : {}),
         },
-        body: JSON.stringify({ documentId: docId }),
+        body: JSON.stringify({ documentId: deleteCandidate.id }),
       });
       const data = await res.json();
       if (data.success) {
         setVerification(data.verification);
+        setSuccessNotice(`Document removed.`);
+        setTimeout(() => setSuccessNotice(null), 3000);
       } else {
         setErrorMessage(data.error || "Failed to delete document.");
       }
     } catch {
       setErrorMessage("Error removing document.");
     } finally {
-      setIsUploading(false);
+      setIsDeleting(false);
+      setDeleteCandidate(null);
     }
   };
 
-  // 4. Handle Live Face Capture
-  const handleCaptureComplete = async (imageBase64: string, mode: "auto" | "manual") => {
-    setIsProcessingFace(true);
-    setErrorMessage(null);
-    setSuccessNotice(null);
-
-    try {
-      const sid = getAuthStudentId();
-      const res = await fetch("/api/student/verification/capture-face", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(sid ? { "x-student-id": sid } : {}),
-        },
-        body: JSON.stringify({ imageBase64, captureMode: mode }),
-      });
-
-      const data = await res.json();
-      if (data.success) {
-        setVerification(data.verification);
-        setSuccessNotice("Live face verified and recorded.");
-      } else {
-        throw new Error(data.error || "Face capture quality check failed.");
-      }
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Face capture verification failed.";
-      setErrorMessage(msg);
-      throw err;
-    } finally {
-      setIsProcessingFace(false);
+  // 4. Save Professional Profiles Handler
+  const handleSaveProfiles = async (profiles: {
+    linkedIn?: string;
+    gitHub?: string;
+    portfolio?: string;
+    other?: string;
+  }) => {
+    const sid = getAuthStudentId();
+    const res = await fetch("/api/student/verification/profiles", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(sid ? { "x-student-id": sid } : {}),
+      },
+      body: JSON.stringify(profiles),
+    });
+    const data = await res.json();
+    if (data.success) {
+      setVerification(data.verification);
+    } else {
+      throw new Error(data.error || "Failed to save professional profiles.");
     }
   };
 
-  // 5. Finalize Complete Verification
-  const handleFinalizeVerification = async () => {
+  // 5. Finalize Submission & Unlock Interest Finder
+  const handleCompleteSubmission = async () => {
     setIsFinalizing(true);
     setErrorMessage(null);
 
@@ -208,348 +194,571 @@ export function DocumentVerificationContainer() {
       const data = await res.json();
       if (data.success) {
         setVerification(data.verification);
-        setActiveStep(3);
+        router.push(data.redirectUrl || "/student/interest-finder");
       } else {
-        setErrorMessage(data.error || "Verification finalization failed.");
+        setErrorMessage(data.error || "Submission completion failed.");
       }
     } catch {
-      setErrorMessage("Network error completing verification.");
+      setErrorMessage("Network error completing submission.");
     } finally {
       setIsFinalizing(false);
     }
   };
 
-  // Progress calculations
-  const requiredTypes = documentTypes.filter((t) => t.required).map((t) => t.id);
-  const uploadedTypes = new Set(verification?.documents.map((d) => d.documentType) || []);
-  const allRequiredUploaded = requiredTypes.length > 0 && requiredTypes.every((t) => uploadedTypes.has(t));
-  const faceCaptured = Boolean(verification?.faceCapture && verification.faceCapture.qualityPassed);
+  // Calculations derived strictly from persisted state
+  const uploadedDocs = verification?.documents || [];
+  const requiredCategories = DOCUMENT_CATEGORIES.filter((c) => c.required);
+  const optionalCategories = DOCUMENT_CATEGORIES.filter((c) => !c.required && !c.isProfileLinks);
+
+  const uploadedCategoryIds = new Set(uploadedDocs.map((d) => d.documentType));
+  const completedRequiredCategories = requiredCategories.filter((c) =>
+    uploadedCategoryIds.has(c.id)
+  );
+  const missingRequiredCategories = requiredCategories.filter(
+    (c) => !uploadedCategoryIds.has(c.id)
+  );
+  const completedRequiredCount = completedRequiredCategories.length;
+  const isAllRequiredCompleted = completedRequiredCount === requiredCategories.length;
+  const progressPercent = Math.round((completedRequiredCount / requiredCategories.length) * 100);
+
+  const optionalDocsCount = optionalCategories.filter((c) =>
+    uploadedCategoryIds.has(c.id)
+  ).length;
+  const hasProfiles = Boolean(
+    verification?.professionalProfiles?.linkedIn ||
+      verification?.professionalProfiles?.gitHub ||
+      verification?.professionalProfiles?.portfolio ||
+      verification?.professionalProfiles?.other
+  );
+  const optionalAddedCount = optionalDocsCount + (hasProfiles ? 1 : 0);
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto py-12 space-y-6 animate-pulse">
-        <div className="h-8 bg-muted/40 rounded w-1/3" />
-        <div className="h-20 bg-muted/20 rounded-xl border border-border" />
+      <div className="max-w-5xl mx-auto py-8 px-4 space-y-6 animate-pulse">
+        <div className="h-6 bg-muted rounded w-1/4" />
+        <div className="h-10 bg-muted rounded w-1/2" />
+        <div className="h-16 bg-card rounded-xl border border-border" />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="h-64 bg-muted/20 rounded-xl border border-border" />
-          <div className="h-64 bg-muted/20 rounded-xl border border-border" />
+          <div className="h-44 bg-card rounded-xl border border-border" />
+          <div className="h-44 bg-card rounded-xl border border-border" />
+          <div className="h-44 bg-card rounded-xl border border-border" />
+          <div className="h-44 bg-card rounded-xl border border-border" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto pb-12 animate-in fade-in duration-200">
-      {/* 1. Milestone Header */}
-      <div className="space-y-2">
-        <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md border border-border bg-muted/30 text-xs text-muted-foreground font-medium">
-          <FileCheck className="w-3.5 h-3.5 text-foreground" />
-          <span>Milestone 1: Onboarding Document &amp; Identity Verification</span>
+    <div className="w-full bg-background text-foreground pb-16 pt-1">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-6">
+
+        {/* ================= 1. PAGE HEADER ================= */}
+        <div className="space-y-1.5 pt-1">
+          {/* Breadcrumb Context */}
+          <nav aria-label="Breadcrumb" className="flex items-center text-xs text-muted-foreground font-medium">
+            <span>Student Portal</span>
+            <span className="mx-1.5 text-muted-foreground/40">/</span>
+            <span className="text-foreground font-semibold">Document Submission</span>
+          </nav>
+
+          <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2 pt-1">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+              Document Submission
+            </h1>
+
+            {/* Small Trust / Security Message */}
+            <div className="inline-flex items-center gap-1.5 text-xs text-muted-foreground bg-card border border-border px-2.5 py-1 rounded-md shadow-2xs">
+              <Shield className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+              <span>Your documents are securely stored and accessible only to you.</span>
+            </div>
+          </div>
+
+          <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">
+            Complete your student profile by submitting the required documents. Once submitted, your profile will unlock the Interest Finder.
+          </p>
         </div>
 
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
-          Verify Your Student Identity &amp; Academic Credentials
-        </h1>
+        {/* ================= 2. COMPACT HORIZONTAL STEPPER ================= */}
+        <div
+          aria-label="Student Journey Steps"
+          className="bg-card border border-border rounded-xl p-3 shadow-2xs"
+        >
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
+            {JOURNEY_STEPS.map((stepItem, idx) => {
+              const isFirst = idx === 0;
+              const isSecond = idx === 1;
 
-        <p className="text-xs md:text-sm text-muted-foreground max-w-3xl leading-relaxed">
-          Skill Bridge connects accredited collegiate engineers directly with corporate placement drives.
-          To ensure genuine eligibility, upload your student credentials and complete a live webcam capture.
-        </p>
-      </div>
+              // Step 01: Document Submission
+              // Step 02: Interest Finder (unlocked when all required are completed)
+              // Step 03+: Locked upcoming
+              const isCurrent = isFirst && !isAllRequiredCompleted;
+              const isDone = isFirst && isAllRequiredCompleted;
+              const isAvailable = isSecond && isAllRequiredCompleted;
 
-      {/* 2. Three-Step Progress Indicator */}
-      <Card className="border-border bg-card shadow-sm">
-        <CardContent className="p-4">
-          <div className="grid grid-cols-3 gap-2 text-xs">
-            {/* Step 1 */}
+              return (
+                <div
+                  key={stepItem.step}
+                  className={`flex items-center gap-2 px-2.5 py-2 rounded-lg border text-xs transition-colors ${
+                    isCurrent
+                      ? "bg-blue-500/10 border-blue-500/30 text-blue-400 font-semibold"
+                      : isDone
+                      ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400 font-medium"
+                      : isAvailable
+                      ? "bg-card border-blue-500/40 text-blue-400 font-medium hover:bg-blue-500/10 cursor-pointer"
+                      : "bg-muted/30 border-border/50 text-muted-foreground/40 select-none"
+                  }`}
+                >
+                  <div
+                    className={`w-5 h-5 rounded-full flex items-center justify-center font-mono text-[10px] shrink-0 font-bold ${
+                      isDone
+                        ? "bg-emerald-600 text-white"
+                        : isCurrent
+                        ? "bg-blue-600 text-white"
+                        : isAvailable
+                        ? "bg-blue-500/20 text-blue-400"
+                        : "bg-muted text-muted-foreground/50"
+                    }`}
+                  >
+                    {isDone ? (
+                      <Check className="w-3 h-3 text-white stroke-[2.5]" />
+                    ) : (
+                      stepItem.step
+                    )}
+                  </div>
+
+                  <div className="min-w-0 flex-1 truncate">
+                    <span className="truncate block leading-tight">{stepItem.name}</span>
+                  </div>
+
+                  {!isFirst && !isAvailable && (
+                    <Lock className="w-3 h-3 text-muted-foreground/30 shrink-0" />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Global Notices */}
+        {errorMessage && (
+          <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-xs text-red-400 flex items-start gap-2.5 animate-in fade-in">
+            <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+            <div className="flex-1">{errorMessage}</div>
             <button
-              type="button"
-              onClick={() => setActiveStep(1)}
-              className={`flex items-center gap-2.5 p-2 rounded-lg text-left transition-colors ${
-                activeStep === 1
-                  ? "bg-primary/10 text-primary border border-primary/30"
-                  : allRequiredUploaded
-                  ? "text-emerald-500 hover:bg-muted/40"
-                  : "text-muted-foreground hover:bg-muted/40"
-              }`}
+              onClick={() => setErrorMessage(null)}
+              className="text-red-400 hover:text-red-300 font-bold px-1"
             >
-              <div
-                className={`w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs shrink-0 ${
-                  allRequiredUploaded
-                    ? "bg-emerald-500 text-white"
-                    : activeStep === 1
-                    ? "bg-primary text-primary-foreground font-bold"
-                    : "bg-muted text-muted-foreground"
-                }`}
-              >
-                {allRequiredUploaded ? <CheckCircle2 className="w-4 h-4" /> : "1"}
-              </div>
-              <div className="hidden sm:block min-w-0">
-                <p className="font-semibold truncate">Document Upload</p>
-                <p className="text-[10px] text-muted-foreground truncate">
-                  {allRequiredUploaded ? "Required Files Added" : "Student ID & Marksheet"}
-                </p>
-              </div>
-            </button>
-
-            {/* Step 2 */}
-            <button
-              type="button"
-              onClick={() => allRequiredUploaded && setActiveStep(2)}
-              disabled={!allRequiredUploaded}
-              className={`flex items-center gap-2.5 p-2 rounded-lg text-left transition-colors ${
-                activeStep === 2
-                  ? "bg-primary/10 text-primary border border-primary/30"
-                  : faceCaptured
-                  ? "text-emerald-500 hover:bg-muted/40"
-                  : !allRequiredUploaded
-                  ? "opacity-50 cursor-not-allowed text-muted-foreground"
-                  : "text-muted-foreground hover:bg-muted/40"
-              }`}
-            >
-              <div
-                className={`w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs shrink-0 ${
-                  faceCaptured
-                    ? "bg-emerald-500 text-white"
-                    : activeStep === 2
-                    ? "bg-primary text-primary-foreground font-bold"
-                    : "bg-muted text-muted-foreground"
-                }`}
-              >
-                {faceCaptured ? <CheckCircle2 className="w-4 h-4" /> : "2"}
-              </div>
-              <div className="hidden sm:block min-w-0">
-                <p className="font-semibold truncate">Live Face Capture</p>
-                <p className="text-[10px] text-muted-foreground truncate">
-                  {faceCaptured ? "Biometric Verified" : "15s Camera Capture"}
-                </p>
-              </div>
-            </button>
-
-            {/* Step 3 */}
-            <button
-              type="button"
-              disabled={!verification?.verificationStatus || verification.verificationStatus !== "VERIFIED"}
-              className={`flex items-center gap-2.5 p-2 rounded-lg text-left transition-colors ${
-                activeStep === 3
-                  ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/30"
-                  : "opacity-50 cursor-not-allowed text-muted-foreground"
-              }`}
-            >
-              <div
-                className={`w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs shrink-0 ${
-                  activeStep === 3
-                    ? "bg-emerald-500 text-white font-bold"
-                    : "bg-muted text-muted-foreground"
-                }`}
-              >
-                {activeStep === 3 ? <CheckCircle2 className="w-4 h-4" /> : "3"}
-              </div>
-              <div className="hidden sm:block min-w-0">
-                <p className="font-semibold truncate">Identity Confirmed</p>
-                <p className="text-[10px] text-muted-foreground truncate">
-                  {activeStep === 3 ? "Unlocked for Career Paths" : "Pending Completion"}
-                </p>
-              </div>
+              ×
             </button>
           </div>
-        </CardContent>
-      </Card>
+        )}
 
-      {/* Global Alerts */}
-      {errorMessage && (
-        <div
-          role="alert"
-          className="p-3.5 rounded-lg border border-destructive/40 bg-destructive/10 text-destructive text-xs flex items-center gap-2.5 animate-in fade-in"
-        >
-          <AlertCircle className="w-4 h-4 shrink-0" />
-          <span>{errorMessage}</span>
-        </div>
-      )}
+        {successNotice && (
+          <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-xs text-emerald-400 flex items-center gap-2.5 animate-in fade-in">
+            <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+            <span>{successNotice}</span>
+          </div>
+        )}
 
-      {successNotice && (
-        <div
-          role="status"
-          className="p-3.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-500 text-xs flex items-center gap-2.5 animate-in fade-in"
-        >
-          <CheckCircle2 className="w-4 h-4 shrink-0" />
-          <span>{successNotice}</span>
-        </div>
-      )}
+        {/* ================= 3. COMPACT PROGRESS BAR & CHIPS ================= */}
+        <Card className="border border-border bg-card shadow-2xs rounded-xl overflow-hidden">
+          <CardContent className="p-4 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="space-y-0.5">
+                <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
+                  Required Documents
+                </p>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-xl font-bold text-foreground">
+                    {completedRequiredCount} of {requiredCategories.length} completed
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    ({progressPercent}%)
+                  </span>
+                </div>
+              </div>
 
-      {/* ========================================================= */}
-      {/* STEP 1: DOCUMENT UPLOADS                                  */}
-      {/* ========================================================= */}
-      {activeStep === 1 && (
-        <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <span className="text-xs text-muted-foreground">
+                  Optional: <strong className="text-foreground">{optionalAddedCount} of 5 added</strong>
+                </span>
+                <Badge
+                  variant="outline"
+                  className={`text-xs px-2.5 py-0.5 font-semibold ${
+                    isAllRequiredCompleted
+                      ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30"
+                      : "bg-blue-500/15 text-blue-400 border-blue-500/30"
+                  }`}
+                >
+                  {isAllRequiredCompleted ? "All Required Submitted" : `${progressPercent}% Completed`}
+                </Badge>
+              </div>
+            </div>
+
+            {/* Smooth Progress Bar */}
+            <Progress
+              value={progressPercent}
+              className="h-2 bg-muted rounded-full"
+            />
+
+            {/* Compact Checklist Chips */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-0.5">
+              {requiredCategories.map((c) => {
+                const isUploaded = uploadedCategoryIds.has(c.id);
+                return (
+                  <div
+                    key={c.id}
+                    className={`flex items-center gap-2 p-1.5 px-2 rounded-md border text-xs ${
+                      isUploaded
+                        ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400 font-medium"
+                        : "bg-muted/40 border-border text-muted-foreground"
+                    }`}
+                  >
+                    {isUploaded ? (
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                    ) : (
+                      <div className="w-3.5 h-3.5 rounded-full border-2 border-muted-foreground/40 shrink-0" />
+                    )}
+                    <span className="truncate">{c.title}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* ================= 4. REQUIRED DOCUMENTS (PRIMARY FOCUS) ================= */}
+        <section aria-labelledby="required-docs-heading" className="space-y-3">
+          <div className="flex items-baseline justify-between">
+            <div className="space-y-0.5">
+              <div className="flex items-center gap-2">
+                <h2
+                  id="required-docs-heading"
+                  className="text-base font-bold text-foreground tracking-tight"
+                >
+                  REQUIRED DOCUMENTS
+                </h2>
+                <Badge className="bg-red-500/15 text-red-400 border border-red-500/30 text-[10px] uppercase font-bold tracking-wider">
+                  Mandatory
+                </Badge>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                These documents are required to complete your student profile.
+              </p>
+            </div>
+
+            <span className="text-xs font-semibold text-muted-foreground">
+              {completedRequiredCount} of {requiredCategories.length} completed
+            </span>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {documentTypes.map((typeConfig) => {
-              const uploaded = verification?.documents.find(
-                (d) => d.documentType === typeConfig.id
-              );
+            {requiredCategories.map((cat) => {
+              const docsForCategory = uploadedDocs.filter((d) => d.documentType === cat.id);
               return (
-                <DocumentUploadCard
-                  key={typeConfig.id}
-                  docType={typeConfig}
-                  uploadedDoc={uploaded}
+                <DocumentItemCard
+                  key={cat.id}
+                  config={cat}
+                  documents={docsForCategory}
                   onUpload={handleUploadDocument}
-                  onDelete={handleDeleteDocument}
-                  isUploading={isUploading}
+                  onDelete={(id) => handleConfirmDelete()}
+                  onPreview={(doc) => setPreviewDoc(doc)}
+                  onRequestDeleteConfirm={(doc) => setDeleteCandidate(doc)}
                 />
               );
             })}
           </div>
+        </section>
 
-          <div className="flex items-center justify-between pt-2">
-            <p className="text-xs text-muted-foreground">
-              {allRequiredUploaded
-                ? "All required documents uploaded. Proceed to Face Capture."
-                : "Please upload your Student ID Card and Academic Marksheet to continue."}
-            </p>
+        {/* ================= 5. OPTIONAL DOCUMENTS ================= */}
+        <section aria-labelledby="optional-docs-heading" className="space-y-3 pt-4">
+          <div className="flex items-baseline justify-between">
+            <div className="space-y-0.5">
+              <div className="flex items-center gap-2">
+                <h2
+                  id="optional-docs-heading"
+                  className="text-base font-bold text-foreground tracking-tight"
+                >
+                  OPTIONAL DOCUMENTS
+                </h2>
+                <Badge className="bg-muted text-muted-foreground border border-border text-[10px] uppercase font-medium">
+                  Not Required to Continue
+                </Badge>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Add these documents if applicable. They are not required to continue.
+              </p>
+            </div>
 
-            <Button
-              type="button"
-              onClick={() => setActiveStep(2)}
-              disabled={!allRequiredUploaded || isUploading}
-              className="text-xs font-semibold gap-1.5"
-            >
-              <span>Continue to Face Capture</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Button>
+            <span className="text-xs font-semibold text-muted-foreground">
+              {optionalAddedCount} of 5 added
+            </span>
           </div>
-        </div>
-      )}
 
-      {/* ========================================================= */}
-      {/* STEP 2: LIVE FACE CAPTURE                                 */}
-      {/* ========================================================= */}
-      {activeStep === 2 && (
-        <div className="space-y-4">
-          <FaceCaptureCard
-            existingCapture={verification?.faceCapture}
-            onCaptureComplete={handleCaptureComplete}
-            isProcessing={isProcessingFace}
-          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* 1. Academic Certifications (Grouped, 5MB limit) */}
+            {optionalCategories
+              .filter((c) => c.id === "academic_certifications" || c.id === "skill_certifications")
+              .map((cat) => {
+                const docsForCategory = uploadedDocs.filter((d) => d.documentType === cat.id);
+                return (
+                  <DocumentItemCard
+                    key={cat.id}
+                    config={cat}
+                    documents={docsForCategory}
+                    onUpload={handleUploadDocument}
+                    onDelete={(id) => handleConfirmDelete()}
+                    onPreview={(doc) => setPreviewDoc(doc)}
+                    onRequestDeleteConfirm={(doc) => setDeleteCandidate(doc)}
+                  />
+                );
+              })}
 
-          <div className="flex items-center justify-between pt-2">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => setActiveStep(1)}
-              className="text-xs gap-1.5"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Back to Documents</span>
-            </Button>
+            {/* 2. Resume & Competitive Exam Score */}
+            {optionalCategories
+              .filter((c) => c.id === "resume" || c.id === "competitive_exam")
+              .map((cat) => {
+                const docsForCategory = uploadedDocs.filter((d) => d.documentType === cat.id);
+                return (
+                  <DocumentItemCard
+                    key={cat.id}
+                    config={cat}
+                    documents={docsForCategory}
+                    onUpload={handleUploadDocument}
+                    onDelete={(id) => handleConfirmDelete()}
+                    onPreview={(doc) => setPreviewDoc(doc)}
+                    onRequestDeleteConfirm={(doc) => setDeleteCandidate(doc)}
+                  />
+                );
+              })}
 
-            <Button
-              type="button"
-              onClick={handleFinalizeVerification}
-              disabled={!faceCaptured || isFinalizing}
-              className="text-xs font-semibold gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white"
-            >
-              {isFinalizing ? (
-                <>
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  <span>Finalizing Verification...</span>
-                </>
+            {/* 3. Professional Profiles (LinkedIn Recommended, GitHub, Portfolio) */}
+            <div className="md:col-span-2">
+              <ProfessionalProfilesCard
+                existingProfiles={verification?.professionalProfiles}
+                onSave={handleSaveProfiles}
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* ================= 6. SUBMISSION SUMMARY & CTA ================= */}
+        <Card
+          className={`border transition-all duration-200 rounded-xl shadow-2xs ${
+            isAllRequiredCompleted
+              ? "border-emerald-500/40 bg-emerald-500/10"
+              : "border-border bg-card"
+          }`}
+        >
+          <CardContent className="p-5">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="space-y-1">
+                {isAllRequiredCompleted ? (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                      <h3 className="text-base font-bold text-foreground">
+                        ✓ You&apos;re all set!
+                      </h3>
+                    </div>
+                    <p className="text-xs sm:text-sm text-muted-foreground">
+                      Your required documents have been submitted. Optional documents can still be added or updated later.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-amber-500 shrink-0" />
+                      <h3 className="text-sm font-bold text-foreground">
+                        {missingRequiredCategories.length} required {missingRequiredCategories.length === 1 ? "document" : "documents"} remaining
+                      </h3>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Missing:{" "}
+                      <span className="font-semibold text-foreground">
+                        {missingRequiredCategories.map((c) => c.title).join(", ")}
+                      </span>
+                      . Please complete all required documents to continue.
+                    </p>
+                  </>
+                )}
+              </div>
+
+              {/* Primary Action Button */}
+              <div className="w-full sm:w-auto shrink-0">
+                {isAllRequiredCompleted ? (
+                  <Button
+                    type="button"
+                    size="lg"
+                    className="w-full sm:w-auto font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs"
+                    onClick={handleCompleteSubmission}
+                    disabled={isFinalizing}
+                  >
+                    {isFinalizing ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                        Navigating to Interest Finder...
+                      </>
+                    ) : (
+                      <>
+                        Continue to Interest Finder
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </>
+                    )}
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    size="lg"
+                    disabled
+                    variant="outline"
+                    className="w-full sm:w-auto text-xs font-medium border-border text-muted-foreground/60 bg-muted/30 cursor-not-allowed"
+                  >
+                    <Lock className="w-3.5 h-3.5 mr-2" />
+                    Complete required documents to continue
+                  </Button>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* ================= MODALS ================= */}
+
+      {/* 1. Document Preview Modal */}
+      {previewDoc && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150"
+          onClick={() => setPreviewDoc(null)}
+        >
+          <div
+            className="bg-card text-card-foreground rounded-xl shadow-xl max-w-3xl w-full max-h-[90vh] flex flex-col overflow-hidden border border-border"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="p-4 border-b border-border flex items-center justify-between bg-muted/40">
+              <div className="min-w-0 pr-4">
+                <p className="text-sm font-bold text-foreground truncate">
+                  {previewDoc.fileName}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {previewDoc.fileType} · Uploaded on {new Date(previewDoc.uploadedAt).toLocaleString()}
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <a
+                  href={`/api/student/verification/document/${previewDoc.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1 font-medium px-2 py-1 rounded hover:bg-blue-500/10"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>Open in New Tab</span>
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setPreviewDoc(null)}
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-4 overflow-y-auto flex-1 flex items-center justify-center bg-background/80 min-h-[300px]">
+              {previewDoc.fileType === "application/pdf" ||
+              previewDoc.fileName.toLowerCase().endsWith(".pdf") ? (
+                <div className="w-full h-[65vh] flex flex-col items-center justify-center bg-card rounded-lg border border-border p-6 text-center">
+                  <div className="w-16 h-16 rounded-xl bg-red-500/15 text-red-400 flex items-center justify-center mb-3">
+                    <FileText className="w-8 h-8" />
+                  </div>
+                  <h4 className="text-sm font-semibold text-foreground">{previewDoc.fileName}</h4>
+                  <p className="text-xs text-muted-foreground mt-1 max-w-sm">
+                    PDF document uploaded securely to your Skill Bridge profile.
+                  </p>
+                  <a
+                    href={`/api/student/verification/document/${previewDoc.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-xs"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    <span>View Full PDF in Viewer</span>
+                  </a>
+                </div>
               ) : (
-                <>
-                  <span>Complete Verification &amp; Proceed</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </>
+                <img
+                  src={`/api/student/verification/document/${previewDoc.id}`}
+                  alt={previewDoc.fileName}
+                  className="max-h-[70vh] max-w-full rounded-lg object-contain border border-border shadow-sm bg-card"
+                />
               )}
-            </Button>
+            </div>
           </div>
         </div>
       )}
 
-      {/* ========================================================= */}
-      {/* STEP 3: VERIFICATION COMPLETED (SUCCESS STATE)            */}
-      {/* ========================================================= */}
-      {activeStep === 3 && (
-        <div className="space-y-6 animate-in fade-in duration-300">
-          <Card className="border-emerald-500/40 bg-emerald-500/[0.03] shadow-sm">
-            <CardHeader className="text-center pb-2">
-              <div className="w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 flex items-center justify-center mx-auto mb-2">
-                <CheckCircle2 className="w-8 h-8" />
+      {/* 2. Delete Confirmation Dialog */}
+      {deleteCandidate && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150"
+          onClick={() => !isDeleting && setDeleteCandidate(null)}
+        >
+          <div
+            className="bg-card text-card-foreground rounded-xl shadow-xl max-w-md w-full p-5 border border-border space-y-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-full bg-red-500/15 text-red-400 flex items-center justify-center shrink-0">
+                <AlertCircle className="w-5 h-5" />
               </div>
-              <CardTitle className="text-xl font-bold text-foreground">
-                Verification Completed Successfully
-              </CardTitle>
-              <CardDescription className="text-xs text-muted-foreground max-w-md mx-auto">
-                Your academic identity credentials have been authenticated via the Skill Bridge
-                Python OCR and live biometric validation pipeline.
-              </CardDescription>
-            </CardHeader>
-
-            <CardContent className="space-y-5">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="p-3 rounded-lg border border-border bg-background/80 text-center space-y-1">
-                  <span className="text-[10px] font-mono text-muted-foreground uppercase block">
-                    Institutional ID
-                  </span>
-                  <Badge className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20 text-xs">
-                    Verified
-                  </Badge>
-                  <p className="text-[11px] text-muted-foreground">Roll: 2024-CS-042</p>
-                </div>
-
-                <div className="p-3 rounded-lg border border-border bg-background/80 text-center space-y-1">
-                  <span className="text-[10px] font-mono text-muted-foreground uppercase block">
-                    Academic Marksheet
-                  </span>
-                  <Badge className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20 text-xs">
-                    OCR Parsed
-                  </Badge>
-                  <p className="text-[11px] text-muted-foreground">Valid Transcript</p>
-                </div>
-
-                <div className="p-3 rounded-lg border border-border bg-background/80 text-center space-y-1">
-                  <span className="text-[10px] font-mono text-muted-foreground uppercase block">
-                    Live Biometric
-                  </span>
-                  <Badge className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20 text-xs">
-                    Matched
-                  </Badge>
-                  <p className="text-[11px] text-muted-foreground">Optimal Clarity</p>
-                </div>
+              <div className="space-y-1">
+                <h3 className="text-sm font-bold text-foreground">
+                  Remove this document?
+                </h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Are you sure you want to remove <span className="font-semibold text-foreground">{deleteCandidate.fileName}</span>? This action cannot be undone.
+                </p>
               </div>
+            </div>
 
-              <div className="bg-muted/20 p-4 rounded-lg border border-border/80 flex items-center justify-between gap-4">
-                <div>
-                  <p className="text-xs font-semibold text-foreground">
-                    Next Stage: Adaptive Interest Discovery
-                  </p>
-                  <p className="text-[11px] text-muted-foreground">
-                    Interest Finder is now unlocked. Discover your specialized technical niche across 5 domains.
-                  </p>
-                </div>
-
-                <Button asChild className="text-xs font-semibold shrink-0 gap-1.5">
-                  <Link href="/student/interest-finder">
-                    <span>Continue to Interest Finder</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+            <div className="flex items-center justify-end gap-2 pt-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-8 text-xs border-border text-foreground hover:bg-muted"
+                onClick={() => setDeleteCandidate(null)}
+                disabled={isDeleting}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                className="h-8 text-xs bg-red-600 hover:bg-red-500 text-white font-semibold"
+                onClick={handleConfirmDelete}
+                disabled={isDeleting}
+              >
+                {isDeleting ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" />
+                    Removing...
+                  </>
+                ) : (
+                  "Yes, Remove"
+                )}
+              </Button>
+            </div>
+          </div>
         </div>
       )}
-
-      {/* 6. Footer Privacy & Institutional Security Note */}
-      <footer className="pt-6 border-t border-border/60 text-center space-y-1">
-        <p className="text-xs text-muted-foreground font-medium flex items-center justify-center gap-1.5">
-          <Shield className="w-3.5 h-3.5 text-emerald-500" />
-          <span>Encrypted Institutional Verification Engine</span>
-        </p>
-        <p className="text-[11px] text-muted-foreground/80 max-w-lg mx-auto">
-          Uploaded documents are stored in private Supabase Storage buckets with Row-Level Security.
-          Camera stream is only used during verification and terminates immediately upon capture.
-        </p>
-      </footer>
     </div>
   );
 }

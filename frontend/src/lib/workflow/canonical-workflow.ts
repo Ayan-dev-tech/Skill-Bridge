@@ -29,8 +29,8 @@ export const CANONICAL_STAGE_DEFINITIONS = [
   {
     id: 1,
     slug: "document-verification",
-    name: "Document Verification",
-    shortDescription: "Authenticate academic transcripts and institutional photo ID",
+    name: "Document Submission",
+    shortDescription: "Upload required academic and identity documents to complete your student profile",
     route: "/student/document-verification",
   },
   {
@@ -97,12 +97,24 @@ export async function getCanonicalWorkflowState(
   const activeKnowledgeSession = await db.getActiveKnowledgeTestSessionByStudent(studentId);
   const latestKnowledgeResult = await db.getLatestKnowledgeTestResult(studentId);
 
-  const isVerificationCompleted = verification.verificationStatus === "VERIFIED";
+  const REQUIRED_VERIFICATION_CATEGORIES = [
+    "student_id",
+    "passport_photo",
+    "post_graduation_marksheet",
+    "abc_id",
+  ] as const;
+  const uploadedDocTypes = new Set(verification.documents.map((d) => d.documentType));
+  const allRequiredPresent = REQUIRED_VERIFICATION_CATEGORIES.every((t) =>
+    uploadedDocTypes.has(t)
+  );
+
+  // Single truth: isVerificationCompleted is strictly true ONLY when all 4 required categories are uploaded
+  const isVerificationCompleted =
+    allRequiredPresent && verification.verificationStatus === "VERIFIED";
   const isVerificationInProgress =
     !isVerificationCompleted &&
     (verification.documents.length > 0 ||
-      verification.verificationStatus === "DOCUMENTS_PENDING" ||
-      verification.verificationStatus === "FACE_PENDING");
+      verification.verificationStatus === "DOCUMENTS_PENDING");
 
   const isInterestFinderCompleted = isVerificationCompleted && Boolean(interestProfile);
   const isInterestFinderInProgress =
@@ -116,8 +128,12 @@ export async function getCanonicalWorkflowState(
     !isKnowledgeTestCompleted &&
     Boolean(activeKnowledgeSession);
 
-  // Future stages sequential completion
-  const isSkillGapCompleted = false;
+  // Skill Gap completed when non-stale analysis exists
+  const skillGapAnalysis = await db.getSkillGapAnalysisByStudent(studentId);
+  const isSkillGapCompleted =
+    isKnowledgeTestCompleted &&
+    Boolean(skillGapAnalysis && !skillGapAnalysis.isStale);
+
   const isLearningCompleted = false;
   const isResumeCompleted = false;
   const isOpportunitiesCompleted = false;
@@ -155,8 +171,8 @@ export async function getCanonicalWorkflowState(
     {
       id: 1,
       slug: "document-verification",
-      name: "Document Verification",
-      shortDescription: "Authenticate academic transcripts and institutional photo ID",
+      name: "Document Submission",
+      shortDescription: "Upload required academic and identity documents to complete your student profile",
       route: "/student/document-verification",
       status: isVerificationCompleted
         ? "completed"
@@ -170,10 +186,10 @@ export async function getCanonicalWorkflowState(
         : "Available",
       isLocked: false,
       actionText: isVerificationCompleted
-        ? "View Credentials"
+        ? "View Submitted Documents"
         : isVerificationInProgress
-        ? "Complete Verification"
-        : "Start Verification",
+        ? "Complete Submission"
+        : "Submit Documents",
     },
     {
       id: 2,
@@ -197,7 +213,7 @@ export async function getCanonicalWorkflowState(
         : "Locked",
       isLocked: !isVerificationCompleted,
       lockedReason: !isVerificationCompleted
-        ? "Complete Document Verification to unlock Interest Finder."
+        ? "Complete Document Submission to unlock Interest Finder."
         : undefined,
       actionText: isInterestFinderCompleted
         ? "Review Profile"
@@ -229,7 +245,7 @@ export async function getCanonicalWorkflowState(
         : "Locked",
       isLocked: !isInterestFinderCompleted,
       lockedReason: !isVerificationCompleted
-        ? "Complete Document Verification first."
+        ? "Complete Document Submission first."
         : !isInterestFinderCompleted
         ? "Complete Interest Finder to unlock Knowledge Testing."
         : undefined,
@@ -261,7 +277,11 @@ export async function getCanonicalWorkflowState(
       lockedReason: !isKnowledgeTestCompleted
         ? "Complete Knowledge Testing to unlock Skill Gap Analysis."
         : undefined,
-      actionText: isKnowledgeTestCompleted ? "View Skill Gap" : "Locked",
+      actionText: isSkillGapCompleted
+        ? "Review Skill Gap"
+        : isKnowledgeTestCompleted
+        ? "View Skill Gap"
+        : "Locked",
     },
     {
       id: 5,
@@ -364,13 +384,13 @@ export async function checkRouteAccess(
       return {
         allowed: false,
         redirectUrl: "/student/document-verification",
-        reason: "Complete Document Verification to access the Student Dashboard.",
+        reason: "Complete Document Submission to access the Student Dashboard.",
       };
     }
     return { allowed: true };
   }
 
-  // Stage 1: Document Verification is ALWAYS accessible (including aliases)
+  // Stage 1: Document Submission is ALWAYS accessible (including aliases)
   if (
     pathname.startsWith("/student/document-verification") ||
     pathname.startsWith("/student/documents")
@@ -378,7 +398,7 @@ export async function checkRouteAccess(
     return { allowed: true };
   }
 
-  // Stage 2: Interest Finder requires Stage 1 (Document Verification) COMPLETED
+  // Stage 2: Interest Finder requires Stage 1 (Document Submission) COMPLETED
   if (
     pathname.startsWith("/student/interest-finder") ||
     pathname.startsWith("/student/interest-discovery")
@@ -387,7 +407,7 @@ export async function checkRouteAccess(
       return {
         allowed: false,
         redirectUrl: "/student/document-verification",
-        reason: "Complete Document Verification before accessing Interest Finder.",
+        reason: "Complete Document Submission before accessing Interest Finder.",
       };
     }
     return { allowed: true };
@@ -399,7 +419,7 @@ export async function checkRouteAccess(
       return {
         allowed: false,
         redirectUrl: "/student/document-verification",
-        reason: "Complete Document Verification before accessing Knowledge Testing.",
+        reason: "Complete Document Submission before accessing Knowledge Testing.",
       };
     }
     if (!workflow.isInterestFinderCompleted) {
@@ -418,7 +438,7 @@ export async function checkRouteAccess(
       return {
         allowed: false,
         redirectUrl: "/student/document-verification",
-        reason: "Complete Document Verification first.",
+        reason: "Complete Document Submission first.",
       };
     }
     if (!workflow.isInterestFinderCompleted) {

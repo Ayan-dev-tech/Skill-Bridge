@@ -1,138 +1,214 @@
 /**
- * Skill Bridge — Document Verification & Onboarding Type Definitions
- * Configurable document schemas, OCR extracted structures, and biometric verification states.
+ * Skill Bridge — Document Submission & Onboarding Type Definitions
+ * Clean document categories, metadata structures, and submission states.
+ * No OCR and no Live Photo / biometric verification.
  */
 
-export type VerificationState =
+export type SubmissionStatus =
   | "NOT_STARTED"
   | "DOCUMENTS_PENDING"
-  | "DOCUMENT_PROCESSING"
-  | "FACE_PENDING"
-  | "FACE_PROCESSING"
-  | "VERIFICATION_PROCESSING"
-  | "VERIFIED"
-  | "FAILED"
-  | "RETRY_REQUIRED";
+  | "VERIFIED";
 
-export interface ConfigurableDocumentType {
-  id: string;
-  name: string;
-  category: "identity" | "academic";
+export type DocumentCategoryId =
+  | "student_id"
+  | "passport_photo"
+  | "post_graduation_marksheet"
+  | "academic_certifications"
+  | "skill_certifications"
+  | "abc_id"
+  | "resume"
+  | "social_profiles"
+  | "competitive_exam";
+
+export interface DocumentCategoryConfig {
+  id: DocumentCategoryId;
+  title: string;
   description: string;
   required: boolean;
+  isGrouped: boolean;
+  isProfileLinks?: boolean;
+  acceptedFormats: string[];
   acceptedMimeTypes: string[];
-  maxSizeImageBytes: number; // 2 MB
-  maxSizePdfBytes: number;   // 5 MB
-  iconName: "IdCard" | "GraduationCap" | "FileCheck" | "Shield";
-  instruction: string;
+  maxSizeImageBytes: number;
+  maxSizePdfBytes: number;
+  sizeLimitLabel: string;
+  iconName: string;
 }
 
-export const CONFIGURABLE_DOCUMENT_TYPES: ConfigurableDocumentType[] = [
+export const DOCUMENT_CATEGORIES: DocumentCategoryConfig[] = [
+  // 1. Student ID (Required, Single)
   {
     id: "student_id",
-    name: "Student Identity Card",
-    category: "identity",
-    description: "Official institutional ID card showing student photo, roll number, and department.",
+    title: "Student ID",
+    description: "Upload your current college or university identification.",
     required: true,
+    isGrouped: false,
+    acceptedFormats: ["PNG", "JPG", "JPEG", "PDF"],
     acceptedMimeTypes: ["image/png", "image/jpeg", "image/jpg", "application/pdf"],
     maxSizeImageBytes: 2 * 1024 * 1024,
     maxSizePdfBytes: 5 * 1024 * 1024,
+    sizeLimitLabel: "Images ≤ 2 MB, PDF ≤ 5 MB",
     iconName: "IdCard",
-    instruction: "Upload front of student ID with clearly visible roll number and institution seal.",
   },
+  // 2. Passport Sized Photo (Required, Single, Images Only)
   {
-    id: "academic_transcript",
-    name: "Academic Marksheet / Transcript",
-    category: "academic",
-    description: "Latest semester grade card, consolidated transcript, or board marksheet.",
+    id: "passport_photo",
+    title: "Passport Sized Photo",
+    description: "Upload a recent passport-size photograph.",
     required: true,
-    acceptedMimeTypes: ["image/png", "image/jpeg", "image/jpg", "application/pdf"],
+    isGrouped: false,
+    acceptedFormats: ["PNG", "JPG", "JPEG"],
+    acceptedMimeTypes: ["image/png", "image/jpeg", "image/jpg"],
     maxSizeImageBytes: 2 * 1024 * 1024,
-    maxSizePdfBytes: 5 * 1024 * 1024,
-    iconName: "GraduationCap",
-    instruction: "Digital PDF or clear photo of recent semester grade card/provisional marksheet.",
+    maxSizePdfBytes: 0,
+    sizeLimitLabel: "PNG, JPG or JPEG ≤ 2 MB (PDF not accepted)",
+    iconName: "User",
   },
+  // 3. Post Graduation Marksheet (Required, Grouped)
   {
-    id: "government_id",
-    name: "Government Identification (Optional)",
-    category: "identity",
-    description: "Aadhaar card, Passport, Driver's License, or National Identity card for corporate drives.",
-    required: false,
+    id: "post_graduation_marksheet",
+    title: "Post Graduation Marksheet",
+    description: "Upload your semester marksheets. All semester files will be grouped together.",
+    required: true,
+    isGrouped: true,
+    acceptedFormats: ["PNG", "JPG", "JPEG", "PDF"],
     acceptedMimeTypes: ["image/png", "image/jpeg", "image/jpg", "application/pdf"],
     maxSizeImageBytes: 2 * 1024 * 1024,
     maxSizePdfBytes: 5 * 1024 * 1024,
-    iconName: "Shield",
-    instruction: "Optional government credential to fast-track employer background check.",
+    sizeLimitLabel: "Images ≤ 2 MB, PDF ≤ 5 MB per file",
+    iconName: "GraduationCap",
+  },
+  // 4. Academic Certifications (Optional, Grouped, 5MB for images and PDFs)
+  {
+    id: "academic_certifications",
+    title: "Academic Certifications",
+    description: "Add academic certificates you have earned.",
+    required: false,
+    isGrouped: true,
+    acceptedFormats: ["PNG", "JPG", "JPEG", "PDF"],
+    acceptedMimeTypes: ["image/png", "image/jpeg", "image/jpg", "application/pdf"],
+    maxSizeImageBytes: 5 * 1024 * 1024, // 5 MB image limit for certifications
+    maxSizePdfBytes: 5 * 1024 * 1024,
+    sizeLimitLabel: "PNG, JPG, JPEG or PDF ≤ 5 MB per file",
+    iconName: "Award",
+  },
+  // 5. Skill Certifications (Optional, Grouped, 5MB for images and PDFs)
+  {
+    id: "skill_certifications",
+    title: "Skill Certifications",
+    description: "Add certifications that demonstrate your technical or professional skills.",
+    required: false,
+    isGrouped: true,
+    acceptedFormats: ["PNG", "JPG", "JPEG", "PDF"],
+    acceptedMimeTypes: ["image/png", "image/jpeg", "image/jpg", "application/pdf"],
+    maxSizeImageBytes: 5 * 1024 * 1024, // 5 MB image limit for certifications
+    maxSizePdfBytes: 5 * 1024 * 1024,
+    sizeLimitLabel: "PNG, JPG, JPEG or PDF ≤ 5 MB per file",
+    iconName: "CheckCircle2",
+  },
+  // 6. ABC ID (Required, Single)
+  {
+    id: "abc_id",
+    title: "ABC ID",
+    description: "Upload your Academic Bank of Credits identification document.",
+    required: true,
+    isGrouped: false,
+    acceptedFormats: ["PNG", "JPG", "JPEG", "PDF"],
+    acceptedMimeTypes: ["image/png", "image/jpeg", "image/jpg", "application/pdf"],
+    maxSizeImageBytes: 2 * 1024 * 1024,
+    maxSizePdfBytes: 5 * 1024 * 1024,
+    sizeLimitLabel: "Images ≤ 2 MB, PDF ≤ 5 MB",
+    iconName: "FileCheck",
+  },
+  // 7. Resume (Optional, Single)
+  {
+    id: "resume",
+    title: "Resume",
+    description: "Upload your current resume if you have one.",
+    required: false,
+    isGrouped: false,
+    acceptedFormats: ["PNG", "JPG", "JPEG", "PDF"],
+    acceptedMimeTypes: ["image/png", "image/jpeg", "image/jpg", "application/pdf"],
+    maxSizeImageBytes: 2 * 1024 * 1024,
+    maxSizePdfBytes: 5 * 1024 * 1024,
+    sizeLimitLabel: "Images ≤ 2 MB, PDF ≤ 5 MB",
+    iconName: "FileText",
+  },
+  // 8. Professional Profiles / LinkedIn (Optional, Profile Links)
+  {
+    id: "social_profiles",
+    title: "Professional Profiles",
+    description: "Add your LinkedIn profile and relevant professional social links.",
+    required: false,
+    isGrouped: false,
+    isProfileLinks: true,
+    acceptedFormats: [],
+    acceptedMimeTypes: [],
+    maxSizeImageBytes: 0,
+    maxSizePdfBytes: 0,
+    sizeLimitLabel: "LinkedIn (Recommended), GitHub, Portfolio",
+    iconName: "Share2",
+  },
+  // 9. Competitive Exam Score (Optional, Grouped)
+  {
+    id: "competitive_exam",
+    title: "Competitive Exam Score",
+    description: "Add scorecards or result documents from competitive examinations.",
+    required: false,
+    isGrouped: true,
+    acceptedFormats: ["PNG", "JPG", "JPEG", "PDF"],
+    acceptedMimeTypes: ["image/png", "image/jpeg", "image/jpg", "application/pdf"],
+    maxSizeImageBytes: 2 * 1024 * 1024,
+    maxSizePdfBytes: 5 * 1024 * 1024,
+    sizeLimitLabel: "Images ≤ 2 MB, PDF ≤ 5 MB per file",
+    iconName: "BarChart3",
   },
 ];
-
-export interface OcrExtractedData {
-  rawText: string;
-  name?: string;
-  idNumber?: string;
-  institution?: string;
-  course?: string;
-  semester?: string;
-  validUntil?: string;
-  detectedType?: string;
-  confidence: number;
-  wordCount: number;
-  engine: string;
-  isDocumentValid: boolean;
-  qualityMetrics: {
-    resolution?: string;
-    aspectRatio?: number;
-    format?: string;
-    fileSizeBytes: number;
-  };
-}
 
 export interface VerificationDocumentRecord {
   id: string;
   studentId: string;
   documentType: string;
+  groupId?: string;
   fileName: string;
   fileType: string;
   fileSizeBytes: number;
   storagePath: string;
   uploadedAt: string;
-  ocrStatus: "pending" | "processing" | "completed" | "failed";
-  ocrData?: OcrExtractedData;
-  ocrError?: string;
+  uploadStatus?: "uploaded" | "completed";
 }
 
-export interface FaceCaptureRecord {
-  id: string;
-  studentId: string;
-  storagePath: string;
-  capturedAt: string;
-  captureMode: "auto" | "manual";
-  faceDetected: boolean;
-  qualityPassed: boolean;
-  confidence: number;
-  checks: {
-    resolutionOk: boolean;
-    lightingOk: boolean;
-    contrastOk: boolean;
-    centered: boolean;
-  };
+export interface ProfessionalProfiles {
+  linkedIn?: string;
+  gitHub?: string;
+  portfolio?: string;
+  other?: string;
+  updatedAt?: string;
 }
 
 export interface StudentVerificationRecord {
   studentId: string;
-  verificationStatus: VerificationState;
+  verificationStatus: SubmissionStatus;
   documents: VerificationDocumentRecord[];
-  faceCapture?: FaceCaptureRecord;
-  rejectionReason?: string;
+  professionalProfiles?: ProfessionalProfiles;
   createdAt: string;
   updatedAt: string;
   completedAt?: string;
 }
 
-export interface DocumentVerificationClientState {
-  verificationStatus: VerificationState;
+export interface DocumentSubmissionClientState {
+  verificationStatus: SubmissionStatus;
   documents: VerificationDocumentRecord[];
-  faceCapture?: FaceCaptureRecord;
-  isVerified: boolean;
+  professionalProfiles?: ProfessionalProfiles;
+  isCompleted: boolean;
+  requiredCount: number;
+  requiredTotal: number;
+  optionalCount: number;
+  optionalTotal: number;
   canProceedToInterestFinder: boolean;
 }
+
+// Backward-compatibility alias
+export type ConfigurableDocumentType = DocumentCategoryConfig;
+export const CONFIGURABLE_DOCUMENT_TYPES = DOCUMENT_CATEGORIES;
+export type VerificationState = SubmissionStatus;

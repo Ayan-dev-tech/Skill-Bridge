@@ -66,8 +66,8 @@ export const studentWorkflowStages: WorkflowStage[] = [
   {
     id: 1,
     slug: "document-verification",
-    name: "Document Verification",
-    shortDescription: "Authenticate academic transcripts and institutional photo ID",
+    name: "Document Submission",
+    shortDescription: "Upload required academic and identity documents to complete your student profile",
     status: "current",
     route: "/student/document-verification",
   },

@@ -27,13 +27,15 @@ export async function GET(request: Request) {
     // Current Focus derived directly from canonical workflow state
     let currentFocus: DashboardCurrentFocus = {
       stage: 1,
-      title: "Document Verification",
+      title: "Document Submission",
       subtitle:
-        "Upload your institutional ID card and academic transcripts, followed by a live photo capture to verify your credentials.",
-      actionText: verification.documents.length > 0 ? "Complete Verification" : "Start Verification",
+        "Upload your required academic and identity documents to complete your student profile.",
+      actionText: verification.documents.length > 0 ? "Complete Submission" : "Submit Documents",
       actionHref: "/student/document-verification",
       status: canonicalWorkflow.stages[0].status,
     };
+
+    const skillGapAnalysis = await db.getSkillGapAnalysisByStudent(student.id);
 
     if (canonicalWorkflow.currentStageId === 2) {
       currentFocus = {
@@ -65,6 +67,16 @@ export async function GET(request: Request) {
         actionHref: "/student/skill-gap",
         status: canonicalWorkflow.stages[3].status,
       };
+    } else if (canonicalWorkflow.currentStageId === 5) {
+      currentFocus = {
+        stage: 5,
+        title: "Learning / Mentoring",
+        subtitle:
+          "Access curated curriculum tracks and faculty mentorship to close identified skill gaps.",
+        actionText: "Explore Learning Modules",
+        actionHref: "/student/learning",
+        status: canonicalWorkflow.stages[4].status,
+      };
     }
 
     const scoreVal = latestKnowledgeResult
@@ -79,7 +91,12 @@ export async function GET(request: Request) {
       knowledgeLevel: latestKnowledgeResult ? latestKnowledgeResult.knowledgeLevel : null,
       verifiedDocumentsCount: verification.verificationStatus === "VERIFIED" ? verification.documents.length : 0,
       totalDocumentsCount: verification.documents.length,
-      skillGapsIdentified: latestKnowledgeResult ? latestKnowledgeResult.weaknesses.length : 0,
+      skillGapsIdentified:
+        skillGapAnalysis && !skillGapAnalysis.isStale
+          ? skillGapAnalysis.skillGaps.length
+          : latestKnowledgeResult
+          ? latestKnowledgeResult.weaknesses.length
+          : 0,
       activeApplicationsCount: 0,
     };
 

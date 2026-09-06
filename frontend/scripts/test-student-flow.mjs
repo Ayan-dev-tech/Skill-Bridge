@@ -62,8 +62,8 @@ async function runStudentVerification() {
   const loginData = await loginRes.json();
   console.log("Student Login Result:", loginRes.status, loginData);
   assert.strictEqual(loginRes.status, 200, "Student login should return HTTP 200");
-  assert.strictEqual(loginData.redirectUrl, "/student", "Student must be routed to /student");
-  console.log("✓ TEST 1 PASSED: Student successfully authenticated and directed to /student.");
+  assert.strictEqual(loginData.redirectUrl, "/student/document-verification", "Student must be routed to /student/document-verification");
+  console.log("✓ TEST 1 PASSED: Student successfully authenticated and directed to /student/document-verification.");
 
   // 2. Verify /student Renders Interest Finder Entry Screen
   console.log("\n[TEST 2] Testing /student Post-Login Entry & Interest Finder Messaging");

@@ -5,9 +5,18 @@ import type { TestSessionState, TestResult } from "./knowledge-test/types";
 import type {
   StudentVerificationRecord,
   VerificationDocumentRecord,
-  FaceCaptureRecord,
-  VerificationState,
+  ProfessionalProfiles,
+  SubmissionStatus,
 } from "./verification/types";
+import type {
+  SkillGapAnalysisRecord,
+  Educator,
+  EducationProgram,
+} from "./skill-gap/types";
+import {
+  SAMPLE_EDUCATORS,
+  SAMPLE_EDUCATION_PROGRAMS,
+} from "./skill-gap/educator-catalog-data";
 
 export type KnowledgeTestSessionRecord = TestSessionState;
 export type KnowledgeTestResultRecord = TestResult;
@@ -114,6 +123,9 @@ interface DatabaseSchema {
   knowledgeTestSessions: KnowledgeTestSessionRecord[];
   knowledgeTestResults: KnowledgeTestResultRecord[];
   studentVerifications: StudentVerificationRecord[];
+  skillGapAnalyses: SkillGapAnalysisRecord[];
+  educators: Educator[];
+  educationPrograms: EducationProgram[];
 }
 
 const DATA_DIR = path.join(process.cwd(), "data");
@@ -146,6 +158,9 @@ function ensureDbExists(): DatabaseSchema {
       knowledgeTestSessions: [],
       knowledgeTestResults: [],
       studentVerifications: [],
+      skillGapAnalyses: [],
+      educators: [...SAMPLE_EDUCATORS],
+      educationPrograms: [...SAMPLE_EDUCATION_PROGRAMS],
     };
   } else {
     try {
@@ -158,6 +173,10 @@ function ensureDbExists(): DatabaseSchema {
       if (!data.knowledgeTestSessions) data.knowledgeTestSessions = [];
       if (!data.knowledgeTestResults) data.knowledgeTestResults = [];
       if (!data.studentVerifications) data.studentVerifications = [];
+      if (!data.skillGapAnalyses) data.skillGapAnalyses = [];
+      if (!data.educators || data.educators.length === 0) data.educators = [...SAMPLE_EDUCATORS];
+      if (!data.educationPrograms || data.educationPrograms.length === 0)
+        data.educationPrograms = [...SAMPLE_EDUCATION_PROGRAMS];
     } catch {
       data = {
         users: [],
@@ -170,6 +189,9 @@ function ensureDbExists(): DatabaseSchema {
         knowledgeTestSessions: [],
         knowledgeTestResults: [],
         studentVerifications: [],
+        skillGapAnalyses: [],
+        educators: [...SAMPLE_EDUCATORS],
+        educationPrograms: [...SAMPLE_EDUCATION_PROGRAMS],
       };
     }
   }
@@ -626,6 +648,16 @@ export const db = {
       data.interestProfiles.push(record);
     }
 
+    // Invalidate existing skill gap analysis so recommendations are refreshed
+    if (data.skillGapAnalyses) {
+      for (const a of data.skillGapAnalyses) {
+        if (a.studentId === record.studentId) {
+          a.isStale = true;
+          a.updatedAt = new Date().toISOString();
+        }
+      }
+    }
+
     saveDb(data);
   },
 
@@ -722,6 +754,16 @@ export const db = {
       data.knowledgeTestResults.push(result);
     }
 
+    // Invalidate existing skill gap analysis so recommendations are refreshed
+    if (data.skillGapAnalyses) {
+      for (const a of data.skillGapAnalyses) {
+        if (a.studentId === result.studentId) {
+          a.isStale = true;
+          a.updatedAt = new Date().toISOString();
+        }
+      }
+    }
+
     saveDb(data);
   },
 
@@ -750,30 +792,116 @@ export const db = {
     return data.knowledgeTestResults.find((r) => r.id === resultId) || null;
   },
 
+  // ================= SKILL GAP ANALYSIS OPERATIONS =================
+
+  async saveSkillGapAnalysis(record: SkillGapAnalysisRecord): Promise<void> {
+    const data = ensureDbExists();
+    if (!data.skillGapAnalyses) data.skillGapAnalyses = [];
+
+    const existingIndex = data.skillGapAnalyses.findIndex(
+      (a) => a.id === record.id || a.studentId === record.studentId
+    );
+
+    if (existingIndex >= 0) {
+      data.skillGapAnalyses[existingIndex] = record;
+    } else {
+      data.skillGapAnalyses.push(record);
+    }
+
+    saveDb(data);
+  },
+
+  async getSkillGapAnalysisByStudent(
+    studentId: string
+  ): Promise<SkillGapAnalysisRecord | null> {
+    const data = ensureDbExists();
+    if (!data.skillGapAnalyses) return null;
+    const records = data.skillGapAnalyses
+      .filter((a) => a.studentId === studentId)
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+    return records.length > 0 ? records[0] : null;
+  },
+
+  async invalidateSkillGapAnalysis(studentId: string): Promise<void> {
+    const data = ensureDbExists();
+    if (!data.skillGapAnalyses) return;
+    for (const a of data.skillGapAnalyses) {
+      if (a.studentId === studentId) {
+        a.isStale = true;
+        a.updatedAt = new Date().toISOString();
+      }
+    }
+    saveDb(data);
+  },
+
+  async getEducators(): Promise<Educator[]> {
+    const data = ensureDbExists();
+    return data.educators && data.educators.length > 0
+      ? data.educators
+      : SAMPLE_EDUCATORS;
+  },
+
+  async getEducationPrograms(): Promise<EducationProgram[]> {
+    const data = ensureDbExists();
+    return data.educationPrograms && data.educationPrograms.length > 0
+      ? data.educationPrograms
+      : SAMPLE_EDUCATION_PROGRAMS;
+  },
+
   // ================= DOCUMENT VERIFICATION OPERATIONS =================
 
   async getStudentVerification(studentId: string): Promise<StudentVerificationRecord> {
     const data = ensureDbExists();
-    const existing = data.studentVerifications.find((v) => v.studentId === studentId);
-    if (existing) {
+    let existing = data.studentVerifications.find((v) => v.studentId === studentId);
+    if (!existing) {
+      existing = {
+        studentId,
+        verificationStatus: "NOT_STARTED",
+        documents: [],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      data.studentVerifications.push(existing);
+      saveDb(data);
       return existing;
     }
 
-    const newRecord: StudentVerificationRecord = {
-      studentId,
-      verificationStatus: "NOT_STARTED",
-      documents: [],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    data.studentVerifications.push(newRecord);
-    saveDb(data);
-    return newRecord;
+    // Deterministic state reconciliation:
+    // Required categories: student_id, passport_photo, post_graduation_marksheet, abc_id
+    const REQUIRED_CATEGORIES = [
+      "student_id",
+      "passport_photo",
+      "post_graduation_marksheet",
+      "abc_id",
+    ];
+    const uploadedTypes = new Set(existing.documents.map((d) => d.documentType));
+    const allRequiredPresent = REQUIRED_CATEGORIES.every((t) => uploadedTypes.has(t));
+
+    // If marked VERIFIED but a required document is missing, self-heal to DOCUMENTS_PENDING
+    if (existing.verificationStatus === "VERIFIED" && !allRequiredPresent) {
+      existing.verificationStatus = existing.documents.length > 0 ? "DOCUMENTS_PENDING" : "NOT_STARTED";
+      existing.updatedAt = new Date().toISOString();
+      saveDb(data);
+    } else if (allRequiredPresent && existing.verificationStatus !== "VERIFIED") {
+      // If all 4 required are present, ensure VERIFIED status
+      existing.verificationStatus = "VERIFIED";
+      if (!existing.completedAt) {
+        existing.completedAt = new Date().toISOString();
+      }
+      existing.updatedAt = new Date().toISOString();
+      saveDb(data);
+    }
+
+    return existing;
   },
 
   async saveVerificationDocument(
     studentId: string,
-    document: VerificationDocumentRecord
+    document: VerificationDocumentRecord,
+    replaceDocId?: string
   ): Promise<StudentVerificationRecord> {
     const data = ensureDbExists();
     let record = data.studentVerifications.find((v) => v.studentId === studentId);
@@ -788,20 +916,55 @@ export const db = {
       data.studentVerifications.push(record);
     }
 
-    // Replace if document of this type already exists, otherwise push
-    const existingDocIdx = record.documents.findIndex(
-      (d) => d.documentType === document.documentType
-    );
-    if (existingDocIdx >= 0) {
-      record.documents[existingDocIdx] = document;
-    } else {
+    // Grouped categories allow multiple documents
+    const groupedTypes = new Set([
+      "post_graduation_marksheet",
+      "academic_certifications",
+      "skill_certifications",
+      "competitive_exam",
+    ]);
+
+    if (replaceDocId) {
+      const idx = record.documents.findIndex((d) => d.id === replaceDocId);
+      if (idx >= 0) {
+        record.documents[idx] = document;
+      } else {
+        record.documents.push(document);
+      }
+    } else if (groupedTypes.has(document.documentType)) {
+      // Append to grouped documents
       record.documents.push(document);
+    } else {
+      // Single-file category: replace existing document of this type
+      const existingDocIdx = record.documents.findIndex(
+        (d) => d.documentType === document.documentType
+      );
+      if (existingDocIdx >= 0) {
+        record.documents[existingDocIdx] = document;
+      } else {
+        record.documents.push(document);
+      }
     }
 
-    // Update state
-    if (record.verificationStatus === "NOT_STARTED") {
-      record.verificationStatus = "DOCUMENTS_PENDING";
+    // Strictly re-evaluate completion state based on all 4 required documents
+    const REQUIRED_CATEGORIES = [
+      "student_id",
+      "passport_photo",
+      "post_graduation_marksheet",
+      "abc_id",
+    ];
+    const uploadedTypes = new Set(record.documents.map((d) => d.documentType));
+    const allRequiredPresent = REQUIRED_CATEGORIES.every((t) => uploadedTypes.has(t));
+
+    if (allRequiredPresent) {
+      record.verificationStatus = "VERIFIED";
+      if (!record.completedAt) {
+        record.completedAt = new Date().toISOString();
+      }
+    } else {
+      record.verificationStatus = record.documents.length > 0 ? "DOCUMENTS_PENDING" : "NOT_STARTED";
     }
+
     record.updatedAt = new Date().toISOString();
     saveDb(data);
     return record;
@@ -815,9 +978,24 @@ export const db = {
     const record = data.studentVerifications.find((v) => v.studentId === studentId);
     if (record) {
       record.documents = record.documents.filter((d) => d.id !== documentId);
-      if (record.documents.length === 0 && !record.faceCapture && record.verificationStatus !== "VERIFIED") {
-        record.verificationStatus = "NOT_STARTED";
+
+      // Re-evaluate required categories after deletion
+      const REQUIRED_CATEGORIES = [
+        "student_id",
+        "passport_photo",
+        "post_graduation_marksheet",
+        "abc_id",
+      ];
+      const uploadedTypes = new Set(record.documents.map((d) => d.documentType));
+      const allRequiredPresent = REQUIRED_CATEGORIES.every((t) => uploadedTypes.has(t));
+
+      if (allRequiredPresent) {
+        record.verificationStatus = "VERIFIED";
+      } else {
+        record.verificationStatus = record.documents.length > 0 ? "DOCUMENTS_PENDING" : "NOT_STARTED";
+        record.completedAt = undefined;
       }
+
       record.updatedAt = new Date().toISOString();
       saveDb(data);
       return record;
@@ -838,17 +1016,16 @@ export const db = {
     return null;
   },
 
-
-  async saveFaceCapture(
+  async saveProfessionalProfiles(
     studentId: string,
-    capture: FaceCaptureRecord
+    profiles: ProfessionalProfiles
   ): Promise<StudentVerificationRecord> {
     const data = ensureDbExists();
     let record = data.studentVerifications.find((v) => v.studentId === studentId);
     if (!record) {
       record = {
         studentId,
-        verificationStatus: "FACE_PENDING",
+        verificationStatus: "DOCUMENTS_PENDING",
         documents: [],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
@@ -856,7 +1033,11 @@ export const db = {
       data.studentVerifications.push(record);
     }
 
-    record.faceCapture = capture;
+    record.professionalProfiles = {
+      ...record.professionalProfiles,
+      ...profiles,
+      updatedAt: new Date().toISOString(),
+    };
     record.updatedAt = new Date().toISOString();
     saveDb(data);
     return record;
@@ -868,18 +1049,30 @@ export const db = {
     if (!record) {
       record = {
         studentId,
-        verificationStatus: "VERIFIED",
+        verificationStatus: "NOT_STARTED",
         documents: [],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        completedAt: new Date().toISOString(),
       };
       data.studentVerifications.push(record);
-    } else {
-      record.verificationStatus = "VERIFIED";
-      record.updatedAt = new Date().toISOString();
-      record.completedAt = new Date().toISOString();
     }
+
+    const REQUIRED_CATEGORIES = [
+      "student_id",
+      "passport_photo",
+      "post_graduation_marksheet",
+      "abc_id",
+    ];
+    const uploadedTypes = new Set(record.documents.map((d) => d.documentType));
+    const allRequiredPresent = REQUIRED_CATEGORIES.every((t) => uploadedTypes.has(t));
+
+    if (!allRequiredPresent) {
+      throw new Error("All 4 required documents must be submitted before completion.");
+    }
+
+    record.verificationStatus = "VERIFIED";
+    record.updatedAt = new Date().toISOString();
+    record.completedAt = record.completedAt || new Date().toISOString();
 
     saveDb(data);
     return record;
@@ -896,13 +1089,16 @@ export const db = {
     const isVerificationCompleted = verification.verificationStatus === "VERIFIED";
     const isVerificationInProgress =
       verification.documents.length > 0 ||
-      verification.verificationStatus === "DOCUMENTS_PENDING" ||
-      verification.verificationStatus === "FACE_PENDING";
+      verification.verificationStatus === "DOCUMENTS_PENDING";
     const isInterestFinderCompleted = !!interestProfile;
     const isKnowledgeTestCompleted = !!latestKnowledgeResult;
     const isKnowledgeTestInProgress = !!activeKnowledgeSession;
+    const skillGapAnalysis = await this.getSkillGapAnalysisByStudent(studentId);
+    const isSkillGapCompleted =
+      isKnowledgeTestCompleted &&
+      Boolean(skillGapAnalysis && !skillGapAnalysis.isStale);
 
-    // Determine current focus stage (1: Document Verification -> 2: Interest Finder -> 3: Knowledge Testing -> 4: Skill Gap)
+    // Determine current focus stage (1: Document Verification -> 2: Interest Finder -> 3: Knowledge Testing -> 4: Skill Gap -> 5: Learning)
     let currentFocusStageId = 1;
     if (!isVerificationCompleted) {
       currentFocusStageId = 1;
@@ -910,16 +1106,18 @@ export const db = {
       currentFocusStageId = 2;
     } else if (!isKnowledgeTestCompleted) {
       currentFocusStageId = 3;
-    } else {
+    } else if (!isSkillGapCompleted) {
       currentFocusStageId = 4;
+    } else {
+      currentFocusStageId = 5;
     }
 
     const sections = [
       {
         id: 1,
         slug: "document-verification",
-        name: "Document Verification",
-        shortDescription: "Authenticate academic transcripts, marksheets, and institutional photo ID.",
+        name: "Document Submission",
+        shortDescription: "Upload required academic and identity documents to complete your student profile.",
         route: "/student/document-verification",
         iconName: "FileCheck",
         status: isVerificationCompleted
@@ -1006,11 +1204,25 @@ export const db = {
         shortDescription: "Identify missing competencies and target elimination roadmaps.",
         route: "/student/skill-gap",
         iconName: "TrendingUp",
-        status: "locked",
-        statusLabel: "Locked",
-        lockedReason: "Complete Document Verification to unlock Skill Gap Analysis.",
-        isCurrentFocus: false,
-        actionText: "Locked",
+        status: isSkillGapCompleted
+          ? "completed"
+          : isKnowledgeTestCompleted
+          ? "available"
+          : "locked",
+        statusLabel: isSkillGapCompleted
+          ? "Completed"
+          : isKnowledgeTestCompleted
+          ? "Available"
+          : "Locked",
+        lockedReason: !isKnowledgeTestCompleted
+          ? "Complete Knowledge Testing to unlock Skill Gap Analysis."
+          : undefined,
+        isCurrentFocus: currentFocusStageId === 4,
+        actionText: isSkillGapCompleted
+          ? "Review Analysis"
+          : isKnowledgeTestCompleted
+          ? "Analyze Gaps"
+          : "Locked",
       },
       {
         id: 5,

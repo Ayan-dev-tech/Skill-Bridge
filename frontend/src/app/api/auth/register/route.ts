@@ -111,7 +111,12 @@ export async function POST(request: Request) {
       message: `Verification code sent to your email for ${role} registration.`,
       email: email.toLowerCase().trim(),
       role,
-      devOtp: process.env.NODE_ENV !== "production" ? otpCode : undefined,
+      devOtp:
+        process.env.NODE_ENV !== "production" ||
+        process.env.ENABLE_DEV_OTP === "true" ||
+        process.env.DEV_OTP === "true"
+          ? otpCode
+          : undefined,
     });
   } catch (error) {
     console.error("Registration error:", error);

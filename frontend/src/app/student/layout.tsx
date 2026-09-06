@@ -87,6 +87,8 @@ export default function StudentRootLayout({
     checkWorkflowAccess();
   }, [checkWorkflowAccess]);
 
+  const isDocVerification = pathname.startsWith("/student/document-verification");
+
   return (
     <div className="flex h-screen bg-background text-foreground overflow-hidden">
       {/* Persistent Desktop Sidebar & Mobile Drawer */}
@@ -106,9 +108,15 @@ export default function StudentRootLayout({
         />
 
         {/* Workflow Progression & Active Page Content */}
-        <main className="flex-1 p-4 md:p-6 max-w-6xl w-full mx-auto space-y-6">
-          {/* Visual Sequential Workflow Progression */}
-          <WorkflowProgress workflow={workflow} />
+        <main
+          className={`flex-1 w-full mx-auto ${
+            isDocVerification
+              ? "p-4 md:p-6 max-w-5xl space-y-6"
+              : "p-4 md:p-6 max-w-6xl space-y-6"
+          }`}
+        >
+          {/* Visual Sequential Workflow Progression (omitted on document submission to avoid duplicate journey stepper) */}
+          {!isDocVerification && <WorkflowProgress workflow={workflow} />}
 
           {/* Child Page Content or Redirecting Guard */}
           <div className="min-h-[calc(100vh-22rem)] animate-in fade-in duration-200 motion-reduce:animate-none">

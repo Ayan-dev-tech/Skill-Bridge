@@ -1,33 +1,30 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getAuthenticatedStudent } from "@/lib/student-auth";
-import { CONFIGURABLE_DOCUMENT_TYPES } from "@/lib/verification/types";
+
+const REQUIRED_CATEGORIES = [
+  "student_id",
+  "passport_photo",
+  "post_graduation_marksheet",
+  "abc_id",
+];
 
 export async function POST(request: Request) {
   try {
     const { student } = await getAuthenticatedStudent(request);
     const verification = await db.getStudentVerification(student.id);
 
-    // Validate that at least required documents are uploaded
-    const requiredTypes = CONFIGURABLE_DOCUMENT_TYPES.filter((t) => t.required).map((t) => t.id);
+    // Validate that all 4 required document categories are uploaded
     const uploadedTypes = new Set(verification.documents.map((d) => d.documentType));
-    const allRequiredPresent = requiredTypes.every((t) => uploadedTypes.has(t));
+    const missing = REQUIRED_CATEGORIES.filter((t) => !uploadedTypes.has(t));
 
-    if (!allRequiredPresent) {
+    if (missing.length > 0) {
       return NextResponse.json(
         {
           success: false,
-          error: "Please upload all required verification documents before completing verification.",
-        },
-        { status: 400 }
-      );
-    }
-
-    if (!verification.faceCapture || !verification.faceCapture.qualityPassed) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Live face capture verification must be completed.",
+          error:
+            "Please upload all 4 required documents (Student ID, Passport Sized Photo, Post Graduation Marksheet, and ABC ID) before completing submission.",
+          missing,
         },
         { status: 400 }
       );
@@ -37,14 +34,16 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: "Verification completed successfully.",
+      status: "VERIFIED",
+      message: "Document Submission completed successfully.",
       verification: completed,
       redirectUrl: "/student/interest-finder",
+      redirectTo: "/student/interest-finder",
     });
   } catch (error) {
     console.error("Complete verification error:", error);
     return NextResponse.json(
-      { success: false, error: "Failed to finalize verification." },
+      { success: false, error: "Failed to finalize document submission." },
       { status: 500 }
     );
   }

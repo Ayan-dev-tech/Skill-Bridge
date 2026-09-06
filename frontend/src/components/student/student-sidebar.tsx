@@ -66,7 +66,7 @@ export function StudentSidebar({
       title: "Getting Started",
       items: [
         {
-          name: "Document Verification",
+          name: "Document Submission",
           href: "/student/document-verification",
           icon: FileCheck,
         },
@@ -139,17 +139,21 @@ export function StudentSidebar({
     },
   ];
 
+  const isDocVerification = pathname.startsWith("/student/document-verification");
+
   const sidebarContent = (
-    <div className="flex flex-col h-full bg-background border-r border-border text-foreground select-none">
+    <div className="flex flex-col h-full select-none bg-background border-r border-border text-foreground">
       {/* Brand Header */}
       <div className="flex items-center justify-between px-5 h-14 border-b border-border shrink-0">
         <Link href="/student/dashboard" className="flex items-center gap-2.5">
-          <div className="w-5 h-5 rounded-md bg-foreground text-background font-bold text-xs flex items-center justify-center">
+          <div className="w-5 h-5 rounded-md font-bold text-xs flex items-center justify-center bg-foreground text-background">
             S
           </div>
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-sm tracking-tight">SKILL BRIDGE</span>
-            <span className="text-[10px] font-mono px-1.5 py-0.2 rounded border border-border bg-muted/40 text-muted-foreground uppercase font-semibold">
+            <span className="font-bold text-sm tracking-tight text-foreground">
+              SKILL BRIDGE
+            </span>
+            <span className="text-[10px] font-mono px-1.5 py-0.2 rounded border uppercase font-semibold border-border bg-muted/40 text-muted-foreground">
               Student
             </span>
           </div>
@@ -157,7 +161,7 @@ export function StudentSidebar({
         {onCloseMobile && (
           <button
             onClick={onCloseMobile}
-            className="md:hidden text-muted-foreground hover:text-foreground p-1 rounded"
+            className="md:hidden p-1 rounded text-muted-foreground hover:text-foreground"
             aria-label="Close navigation drawer"
           >
             <X className="w-4 h-4" />
@@ -188,14 +192,14 @@ export function StudentSidebar({
                 return (
                   <div
                     key={item.href}
-                    className="w-full flex items-center justify-between px-2.5 py-2 rounded-md font-medium text-muted-foreground/40 cursor-not-allowed select-none opacity-60"
+                    className="w-full flex items-center justify-between px-2.5 py-2 rounded-md font-medium cursor-not-allowed select-none opacity-60 text-muted-foreground/40"
                     title={matchingStage?.lockedReason || "Locked until prerequisite milestones are completed."}
                   >
                     <div className="flex items-center gap-2.5 truncate">
                       <Icon className="w-4 h-4 shrink-0 text-muted-foreground/40" />
                       <span className="truncate">{item.name}</span>
                     </div>
-                    <Lock className="w-3 h-3 text-muted-foreground/50 shrink-0" />
+                    <Lock className="w-3 h-3 shrink-0 text-muted-foreground/50" />
                   </div>
                 );
               }
@@ -218,7 +222,7 @@ export function StudentSidebar({
                     <span className="truncate">{item.name}</span>
                   </div>
                   {item.isCurrentEntry && !isActive && (
-                    <span className="text-[10px] font-mono px-1.5 py-0.2 rounded font-semibold bg-muted text-foreground border border-border">
+                    <span className="text-[10px] font-mono px-1.5 py-0.2 rounded font-semibold border bg-muted text-foreground border-border">
                       Start
                     </span>
                   )}

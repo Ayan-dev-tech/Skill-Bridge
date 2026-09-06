@@ -877,9 +877,15 @@ export function KnowledgeTestContainer() {
             <RotateCcw className="w-4 h-4 mr-1.5" /> Take New Assessment
           </Button>
 
-          <Button asChild>
+          <Button variant="outline" asChild>
             <Link href="/student/dashboard">
-              Return to Student Dashboard <ArrowRight className="w-4 h-4 ml-1.5" />
+              Return to Dashboard
+            </Link>
+          </Button>
+
+          <Button asChild>
+            <Link href="/student/skill-gap">
+              Proceed to Skill Gap Analysis <ArrowRight className="w-4 h-4 ml-1.5" />
             </Link>
           </Button>
         </div>

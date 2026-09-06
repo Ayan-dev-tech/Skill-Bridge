@@ -1,20 +1,15 @@
-import type {
-  OcrExtractedData,
-  VerificationDocumentRecord,
-  FaceCaptureRecord,
-  CONFIGURABLE_DOCUMENT_TYPES,
-} from "./types";
-
-const PYTHON_OCR_URL = process.env.PYTHON_OCR_URL || "http://127.0.0.1:8000";
+import { DOCUMENT_CATEGORIES } from "./types";
 
 export class DocumentVerificationService {
   /**
-   * Validates file size and magic bytes against accepted types.
+   * Validates file format, category-specific rules, size limits, and magic bytes.
    */
   static validateFile(
     fileName: string,
     mimeType: string,
-    buffer: Buffer
+    fileSize: number,
+    buffer: Buffer,
+    categoryId: string
   ): { valid: boolean; error?: string } {
     const lowerName = fileName.toLowerCase();
     const isPdf = mimeType === "application/pdf" || lowerName.endsWith(".pdf");
@@ -25,30 +20,64 @@ export class DocumentVerificationService {
       lowerName.endsWith(".jpg") ||
       lowerName.endsWith(".jpeg");
 
-    if (!isPdf && !isPng && !isJpg) {
-      return {
-        valid: false,
-        error: "Only PNG, JPG and PDF files are supported.",
-      };
+    // 1. Passport Sized Photo rule: Only PNG, JPG, JPEG <= 2 MB
+    if (categoryId === "passport_photo") {
+      if (isPdf) {
+        return {
+          valid: false,
+          error: "Passport Sized Photo must be PNG, JPG or JPEG.",
+        };
+      }
+      if (!isPng && !isJpg) {
+        return {
+          valid: false,
+          error: "Passport Sized Photo must be PNG, JPG or JPEG.",
+        };
+      }
+      if (fileSize > 2 * 1024 * 1024) {
+        return {
+          valid: false,
+          error: "Images must be 2 MB or smaller.",
+        };
+      }
+    } else {
+      // General format validation
+      if (!isPdf && !isPng && !isJpg) {
+        return {
+          valid: false,
+          error: "Unsupported file type. Please upload PNG, JPG, JPEG or PDF.",
+        };
+      }
+
+      // 2. Certifications rule: 5 MB per file for both images and PDFs
+      if (
+        categoryId === "academic_certifications" ||
+        categoryId === "skill_certifications"
+      ) {
+        if (fileSize > 5 * 1024 * 1024) {
+          return {
+            valid: false,
+            error: "Certification files must be 5 MB or smaller.",
+          };
+        }
+      } else {
+        // 3. Standard limits: Images <= 2 MB, PDFs <= 5 MB
+        if (isPdf && fileSize > 5 * 1024 * 1024) {
+          return {
+            valid: false,
+            error: "PDF files must be 5 MB or smaller.",
+          };
+        }
+        if (!isPdf && fileSize > 2 * 1024 * 1024) {
+          return {
+            valid: false,
+            error: "Images must be 2 MB or smaller.",
+          };
+        }
+      }
     }
 
-    const size = buffer.length;
-
-    if (isPdf && size > 5 * 1024 * 1024) {
-      return {
-        valid: false,
-        error: "PDF documents must be 5 MB or smaller.",
-      };
-    }
-
-    if (!isPdf && size > 2 * 1024 * 1024) {
-      return {
-        valid: false,
-        error: "Image documents must be 2 MB or smaller.",
-      };
-    }
-
-    // Inspect Magic Bytes
+    // 4. Magic Bytes Inspection
     if (isPdf) {
       const header = buffer.subarray(0, 5).toString("ascii");
       if (!header.startsWith("%PDF-")) {
@@ -59,6 +88,7 @@ export class DocumentVerificationService {
       }
     } else if (isPng) {
       if (
+        buffer.length < 8 ||
         buffer[0] !== 0x89 ||
         buffer[1] !== 0x50 ||
         buffer[2] !== 0x4e ||
@@ -70,7 +100,12 @@ export class DocumentVerificationService {
         };
       }
     } else if (isJpg) {
-      if (buffer[0] !== 0xff || buffer[1] !== 0xd8 || buffer[2] !== 0xff) {
+      if (
+        buffer.length < 3 ||
+        buffer[0] !== 0xff ||
+        buffer[1] !== 0xd8 ||
+        buffer[2] !== 0xff
+      ) {
         return {
           valid: false,
           error: "Corrupt or invalid JPEG/JPG file header.",
@@ -82,146 +117,36 @@ export class DocumentVerificationService {
   }
 
   /**
-   * Calls Python OCR Service to extract text & structured student credentials.
+   * Helper to format bytes to human readable string (KB, MB).
    */
-  static async processOcr(
-    buffer: Buffer,
-    fileName: string,
-    mimeType: string,
-    documentType: string,
-    studentId: string
-  ): Promise<OcrExtractedData> {
-    try {
-      const formData = new FormData();
-      const blob = new Blob([new Uint8Array(buffer)], { type: mimeType });
-      formData.append("file", blob, fileName);
-      formData.append("document_type", documentType);
-      formData.append("student_id", studentId);
-
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 30000);
-
-      const res = await fetch(`${PYTHON_OCR_URL}/api/ocr/process-document`, {
-        method: "POST",
-        body: formData,
-        signal: controller.signal,
-      });
-
-      clearTimeout(timeoutId);
-
-      if (res.ok) {
-        const json = await res.json();
-        if (json.status === "success") {
-          return {
-            rawText: json.extracted_text || "",
-            name: json.extracted_fields?.name || null,
-            idNumber: json.extracted_fields?.id_number || null,
-            institution: json.extracted_fields?.institution || null,
-            course: json.extracted_fields?.course || null,
-            semester: json.extracted_fields?.semester || null,
-            validUntil: json.extracted_fields?.valid_until || null,
-            detectedType: json.extracted_fields?.detected_type || documentType,
-            confidence: json.confidence || 0.0,
-            wordCount: json.word_count || 0,
-            engine: json.engine || "python_ocr_engine",
-            isDocumentValid: json.is_valid_document ?? false,
-            qualityMetrics: {
-              resolution: json.quality_metrics?.resolution,
-              aspectRatio: json.quality_metrics?.aspect_ratio,
-              format: json.quality_metrics?.format,
-              fileSizeBytes: json.quality_metrics?.file_size_bytes || buffer.length,
-            },
-          };
-        } else {
-          throw new Error(
-            json.error || "Document text extraction failed. Please ensure the document is clear and readable."
-          );
-        }
-      } else {
-        throw new Error("OCR processing is currently unavailable. Please try again.");
-      }
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        throw err;
-      }
-      throw new Error("OCR processing is currently unavailable. Please try again.");
-    }
+  static formatFileSize(bytes: number): string {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
   }
 
   /**
-   * Calls Python Face Verification Service to validate captured live selfie photo.
+   * Validates standard HTTP/HTTPS profile URLs (e.g. LinkedIn, GitHub).
    */
-  static async verifyLiveFace(
-    imageBase64: string,
-    captureMode: "auto" | "manual",
-    studentId: string
-  ): Promise<{
-    verified: boolean;
-    confidence: number;
-    message: string;
-    checks: {
-      resolutionOk: boolean;
-      lightingOk: boolean;
-      contrastOk: boolean;
-      centered: boolean;
-    };
-  }> {
+  static validateProfileUrl(url: string, platform?: "linkedin" | "github"): boolean {
+    if (!url || typeof url !== "string") return false;
+    const trimmed = url.trim();
     try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 12000);
-
-      const res = await fetch(`${PYTHON_OCR_URL}/api/verification/process-face`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          student_id: studentId,
-          image_base64: imageBase64,
-          capture_mode: captureMode,
-          face_detected_client: true,
-        }),
-        signal: controller.signal,
-      });
-
-      clearTimeout(timeoutId);
-
-      if (res.ok) {
-        const json = await res.json();
-        return {
-          verified: Boolean(json.quality_passed && json.face_detected),
-          confidence: json.confidence || 0.0,
-          message: json.message || (json.quality_passed ? "Face verified successfully." : "Face verification failed."),
-          checks: {
-            resolutionOk: Boolean(json.checks?.resolution_ok),
-            lightingOk: Boolean(json.checks?.lighting_ok),
-            contrastOk: Boolean(json.checks?.contrast_ok),
-            centered: Boolean(json.checks?.centered),
-          },
-        };
+      const parsed = new URL(trimmed);
+      if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+        return false;
       }
-
-      return {
-        verified: false,
-        confidence: 0.0,
-        message: "Face verification is currently unavailable. Please try again.",
-        checks: {
-          resolutionOk: false,
-          lightingOk: false,
-          contrastOk: false,
-          centered: false,
-        },
-      };
+      if (platform === "linkedin") {
+        return parsed.hostname.includes("linkedin.com");
+      }
+      if (platform === "github") {
+        return parsed.hostname.includes("github.com");
+      }
+      return true;
     } catch {
-      return {
-        verified: false,
-        confidence: 0.0,
-        message: "Face verification is currently unavailable. Please try again.",
-        checks: {
-          resolutionOk: false,
-          lightingOk: false,
-          contrastOk: false,
-          centered: false,
-        },
-      };
+      return false;
     }
   }
 }

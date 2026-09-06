@@ -15,6 +15,7 @@ interface StudentHeaderProps {
 const pageTitles: Record<string, { section: string; title: string }> = {
   "/student": { section: "Main", title: "Student Dashboard" },
   "/student/dashboard": { section: "Main", title: "Student Dashboard" },
+  "/student/document-verification": { section: "Student Portal", title: "Document Submission" },
   "/student/interest-finder": { section: "Getting Started", title: "Interest Finder" },
   "/student/knowledge-testing": { section: "Getting Started", title: "Knowledge Testing" },
   "/student/documents": { section: "Getting Started", title: "Document Verification" },
@@ -36,6 +37,8 @@ export function StudentHeader({
   const pathname = usePathname();
   const [showNotifications, setShowNotifications] = React.useState(false);
   const notificationRef = React.useRef<HTMLDivElement>(null);
+
+  const isDocVerification = pathname.startsWith("/student/document-verification");
 
   const currentMeta = pageTitles[pathname] || {
     section: "Student Portal",
@@ -67,7 +70,7 @@ export function StudentHeader({
   }, [showNotifications]);
 
   return (
-    <header className="sticky top-0 z-20 flex items-center justify-between px-4 md:px-6 h-14 border-b border-border bg-background/95 backdrop-blur-xs select-none">
+    <header className="sticky top-0 z-20 flex items-center justify-between px-4 md:px-6 h-14 border-b border-border bg-background/95 backdrop-blur-xs text-foreground select-none">
       {/* Left: Mobile hamburger & Breadcrumb occupying available space */}
       <div className="flex items-center gap-3 min-w-0 flex-1 mr-4">
         <button
@@ -107,7 +110,7 @@ export function StudentHeader({
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 mt-2 w-72 p-3 rounded-lg border border-border bg-card shadow-lg z-50 text-xs space-y-2 animate-in fade-in-0 duration-150 motion-reduce:animate-none">
+            <div className="absolute right-0 mt-2 w-72 p-3 rounded-lg border border-border bg-card shadow-lg z-50 text-xs space-y-2 animate-in fade-in-0 duration-150 motion-reduce:animate-none text-foreground">
               <div className="flex items-center justify-between pb-2 border-b border-border">
                 <span className="font-semibold text-foreground">Notifications</span>
                 <span className="text-[10px] text-muted-foreground font-mono">1 unread</span>
@@ -118,7 +121,7 @@ export function StudentHeader({
                   Account Active
                 </p>
                 <p className="text-muted-foreground text-[11px] leading-relaxed">
-                  Welcome to Skill Bridge. Begin your journey with the Interest Finder.
+                  Welcome to Skill Bridge. Complete your required documents to proceed.
                 </p>
               </div>
             </div>

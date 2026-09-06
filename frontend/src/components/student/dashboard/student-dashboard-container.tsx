@@ -370,12 +370,12 @@ export function StudentDashboardContainer() {
           </CardContent>
         </Card>
 
-        {/* Metric 2: Document Verification */}
+        {/* Metric 2: Document Submission */}
         <Card className="border-border bg-card">
           <CardContent className="p-4 space-y-2">
             <div className="flex items-center justify-between text-muted-foreground">
               <span className="text-xs font-medium uppercase tracking-wider">
-                Academic Credentials
+                Document Submission
               </span>
               <FileCheck className="w-4 h-4 text-foreground/70" />
             </div>
@@ -385,15 +385,15 @@ export function StudentDashboardContainer() {
                   {statistics.verifiedDocumentsCount}
                 </span>
                 <span className="text-xs text-muted-foreground">
-                  / {statistics.totalDocumentsCount} Verified
+                  / 4 Required Submitted
                 </span>
                 <Badge variant="outline" className="ml-auto text-[10px]">
-                  Stage 3
+                  Stage 1
                 </Badge>
               </div>
             </div>
             <p className="text-[11px] text-muted-foreground leading-tight">
-              Transcripts, certifications, and institutional marks verified for campus drives.
+              Required identification and academic documents submitted for your student profile.
             </p>
           </CardContent>
         </Card>

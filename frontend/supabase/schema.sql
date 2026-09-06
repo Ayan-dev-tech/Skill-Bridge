@@ -73,10 +73,7 @@ CREATE TABLE IF NOT EXISTS public.student_verifications (
             'RETRY_REQUIRED'
         )
     ),
-    face_capture_status TEXT DEFAULT 'PENDING' CHECK (face_capture_status IN ('PENDING', 'CAPTURED', 'VERIFIED', 'FAILED')),
-    face_capture_storage_ref TEXT,
-    face_capture_mode TEXT CHECK (face_capture_mode IN ('auto', 'manual')),
-    face_confidence NUMERIC(4, 2),
+    professional_profiles JSONB DEFAULT '{}'::jsonb,
     rejection_reason TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
@@ -84,21 +81,18 @@ CREATE TABLE IF NOT EXISTS public.student_verifications (
     CONSTRAINT unique_verification_per_student UNIQUE (student_id)
 );
 
--- 9. Verification Documents Table
+-- 9. Verification Documents Table (Document Submission)
 CREATE TABLE IF NOT EXISTS public.verification_documents (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     verification_id UUID NOT NULL REFERENCES public.student_verifications(id) ON DELETE CASCADE,
     student_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
     document_type TEXT NOT NULL,
+    group_id TEXT,
     file_name TEXT NOT NULL,
     file_type TEXT NOT NULL CHECK (file_type IN ('image/png', 'image/jpeg', 'image/jpg', 'application/pdf')),
     file_size_bytes BIGINT NOT NULL,
     storage_path TEXT NOT NULL,
-    ocr_status TEXT NOT NULL DEFAULT 'pending' CHECK (ocr_status IN ('pending', 'processing', 'completed', 'failed')),
-    ocr_extracted_data JSONB DEFAULT '{}'::jsonb,
-    ocr_confidence NUMERIC(4, 2),
-    ocr_engine TEXT,
-    ocr_error TEXT,
+    upload_status TEXT NOT NULL DEFAULT 'completed',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
@@ -164,3 +158,83 @@ USING (
     AND (storage.foldername(name))[1] = 'student'
     AND (storage.foldername(name))[2] = auth.uid()::text
 );
+
+-- 14. Educators Catalog
+CREATE TABLE IF NOT EXISTS educators (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    slug TEXT NOT NULL UNIQUE,
+    logo_url TEXT,
+    description TEXT NOT NULL,
+    website TEXT NOT NULL,
+    verified_status TEXT NOT NULL DEFAULT 'sample_provider',
+    status_label TEXT NOT NULL DEFAULT 'Sample Learning Provider',
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 15. Education Programs Catalog
+CREATE TABLE IF NOT EXISTS education_programs (
+    id TEXT PRIMARY KEY,
+    educator_id TEXT REFERENCES educators(id) ON DELETE CASCADE,
+    educator_name TEXT NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    program_url TEXT NOT NULL,
+    domains TEXT[] NOT NULL DEFAULT '{}',
+    niches TEXT[] NOT NULL DEFAULT '{}',
+    skill_ids TEXT[] NOT NULL DEFAULT '{}',
+    difficulty TEXT NOT NULL DEFAULT 'all_levels',
+    delivery_type TEXT NOT NULL,
+    duration TEXT NOT NULL,
+    certification TEXT NOT NULL,
+    verified_status TEXT NOT NULL DEFAULT 'sample_provider',
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 16. Persisted Skill Gap Analyses
+CREATE TABLE IF NOT EXISTS skill_gap_analyses (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    student_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    interest_profile_id UUID REFERENCES interest_profiles(id) ON DELETE SET NULL,
+    knowledge_test_result_id UUID REFERENCES knowledge_test_results(id) ON DELETE SET NULL,
+    domain_id TEXT NOT NULL,
+    domain_name TEXT NOT NULL,
+    niche_id TEXT NOT NULL,
+    niche_title TEXT NOT NULL,
+    difficulty TEXT NOT NULL,
+    test_score NUMERIC NOT NULL,
+    test_max_score NUMERIC NOT NULL,
+    test_score_percent NUMERIC NOT NULL,
+    knowledge_level TEXT NOT NULL,
+    skill_profile_version TEXT NOT NULL DEFAULT '1.0',
+    executive_summary TEXT NOT NULL,
+    skill_gaps JSONB NOT NULL DEFAULT '[]',
+    recommendations JSONB NOT NULL DEFAULT '[]',
+    ai_generated BOOLEAN NOT NULL DEFAULT FALSE,
+    is_stale BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_skill_gap_student_id ON skill_gap_analyses(student_id);
+CREATE INDEX IF NOT EXISTS idx_skill_gap_stale ON skill_gap_analyses(student_id, is_stale);
+
+ALTER TABLE educators ENABLE ROW LEVEL SECURITY;
+ALTER TABLE education_programs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE skill_gap_analyses ENABLE ROW LEVEL SECURITY;
+
+-- Read-only access for authenticated users to active educators & programs
+CREATE POLICY "Anyone can view active educators" ON educators
+    FOR SELECT TO authenticated USING (active = TRUE);
+
+CREATE POLICY "Anyone can view active education programs" ON education_programs
+    FOR SELECT TO authenticated USING (active = TRUE);
+
+-- Students can only access and modify their own skill gap analyses
+CREATE POLICY "Students can access their own skill gap analyses" ON skill_gap_analyses
+    FOR ALL USING (auth.uid() = student_id);
+
