@@ -1,32 +1,36 @@
-"use client";
-
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { studentWorkflowStages, WorkflowStage } from "@/lib/student-data";
-import { Check, Compass, ChevronRight } from "lucide-react";
+import { studentWorkflowStages } from "@/lib/student-data";
+import { Check, Compass, ChevronRight, Lock } from "lucide-react";
+import type { CanonicalWorkflowState } from "@/lib/workflow/canonical-workflow";
 
 interface WorkflowProgressProps {
   currentStageId?: number;
   className?: string;
+  workflow?: CanonicalWorkflowState | null;
 }
 
 export function WorkflowProgress({
   currentStageId = 1,
   className = "",
+  workflow = null,
 }: WorkflowProgressProps) {
   const pathname = usePathname();
 
+  // Use canonical stages if available, otherwise fallback to static definitions
+  const stages = workflow?.stages || studentWorkflowStages;
+
   // Identify active stage
   const activeStageIndex = React.useMemo(() => {
-    const idx = studentWorkflowStages.findIndex((s) => pathname.startsWith(s.route));
+    const idx = stages.findIndex((s) => pathname.startsWith(s.route));
     if (idx !== -1) return idx;
-    const byId = studentWorkflowStages.findIndex((s) => s.id === currentStageId);
+    const byId = stages.findIndex((s) => s.id === (workflow?.currentStageId || currentStageId));
     return byId !== -1 ? byId : 0;
-  }, [pathname, currentStageId]);
+  }, [pathname, currentStageId, workflow, stages]);
 
-  const activeStage = studentWorkflowStages[activeStageIndex];
-  const progressPercent = Math.round(((activeStageIndex + 1) / studentWorkflowStages.length) * 100);
+  const activeStage = stages[activeStageIndex] || stages[0];
+  const progressPercent = Math.round(((activeStageIndex + 1) / stages.length) * 100);
 
   return (
     <section
@@ -78,15 +82,16 @@ export function WorkflowProgress({
 
           {/* Nodes Row: Spans from very left edge to very right edge */}
           <div className="relative z-10 flex justify-between items-start w-full">
-            {studentWorkflowStages.map((stage, idx) => {
+            {stages.map((stage, idx) => {
               const isCurrent = idx === activeStageIndex;
               const isPast = idx < activeStageIndex;
+              const isLocked = "isLocked" in stage ? Boolean(stage.isLocked) : idx > activeStageIndex;
 
               // Node alignment: first node left-aligned, last node right-aligned, middle nodes centered
               const labelPositionClass =
                 idx === 0
                   ? "left-0 text-left items-start"
-                  : idx === studentWorkflowStages.length - 1
+                  : idx === stages.length - 1
                   ? "right-0 text-right items-end"
                   : "left-1/2 -translate-x-1/2 text-center items-center";
 
@@ -97,20 +102,30 @@ export function WorkflowProgress({
                   style={{ width: "28px" }}
                 >
                   {/* Milestone Node */}
-                  <Link
-                    href={stage.route}
-                    aria-current={isCurrent ? "step" : undefined}
-                    className={`w-7 h-7 rounded-md flex items-center justify-center font-mono text-xs font-semibold transition-all duration-150 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-                      isCurrent
-                        ? "bg-foreground text-background shadow-xs ring-4 ring-foreground/15 font-bold"
-                        : isPast
-                        ? "bg-muted text-foreground border border-border hover:bg-muted/80"
-                        : "bg-background text-muted-foreground border-2 border-border hover:border-foreground/40 hover:text-foreground"
-                    }`}
-                    title={`Stage ${stage.id}: ${stage.name}`}
-                  >
-                    {isPast ? <Check className="w-3.5 h-3.5" /> : stage.id}
-                  </Link>
+                  {isLocked ? (
+                    <div
+                      aria-disabled="true"
+                      className="w-7 h-7 rounded-md flex items-center justify-center font-mono text-xs font-semibold bg-muted/30 text-muted-foreground/40 border border-border/50 cursor-not-allowed select-none"
+                      title={`Stage ${stage.id}: ${stage.name} (Locked)`}
+                    >
+                      <Lock className="w-3.5 h-3.5 text-muted-foreground/40" />
+                    </div>
+                  ) : (
+                    <Link
+                      href={stage.route}
+                      aria-current={isCurrent ? "step" : undefined}
+                      className={`w-7 h-7 rounded-md flex items-center justify-center font-mono text-xs font-semibold transition-all duration-150 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                        isCurrent
+                          ? "bg-foreground text-background shadow-xs ring-4 ring-foreground/15 font-bold"
+                          : isPast
+                          ? "bg-muted text-foreground border border-border hover:bg-muted/80"
+                          : "bg-background text-muted-foreground border-2 border-border hover:border-foreground/40 hover:text-foreground"
+                      }`}
+                      title={`Stage ${stage.id}: ${stage.name}`}
+                    >
+                      {isPast ? <Check className="w-3.5 h-3.5" /> : stage.id}
+                    </Link>
+                  )}
 
                   {/* Milestone Label (Centered under node without breaking edge bounds) */}
                   <div
@@ -153,9 +168,24 @@ export function WorkflowProgress({
         {/* Horizontal Swipeable Milestone Track */}
         <div className="overflow-x-auto pb-1 -mx-4 px-4 scrollbar-none">
           <div className="flex items-center gap-1.5 min-w-max">
-            {studentWorkflowStages.map((stage, idx) => {
+            {stages.map((stage, idx) => {
               const isCurrent = idx === activeStageIndex;
               const isPast = idx < activeStageIndex;
+              const isLocked = "isLocked" in stage ? Boolean(stage.isLocked) : idx > activeStageIndex;
+
+              if (isLocked) {
+                return (
+                  <div
+                    key={stage.id}
+                    aria-disabled="true"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium border border-border/40 text-muted-foreground/40 cursor-not-allowed select-none opacity-60"
+                    title={`Stage ${stage.id}: ${stage.name} (Locked)`}
+                  >
+                    <Lock className="w-3 h-3 text-muted-foreground/40" />
+                    <span>{stage.name}</span>
+                  </div>
+                );
+              }
 
               return (
                 <Link

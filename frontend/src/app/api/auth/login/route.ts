@@ -68,13 +68,20 @@ export async function POST(request: Request) {
 
     // 5. Success
     const isAdmin = Boolean(user.isAdmin || user.email === "admin@gmail.com");
-    const redirectUrl = isAdmin
-      ? "/admin"
-      : user.role === "student"
-      ? "/student"
-      : undefined;
+    let redirectUrl: string | undefined = undefined;
 
-    return NextResponse.json({
+    if (isAdmin) {
+      redirectUrl = "/admin";
+    } else if (user.role === "student") {
+      const verification = await db.getStudentVerification(user.id);
+      if (verification.verificationStatus === "VERIFIED") {
+        redirectUrl = "/student/dashboard";
+      } else {
+        redirectUrl = "/student/document-verification";
+      }
+    }
+
+    const response = NextResponse.json({
       success: true,
       message: isAdmin ? "Welcome, Administrator!" : `Welcome back, ${user.fullName}!`,
       isAdmin,
@@ -87,6 +94,14 @@ export async function POST(request: Request) {
         isAdmin,
       },
     });
+
+    response.cookies.set("sb_student_id", user.id, {
+      path: "/",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7,
+    });
+
+    return response;
   } catch (error) {
     console.error("Login API error:", error);
     return NextResponse.json(

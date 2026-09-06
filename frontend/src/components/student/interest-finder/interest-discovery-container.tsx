@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -70,6 +71,7 @@ interface ConfirmedProfileData {
 type ViewState =
   | "loading"
   | "intro"
+  | "unverified_gate"
   | "phase1_question"
   | "phase1_reveal"
   | "phase2_question"
@@ -92,14 +94,14 @@ export function InterestDiscoveryContainer() {
   const [finalProfile, setFinalProfile] = React.useState<FinalProfileResult | null>(null);
   const [confirmedProfile, setConfirmedProfile] = React.useState<ConfirmedProfileData | null>(null);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [studentId, setStudentId] = React.useState<string>("stu-2024-042");
+  const [studentId, setStudentId] = React.useState<string>("");
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
   // 1. Initial Session & Profile Check on Mount (Browser Reload Recovery)
   React.useEffect(() => {
     async function loadSession() {
       try {
-        let sid = "stu-2024-042";
+        let sid = "";
         if (typeof window !== "undefined") {
           const storedUser = sessionStorage.getItem("skill_bridge_user");
           if (storedUser) {
@@ -110,13 +112,24 @@ export function InterestDiscoveryContainer() {
               // fallback
             }
           }
+          if (!sid) {
+            const match = document.cookie.match(/sb_student_id=([^;]+)/);
+            if (match && match[1]) {
+              sid = decodeURIComponent(match[1].trim());
+            }
+          }
         }
         setStudentId(sid);
 
         const res = await fetch("/api/student/interest-finder/session", {
-          headers: { "x-student-id": sid },
+          headers: sid ? { "x-student-id": sid } : {},
         });
         const data = await res.json();
+
+        if (data.requiresVerification) {
+          window.location.href = "/student/document-verification";
+          return;
+        }
 
         if (data.success) {
           if (data.confirmedProfile) {
@@ -433,6 +446,20 @@ export function InterestDiscoveryContainer() {
             milestones (such as Knowledge Testing and Curriculum Deficit Mapping).
           </p>
         </div>
+
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+          <Button variant="outline" asChild size="sm">
+            <Link href="/student/dashboard">
+              Return to Dashboard
+            </Link>
+          </Button>
+
+          <Button asChild size="sm">
+            <Link href="/student/knowledge-testing">
+              Proceed to Knowledge Testing <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+            </Link>
+          </Button>
+        </div>
       </div>
     );
   }
@@ -440,6 +467,35 @@ export function InterestDiscoveryContainer() {
   // =========================================================================
   // VIEW: INTRO / EXPLORATION OVERVIEW (No upfront domain selection!)
   // =========================================================================
+  if (viewState === "unverified_gate") {
+    return (
+      <div className="max-w-xl mx-auto py-12 space-y-6">
+        <Card className="border-border shadow-sm">
+          <CardHeader className="text-center space-y-2">
+            <div className="w-12 h-12 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-500 flex items-center justify-center mx-auto">
+              <Shield className="w-6 h-6" />
+            </div>
+            <CardTitle className="text-xl font-bold">Document Verification Required</CardTitle>
+            <CardDescription className="text-sm">
+              Document Verification must be completed before you can enter the Interest Finder.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Please upload your institutional credentials (Student ID Card or Academic Transcript) and complete the live face capture verification to proceed with your personalized technical journey.
+            </p>
+            <Button asChild className="w-full">
+              <Link href="/student/document-verification">
+                <span>Proceed to Document Verification</span>
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   if (viewState === "intro") {
     return (
       <div className="space-y-6 max-w-4xl mx-auto animate-in fade-in duration-200 motion-reduce:animate-none select-none">

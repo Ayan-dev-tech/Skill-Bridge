@@ -8,13 +8,30 @@ export async function getAuthenticatedStudent(
   request: Request,
   providedId?: string
 ): Promise<{ student: User | { id: string; fullName: string; email: string }; error?: string }> {
-  // Check header authorization or custom x-student-id header
-  const authHeader = request.headers.get("x-student-id") || providedId;
+  // 1. Check custom x-student-id header, bearer token, or providedId
+  let authId = request.headers.get("x-student-id") || providedId;
 
-  if (authHeader) {
+  // 2. Check HTTP cookie sb_student_id
+  if (!authId) {
+    const cookieHeader = request.headers.get("cookie") || "";
+    const match = cookieHeader.match(/sb_student_id=([^;]+)/);
+    if (match && match[1]) {
+      authId = decodeURIComponent(match[1].trim());
+    }
+  }
+
+  // 3. Check Authorization Bearer header
+  if (!authId) {
+    const auth = request.headers.get("authorization") || "";
+    if (auth.startsWith("Bearer ")) {
+      authId = auth.substring(7).trim();
+    }
+  }
+
+  if (authId && authId !== "anonymous") {
     const data = await db.getAdminOverview();
     const found = data.users.find(
-      (u) => (u.id === authHeader || u.email === authHeader) && u.role === "student"
+      (u) => (u.id === authId || u.email === authId) && u.role === "student"
     );
     if (found) {
       return {
@@ -25,22 +42,22 @@ export async function getAuthenticatedStudent(
         },
       };
     }
-    // Allow verified student ID passed via authenticated test header
+    // Allow authenticated student ID recorded in session
     return {
       student: {
-        id: authHeader,
+        id: authId,
         fullName: "Student",
-        email: `${authHeader}@university.edu`,
+        email: `${authId}@university.edu`,
       },
     };
   }
 
-  // Fallback for default student account
   return {
     student: {
-      id: "stu-2024-042",
-      fullName: "Alex Rivera",
-      email: "alex.rivera@nit.edu",
+      id: "unauthenticated_guest",
+      fullName: "Guest Student",
+      email: "",
     },
+    error: "Authentication required",
   };
 }

@@ -10,6 +10,20 @@ export async function POST(request: Request) {
     const body = await request.json().catch(() => ({}));
     const { student } = await getAuthenticatedStudent(request, body.studentId);
 
+    // Enforce sequential onboarding gating: Document Verification must be completed first
+    const verification = await db.getStudentVerification(student.id);
+    if (verification.verificationStatus !== "VERIFIED") {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Document Verification must be completed before entering Interest Finder.",
+          requiresVerification: true,
+          redirectUrl: "/student/document-verification",
+        },
+        { status: 403 }
+      );
+    }
+
     const sessionId = `session_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
 
     // Generate Question 1 (Phase 1)

@@ -1,6 +1,16 @@
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
+import type { TestSessionState, TestResult } from "./knowledge-test/types";
+import type {
+  StudentVerificationRecord,
+  VerificationDocumentRecord,
+  FaceCaptureRecord,
+  VerificationState,
+} from "./verification/types";
+
+export type KnowledgeTestSessionRecord = TestSessionState;
+export type KnowledgeTestResultRecord = TestResult;
 
 export type RoleType = "student" | "faculty" | "campus" | "industry";
 
@@ -101,6 +111,9 @@ interface DatabaseSchema {
   campusRequests: CampusRequest[];
   interestProfiles: InterestProfileRecord[];
   interestSessions: InterestSessionRecord[];
+  knowledgeTestSessions: KnowledgeTestSessionRecord[];
+  knowledgeTestResults: KnowledgeTestResultRecord[];
+  studentVerifications: StudentVerificationRecord[];
 }
 
 const DATA_DIR = path.join(process.cwd(), "data");
@@ -130,6 +143,9 @@ function ensureDbExists(): DatabaseSchema {
       campusRequests: [],
       interestProfiles: [],
       interestSessions: [],
+      knowledgeTestSessions: [],
+      knowledgeTestResults: [],
+      studentVerifications: [],
     };
   } else {
     try {
@@ -139,6 +155,9 @@ function ensureDbExists(): DatabaseSchema {
       if (!data.campusRequests) data.campusRequests = [];
       if (!data.interestProfiles) data.interestProfiles = [];
       if (!data.interestSessions) data.interestSessions = [];
+      if (!data.knowledgeTestSessions) data.knowledgeTestSessions = [];
+      if (!data.knowledgeTestResults) data.knowledgeTestResults = [];
+      if (!data.studentVerifications) data.studentVerifications = [];
     } catch {
       data = {
         users: [],
@@ -148,6 +167,9 @@ function ensureDbExists(): DatabaseSchema {
         campusRequests: [],
         interestProfiles: [],
         interestSessions: [],
+        knowledgeTestSessions: [],
+        knowledgeTestResults: [],
+        studentVerifications: [],
       };
     }
   }
@@ -647,5 +669,409 @@ export const db = {
       (s) => s.studentId !== studentId
     );
     saveDb(data);
+  },
+
+  // ================= KNOWLEDGE TEST PERSISTENCE =================
+
+  async saveKnowledgeTestSession(session: KnowledgeTestSessionRecord): Promise<void> {
+    const data = ensureDbExists();
+    if (!data.knowledgeTestSessions) data.knowledgeTestSessions = [];
+
+    const existingIndex = data.knowledgeTestSessions.findIndex(
+      (s) => s.sessionId === session.sessionId
+    );
+
+    if (existingIndex >= 0) {
+      data.knowledgeTestSessions[existingIndex] = session;
+    } else {
+      data.knowledgeTestSessions.push(session);
+    }
+
+    saveDb(data);
+  },
+
+  async getKnowledgeTestSession(sessionId: string): Promise<KnowledgeTestSessionRecord | null> {
+    const data = ensureDbExists();
+    if (!data.knowledgeTestSessions) return null;
+    return data.knowledgeTestSessions.find((s) => s.sessionId === sessionId) || null;
+  },
+
+  async getActiveKnowledgeTestSessionByStudent(
+    studentId: string
+  ): Promise<KnowledgeTestSessionRecord | null> {
+    const data = ensureDbExists();
+    if (!data.knowledgeTestSessions) return null;
+    return (
+      data.knowledgeTestSessions.find(
+        (s) => s.studentId === studentId && s.status === "in_progress"
+      ) || null
+    );
+  },
+
+  async saveKnowledgeTestResult(result: KnowledgeTestResultRecord): Promise<void> {
+    const data = ensureDbExists();
+    if (!data.knowledgeTestResults) data.knowledgeTestResults = [];
+
+    const existingIndex = data.knowledgeTestResults.findIndex(
+      (r) => r.id === result.id || r.sessionId === result.sessionId
+    );
+
+    if (existingIndex >= 0) {
+      data.knowledgeTestResults[existingIndex] = result;
+    } else {
+      data.knowledgeTestResults.push(result);
+    }
+
+    saveDb(data);
+  },
+
+  async getKnowledgeTestResultsByStudent(
+    studentId: string
+  ): Promise<KnowledgeTestResultRecord[]> {
+    const data = ensureDbExists();
+    if (!data.knowledgeTestResults) return [];
+    return data.knowledgeTestResults
+      .filter((r) => r.studentId === studentId)
+      .sort((a, b) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime());
+  },
+
+  async getLatestKnowledgeTestResult(
+    studentId: string
+  ): Promise<KnowledgeTestResultRecord | null> {
+    const results = await this.getKnowledgeTestResultsByStudent(studentId);
+    return results.length > 0 ? results[0] : null;
+  },
+
+  async getKnowledgeTestResultById(
+    resultId: string
+  ): Promise<KnowledgeTestResultRecord | null> {
+    const data = ensureDbExists();
+    if (!data.knowledgeTestResults) return null;
+    return data.knowledgeTestResults.find((r) => r.id === resultId) || null;
+  },
+
+  // ================= DOCUMENT VERIFICATION OPERATIONS =================
+
+  async getStudentVerification(studentId: string): Promise<StudentVerificationRecord> {
+    const data = ensureDbExists();
+    const existing = data.studentVerifications.find((v) => v.studentId === studentId);
+    if (existing) {
+      return existing;
+    }
+
+    const newRecord: StudentVerificationRecord = {
+      studentId,
+      verificationStatus: "NOT_STARTED",
+      documents: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    data.studentVerifications.push(newRecord);
+    saveDb(data);
+    return newRecord;
+  },
+
+  async saveVerificationDocument(
+    studentId: string,
+    document: VerificationDocumentRecord
+  ): Promise<StudentVerificationRecord> {
+    const data = ensureDbExists();
+    let record = data.studentVerifications.find((v) => v.studentId === studentId);
+    if (!record) {
+      record = {
+        studentId,
+        verificationStatus: "DOCUMENTS_PENDING",
+        documents: [],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      data.studentVerifications.push(record);
+    }
+
+    // Replace if document of this type already exists, otherwise push
+    const existingDocIdx = record.documents.findIndex(
+      (d) => d.documentType === document.documentType
+    );
+    if (existingDocIdx >= 0) {
+      record.documents[existingDocIdx] = document;
+    } else {
+      record.documents.push(document);
+    }
+
+    // Update state
+    if (record.verificationStatus === "NOT_STARTED") {
+      record.verificationStatus = "DOCUMENTS_PENDING";
+    }
+    record.updatedAt = new Date().toISOString();
+    saveDb(data);
+    return record;
+  },
+
+  async deleteVerificationDocument(
+    studentId: string,
+    documentId: string
+  ): Promise<StudentVerificationRecord> {
+    const data = ensureDbExists();
+    const record = data.studentVerifications.find((v) => v.studentId === studentId);
+    if (record) {
+      record.documents = record.documents.filter((d) => d.id !== documentId);
+      if (record.documents.length === 0 && !record.faceCapture && record.verificationStatus !== "VERIFIED") {
+        record.verificationStatus = "NOT_STARTED";
+      }
+      record.updatedAt = new Date().toISOString();
+      saveDb(data);
+      return record;
+    }
+    return this.getStudentVerification(studentId);
+  },
+
+  async findVerificationDocumentById(
+    documentId: string
+  ): Promise<{ document: VerificationDocumentRecord; studentId: string } | null> {
+    const data = ensureDbExists();
+    for (const v of data.studentVerifications || []) {
+      const doc = v.documents.find((d) => d.id === documentId);
+      if (doc) {
+        return { document: doc, studentId: v.studentId };
+      }
+    }
+    return null;
+  },
+
+
+  async saveFaceCapture(
+    studentId: string,
+    capture: FaceCaptureRecord
+  ): Promise<StudentVerificationRecord> {
+    const data = ensureDbExists();
+    let record = data.studentVerifications.find((v) => v.studentId === studentId);
+    if (!record) {
+      record = {
+        studentId,
+        verificationStatus: "FACE_PENDING",
+        documents: [],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      data.studentVerifications.push(record);
+    }
+
+    record.faceCapture = capture;
+    record.updatedAt = new Date().toISOString();
+    saveDb(data);
+    return record;
+  },
+
+  async completeStudentVerification(studentId: string): Promise<StudentVerificationRecord> {
+    const data = ensureDbExists();
+    let record = data.studentVerifications.find((v) => v.studentId === studentId);
+    if (!record) {
+      record = {
+        studentId,
+        verificationStatus: "VERIFIED",
+        documents: [],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        completedAt: new Date().toISOString(),
+      };
+      data.studentVerifications.push(record);
+    } else {
+      record.verificationStatus = "VERIFIED";
+      record.updatedAt = new Date().toISOString();
+      record.completedAt = new Date().toISOString();
+    }
+
+    saveDb(data);
+    return record;
+  },
+
+  // ================= WORKFLOW PROGRESSION & DASHBOARD =================
+
+  async getStudentWorkflowStatus(studentId: string) {
+    const verification = await this.getStudentVerification(studentId);
+    const interestProfile = await this.getInterestProfile(studentId);
+    const activeKnowledgeSession = await this.getActiveKnowledgeTestSessionByStudent(studentId);
+    const latestKnowledgeResult = await this.getLatestKnowledgeTestResult(studentId);
+
+    const isVerificationCompleted = verification.verificationStatus === "VERIFIED";
+    const isVerificationInProgress =
+      verification.documents.length > 0 ||
+      verification.verificationStatus === "DOCUMENTS_PENDING" ||
+      verification.verificationStatus === "FACE_PENDING";
+    const isInterestFinderCompleted = !!interestProfile;
+    const isKnowledgeTestCompleted = !!latestKnowledgeResult;
+    const isKnowledgeTestInProgress = !!activeKnowledgeSession;
+
+    // Determine current focus stage (1: Document Verification -> 2: Interest Finder -> 3: Knowledge Testing -> 4: Skill Gap)
+    let currentFocusStageId = 1;
+    if (!isVerificationCompleted) {
+      currentFocusStageId = 1;
+    } else if (!isInterestFinderCompleted) {
+      currentFocusStageId = 2;
+    } else if (!isKnowledgeTestCompleted) {
+      currentFocusStageId = 3;
+    } else {
+      currentFocusStageId = 4;
+    }
+
+    const sections = [
+      {
+        id: 1,
+        slug: "document-verification",
+        name: "Document Verification",
+        shortDescription: "Authenticate academic transcripts, marksheets, and institutional photo ID.",
+        route: "/student/document-verification",
+        iconName: "FileCheck",
+        status: isVerificationCompleted
+          ? "completed"
+          : isVerificationInProgress
+          ? "in_progress"
+          : "available",
+        statusLabel: isVerificationCompleted
+          ? "Completed"
+          : isVerificationInProgress
+          ? "In Progress"
+          : "Start Here",
+        isCurrentFocus: currentFocusStageId === 1,
+        actionText: isVerificationCompleted
+          ? "View Credentials"
+          : isVerificationInProgress
+          ? "Complete Verification"
+          : "Start Verification",
+      },
+      {
+        id: 2,
+        slug: "interest-finder",
+        name: "Interest Finder",
+        shortDescription: "Discover your true technical interest and specific engineering niche.",
+        route: "/student/interest-finder",
+        iconName: "Compass",
+        status: isInterestFinderCompleted
+          ? "completed"
+          : isVerificationCompleted
+          ? "available"
+          : "locked",
+        statusLabel: isInterestFinderCompleted
+          ? "Completed"
+          : isVerificationCompleted
+          ? "Available"
+          : "Locked",
+        lockedReason: !isVerificationCompleted
+          ? "Complete Document Verification to unlock your Interest Finder exploration."
+          : undefined,
+        isCurrentFocus: currentFocusStageId === 2,
+        actionText: isInterestFinderCompleted
+          ? "Review Profile"
+          : isVerificationCompleted
+          ? "Start Exploration"
+          : "Locked",
+      },
+      {
+        id: 3,
+        slug: "knowledge-testing",
+        name: "Knowledge Testing",
+        shortDescription: "Measure what you already know in your chosen technical focus area.",
+        route: "/student/knowledge-testing",
+        iconName: "ClipboardCheck",
+        status: isKnowledgeTestCompleted
+          ? "completed"
+          : isKnowledgeTestInProgress
+          ? "in_progress"
+          : isInterestFinderCompleted
+          ? "available"
+          : "locked",
+        statusLabel: isKnowledgeTestCompleted
+          ? "Completed"
+          : isKnowledgeTestInProgress
+          ? "In Progress"
+          : isInterestFinderCompleted
+          ? "Available"
+          : "Locked",
+        lockedReason: !isInterestFinderCompleted
+          ? "Complete Interest Finder to unlock your calibrated assessment."
+          : undefined,
+        isCurrentFocus: currentFocusStageId === 3,
+        actionText: isKnowledgeTestCompleted
+          ? "View Report"
+          : isKnowledgeTestInProgress
+          ? "Resume Test"
+          : isInterestFinderCompleted
+          ? "Take Assessment"
+          : "Locked",
+      },
+      {
+        id: 4,
+        slug: "skill-gap",
+        name: "Skill Gap & Suggestions",
+        shortDescription: "Identify missing competencies and target elimination roadmaps.",
+        route: "/student/skill-gap",
+        iconName: "TrendingUp",
+        status: "locked",
+        statusLabel: "Locked",
+        lockedReason: "Complete Document Verification to unlock Skill Gap Analysis.",
+        isCurrentFocus: false,
+        actionText: "Locked",
+      },
+      {
+        id: 5,
+        slug: "learning",
+        name: "Learning / Mentoring",
+        shortDescription: "Access curated curriculum tracks and faculty mentorship.",
+        route: "/student/learning",
+        iconName: "BookOpen",
+        status: "locked",
+        statusLabel: "Locked",
+        lockedReason: "Complete Skill Gap Analysis to access learning tracks.",
+        isCurrentFocus: false,
+        actionText: "Locked",
+      },
+      {
+        id: 6,
+        slug: "resume-builder",
+        name: "Resume Builder",
+        shortDescription: "Generate an industry-standard verified technical resume.",
+        route: "/student/resume",
+        iconName: "FileText",
+        status: "locked",
+        statusLabel: "Locked",
+        lockedReason: "Progress through learning tracks to generate your resume.",
+        isCurrentFocus: false,
+        actionText: "Locked",
+      },
+      {
+        id: 7,
+        slug: "jobs-internships",
+        name: "Jobs & Internships",
+        shortDescription: "Explore verified employer openings and campus placement drives.",
+        route: "/student/opportunities",
+        iconName: "Briefcase",
+        status: "locked",
+        statusLabel: "Locked",
+        lockedReason: "Complete your verified resume to apply for opportunities.",
+        isCurrentFocus: false,
+        actionText: "Locked",
+      },
+      {
+        id: 8,
+        slug: "track-applications",
+        name: "Track Applications",
+        shortDescription: "Monitor interview rounds, corporate feedback, and offer letters.",
+        route: "/student/applications",
+        iconName: "Send",
+        status: "locked",
+        statusLabel: "Locked",
+        lockedReason: "Apply to positions to track your active applications.",
+        isCurrentFocus: false,
+        actionText: "Locked",
+      },
+    ];
+
+    return {
+      currentFocusStageId,
+      interestProfile,
+      latestKnowledgeResult,
+      activeKnowledgeSession,
+      sections,
+    };
   },
 };

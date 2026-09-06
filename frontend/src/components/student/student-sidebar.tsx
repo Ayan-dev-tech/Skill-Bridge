@@ -4,6 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  LayoutDashboard,
   Compass,
   ClipboardCheck,
   FileCheck,
@@ -17,9 +18,11 @@ import {
   Info,
   X,
   Sparkles,
+  Lock,
 } from "lucide-react";
 import { StudentProfileData, defaultStudentProfile } from "@/lib/student-data";
 import { StudentProfileBadge } from "./student-profile-badge";
+import type { CanonicalWorkflowState } from "@/lib/workflow/canonical-workflow";
 
 interface NavItem {
   name: string;
@@ -37,34 +40,45 @@ interface StudentSidebarProps {
   mobileOpen?: boolean;
   onCloseMobile?: () => void;
   profile?: StudentProfileData;
+  workflow?: CanonicalWorkflowState | null;
 }
 
 export function StudentSidebar({
   mobileOpen = false,
   onCloseMobile,
   profile = defaultStudentProfile,
+  workflow = null,
 }: StudentSidebarProps) {
   const pathname = usePathname();
 
   const sections: NavSection[] = [
     {
+      title: "Main",
+      items: [
+        {
+          name: "Dashboard",
+          href: "/student/dashboard",
+          icon: LayoutDashboard,
+        },
+      ],
+    },
+    {
       title: "Getting Started",
       items: [
+        {
+          name: "Document Verification",
+          href: "/student/document-verification",
+          icon: FileCheck,
+        },
         {
           name: "Interest Finder",
           href: "/student/interest-finder",
           icon: Compass,
-          isCurrentEntry: true,
         },
         {
           name: "Knowledge Testing",
           href: "/student/knowledge-testing",
           icon: ClipboardCheck,
-        },
-        {
-          name: "Document Verification",
-          href: "/student/documents",
-          icon: FileCheck,
         },
       ],
     },
@@ -129,7 +143,7 @@ export function StudentSidebar({
     <div className="flex flex-col h-full bg-background border-r border-border text-foreground select-none">
       {/* Brand Header */}
       <div className="flex items-center justify-between px-5 h-14 border-b border-border shrink-0">
-        <Link href="/student/interest-finder" className="flex items-center gap-2.5">
+        <Link href="/student/dashboard" className="flex items-center gap-2.5">
           <div className="w-5 h-5 rounded-md bg-foreground text-background font-bold text-xs flex items-center justify-center">
             S
           </div>
@@ -162,7 +176,29 @@ export function StudentSidebar({
               const Icon = item.icon;
               const isActive =
                 pathname === item.href ||
-                (item.href === "/student/interest-finder" && pathname === "/student");
+                (item.href === "/student/dashboard" && pathname === "/student");
+
+              const matchingStage = workflow?.stages.find((s) => s.route === item.href);
+              const isStageLocked = matchingStage ? matchingStage.isLocked : false;
+              const isDashboardLocked =
+                item.href === "/student/dashboard" && workflow ? !workflow.isVerificationCompleted : false;
+              const isLocked = isStageLocked || isDashboardLocked;
+
+              if (isLocked) {
+                return (
+                  <div
+                    key={item.href}
+                    className="w-full flex items-center justify-between px-2.5 py-2 rounded-md font-medium text-muted-foreground/40 cursor-not-allowed select-none opacity-60"
+                    title={matchingStage?.lockedReason || "Locked until prerequisite milestones are completed."}
+                  >
+                    <div className="flex items-center gap-2.5 truncate">
+                      <Icon className="w-4 h-4 shrink-0 text-muted-foreground/40" />
+                      <span className="truncate">{item.name}</span>
+                    </div>
+                    <Lock className="w-3 h-3 text-muted-foreground/50 shrink-0" />
+                  </div>
+                );
+              }
 
               return (
                 <Link

@@ -5,6 +5,8 @@ import { getAuthenticatedStudent } from "@/lib/student-auth";
 export async function GET(request: Request) {
   try {
     const { student } = await getAuthenticatedStudent(request);
+    const verification = await db.getStudentVerification(student.id);
+    const isVerified = verification.verificationStatus === "VERIFIED";
     const confirmedProfile = await db.getInterestProfile(student.id);
     const activeSession = await db.getInterestSession(student.id);
 
@@ -13,6 +15,8 @@ export async function GET(request: Request) {
       student,
       confirmedProfile,
       activeSession,
+      isVerified,
+      requiresVerification: !isVerified,
     });
   } catch (error) {
     console.error("Interest Finder session error:", error);

@@ -16,14 +16,41 @@ export interface StudentProfileData {
   currentWorkflowStage: number; // 1 to 7
 }
 
+export type WorkflowStageStatus =
+  | "completed"
+  | "in_progress"
+  | "available"
+  | "locked"
+  | "not_started";
+
 export interface WorkflowStage {
   id: number;
   slug: string;
   name: string;
   shortDescription: string;
-  status: "current" | "completed" | "upcoming";
+  status: "current" | "completed" | "upcoming" | WorkflowStageStatus;
   route: string;
 }
+
+export interface DashboardCurrentFocus {
+  stage: number;
+  title: string;
+  subtitle: string;
+  actionText: string;
+  actionHref: string;
+  status: WorkflowStageStatus;
+}
+
+export interface DashboardSectionItem {
+  id: string;
+  stage: number;
+  name: string;
+  description: string;
+  href: string;
+  status: WorkflowStageStatus;
+  lockReason: string | null;
+}
+
 
 export interface InterestDomain {
   id: string;
@@ -34,31 +61,31 @@ export interface InterestDomain {
   keyQuestionsExamined: string[];
 }
 
-// 7-Stage Core Workflow Journey
+// 8-Stage Complete Student Workflow Journey
 export const studentWorkflowStages: WorkflowStage[] = [
   {
     id: 1,
-    slug: "interest-finder",
-    name: "Interest Finder",
-    shortDescription: "Discover your technical niche within broad engineering domains",
+    slug: "document-verification",
+    name: "Document Verification",
+    shortDescription: "Authenticate academic transcripts and institutional photo ID",
     status: "current",
-    route: "/student/interest-finder",
+    route: "/student/document-verification",
   },
   {
     id: 2,
+    slug: "interest-finder",
+    name: "Interest Finder",
+    shortDescription: "Discover your technical niche within broad engineering domains",
+    status: "upcoming",
+    route: "/student/interest-finder",
+  },
+  {
+    id: 3,
     slug: "knowledge-testing",
     name: "Knowledge Testing",
     shortDescription: "Benchmark foundational and practical technical proficiency",
     status: "upcoming",
     route: "/student/knowledge-testing",
-  },
-  {
-    id: 3,
-    slug: "documents",
-    name: "Document Verification",
-    shortDescription: "Authenticate academic transcripts and vendor certifications",
-    status: "upcoming",
-    route: "/student/documents",
   },
   {
     id: 4,
@@ -70,6 +97,14 @@ export const studentWorkflowStages: WorkflowStage[] = [
   },
   {
     id: 5,
+    slug: "learning",
+    name: "Learning / Mentoring",
+    shortDescription: "Access curated curriculum tracks and faculty mentorship",
+    status: "upcoming",
+    route: "/student/learning",
+  },
+  {
+    id: 6,
     slug: "resume",
     name: "Resume Builder",
     shortDescription: "Generate verified, skill-validated technical portfolios",
@@ -77,7 +112,7 @@ export const studentWorkflowStages: WorkflowStage[] = [
     route: "/student/resume",
   },
   {
-    id: 6,
+    id: 7,
     slug: "opportunities",
     name: "Jobs & Internships",
     shortDescription: "Explore curated institutional campus drives and internships",
@@ -85,7 +120,7 @@ export const studentWorkflowStages: WorkflowStage[] = [
     route: "/student/opportunities",
   },
   {
-    id: 7,
+    id: 8,
     slug: "applications",
     name: "Track Applications",
     shortDescription: "Monitor interview schedules, shortlists, and offer status",

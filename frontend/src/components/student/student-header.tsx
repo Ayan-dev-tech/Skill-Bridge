@@ -13,7 +13,8 @@ interface StudentHeaderProps {
 }
 
 const pageTitles: Record<string, { section: string; title: string }> = {
-  "/student": { section: "Getting Started", title: "Interest Finder" },
+  "/student": { section: "Main", title: "Student Dashboard" },
+  "/student/dashboard": { section: "Main", title: "Student Dashboard" },
   "/student/interest-finder": { section: "Getting Started", title: "Interest Finder" },
   "/student/knowledge-testing": { section: "Getting Started", title: "Knowledge Testing" },
   "/student/documents": { section: "Getting Started", title: "Document Verification" },
