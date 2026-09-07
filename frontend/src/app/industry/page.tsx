@@ -1,18 +1,34 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { GlobalHeader } from "@/components/navigation/global-header";
-import { Briefcase, CheckCircle, Search } from "lucide-react";
+import { IndustrySidebar, IndustryViewType } from "@/components/industry/industry-sidebar";
+import { IndustryDashboardView } from "@/components/industry/views/industry-dashboard-view";
+import { IndustryProfileView } from "@/components/industry/views/industry-profile-view";
+import { StudentDataAccessView } from "@/components/industry/views/student-data-access-view";
+import { QuestionBankView } from "@/components/industry/views/question-bank-view";
+import { HiringManagementView } from "@/components/industry/views/hiring-management-view";
 
 export default function IndustryPortalPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Navigation State
+  const initialView = (searchParams.get("view") as IndustryViewType) || "dashboard";
+  const [currentView, setCurrentView] = React.useState<IndustryViewType>(initialView);
+  const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
+
+  // User State
   const [user, setUser] = React.useState({
     name: "Corporate Talent Lead",
-    meta: "Partner Portal",
+    meta: "Industry Partner",
     email: "recruiter@company.com",
   });
 
+  const [questionsCount, setQuestionsCount] = React.useState<number>(0);
+
+  // Load user session and question count
   React.useEffect(() => {
     if (typeof window !== "undefined") {
       const stored = sessionStorage.getItem("skill_bridge_user");
@@ -22,7 +38,7 @@ export default function IndustryPortalPage() {
           if (parsed.fullName || parsed.email) {
             setUser({
               name: parsed.fullName || "Corporate Talent Lead",
-              meta: parsed.role ? parsed.role.toUpperCase() : "Industry",
+              meta: parsed.companyName || "Industry Partner",
               email: parsed.email || "recruiter@company.com",
             });
           }
@@ -31,7 +47,32 @@ export default function IndustryPortalPage() {
         }
       }
     }
+
+    // Fetch question count for sidebar badge
+    fetch("/api/industry/question-bank")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && typeof data.count === "number") {
+          setQuestionsCount(data.count);
+        }
+      })
+      .catch(() => {});
   }, []);
+
+  // Update view from searchParams if user navigates back/forward
+  React.useEffect(() => {
+    const v = searchParams.get("view") as IndustryViewType;
+    if (v && ["dashboard", "profile", "hiring", "students", "question-bank"].includes(v)) {
+      setCurrentView(v);
+    }
+  }, [searchParams]);
+
+  const handleSelectView = (view: IndustryViewType) => {
+    setCurrentView(view);
+    const url = new URL(window.location.href);
+    url.searchParams.set("view", view);
+    window.history.pushState({}, "", url.toString());
+  };
 
   const handleLogout = () => {
     if (typeof window !== "undefined") {
@@ -41,82 +82,73 @@ export default function IndustryPortalPage() {
     router.push("/");
   };
 
+  const getBreadcrumbTitle = () => {
+    switch (currentView) {
+      case "dashboard":
+        return "Operational Dashboard";
+      case "hiring":
+        return "Hiring & Post Configuration";
+      case "profile":
+        return "Company Profile";
+      case "students":
+        return "Student Talent Discovery";
+      case "question-bank":
+        return "Question Bank";
+      default:
+        return "Industry Portal";
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground select-none">
+      {/* Global Header */}
       <GlobalHeader
         portal="industry"
         breadcrumb={{
           section: "Corporate",
-          title: "Talent Discovery",
+          title: getBreadcrumbTitle(),
         }}
         user={user}
+        onOpenMobile={() => setMobileNavOpen(true)}
         onLogout={handleLogout}
-        notificationsCount={2}
+        notificationsCount={1}
         notificationItems={[
           {
             id: "notif-ind-1",
-            title: "Candidate Matches",
-            message: "18 candidates matched your Cloud Solutions Engineer requirement.",
-          },
-          {
-            id: "notif-ind-2",
-            title: "Partner Verification",
-            message: "Corporate recruiter credentials active and verified.",
+            title: "Authorized Partner",
+            message: "Direct campus recruitment and student discovery verified.",
+            time: "Active",
           },
         ]}
       />
 
-      <main className="flex-1 p-4 md:p-8 max-w-6xl w-full mx-auto space-y-6">
-        <div className="space-y-1.5">
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            Industry Partner & Talent Discovery
-          </h1>
-          <p className="text-xs text-muted-foreground">
-            Connect with certified student talent, post verified opportunities, and review competency benchmarks.
-          </p>
-        </div>
+      <div className="flex-1 flex w-full">
+        {/* Sidebar */}
+        <IndustrySidebar
+          currentView={currentView}
+          onSelectView={handleSelectView}
+          questionsCount={questionsCount}
+          mobileOpen={mobileNavOpen}
+          onCloseMobile={() => setMobileNavOpen(false)}
+        />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-5 rounded-lg border border-border bg-card space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Active Job Postings
-              </span>
-              <Briefcase className="w-4 h-4 text-muted-foreground" />
-            </div>
-            <p className="text-2xl font-bold font-mono">8</p>
-            <p className="text-xs text-muted-foreground">
-              Open roles posted across engineering and product disciplines.
-            </p>
-          </div>
+        {/* Main Content Area */}
+        <main className="flex-1 p-4 md:p-8 overflow-y-auto min-w-0">
+          {currentView === "dashboard" && (
+            <IndustryDashboardView onNavigate={handleSelectView} />
+          )}
 
-          <div className="p-5 rounded-lg border border-border bg-card space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Candidate Applications
-              </span>
-              <Search className="w-4 h-4 text-muted-foreground" />
-            </div>
-            <p className="text-2xl font-bold font-mono">94</p>
-            <p className="text-xs text-muted-foreground">
-              Verified applications with demonstrated competency scores.
-            </p>
-          </div>
+          {currentView === "hiring" && (
+            <HiringManagementView onNavigateToQuestionBank={() => handleSelectView("question-bank")} />
+          )}
 
-          <div className="p-5 rounded-lg border border-border bg-card space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Partner Status
-              </span>
-              <CheckCircle className="w-4 h-4 text-emerald-500" />
-            </div>
-            <p className="text-2xl font-bold text-emerald-500">Verified</p>
-            <p className="text-xs text-muted-foreground">
-              Direct recruitment and campus drive rights authorized by Skill Bridge Admin.
-            </p>
-          </div>
-        </div>
-      </main>
+          {currentView === "profile" && <IndustryProfileView />}
+
+          {currentView === "students" && <StudentDataAccessView />}
+
+          {currentView === "question-bank" && <QuestionBankView />}
+        </main>
+      </div>
     </div>
   );
 }

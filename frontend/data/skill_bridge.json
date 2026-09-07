@@ -1566,6 +1566,159 @@
       "isVerified": true,
       "createdAt": "2026-09-07T13:30:10.448Z",
       "passwordHash": "h"
+    },
+    {
+      "id": "stu_34_new_1788806285059",
+      "email": "stu_34_new_1788806285059@test.edu",
+      "role": "student",
+      "fullName": "New Student 34",
+      "isVerified": true,
+      "createdAt": "2026-09-07T18:38:05.062Z",
+      "passwordHash": "h"
+    },
+    {
+      "id": "stu_34_adv_1788806285059",
+      "email": "stu_34_adv_1788806285059@test.edu",
+      "role": "student",
+      "fullName": "Advanced Student 34",
+      "isVerified": true,
+      "createdAt": "2026-09-07T18:38:05.062Z",
+      "passwordHash": "h"
+    },
+    {
+      "id": "stu_34_lrn_1788806285059",
+      "email": "stu_34_lrn_1788806285059@test.edu",
+      "role": "student",
+      "fullName": "Learning Student 34",
+      "isVerified": true,
+      "createdAt": "2026-09-07T18:38:05.062Z",
+      "passwordHash": "h"
+    },
+    {
+      "id": "stu_34_other_1788806285059",
+      "email": "stu_34_other_1788806285059@test.edu",
+      "role": "student",
+      "fullName": "Student B 34",
+      "isVerified": true,
+      "createdAt": "2026-09-07T18:38:05.062Z",
+      "passwordHash": "h"
+    },
+    {
+      "id": "stu_34_new_1788806594421",
+      "email": "stu_34_new_1788806594421@test.edu",
+      "role": "student",
+      "fullName": "New Student 34",
+      "isVerified": true,
+      "createdAt": "2026-09-07T18:43:14.421Z",
+      "passwordHash": "h"
+    },
+    {
+      "id": "stu_34_adv_1788806594421",
+      "email": "stu_34_adv_1788806594421@test.edu",
+      "role": "student",
+      "fullName": "Advanced Student 34",
+      "isVerified": true,
+      "createdAt": "2026-09-07T18:43:14.421Z",
+      "passwordHash": "h"
+    },
+    {
+      "id": "stu_34_lrn_1788806594421",
+      "email": "stu_34_lrn_1788806594421@test.edu",
+      "role": "student",
+      "fullName": "Learning Student 34",
+      "isVerified": true,
+      "createdAt": "2026-09-07T18:43:14.421Z",
+      "passwordHash": "h"
+    },
+    {
+      "id": "stu_34_other_1788806594421",
+      "email": "stu_34_other_1788806594421@test.edu",
+      "role": "student",
+      "fullName": "Student B 34",
+      "isVerified": true,
+      "createdAt": "2026-09-07T18:43:14.421Z",
+      "passwordHash": "h"
+    },
+    {
+      "id": "stu_34_new_1788808155355",
+      "email": "stu_34_new_1788808155355@test.edu",
+      "role": "student",
+      "fullName": "New Student 34",
+      "isVerified": true,
+      "createdAt": "2026-09-07T19:09:15.355Z",
+      "passwordHash": "h"
+    },
+    {
+      "id": "stu_34_adv_1788808155355",
+      "email": "stu_34_adv_1788808155355@test.edu",
+      "role": "student",
+      "fullName": "Advanced Student 34",
+      "isVerified": true,
+      "createdAt": "2026-09-07T19:09:15.355Z",
+      "passwordHash": "h"
+    },
+    {
+      "id": "stu_34_lrn_1788808155355",
+      "email": "stu_34_lrn_1788808155355@test.edu",
+      "role": "student",
+      "fullName": "Learning Student 34",
+      "isVerified": true,
+      "createdAt": "2026-09-07T19:09:15.355Z",
+      "passwordHash": "h"
+    },
+    {
+      "id": "stu_34_other_1788808155355",
+      "email": "stu_34_other_1788808155355@test.edu",
+      "role": "student",
+      "fullName": "Student B 34",
+      "isVerified": true,
+      "createdAt": "2026-09-07T19:09:15.355Z",
+      "passwordHash": "h"
+    },
+    {
+      "id": "1f80e367-38a7-43d0-9573-fb3d9215d64a",
+      "email": "industry@gmail.com",
+      "role": "industry",
+      "passwordHash": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+      "fullName": "Industry",
+      "isVerified": true,
+      "createdAt": "2026-09-07T19:11:47.250Z"
+    },
+    {
+      "id": "stu_34_new_1788809444883",
+      "email": "stu_34_new_1788809444883@test.edu",
+      "role": "student",
+      "fullName": "New Student 34",
+      "isVerified": true,
+      "createdAt": "2026-09-07T19:30:44.883Z",
+      "passwordHash": "h"
+    },
+    {
+      "id": "stu_34_adv_1788809444883",
+      "email": "stu_34_adv_1788809444883@test.edu",
+      "role": "student",
+      "fullName": "Advanced Student 34",
+      "isVerified": true,
+      "createdAt": "2026-09-07T19:30:44.883Z",
+      "passwordHash": "h"
+    },
+    {
+      "id": "stu_34_lrn_1788809444883",
+      "email": "stu_34_lrn_1788809444883@test.edu",
+      "role": "student",
+      "fullName": "Learning Student 34",
+      "isVerified": true,
+      "createdAt": "2026-09-07T19:30:44.883Z",
+      "passwordHash": "h"
+    },
+    {
+      "id": "stu_34_other_1788809444883",
+      "email": "stu_34_other_1788809444883@test.edu",
+      "role": "student",
+      "fullName": "Student B 34",
+      "isVerified": true,
+      "createdAt": "2026-09-07T19:30:44.883Z",
+      "passwordHash": "h"
     }
   ],
   "profiles": [
@@ -1655,7 +1808,16 @@
       "metadata": {
         "companyName": "tcs",
         "industryDomain": "IT AND CONCULTANCY",
-        "workTitle": "CEO"
+        "workTitle": "CEO",
+        "description": "Leading technology and engineering solutions provider.",
+        "website": "https://www.tcs.com",
+        "location": "Tech Park, Bengaluru, Karnataka, India",
+        "demandedSkills": [
+          "TypeScript",
+          "Next.js",
+          "Cloud Infrastructure"
+        ],
+        "updatedAt": "2026-09-07T19:30:24.476Z"
       }
     },
     {
@@ -2759,6 +2921,194 @@
       },
       "createdAt": "2026-09-07T13:30:10.448Z",
       "updatedAt": "2026-09-07T13:30:10.448Z"
+    },
+    {
+      "id": "prof_stu_34_new_1788806285059",
+      "userId": "stu_34_new_1788806285059",
+      "fullName": "New Student 34",
+      "metadata": {
+        "phone": "+1-555-010-0001"
+      },
+      "createdAt": "2026-09-07T18:38:05.062Z",
+      "updatedAt": "2026-09-07T18:38:05.062Z"
+    },
+    {
+      "id": "prof_stu_34_adv_1788806285059",
+      "userId": "stu_34_adv_1788806285059",
+      "fullName": "Advanced Student 34",
+      "metadata": {
+        "phone": "+1-555-010-0002"
+      },
+      "createdAt": "2026-09-07T18:38:05.062Z",
+      "updatedAt": "2026-09-07T18:38:05.062Z"
+    },
+    {
+      "id": "prof_stu_34_lrn_1788806285059",
+      "userId": "stu_34_lrn_1788806285059",
+      "fullName": "Learning Student 34",
+      "metadata": {
+        "phone": "+1-555-010-0003"
+      },
+      "createdAt": "2026-09-07T18:38:05.062Z",
+      "updatedAt": "2026-09-07T18:38:05.062Z"
+    },
+    {
+      "id": "prof_stu_34_other_1788806285059",
+      "userId": "stu_34_other_1788806285059",
+      "fullName": "Student B 34",
+      "metadata": {
+        "phone": "+1-555-010-0004"
+      },
+      "createdAt": "2026-09-07T18:38:05.062Z",
+      "updatedAt": "2026-09-07T18:38:05.062Z"
+    },
+    {
+      "id": "prof_stu_34_new_1788806594421",
+      "userId": "stu_34_new_1788806594421",
+      "fullName": "New Student 34",
+      "metadata": {
+        "phone": "+1-555-010-0001"
+      },
+      "createdAt": "2026-09-07T18:43:14.421Z",
+      "updatedAt": "2026-09-07T18:43:14.421Z"
+    },
+    {
+      "id": "prof_stu_34_adv_1788806594421",
+      "userId": "stu_34_adv_1788806594421",
+      "fullName": "Advanced Student 34",
+      "metadata": {
+        "phone": "+1-555-010-0002"
+      },
+      "createdAt": "2026-09-07T18:43:14.421Z",
+      "updatedAt": "2026-09-07T18:43:14.421Z"
+    },
+    {
+      "id": "prof_stu_34_lrn_1788806594421",
+      "userId": "stu_34_lrn_1788806594421",
+      "fullName": "Learning Student 34",
+      "metadata": {
+        "phone": "+1-555-010-0003"
+      },
+      "createdAt": "2026-09-07T18:43:14.421Z",
+      "updatedAt": "2026-09-07T18:43:14.421Z"
+    },
+    {
+      "id": "prof_stu_34_other_1788806594421",
+      "userId": "stu_34_other_1788806594421",
+      "fullName": "Student B 34",
+      "metadata": {
+        "phone": "+1-555-010-0004"
+      },
+      "createdAt": "2026-09-07T18:43:14.421Z",
+      "updatedAt": "2026-09-07T18:43:14.421Z"
+    },
+    {
+      "id": "prof_stu_34_new_1788808155355",
+      "userId": "stu_34_new_1788808155355",
+      "fullName": "New Student 34",
+      "metadata": {
+        "phone": "+1-555-010-0001"
+      },
+      "createdAt": "2026-09-07T19:09:15.355Z",
+      "updatedAt": "2026-09-07T19:09:15.355Z"
+    },
+    {
+      "id": "prof_stu_34_adv_1788808155355",
+      "userId": "stu_34_adv_1788808155355",
+      "fullName": "Advanced Student 34",
+      "metadata": {
+        "phone": "+1-555-010-0002"
+      },
+      "createdAt": "2026-09-07T19:09:15.355Z",
+      "updatedAt": "2026-09-07T19:09:15.355Z"
+    },
+    {
+      "id": "prof_stu_34_lrn_1788808155355",
+      "userId": "stu_34_lrn_1788808155355",
+      "fullName": "Learning Student 34",
+      "metadata": {
+        "phone": "+1-555-010-0003"
+      },
+      "createdAt": "2026-09-07T19:09:15.355Z",
+      "updatedAt": "2026-09-07T19:09:15.355Z"
+    },
+    {
+      "id": "prof_stu_34_other_1788808155355",
+      "userId": "stu_34_other_1788808155355",
+      "fullName": "Student B 34",
+      "metadata": {
+        "phone": "+1-555-010-0004"
+      },
+      "createdAt": "2026-09-07T19:09:15.355Z",
+      "updatedAt": "2026-09-07T19:09:15.355Z"
+    },
+    {
+      "userId": "1f80e367-38a7-43d0-9573-fb3d9215d64a",
+      "role": "industry",
+      "metadata": {
+        "companyName": "Industry",
+        "industryDomain": "IT AND CONCULTANCY",
+        "workTitle": "Talent Finder Officer",
+        "description": "We are Charlie Kirk",
+        "website": "http://localhost:3000/industry?view=profile",
+        "contactEmail": "industry@gmail.com",
+        "contactPhone": "1234567890",
+        "location": "51, Munjka, Rajkot(360005)",
+        "contactPerson": "Mr. Tuff",
+        "demandedSkills": [
+          "Python",
+          "Ai Automation",
+          "Penetration Tester",
+          "DevOps",
+          "Full-Stack",
+          "Frontend",
+          "Backend",
+          "UI/UX"
+        ],
+        "companySize": "50-250 Employees",
+        "foundedYear": "",
+        "updatedAt": "2026-09-07T19:17:16.098Z"
+      }
+    },
+    {
+      "id": "prof_stu_34_new_1788809444883",
+      "userId": "stu_34_new_1788809444883",
+      "fullName": "New Student 34",
+      "metadata": {
+        "phone": "+1-555-010-0001"
+      },
+      "createdAt": "2026-09-07T19:30:44.883Z",
+      "updatedAt": "2026-09-07T19:30:44.883Z"
+    },
+    {
+      "id": "prof_stu_34_adv_1788809444883",
+      "userId": "stu_34_adv_1788809444883",
+      "fullName": "Advanced Student 34",
+      "metadata": {
+        "phone": "+1-555-010-0002"
+      },
+      "createdAt": "2026-09-07T19:30:44.883Z",
+      "updatedAt": "2026-09-07T19:30:44.883Z"
+    },
+    {
+      "id": "prof_stu_34_lrn_1788809444883",
+      "userId": "stu_34_lrn_1788809444883",
+      "fullName": "Learning Student 34",
+      "metadata": {
+        "phone": "+1-555-010-0003"
+      },
+      "createdAt": "2026-09-07T19:30:44.883Z",
+      "updatedAt": "2026-09-07T19:30:44.883Z"
+    },
+    {
+      "id": "prof_stu_34_other_1788809444883",
+      "userId": "stu_34_other_1788809444883",
+      "fullName": "Student B 34",
+      "metadata": {
+        "phone": "+1-555-010-0004"
+      },
+      "createdAt": "2026-09-07T19:30:44.883Z",
+      "updatedAt": "2026-09-07T19:30:44.883Z"
     }
   ],
   "otps": [
@@ -3684,6 +4034,16 @@
       "attempts": 0,
       "verified": true,
       "createdAt": "2026-09-07T12:39:40.581Z"
+    },
+    {
+      "id": "7e47fda2-3dda-4490-8f19-0ef729c59d29",
+      "email": "industry@gmail.com",
+      "role": "industry",
+      "otpCode": "159944",
+      "expiresAt": "2026-09-07T19:21:47.391Z",
+      "attempts": 0,
+      "verified": true,
+      "createdAt": "2026-09-07T19:11:47.391Z"
     }
   ],
   "hiringRequests": [
@@ -4649,6 +5009,94 @@
       "status": "COMPLETED",
       "createdAt": "2026-09-07T13:30:10.448Z",
       "updatedAt": "2026-09-07T13:30:10.448Z"
+    },
+    {
+      "id": "int_stu_34_adv_1788806285059",
+      "studentId": "stu_34_adv_1788806285059",
+      "confirmedMainDomainId": "software-engineering",
+      "confirmedMainDomain": "Software Engineering & Full Stack",
+      "confirmedSpecificInterest": "Full Stack Development & Distributed Systems",
+      "explanation": "Verified high interest in backend and full stack architecture.",
+      "status": "COMPLETED",
+      "createdAt": "2026-09-07T18:38:05.062Z",
+      "updatedAt": "2026-09-07T18:38:05.062Z"
+    },
+    {
+      "id": "int_stu_34_lrn_1788806285059",
+      "studentId": "stu_34_lrn_1788806285059",
+      "confirmedMainDomainId": "software-engineering",
+      "confirmedMainDomain": "Software Engineering & Full Stack",
+      "confirmedSpecificInterest": "Full Stack Development & Distributed Systems",
+      "explanation": "Verified interest in software engineering.",
+      "status": "COMPLETED",
+      "createdAt": "2026-09-07T18:38:05.062Z",
+      "updatedAt": "2026-09-07T18:38:05.062Z"
+    },
+    {
+      "id": "int_stu_34_adv_1788806594421",
+      "studentId": "stu_34_adv_1788806594421",
+      "confirmedMainDomainId": "software-engineering",
+      "confirmedMainDomain": "Software Engineering & Full Stack",
+      "confirmedSpecificInterest": "Full Stack Development & Distributed Systems",
+      "explanation": "Verified high interest in backend and full stack architecture.",
+      "status": "COMPLETED",
+      "createdAt": "2026-09-07T18:43:14.421Z",
+      "updatedAt": "2026-09-07T18:43:14.421Z"
+    },
+    {
+      "id": "int_stu_34_lrn_1788806594421",
+      "studentId": "stu_34_lrn_1788806594421",
+      "confirmedMainDomainId": "software-engineering",
+      "confirmedMainDomain": "Software Engineering & Full Stack",
+      "confirmedSpecificInterest": "Full Stack Development & Distributed Systems",
+      "explanation": "Verified interest in software engineering.",
+      "status": "COMPLETED",
+      "createdAt": "2026-09-07T18:43:14.421Z",
+      "updatedAt": "2026-09-07T18:43:14.421Z"
+    },
+    {
+      "id": "int_stu_34_adv_1788808155355",
+      "studentId": "stu_34_adv_1788808155355",
+      "confirmedMainDomainId": "software-engineering",
+      "confirmedMainDomain": "Software Engineering & Full Stack",
+      "confirmedSpecificInterest": "Full Stack Development & Distributed Systems",
+      "explanation": "Verified high interest in backend and full stack architecture.",
+      "status": "COMPLETED",
+      "createdAt": "2026-09-07T19:09:15.355Z",
+      "updatedAt": "2026-09-07T19:09:15.355Z"
+    },
+    {
+      "id": "int_stu_34_lrn_1788808155355",
+      "studentId": "stu_34_lrn_1788808155355",
+      "confirmedMainDomainId": "software-engineering",
+      "confirmedMainDomain": "Software Engineering & Full Stack",
+      "confirmedSpecificInterest": "Full Stack Development & Distributed Systems",
+      "explanation": "Verified interest in software engineering.",
+      "status": "COMPLETED",
+      "createdAt": "2026-09-07T19:09:15.355Z",
+      "updatedAt": "2026-09-07T19:09:15.355Z"
+    },
+    {
+      "id": "int_stu_34_adv_1788809444883",
+      "studentId": "stu_34_adv_1788809444883",
+      "confirmedMainDomainId": "software-engineering",
+      "confirmedMainDomain": "Software Engineering & Full Stack",
+      "confirmedSpecificInterest": "Full Stack Development & Distributed Systems",
+      "explanation": "Verified high interest in backend and full stack architecture.",
+      "status": "COMPLETED",
+      "createdAt": "2026-09-07T19:30:44.883Z",
+      "updatedAt": "2026-09-07T19:30:44.883Z"
+    },
+    {
+      "id": "int_stu_34_lrn_1788809444883",
+      "studentId": "stu_34_lrn_1788809444883",
+      "confirmedMainDomainId": "software-engineering",
+      "confirmedMainDomain": "Software Engineering & Full Stack",
+      "confirmedSpecificInterest": "Full Stack Development & Distributed Systems",
+      "explanation": "Verified interest in software engineering.",
+      "status": "COMPLETED",
+      "createdAt": "2026-09-07T19:30:44.883Z",
+      "updatedAt": "2026-09-07T19:30:44.883Z"
     }
   ],
   "interestSessions": [
@@ -24201,6 +24649,194 @@
         "SQL"
       ],
       "completedAt": "2026-09-07T13:30:10.448Z"
+    },
+    {
+      "id": "know_stu_34_adv_1788806285059",
+      "studentId": "stu_34_adv_1788806285059",
+      "domainId": "software-engineering",
+      "score": 9,
+      "maxScore": 10,
+      "scorePercent": 90,
+      "difficulty": "Advanced",
+      "knowledgeLevel": "Advanced",
+      "totalQuestions": 10,
+      "correctCount": 9,
+      "strengths": [
+        "Python",
+        "SQL",
+        "React",
+        "TypeScript",
+        "REST APIs"
+      ],
+      "weaknesses": [
+        "Docker",
+        "Kubernetes"
+      ],
+      "completedAt": "2026-09-07T18:38:05.062Z"
+    },
+    {
+      "id": "know_stu_34_lrn_1788806285059",
+      "studentId": "stu_34_lrn_1788806285059",
+      "domainId": "software-engineering",
+      "score": 6,
+      "maxScore": 10,
+      "scorePercent": 60,
+      "difficulty": "Intermediate",
+      "knowledgeLevel": "Intermediate",
+      "totalQuestions": 10,
+      "correctCount": 6,
+      "strengths": [
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ],
+      "weaknesses": [
+        "Docker",
+        "AWS",
+        "SQL"
+      ],
+      "completedAt": "2026-09-07T18:38:05.062Z"
+    },
+    {
+      "id": "know_stu_34_adv_1788806594421",
+      "studentId": "stu_34_adv_1788806594421",
+      "domainId": "software-engineering",
+      "score": 9,
+      "maxScore": 10,
+      "scorePercent": 90,
+      "difficulty": "Advanced",
+      "knowledgeLevel": "Advanced",
+      "totalQuestions": 10,
+      "correctCount": 9,
+      "strengths": [
+        "Python",
+        "SQL",
+        "React",
+        "TypeScript",
+        "REST APIs"
+      ],
+      "weaknesses": [
+        "Docker",
+        "Kubernetes"
+      ],
+      "completedAt": "2026-09-07T18:43:14.421Z"
+    },
+    {
+      "id": "know_stu_34_lrn_1788806594421",
+      "studentId": "stu_34_lrn_1788806594421",
+      "domainId": "software-engineering",
+      "score": 6,
+      "maxScore": 10,
+      "scorePercent": 60,
+      "difficulty": "Intermediate",
+      "knowledgeLevel": "Intermediate",
+      "totalQuestions": 10,
+      "correctCount": 6,
+      "strengths": [
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ],
+      "weaknesses": [
+        "Docker",
+        "AWS",
+        "SQL"
+      ],
+      "completedAt": "2026-09-07T18:43:14.421Z"
+    },
+    {
+      "id": "know_stu_34_adv_1788808155355",
+      "studentId": "stu_34_adv_1788808155355",
+      "domainId": "software-engineering",
+      "score": 9,
+      "maxScore": 10,
+      "scorePercent": 90,
+      "difficulty": "Advanced",
+      "knowledgeLevel": "Advanced",
+      "totalQuestions": 10,
+      "correctCount": 9,
+      "strengths": [
+        "Python",
+        "SQL",
+        "React",
+        "TypeScript",
+        "REST APIs"
+      ],
+      "weaknesses": [
+        "Docker",
+        "Kubernetes"
+      ],
+      "completedAt": "2026-09-07T19:09:15.355Z"
+    },
+    {
+      "id": "know_stu_34_lrn_1788808155355",
+      "studentId": "stu_34_lrn_1788808155355",
+      "domainId": "software-engineering",
+      "score": 6,
+      "maxScore": 10,
+      "scorePercent": 60,
+      "difficulty": "Intermediate",
+      "knowledgeLevel": "Intermediate",
+      "totalQuestions": 10,
+      "correctCount": 6,
+      "strengths": [
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ],
+      "weaknesses": [
+        "Docker",
+        "AWS",
+        "SQL"
+      ],
+      "completedAt": "2026-09-07T19:09:15.355Z"
+    },
+    {
+      "id": "know_stu_34_adv_1788809444883",
+      "studentId": "stu_34_adv_1788809444883",
+      "domainId": "software-engineering",
+      "score": 9,
+      "maxScore": 10,
+      "scorePercent": 90,
+      "difficulty": "Advanced",
+      "knowledgeLevel": "Advanced",
+      "totalQuestions": 10,
+      "correctCount": 9,
+      "strengths": [
+        "Python",
+        "SQL",
+        "React",
+        "TypeScript",
+        "REST APIs"
+      ],
+      "weaknesses": [
+        "Docker",
+        "Kubernetes"
+      ],
+      "completedAt": "2026-09-07T19:30:44.883Z"
+    },
+    {
+      "id": "know_stu_34_lrn_1788809444883",
+      "studentId": "stu_34_lrn_1788809444883",
+      "domainId": "software-engineering",
+      "score": 6,
+      "maxScore": 10,
+      "scorePercent": 60,
+      "difficulty": "Intermediate",
+      "knowledgeLevel": "Intermediate",
+      "totalQuestions": 10,
+      "correctCount": 6,
+      "strengths": [
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ],
+      "weaknesses": [
+        "Docker",
+        "AWS",
+        "SQL"
+      ],
+      "completedAt": "2026-09-07T19:30:44.883Z"
     }
   ],
   "studentVerifications": [
@@ -31439,6 +32075,797 @@
       ],
       "createdAt": "2026-09-07T13:30:10.448Z",
       "updatedAt": "2026-09-07T13:30:10.448Z"
+    },
+    {
+      "studentId": "stu_34_new_1788806285059",
+      "verificationStatus": "VERIFIED",
+      "verifiedAt": "2026-09-07T18:38:05.062Z",
+      "documents": [
+        {
+          "id": "doc_id_1788806285059",
+          "documentType": "student_id",
+          "originalFilename": "id.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k1",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:38:05.062Z"
+        },
+        {
+          "id": "doc_photo_1788806285059",
+          "documentType": "passport_photo",
+          "originalFilename": "photo.jpg",
+          "fileSize": 1024,
+          "mimeType": "image/jpeg",
+          "storageKey": "k4",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:38:05.062Z"
+        },
+        {
+          "id": "doc_marks_1788806285059",
+          "documentType": "post_graduation_marksheet",
+          "originalFilename": "marks.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k2",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:38:05.062Z"
+        },
+        {
+          "id": "doc_abc_1788806285059",
+          "documentType": "abc_id",
+          "originalFilename": "abc.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k3",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:38:05.062Z"
+        }
+      ],
+      "createdAt": "2026-09-07T18:38:05.062Z",
+      "updatedAt": "2026-09-07T18:38:05.062Z"
+    },
+    {
+      "studentId": "stu_34_adv_1788806285059",
+      "verificationStatus": "VERIFIED",
+      "verifiedAt": "2026-09-07T18:38:05.062Z",
+      "documents": [
+        {
+          "id": "doc_id_1788806285059",
+          "documentType": "student_id",
+          "originalFilename": "id.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k1",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:38:05.062Z"
+        },
+        {
+          "id": "doc_photo_1788806285059",
+          "documentType": "passport_photo",
+          "originalFilename": "photo.jpg",
+          "fileSize": 1024,
+          "mimeType": "image/jpeg",
+          "storageKey": "k4",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:38:05.062Z"
+        },
+        {
+          "id": "doc_marks_1788806285059",
+          "documentType": "post_graduation_marksheet",
+          "originalFilename": "marks.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k2",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:38:05.062Z"
+        },
+        {
+          "id": "doc_abc_1788806285059",
+          "documentType": "abc_id",
+          "originalFilename": "abc.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k3",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:38:05.062Z"
+        }
+      ],
+      "createdAt": "2026-09-07T18:38:05.062Z",
+      "updatedAt": "2026-09-07T18:38:05.062Z"
+    },
+    {
+      "studentId": "stu_34_lrn_1788806285059",
+      "verificationStatus": "VERIFIED",
+      "verifiedAt": "2026-09-07T18:38:05.062Z",
+      "documents": [
+        {
+          "id": "doc_id_1788806285059",
+          "documentType": "student_id",
+          "originalFilename": "id.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k1",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:38:05.062Z"
+        },
+        {
+          "id": "doc_photo_1788806285059",
+          "documentType": "passport_photo",
+          "originalFilename": "photo.jpg",
+          "fileSize": 1024,
+          "mimeType": "image/jpeg",
+          "storageKey": "k4",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:38:05.062Z"
+        },
+        {
+          "id": "doc_marks_1788806285059",
+          "documentType": "post_graduation_marksheet",
+          "originalFilename": "marks.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k2",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:38:05.062Z"
+        },
+        {
+          "id": "doc_abc_1788806285059",
+          "documentType": "abc_id",
+          "originalFilename": "abc.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k3",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:38:05.062Z"
+        }
+      ],
+      "createdAt": "2026-09-07T18:38:05.062Z",
+      "updatedAt": "2026-09-07T18:38:05.062Z"
+    },
+    {
+      "studentId": "stu_34_other_1788806285059",
+      "verificationStatus": "VERIFIED",
+      "verifiedAt": "2026-09-07T18:38:05.062Z",
+      "documents": [
+        {
+          "id": "doc_id_1788806285059",
+          "documentType": "student_id",
+          "originalFilename": "id.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k1",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:38:05.062Z"
+        },
+        {
+          "id": "doc_photo_1788806285059",
+          "documentType": "passport_photo",
+          "originalFilename": "photo.jpg",
+          "fileSize": 1024,
+          "mimeType": "image/jpeg",
+          "storageKey": "k4",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:38:05.062Z"
+        },
+        {
+          "id": "doc_marks_1788806285059",
+          "documentType": "post_graduation_marksheet",
+          "originalFilename": "marks.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k2",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:38:05.062Z"
+        },
+        {
+          "id": "doc_abc_1788806285059",
+          "documentType": "abc_id",
+          "originalFilename": "abc.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k3",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:38:05.062Z"
+        }
+      ],
+      "createdAt": "2026-09-07T18:38:05.062Z",
+      "updatedAt": "2026-09-07T18:38:05.062Z"
+    },
+    {
+      "studentId": "stu_34_new_1788806594421",
+      "verificationStatus": "VERIFIED",
+      "verifiedAt": "2026-09-07T18:43:14.421Z",
+      "documents": [
+        {
+          "id": "doc_id_1788806594421",
+          "documentType": "student_id",
+          "originalFilename": "id.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k1",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:43:14.421Z"
+        },
+        {
+          "id": "doc_photo_1788806594421",
+          "documentType": "passport_photo",
+          "originalFilename": "photo.jpg",
+          "fileSize": 1024,
+          "mimeType": "image/jpeg",
+          "storageKey": "k4",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:43:14.421Z"
+        },
+        {
+          "id": "doc_marks_1788806594421",
+          "documentType": "post_graduation_marksheet",
+          "originalFilename": "marks.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k2",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:43:14.421Z"
+        },
+        {
+          "id": "doc_abc_1788806594421",
+          "documentType": "abc_id",
+          "originalFilename": "abc.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k3",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:43:14.421Z"
+        }
+      ],
+      "createdAt": "2026-09-07T18:43:14.421Z",
+      "updatedAt": "2026-09-07T18:43:14.421Z"
+    },
+    {
+      "studentId": "stu_34_adv_1788806594421",
+      "verificationStatus": "VERIFIED",
+      "verifiedAt": "2026-09-07T18:43:14.421Z",
+      "documents": [
+        {
+          "id": "doc_id_1788806594421",
+          "documentType": "student_id",
+          "originalFilename": "id.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k1",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:43:14.421Z"
+        },
+        {
+          "id": "doc_photo_1788806594421",
+          "documentType": "passport_photo",
+          "originalFilename": "photo.jpg",
+          "fileSize": 1024,
+          "mimeType": "image/jpeg",
+          "storageKey": "k4",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:43:14.421Z"
+        },
+        {
+          "id": "doc_marks_1788806594421",
+          "documentType": "post_graduation_marksheet",
+          "originalFilename": "marks.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k2",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:43:14.421Z"
+        },
+        {
+          "id": "doc_abc_1788806594421",
+          "documentType": "abc_id",
+          "originalFilename": "abc.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k3",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:43:14.421Z"
+        }
+      ],
+      "createdAt": "2026-09-07T18:43:14.421Z",
+      "updatedAt": "2026-09-07T18:43:14.421Z"
+    },
+    {
+      "studentId": "stu_34_lrn_1788806594421",
+      "verificationStatus": "VERIFIED",
+      "verifiedAt": "2026-09-07T18:43:14.421Z",
+      "documents": [
+        {
+          "id": "doc_id_1788806594421",
+          "documentType": "student_id",
+          "originalFilename": "id.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k1",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:43:14.421Z"
+        },
+        {
+          "id": "doc_photo_1788806594421",
+          "documentType": "passport_photo",
+          "originalFilename": "photo.jpg",
+          "fileSize": 1024,
+          "mimeType": "image/jpeg",
+          "storageKey": "k4",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:43:14.421Z"
+        },
+        {
+          "id": "doc_marks_1788806594421",
+          "documentType": "post_graduation_marksheet",
+          "originalFilename": "marks.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k2",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:43:14.421Z"
+        },
+        {
+          "id": "doc_abc_1788806594421",
+          "documentType": "abc_id",
+          "originalFilename": "abc.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k3",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:43:14.421Z"
+        }
+      ],
+      "createdAt": "2026-09-07T18:43:14.421Z",
+      "updatedAt": "2026-09-07T18:43:14.421Z"
+    },
+    {
+      "studentId": "stu_34_other_1788806594421",
+      "verificationStatus": "VERIFIED",
+      "verifiedAt": "2026-09-07T18:43:14.421Z",
+      "documents": [
+        {
+          "id": "doc_id_1788806594421",
+          "documentType": "student_id",
+          "originalFilename": "id.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k1",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:43:14.421Z"
+        },
+        {
+          "id": "doc_photo_1788806594421",
+          "documentType": "passport_photo",
+          "originalFilename": "photo.jpg",
+          "fileSize": 1024,
+          "mimeType": "image/jpeg",
+          "storageKey": "k4",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:43:14.421Z"
+        },
+        {
+          "id": "doc_marks_1788806594421",
+          "documentType": "post_graduation_marksheet",
+          "originalFilename": "marks.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k2",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:43:14.421Z"
+        },
+        {
+          "id": "doc_abc_1788806594421",
+          "documentType": "abc_id",
+          "originalFilename": "abc.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k3",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T18:43:14.421Z"
+        }
+      ],
+      "createdAt": "2026-09-07T18:43:14.421Z",
+      "updatedAt": "2026-09-07T18:43:14.421Z"
+    },
+    {
+      "studentId": "stu_34_new_1788808155355",
+      "verificationStatus": "VERIFIED",
+      "verifiedAt": "2026-09-07T19:09:15.355Z",
+      "documents": [
+        {
+          "id": "doc_id_1788808155355",
+          "documentType": "student_id",
+          "originalFilename": "id.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k1",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:09:15.355Z"
+        },
+        {
+          "id": "doc_photo_1788808155355",
+          "documentType": "passport_photo",
+          "originalFilename": "photo.jpg",
+          "fileSize": 1024,
+          "mimeType": "image/jpeg",
+          "storageKey": "k4",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:09:15.355Z"
+        },
+        {
+          "id": "doc_marks_1788808155355",
+          "documentType": "post_graduation_marksheet",
+          "originalFilename": "marks.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k2",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:09:15.355Z"
+        },
+        {
+          "id": "doc_abc_1788808155355",
+          "documentType": "abc_id",
+          "originalFilename": "abc.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k3",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:09:15.355Z"
+        }
+      ],
+      "createdAt": "2026-09-07T19:09:15.355Z",
+      "updatedAt": "2026-09-07T19:09:15.355Z"
+    },
+    {
+      "studentId": "stu_34_adv_1788808155355",
+      "verificationStatus": "VERIFIED",
+      "verifiedAt": "2026-09-07T19:09:15.355Z",
+      "documents": [
+        {
+          "id": "doc_id_1788808155355",
+          "documentType": "student_id",
+          "originalFilename": "id.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k1",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:09:15.355Z"
+        },
+        {
+          "id": "doc_photo_1788808155355",
+          "documentType": "passport_photo",
+          "originalFilename": "photo.jpg",
+          "fileSize": 1024,
+          "mimeType": "image/jpeg",
+          "storageKey": "k4",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:09:15.355Z"
+        },
+        {
+          "id": "doc_marks_1788808155355",
+          "documentType": "post_graduation_marksheet",
+          "originalFilename": "marks.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k2",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:09:15.355Z"
+        },
+        {
+          "id": "doc_abc_1788808155355",
+          "documentType": "abc_id",
+          "originalFilename": "abc.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k3",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:09:15.355Z"
+        }
+      ],
+      "createdAt": "2026-09-07T19:09:15.355Z",
+      "updatedAt": "2026-09-07T19:09:15.355Z"
+    },
+    {
+      "studentId": "stu_34_lrn_1788808155355",
+      "verificationStatus": "VERIFIED",
+      "verifiedAt": "2026-09-07T19:09:15.355Z",
+      "documents": [
+        {
+          "id": "doc_id_1788808155355",
+          "documentType": "student_id",
+          "originalFilename": "id.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k1",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:09:15.355Z"
+        },
+        {
+          "id": "doc_photo_1788808155355",
+          "documentType": "passport_photo",
+          "originalFilename": "photo.jpg",
+          "fileSize": 1024,
+          "mimeType": "image/jpeg",
+          "storageKey": "k4",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:09:15.355Z"
+        },
+        {
+          "id": "doc_marks_1788808155355",
+          "documentType": "post_graduation_marksheet",
+          "originalFilename": "marks.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k2",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:09:15.355Z"
+        },
+        {
+          "id": "doc_abc_1788808155355",
+          "documentType": "abc_id",
+          "originalFilename": "abc.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k3",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:09:15.355Z"
+        }
+      ],
+      "createdAt": "2026-09-07T19:09:15.355Z",
+      "updatedAt": "2026-09-07T19:09:15.355Z"
+    },
+    {
+      "studentId": "stu_34_other_1788808155355",
+      "verificationStatus": "VERIFIED",
+      "verifiedAt": "2026-09-07T19:09:15.355Z",
+      "documents": [
+        {
+          "id": "doc_id_1788808155355",
+          "documentType": "student_id",
+          "originalFilename": "id.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k1",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:09:15.355Z"
+        },
+        {
+          "id": "doc_photo_1788808155355",
+          "documentType": "passport_photo",
+          "originalFilename": "photo.jpg",
+          "fileSize": 1024,
+          "mimeType": "image/jpeg",
+          "storageKey": "k4",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:09:15.355Z"
+        },
+        {
+          "id": "doc_marks_1788808155355",
+          "documentType": "post_graduation_marksheet",
+          "originalFilename": "marks.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k2",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:09:15.355Z"
+        },
+        {
+          "id": "doc_abc_1788808155355",
+          "documentType": "abc_id",
+          "originalFilename": "abc.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k3",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:09:15.355Z"
+        }
+      ],
+      "createdAt": "2026-09-07T19:09:15.355Z",
+      "updatedAt": "2026-09-07T19:09:15.355Z"
+    },
+    {
+      "studentId": "stu_34_new_1788809444883",
+      "verificationStatus": "VERIFIED",
+      "verifiedAt": "2026-09-07T19:30:44.883Z",
+      "documents": [
+        {
+          "id": "doc_id_1788809444883",
+          "documentType": "student_id",
+          "originalFilename": "id.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k1",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:30:44.883Z"
+        },
+        {
+          "id": "doc_photo_1788809444883",
+          "documentType": "passport_photo",
+          "originalFilename": "photo.jpg",
+          "fileSize": 1024,
+          "mimeType": "image/jpeg",
+          "storageKey": "k4",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:30:44.883Z"
+        },
+        {
+          "id": "doc_marks_1788809444883",
+          "documentType": "post_graduation_marksheet",
+          "originalFilename": "marks.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k2",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:30:44.883Z"
+        },
+        {
+          "id": "doc_abc_1788809444883",
+          "documentType": "abc_id",
+          "originalFilename": "abc.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k3",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:30:44.883Z"
+        }
+      ],
+      "createdAt": "2026-09-07T19:30:44.883Z",
+      "updatedAt": "2026-09-07T19:30:44.883Z"
+    },
+    {
+      "studentId": "stu_34_adv_1788809444883",
+      "verificationStatus": "VERIFIED",
+      "verifiedAt": "2026-09-07T19:30:44.883Z",
+      "documents": [
+        {
+          "id": "doc_id_1788809444883",
+          "documentType": "student_id",
+          "originalFilename": "id.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k1",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:30:44.883Z"
+        },
+        {
+          "id": "doc_photo_1788809444883",
+          "documentType": "passport_photo",
+          "originalFilename": "photo.jpg",
+          "fileSize": 1024,
+          "mimeType": "image/jpeg",
+          "storageKey": "k4",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:30:44.883Z"
+        },
+        {
+          "id": "doc_marks_1788809444883",
+          "documentType": "post_graduation_marksheet",
+          "originalFilename": "marks.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k2",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:30:44.883Z"
+        },
+        {
+          "id": "doc_abc_1788809444883",
+          "documentType": "abc_id",
+          "originalFilename": "abc.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k3",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:30:44.883Z"
+        }
+      ],
+      "createdAt": "2026-09-07T19:30:44.883Z",
+      "updatedAt": "2026-09-07T19:30:44.883Z"
+    },
+    {
+      "studentId": "stu_34_lrn_1788809444883",
+      "verificationStatus": "VERIFIED",
+      "verifiedAt": "2026-09-07T19:30:44.883Z",
+      "documents": [
+        {
+          "id": "doc_id_1788809444883",
+          "documentType": "student_id",
+          "originalFilename": "id.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k1",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:30:44.883Z"
+        },
+        {
+          "id": "doc_photo_1788809444883",
+          "documentType": "passport_photo",
+          "originalFilename": "photo.jpg",
+          "fileSize": 1024,
+          "mimeType": "image/jpeg",
+          "storageKey": "k4",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:30:44.883Z"
+        },
+        {
+          "id": "doc_marks_1788809444883",
+          "documentType": "post_graduation_marksheet",
+          "originalFilename": "marks.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k2",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:30:44.883Z"
+        },
+        {
+          "id": "doc_abc_1788809444883",
+          "documentType": "abc_id",
+          "originalFilename": "abc.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k3",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:30:44.883Z"
+        }
+      ],
+      "createdAt": "2026-09-07T19:30:44.883Z",
+      "updatedAt": "2026-09-07T19:30:44.883Z"
+    },
+    {
+      "studentId": "stu_34_other_1788809444883",
+      "verificationStatus": "VERIFIED",
+      "verifiedAt": "2026-09-07T19:30:44.883Z",
+      "documents": [
+        {
+          "id": "doc_id_1788809444883",
+          "documentType": "student_id",
+          "originalFilename": "id.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k1",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:30:44.883Z"
+        },
+        {
+          "id": "doc_photo_1788809444883",
+          "documentType": "passport_photo",
+          "originalFilename": "photo.jpg",
+          "fileSize": 1024,
+          "mimeType": "image/jpeg",
+          "storageKey": "k4",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:30:44.883Z"
+        },
+        {
+          "id": "doc_marks_1788809444883",
+          "documentType": "post_graduation_marksheet",
+          "originalFilename": "marks.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k2",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:30:44.883Z"
+        },
+        {
+          "id": "doc_abc_1788809444883",
+          "documentType": "abc_id",
+          "originalFilename": "abc.pdf",
+          "fileSize": 1024,
+          "mimeType": "application/pdf",
+          "storageKey": "k3",
+          "verificationStatus": "VERIFIED",
+          "uploadedAt": "2026-09-07T19:30:44.883Z"
+        }
+      ],
+      "createdAt": "2026-09-07T19:30:44.883Z",
+      "updatedAt": "2026-09-07T19:30:44.883Z"
+    },
+    {
+      "studentId": "admin-system-account-id",
+      "verificationStatus": "NOT_STARTED",
+      "documents": [],
+      "createdAt": "2026-09-07T19:38:52.738Z",
+      "updatedAt": "2026-09-07T19:38:52.739Z"
     }
   ],
   "skillGapAnalyses": [
@@ -36178,6 +37605,78 @@
       "isStale": false,
       "createdAt": "2026-09-07T13:30:10.448Z",
       "updatedAt": "2026-09-07T13:30:10.448Z"
+    },
+    {
+      "id": "sg_stu_34_lrn_1788806285059",
+      "studentId": "stu_34_lrn_1788806285059",
+      "domainId": "software-engineering",
+      "nicheId": "full-stack",
+      "interestProfileId": "int_stu_34_lrn_1788806285059",
+      "knowledgeTestResultId": "know_stu_34_lrn_1788806285059",
+      "overallProficiencyScore": 60,
+      "knowledgeLevel": "Intermediate",
+      "skillProfileVersion": "1.0",
+      "executiveSummary": "Solid front-end foundations with backend gaps.",
+      "skillGaps": [],
+      "recommendations": [],
+      "aiGenerated": false,
+      "isStale": false,
+      "createdAt": "2026-09-07T18:38:05.062Z",
+      "updatedAt": "2026-09-07T18:38:05.062Z"
+    },
+    {
+      "id": "sg_stu_34_lrn_1788806594421",
+      "studentId": "stu_34_lrn_1788806594421",
+      "domainId": "software-engineering",
+      "nicheId": "full-stack",
+      "interestProfileId": "int_stu_34_lrn_1788806594421",
+      "knowledgeTestResultId": "know_stu_34_lrn_1788806594421",
+      "overallProficiencyScore": 60,
+      "knowledgeLevel": "Intermediate",
+      "skillProfileVersion": "1.0",
+      "executiveSummary": "Solid front-end foundations with backend gaps.",
+      "skillGaps": [],
+      "recommendations": [],
+      "aiGenerated": false,
+      "isStale": false,
+      "createdAt": "2026-09-07T18:43:14.421Z",
+      "updatedAt": "2026-09-07T18:43:14.421Z"
+    },
+    {
+      "id": "sg_stu_34_lrn_1788808155355",
+      "studentId": "stu_34_lrn_1788808155355",
+      "domainId": "software-engineering",
+      "nicheId": "full-stack",
+      "interestProfileId": "int_stu_34_lrn_1788808155355",
+      "knowledgeTestResultId": "know_stu_34_lrn_1788808155355",
+      "overallProficiencyScore": 60,
+      "knowledgeLevel": "Intermediate",
+      "skillProfileVersion": "1.0",
+      "executiveSummary": "Solid front-end foundations with backend gaps.",
+      "skillGaps": [],
+      "recommendations": [],
+      "aiGenerated": false,
+      "isStale": false,
+      "createdAt": "2026-09-07T19:09:15.355Z",
+      "updatedAt": "2026-09-07T19:09:15.355Z"
+    },
+    {
+      "id": "sg_stu_34_lrn_1788809444883",
+      "studentId": "stu_34_lrn_1788809444883",
+      "domainId": "software-engineering",
+      "nicheId": "full-stack",
+      "interestProfileId": "int_stu_34_lrn_1788809444883",
+      "knowledgeTestResultId": "know_stu_34_lrn_1788809444883",
+      "overallProficiencyScore": 60,
+      "knowledgeLevel": "Intermediate",
+      "skillProfileVersion": "1.0",
+      "executiveSummary": "Solid front-end foundations with backend gaps.",
+      "skillGaps": [],
+      "recommendations": [],
+      "aiGenerated": false,
+      "isStale": false,
+      "createdAt": "2026-09-07T19:30:44.883Z",
+      "updatedAt": "2026-09-07T19:30:44.883Z"
     }
   ],
   "educators": [
@@ -37884,6 +39383,134 @@
   ],
   "jobApplications": [
     {
+      "id": "app-1788809453023-sy93g",
+      "studentId": "stu_34_adv_1788809444883",
+      "jobId": "job-sec-01",
+      "companyName": "CloudArmor Defense Labs",
+      "roleTitle": "Associate Security Operations Engineer",
+      "position": "Associate Security Operations Engineer",
+      "location": "Hybrid / Remote",
+      "type": "Full-time",
+      "employmentType": "Full-time",
+      "status": "applied",
+      "appliedAt": "2026-09-07T19:30:53.023Z",
+      "statusUpdatedAt": "2026-09-07T19:30:53.045Z",
+      "timeline": [
+        {
+          "id": "ev-1788809453023",
+          "status": "applied",
+          "title": "Application Submitted",
+          "description": "Application officially received for Associate Security Operations Engineer at CloudArmor Defense Labs.",
+          "timestamp": "2026-09-07T19:30:53.023Z"
+        }
+      ],
+      "notes": "Submitted via Skill Bridge Campus Placement Portal.",
+      "applicantFullName": "Advanced Student 34",
+      "applicantEmail": "stu_34_adv_1788809444883@test.edu",
+      "applicantPhone": "+1-555-010-0002",
+      "resumeFileName": "Sarah_Connor_Professional_Resume.pdf",
+      "submittedDocumentTypes": [
+        "student_id",
+        "post_graduation_marksheet"
+      ]
+    },
+    {
+      "id": "app-1788808159369-ydpl8",
+      "studentId": "stu_34_adv_1788808155355",
+      "jobId": "job-sec-01",
+      "companyName": "CloudArmor Defense Labs",
+      "roleTitle": "Associate Security Operations Engineer",
+      "position": "Associate Security Operations Engineer",
+      "location": "Hybrid / Remote",
+      "type": "Full-time",
+      "employmentType": "Full-time",
+      "status": "applied",
+      "appliedAt": "2026-09-07T19:09:19.369Z",
+      "statusUpdatedAt": "2026-09-07T19:09:19.398Z",
+      "timeline": [
+        {
+          "id": "ev-1788808159369",
+          "status": "applied",
+          "title": "Application Submitted",
+          "description": "Application officially received for Associate Security Operations Engineer at CloudArmor Defense Labs.",
+          "timestamp": "2026-09-07T19:09:19.369Z"
+        }
+      ],
+      "notes": "Submitted via Skill Bridge Campus Placement Portal.",
+      "applicantFullName": "Advanced Student 34",
+      "applicantEmail": "stu_34_adv_1788808155355@test.edu",
+      "applicantPhone": "+1-555-010-0002",
+      "resumeFileName": "Sarah_Connor_Professional_Resume.pdf",
+      "submittedDocumentTypes": [
+        "student_id",
+        "post_graduation_marksheet"
+      ]
+    },
+    {
+      "id": "app-1788806598752-4zwsb",
+      "studentId": "stu_34_adv_1788806594421",
+      "jobId": "job-sec-01",
+      "companyName": "CloudArmor Defense Labs",
+      "roleTitle": "Associate Security Operations Engineer",
+      "position": "Associate Security Operations Engineer",
+      "location": "Hybrid / Remote",
+      "type": "Full-time",
+      "employmentType": "Full-time",
+      "status": "applied",
+      "appliedAt": "2026-09-07T18:43:18.752Z",
+      "statusUpdatedAt": "2026-09-07T18:43:18.782Z",
+      "timeline": [
+        {
+          "id": "ev-1788806598752",
+          "status": "applied",
+          "title": "Application Submitted",
+          "description": "Application officially received for Associate Security Operations Engineer at CloudArmor Defense Labs.",
+          "timestamp": "2026-09-07T18:43:18.752Z"
+        }
+      ],
+      "notes": "Submitted via Skill Bridge Campus Placement Portal.",
+      "applicantFullName": "Advanced Student 34",
+      "applicantEmail": "stu_34_adv_1788806594421@test.edu",
+      "applicantPhone": "+1-555-010-0002",
+      "resumeFileName": "Sarah_Connor_Professional_Resume.pdf",
+      "submittedDocumentTypes": [
+        "student_id",
+        "post_graduation_marksheet"
+      ]
+    },
+    {
+      "id": "app-1788806290117-8omw9",
+      "studentId": "stu_34_adv_1788806285059",
+      "jobId": "job-sec-01",
+      "companyName": "CloudArmor Defense Labs",
+      "roleTitle": "Associate Security Operations Engineer",
+      "position": "Associate Security Operations Engineer",
+      "location": "Hybrid / Remote",
+      "type": "Full-time",
+      "employmentType": "Full-time",
+      "status": "applied",
+      "appliedAt": "2026-09-07T18:38:10.117Z",
+      "statusUpdatedAt": "2026-09-07T18:38:10.144Z",
+      "timeline": [
+        {
+          "id": "ev-1788806290117",
+          "status": "applied",
+          "title": "Application Submitted",
+          "description": "Application officially received for Associate Security Operations Engineer at CloudArmor Defense Labs.",
+          "timestamp": "2026-09-07T18:38:10.117Z"
+        }
+      ],
+      "notes": "Submitted via Skill Bridge Campus Placement Portal.",
+      "applicantFullName": "Advanced Student 34",
+      "applicantEmail": "stu_34_adv_1788806285059@test.edu",
+      "applicantPhone": "+1-555-010-0002",
+      "resumeFileName": "Sarah_Connor_Professional_Resume.pdf",
+      "submittedDocumentTypes": [
+        "student_id",
+        "post_graduation_marksheet"
+      ]
+    },
+    {
       "id": "app-1788785735223-h9qn8",
       "studentId": "47fc1671-0e5d-4f66-af79-ca34f5e10ec5",
       "jobId": "job-sec-01",
@@ -38278,7 +39905,1247 @@
   ],
   "resumeAnalyses": [
     {
-      "id": "ra_stu_ayan_test_01_6601bfac0371",
+      "id": "ra_stu_34_new_1788809444883_4b37cdeec730",
+      "studentId": "stu_34_new_1788809444883",
+      "resumeFileName": "Alex_Johnson_Resume.pdf",
+      "jobTitle": "Specified Role",
+      "hasJobDescription": true,
+      "overallScore": 65,
+      "jobMatchScore": 50,
+      "strengthTier": "Strong",
+      "summary": "ATS analysis completed against target role. Scored 65/100 with 2 matched technical skills and 50% alignment to job requirements.",
+      "categoryScores": {
+        "parseability": 80,
+        "structure": 76,
+        "skillsKeywordCoverage": 85,
+        "keywordCoverage": 85,
+        "jobMatch": 50,
+        "contentQuality": 45
+      },
+      "matchedKeywords": [
+        "python",
+        "docker"
+      ],
+      "missingKeywords": [
+        "aws",
+        "kubernetes"
+      ],
+      "detectedSections": [
+        "Education",
+        "Technical Skills",
+        "Projects",
+        "Summary / Objective / Profile"
+      ],
+      "missingSections": [
+        "Experience / Internships",
+        "Certifications",
+        "Strengths"
+      ],
+      "issues": [
+        {
+          "id": "parse-too-short",
+          "category": "parseability",
+          "severity": "warning",
+          "title": "Resume is Exceptionally Brief",
+          "description": "Only 83 words detected. Standard undergraduate technical resumes are typically 350–650 words.",
+          "message": "Resume is Exceptionally Brief",
+          "suggestion": "Only 83 words detected. Standard undergraduate technical resumes are typically 350–650 words."
+        },
+        {
+          "id": "kw-missing-requirements",
+          "category": "skills",
+          "severity": "info",
+          "title": "2 Target Keywords Not Found in Resume",
+          "description": "This role seeks: aws, kubernetes.",
+          "message": "2 Target Keywords Not Found in Resume",
+          "suggestion": "This role seeks: aws, kubernetes."
+        },
+        {
+          "id": "content-weak-verbs",
+          "category": "content",
+          "severity": "warning",
+          "title": "Limited Strong Technical Action Verbs",
+          "description": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'.",
+          "message": "Limited Strong Technical Action Verbs",
+          "suggestion": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'."
+        },
+        {
+          "id": "content-no-metrics",
+          "category": "content",
+          "severity": "warning",
+          "title": "Lack of Quantifiable Results & Metrics",
+          "description": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users').",
+          "message": "Lack of Quantifiable Results & Metrics",
+          "suggestion": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users')."
+        }
+      ],
+      "recommendations": [
+        {
+          "id": "rec-add-missing-kw",
+          "priority": "high",
+          "title": "Incorporate matching skills honestly",
+          "actionableTip": "If you have experience with aws, kubernetes, include them in your Skills or Project bullet points. Do not keyword-stuff unpracticed technologies.",
+          "action": "Incorporate matching skills honestly",
+          "reason": "If you have experience with aws, kubernetes, include them in your Skills or Project bullet points. Do not keyword-stuff unpracticed technologies.",
+          "category": "Resume Quality"
+        },
+        {
+          "id": "rec-action-verbs",
+          "priority": "medium",
+          "title": "Begin bullets with action verbs",
+          "actionableTip": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "action": "Begin bullets with action verbs",
+          "reason": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "category": "Resume Quality"
+        },
+        {
+          "id": "rec-metrics",
+          "priority": "high",
+          "title": "Quantify your project outcomes",
+          "actionableTip": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "action": "Quantify your project outcomes",
+          "reason": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "category": "Resume Quality"
+        }
+      ],
+      "analyzedAt": "2026-09-07T19:30:51.180Z",
+      "disclaimer": "ATS scores are estimates and can vary between hiring systems. Use this analysis as a diagnostic to improve your resume."
+    },
+    {
+      "id": "ra_stu_34_adv_1788809444883_85cebff90758",
+      "studentId": "stu_34_adv_1788809444883",
+      "resumeFileName": "Sarah_Connor_Professional_Resume.pdf",
+      "hasJobDescription": false,
+      "overallScore": 67,
+      "jobMatchScore": null,
+      "strengthTier": "Strong",
+      "summary": "General ATS diagnostic completed. Scored 67/100 across parseability, standard section structure, content quality, and general technical keyword coverage (9 skills identified).",
+      "categoryScores": {
+        "parseability": 80,
+        "structure": 62,
+        "skillsKeywordCoverage": 85,
+        "keywordCoverage": 85,
+        "jobMatch": null,
+        "contentQuality": 45
+      },
+      "matchedKeywords": [
+        "python",
+        "go",
+        "postgresql",
+        "redis",
+        "aws",
+        "docker",
+        "kubernetes",
+        "ci/cd",
+        "microservices"
+      ],
+      "missingKeywords": [],
+      "detectedSections": [
+        "Education",
+        "Technical Skills",
+        "Experience / Internships",
+        "Summary / Objective / Profile"
+      ],
+      "missingSections": [
+        "Projects",
+        "Certifications",
+        "Strengths"
+      ],
+      "issues": [
+        {
+          "id": "parse-too-short",
+          "category": "parseability",
+          "severity": "warning",
+          "title": "Resume is Exceptionally Brief",
+          "description": "Only 43 words detected. Standard undergraduate technical resumes are typically 350–650 words.",
+          "message": "Resume is Exceptionally Brief",
+          "suggestion": "Only 43 words detected. Standard undergraduate technical resumes are typically 350–650 words."
+        },
+        {
+          "id": "struct-missing-projects",
+          "category": "structure",
+          "severity": "critical",
+          "title": "Missing Section: Projects",
+          "description": "ATS parsers look for an explicit \"Projects\" section heading to categorize your qualifications.",
+          "message": "Missing Section: Projects",
+          "suggestion": "ATS parsers look for an explicit \"Projects\" section heading to categorize your qualifications."
+        },
+        {
+          "id": "content-weak-verbs",
+          "category": "content",
+          "severity": "warning",
+          "title": "Limited Strong Technical Action Verbs",
+          "description": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'.",
+          "message": "Limited Strong Technical Action Verbs",
+          "suggestion": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'."
+        },
+        {
+          "id": "content-no-metrics",
+          "category": "content",
+          "severity": "warning",
+          "title": "Lack of Quantifiable Results & Metrics",
+          "description": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users').",
+          "message": "Lack of Quantifiable Results & Metrics",
+          "suggestion": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users')."
+        }
+      ],
+      "recommendations": [
+        {
+          "id": "rec-sec-projects",
+          "priority": "high",
+          "title": "Add a dedicated \"Projects\" section",
+          "actionableTip": "Ensure there is an explicit uppercase or bold header titled \"Projects\".",
+          "action": "Add a dedicated \"Projects\" section",
+          "reason": "Ensure there is an explicit uppercase or bold header titled \"Projects\".",
+          "category": "Resume Quality"
+        },
+        {
+          "id": "rec-action-verbs",
+          "priority": "medium",
+          "title": "Begin bullets with action verbs",
+          "actionableTip": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "action": "Begin bullets with action verbs",
+          "reason": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "category": "Resume Quality"
+        },
+        {
+          "id": "rec-metrics",
+          "priority": "high",
+          "title": "Quantify your project outcomes",
+          "actionableTip": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "action": "Quantify your project outcomes",
+          "reason": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "category": "Resume Quality"
+        }
+      ],
+      "analyzedAt": "2026-09-07T19:30:50.708Z",
+      "disclaimer": "ATS scores are estimates and can vary between hiring systems. Use this analysis as a diagnostic to improve your resume."
+    },
+    {
+      "id": "ra_stu_34_new_1788809444883_3e77c880413e",
+      "studentId": "stu_34_new_1788809444883",
+      "resumeFileName": "Alex_Johnson_Fresher_Resume.pdf",
+      "hasJobDescription": false,
+      "overallScore": 71,
+      "jobMatchScore": null,
+      "strengthTier": "Strong",
+      "summary": "General ATS diagnostic completed. Scored 71/100 across parseability, standard section structure, content quality, and general technical keyword coverage (10 skills identified).",
+      "categoryScores": {
+        "parseability": 80,
+        "structure": 76,
+        "skillsKeywordCoverage": 85,
+        "keywordCoverage": 85,
+        "jobMatch": null,
+        "contentQuality": 45
+      },
+      "matchedKeywords": [
+        "typescript",
+        "python",
+        "sql",
+        "react",
+        "node.js",
+        "express",
+        "sqlite",
+        "docker",
+        "git",
+        "linux"
+      ],
+      "missingKeywords": [],
+      "detectedSections": [
+        "Education",
+        "Technical Skills",
+        "Projects",
+        "Summary / Objective / Profile"
+      ],
+      "missingSections": [
+        "Experience / Internships",
+        "Certifications",
+        "Strengths"
+      ],
+      "issues": [
+        {
+          "id": "parse-too-short",
+          "category": "parseability",
+          "severity": "warning",
+          "title": "Resume is Exceptionally Brief",
+          "description": "Only 83 words detected. Standard undergraduate technical resumes are typically 350–650 words.",
+          "message": "Resume is Exceptionally Brief",
+          "suggestion": "Only 83 words detected. Standard undergraduate technical resumes are typically 350–650 words."
+        },
+        {
+          "id": "content-weak-verbs",
+          "category": "content",
+          "severity": "warning",
+          "title": "Limited Strong Technical Action Verbs",
+          "description": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'.",
+          "message": "Limited Strong Technical Action Verbs",
+          "suggestion": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'."
+        },
+        {
+          "id": "content-no-metrics",
+          "category": "content",
+          "severity": "warning",
+          "title": "Lack of Quantifiable Results & Metrics",
+          "description": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users').",
+          "message": "Lack of Quantifiable Results & Metrics",
+          "suggestion": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users')."
+        }
+      ],
+      "recommendations": [
+        {
+          "id": "rec-action-verbs",
+          "priority": "medium",
+          "title": "Begin bullets with action verbs",
+          "actionableTip": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "action": "Begin bullets with action verbs",
+          "reason": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "category": "Resume Quality"
+        },
+        {
+          "id": "rec-metrics",
+          "priority": "high",
+          "title": "Quantify your project outcomes",
+          "actionableTip": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "action": "Quantify your project outcomes",
+          "reason": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "category": "Resume Quality"
+        }
+      ],
+      "analyzedAt": "2026-09-07T19:30:50.259Z",
+      "disclaimer": "ATS scores are estimates and can vary between hiring systems. Use this analysis as a diagnostic to improve your resume."
+    },
+    {
+      "id": "ra_stu_34_new_1788808155355_3f633b2fa48a",
+      "studentId": "stu_34_new_1788808155355",
+      "resumeFileName": "Alex_Johnson_Resume.pdf",
+      "jobTitle": "Specified Role",
+      "hasJobDescription": true,
+      "overallScore": 65,
+      "jobMatchScore": 50,
+      "strengthTier": "Strong",
+      "summary": "ATS analysis completed against target role. Scored 65/100 with 2 matched technical skills and 50% alignment to job requirements.",
+      "categoryScores": {
+        "parseability": 80,
+        "structure": 76,
+        "skillsKeywordCoverage": 85,
+        "keywordCoverage": 85,
+        "jobMatch": 50,
+        "contentQuality": 45
+      },
+      "matchedKeywords": [
+        "python",
+        "docker"
+      ],
+      "missingKeywords": [
+        "aws",
+        "kubernetes"
+      ],
+      "detectedSections": [
+        "Education",
+        "Technical Skills",
+        "Projects",
+        "Summary / Objective / Profile"
+      ],
+      "missingSections": [
+        "Experience / Internships",
+        "Certifications",
+        "Strengths"
+      ],
+      "issues": [
+        {
+          "id": "parse-too-short",
+          "category": "parseability",
+          "severity": "warning",
+          "title": "Resume is Exceptionally Brief",
+          "description": "Only 83 words detected. Standard undergraduate technical resumes are typically 350–650 words.",
+          "message": "Resume is Exceptionally Brief",
+          "suggestion": "Only 83 words detected. Standard undergraduate technical resumes are typically 350–650 words."
+        },
+        {
+          "id": "kw-missing-requirements",
+          "category": "skills",
+          "severity": "info",
+          "title": "2 Target Keywords Not Found in Resume",
+          "description": "This role seeks: aws, kubernetes.",
+          "message": "2 Target Keywords Not Found in Resume",
+          "suggestion": "This role seeks: aws, kubernetes."
+        },
+        {
+          "id": "content-weak-verbs",
+          "category": "content",
+          "severity": "warning",
+          "title": "Limited Strong Technical Action Verbs",
+          "description": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'.",
+          "message": "Limited Strong Technical Action Verbs",
+          "suggestion": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'."
+        },
+        {
+          "id": "content-no-metrics",
+          "category": "content",
+          "severity": "warning",
+          "title": "Lack of Quantifiable Results & Metrics",
+          "description": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users').",
+          "message": "Lack of Quantifiable Results & Metrics",
+          "suggestion": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users')."
+        }
+      ],
+      "recommendations": [
+        {
+          "id": "rec-add-missing-kw",
+          "priority": "high",
+          "title": "Incorporate matching skills honestly",
+          "actionableTip": "If you have experience with aws, kubernetes, include them in your Skills or Project bullet points. Do not keyword-stuff unpracticed technologies.",
+          "action": "Incorporate matching skills honestly",
+          "reason": "If you have experience with aws, kubernetes, include them in your Skills or Project bullet points. Do not keyword-stuff unpracticed technologies.",
+          "category": "Resume Quality"
+        },
+        {
+          "id": "rec-action-verbs",
+          "priority": "medium",
+          "title": "Begin bullets with action verbs",
+          "actionableTip": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "action": "Begin bullets with action verbs",
+          "reason": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "category": "Resume Quality"
+        },
+        {
+          "id": "rec-metrics",
+          "priority": "high",
+          "title": "Quantify your project outcomes",
+          "actionableTip": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "action": "Quantify your project outcomes",
+          "reason": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "category": "Resume Quality"
+        }
+      ],
+      "analyzedAt": "2026-09-07T19:09:17.891Z",
+      "disclaimer": "ATS scores are estimates and can vary between hiring systems. Use this analysis as a diagnostic to improve your resume."
+    },
+    {
+      "id": "ra_stu_34_adv_1788808155355_b400337939a0",
+      "studentId": "stu_34_adv_1788808155355",
+      "resumeFileName": "Sarah_Connor_Professional_Resume.pdf",
+      "hasJobDescription": false,
+      "overallScore": 67,
+      "jobMatchScore": null,
+      "strengthTier": "Strong",
+      "summary": "General ATS diagnostic completed. Scored 67/100 across parseability, standard section structure, content quality, and general technical keyword coverage (9 skills identified).",
+      "categoryScores": {
+        "parseability": 80,
+        "structure": 62,
+        "skillsKeywordCoverage": 85,
+        "keywordCoverage": 85,
+        "jobMatch": null,
+        "contentQuality": 45
+      },
+      "matchedKeywords": [
+        "python",
+        "go",
+        "postgresql",
+        "redis",
+        "aws",
+        "docker",
+        "kubernetes",
+        "ci/cd",
+        "microservices"
+      ],
+      "missingKeywords": [],
+      "detectedSections": [
+        "Education",
+        "Technical Skills",
+        "Experience / Internships",
+        "Summary / Objective / Profile"
+      ],
+      "missingSections": [
+        "Projects",
+        "Certifications",
+        "Strengths"
+      ],
+      "issues": [
+        {
+          "id": "parse-too-short",
+          "category": "parseability",
+          "severity": "warning",
+          "title": "Resume is Exceptionally Brief",
+          "description": "Only 43 words detected. Standard undergraduate technical resumes are typically 350–650 words.",
+          "message": "Resume is Exceptionally Brief",
+          "suggestion": "Only 43 words detected. Standard undergraduate technical resumes are typically 350–650 words."
+        },
+        {
+          "id": "struct-missing-projects",
+          "category": "structure",
+          "severity": "critical",
+          "title": "Missing Section: Projects",
+          "description": "ATS parsers look for an explicit \"Projects\" section heading to categorize your qualifications.",
+          "message": "Missing Section: Projects",
+          "suggestion": "ATS parsers look for an explicit \"Projects\" section heading to categorize your qualifications."
+        },
+        {
+          "id": "content-weak-verbs",
+          "category": "content",
+          "severity": "warning",
+          "title": "Limited Strong Technical Action Verbs",
+          "description": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'.",
+          "message": "Limited Strong Technical Action Verbs",
+          "suggestion": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'."
+        },
+        {
+          "id": "content-no-metrics",
+          "category": "content",
+          "severity": "warning",
+          "title": "Lack of Quantifiable Results & Metrics",
+          "description": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users').",
+          "message": "Lack of Quantifiable Results & Metrics",
+          "suggestion": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users')."
+        }
+      ],
+      "recommendations": [
+        {
+          "id": "rec-sec-projects",
+          "priority": "high",
+          "title": "Add a dedicated \"Projects\" section",
+          "actionableTip": "Ensure there is an explicit uppercase or bold header titled \"Projects\".",
+          "action": "Add a dedicated \"Projects\" section",
+          "reason": "Ensure there is an explicit uppercase or bold header titled \"Projects\".",
+          "category": "Resume Quality"
+        },
+        {
+          "id": "rec-action-verbs",
+          "priority": "medium",
+          "title": "Begin bullets with action verbs",
+          "actionableTip": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "action": "Begin bullets with action verbs",
+          "reason": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "category": "Resume Quality"
+        },
+        {
+          "id": "rec-metrics",
+          "priority": "high",
+          "title": "Quantify your project outcomes",
+          "actionableTip": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "action": "Quantify your project outcomes",
+          "reason": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "category": "Resume Quality"
+        }
+      ],
+      "analyzedAt": "2026-09-07T19:09:17.590Z",
+      "disclaimer": "ATS scores are estimates and can vary between hiring systems. Use this analysis as a diagnostic to improve your resume."
+    },
+    {
+      "id": "ra_stu_34_new_1788808155355_824558e9a966",
+      "studentId": "stu_34_new_1788808155355",
+      "resumeFileName": "Alex_Johnson_Fresher_Resume.pdf",
+      "hasJobDescription": false,
+      "overallScore": 71,
+      "jobMatchScore": null,
+      "strengthTier": "Strong",
+      "summary": "General ATS diagnostic completed. Scored 71/100 across parseability, standard section structure, content quality, and general technical keyword coverage (10 skills identified).",
+      "categoryScores": {
+        "parseability": 80,
+        "structure": 76,
+        "skillsKeywordCoverage": 85,
+        "keywordCoverage": 85,
+        "jobMatch": null,
+        "contentQuality": 45
+      },
+      "matchedKeywords": [
+        "typescript",
+        "python",
+        "sql",
+        "react",
+        "node.js",
+        "express",
+        "sqlite",
+        "docker",
+        "git",
+        "linux"
+      ],
+      "missingKeywords": [],
+      "detectedSections": [
+        "Education",
+        "Technical Skills",
+        "Projects",
+        "Summary / Objective / Profile"
+      ],
+      "missingSections": [
+        "Experience / Internships",
+        "Certifications",
+        "Strengths"
+      ],
+      "issues": [
+        {
+          "id": "parse-too-short",
+          "category": "parseability",
+          "severity": "warning",
+          "title": "Resume is Exceptionally Brief",
+          "description": "Only 83 words detected. Standard undergraduate technical resumes are typically 350–650 words.",
+          "message": "Resume is Exceptionally Brief",
+          "suggestion": "Only 83 words detected. Standard undergraduate technical resumes are typically 350–650 words."
+        },
+        {
+          "id": "content-weak-verbs",
+          "category": "content",
+          "severity": "warning",
+          "title": "Limited Strong Technical Action Verbs",
+          "description": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'.",
+          "message": "Limited Strong Technical Action Verbs",
+          "suggestion": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'."
+        },
+        {
+          "id": "content-no-metrics",
+          "category": "content",
+          "severity": "warning",
+          "title": "Lack of Quantifiable Results & Metrics",
+          "description": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users').",
+          "message": "Lack of Quantifiable Results & Metrics",
+          "suggestion": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users')."
+        }
+      ],
+      "recommendations": [
+        {
+          "id": "rec-action-verbs",
+          "priority": "medium",
+          "title": "Begin bullets with action verbs",
+          "actionableTip": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "action": "Begin bullets with action verbs",
+          "reason": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "category": "Resume Quality"
+        },
+        {
+          "id": "rec-metrics",
+          "priority": "high",
+          "title": "Quantify your project outcomes",
+          "actionableTip": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "action": "Quantify your project outcomes",
+          "reason": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "category": "Resume Quality"
+        }
+      ],
+      "analyzedAt": "2026-09-07T19:09:17.319Z",
+      "disclaimer": "ATS scores are estimates and can vary between hiring systems. Use this analysis as a diagnostic to improve your resume."
+    },
+    {
+      "id": "ra_stu_34_new_1788806594421_34bd9abfb937",
+      "studentId": "stu_34_new_1788806594421",
+      "resumeFileName": "Alex_Johnson_Resume.pdf",
+      "jobTitle": "Specified Role",
+      "hasJobDescription": true,
+      "overallScore": 65,
+      "jobMatchScore": 50,
+      "strengthTier": "Strong",
+      "summary": "ATS analysis completed against target role. Scored 65/100 with 2 matched technical skills and 50% alignment to job requirements.",
+      "categoryScores": {
+        "parseability": 80,
+        "structure": 76,
+        "skillsKeywordCoverage": 85,
+        "keywordCoverage": 85,
+        "jobMatch": 50,
+        "contentQuality": 45
+      },
+      "matchedKeywords": [
+        "python",
+        "docker"
+      ],
+      "missingKeywords": [
+        "aws",
+        "kubernetes"
+      ],
+      "detectedSections": [
+        "Education",
+        "Technical Skills",
+        "Projects",
+        "Summary / Objective / Profile"
+      ],
+      "missingSections": [
+        "Experience / Internships",
+        "Certifications",
+        "Strengths"
+      ],
+      "issues": [
+        {
+          "id": "parse-too-short",
+          "category": "parseability",
+          "severity": "warning",
+          "title": "Resume is Exceptionally Brief",
+          "description": "Only 83 words detected. Standard undergraduate technical resumes are typically 350–650 words.",
+          "message": "Resume is Exceptionally Brief",
+          "suggestion": "Only 83 words detected. Standard undergraduate technical resumes are typically 350–650 words."
+        },
+        {
+          "id": "kw-missing-requirements",
+          "category": "skills",
+          "severity": "info",
+          "title": "2 Target Keywords Not Found in Resume",
+          "description": "This role seeks: aws, kubernetes.",
+          "message": "2 Target Keywords Not Found in Resume",
+          "suggestion": "This role seeks: aws, kubernetes."
+        },
+        {
+          "id": "content-weak-verbs",
+          "category": "content",
+          "severity": "warning",
+          "title": "Limited Strong Technical Action Verbs",
+          "description": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'.",
+          "message": "Limited Strong Technical Action Verbs",
+          "suggestion": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'."
+        },
+        {
+          "id": "content-no-metrics",
+          "category": "content",
+          "severity": "warning",
+          "title": "Lack of Quantifiable Results & Metrics",
+          "description": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users').",
+          "message": "Lack of Quantifiable Results & Metrics",
+          "suggestion": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users')."
+        }
+      ],
+      "recommendations": [
+        {
+          "id": "rec-add-missing-kw",
+          "priority": "high",
+          "title": "Incorporate matching skills honestly",
+          "actionableTip": "If you have experience with aws, kubernetes, include them in your Skills or Project bullet points. Do not keyword-stuff unpracticed technologies.",
+          "action": "Incorporate matching skills honestly",
+          "reason": "If you have experience with aws, kubernetes, include them in your Skills or Project bullet points. Do not keyword-stuff unpracticed technologies.",
+          "category": "Resume Quality"
+        },
+        {
+          "id": "rec-action-verbs",
+          "priority": "medium",
+          "title": "Begin bullets with action verbs",
+          "actionableTip": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "action": "Begin bullets with action verbs",
+          "reason": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "category": "Resume Quality"
+        },
+        {
+          "id": "rec-metrics",
+          "priority": "high",
+          "title": "Quantify your project outcomes",
+          "actionableTip": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "action": "Quantify your project outcomes",
+          "reason": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "category": "Resume Quality"
+        }
+      ],
+      "analyzedAt": "2026-09-07T18:43:17.645Z",
+      "disclaimer": "ATS scores are estimates and can vary between hiring systems. Use this analysis as a diagnostic to improve your resume."
+    },
+    {
+      "id": "ra_stu_34_adv_1788806594421_3e6a4dca22f0",
+      "studentId": "stu_34_adv_1788806594421",
+      "resumeFileName": "Sarah_Connor_Professional_Resume.pdf",
+      "hasJobDescription": false,
+      "overallScore": 67,
+      "jobMatchScore": null,
+      "strengthTier": "Strong",
+      "summary": "General ATS diagnostic completed. Scored 67/100 across parseability, standard section structure, content quality, and general technical keyword coverage (9 skills identified).",
+      "categoryScores": {
+        "parseability": 80,
+        "structure": 62,
+        "skillsKeywordCoverage": 85,
+        "keywordCoverage": 85,
+        "jobMatch": null,
+        "contentQuality": 45
+      },
+      "matchedKeywords": [
+        "python",
+        "go",
+        "postgresql",
+        "redis",
+        "aws",
+        "docker",
+        "kubernetes",
+        "ci/cd",
+        "microservices"
+      ],
+      "missingKeywords": [],
+      "detectedSections": [
+        "Education",
+        "Technical Skills",
+        "Experience / Internships",
+        "Summary / Objective / Profile"
+      ],
+      "missingSections": [
+        "Projects",
+        "Certifications",
+        "Strengths"
+      ],
+      "issues": [
+        {
+          "id": "parse-too-short",
+          "category": "parseability",
+          "severity": "warning",
+          "title": "Resume is Exceptionally Brief",
+          "description": "Only 43 words detected. Standard undergraduate technical resumes are typically 350–650 words.",
+          "message": "Resume is Exceptionally Brief",
+          "suggestion": "Only 43 words detected. Standard undergraduate technical resumes are typically 350–650 words."
+        },
+        {
+          "id": "struct-missing-projects",
+          "category": "structure",
+          "severity": "critical",
+          "title": "Missing Section: Projects",
+          "description": "ATS parsers look for an explicit \"Projects\" section heading to categorize your qualifications.",
+          "message": "Missing Section: Projects",
+          "suggestion": "ATS parsers look for an explicit \"Projects\" section heading to categorize your qualifications."
+        },
+        {
+          "id": "content-weak-verbs",
+          "category": "content",
+          "severity": "warning",
+          "title": "Limited Strong Technical Action Verbs",
+          "description": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'.",
+          "message": "Limited Strong Technical Action Verbs",
+          "suggestion": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'."
+        },
+        {
+          "id": "content-no-metrics",
+          "category": "content",
+          "severity": "warning",
+          "title": "Lack of Quantifiable Results & Metrics",
+          "description": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users').",
+          "message": "Lack of Quantifiable Results & Metrics",
+          "suggestion": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users')."
+        }
+      ],
+      "recommendations": [
+        {
+          "id": "rec-sec-projects",
+          "priority": "high",
+          "title": "Add a dedicated \"Projects\" section",
+          "actionableTip": "Ensure there is an explicit uppercase or bold header titled \"Projects\".",
+          "action": "Add a dedicated \"Projects\" section",
+          "reason": "Ensure there is an explicit uppercase or bold header titled \"Projects\".",
+          "category": "Resume Quality"
+        },
+        {
+          "id": "rec-action-verbs",
+          "priority": "medium",
+          "title": "Begin bullets with action verbs",
+          "actionableTip": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "action": "Begin bullets with action verbs",
+          "reason": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "category": "Resume Quality"
+        },
+        {
+          "id": "rec-metrics",
+          "priority": "high",
+          "title": "Quantify your project outcomes",
+          "actionableTip": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "action": "Quantify your project outcomes",
+          "reason": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "category": "Resume Quality"
+        }
+      ],
+      "analyzedAt": "2026-09-07T18:43:17.261Z",
+      "disclaimer": "ATS scores are estimates and can vary between hiring systems. Use this analysis as a diagnostic to improve your resume."
+    },
+    {
+      "id": "ra_stu_34_new_1788806594421_66a99b8ca7e6",
+      "studentId": "stu_34_new_1788806594421",
+      "resumeFileName": "Alex_Johnson_Fresher_Resume.pdf",
+      "hasJobDescription": false,
+      "overallScore": 71,
+      "jobMatchScore": null,
+      "strengthTier": "Strong",
+      "summary": "General ATS diagnostic completed. Scored 71/100 across parseability, standard section structure, content quality, and general technical keyword coverage (10 skills identified).",
+      "categoryScores": {
+        "parseability": 80,
+        "structure": 76,
+        "skillsKeywordCoverage": 85,
+        "keywordCoverage": 85,
+        "jobMatch": null,
+        "contentQuality": 45
+      },
+      "matchedKeywords": [
+        "typescript",
+        "python",
+        "sql",
+        "react",
+        "node.js",
+        "express",
+        "sqlite",
+        "docker",
+        "git",
+        "linux"
+      ],
+      "missingKeywords": [],
+      "detectedSections": [
+        "Education",
+        "Technical Skills",
+        "Projects",
+        "Summary / Objective / Profile"
+      ],
+      "missingSections": [
+        "Experience / Internships",
+        "Certifications",
+        "Strengths"
+      ],
+      "issues": [
+        {
+          "id": "parse-too-short",
+          "category": "parseability",
+          "severity": "warning",
+          "title": "Resume is Exceptionally Brief",
+          "description": "Only 83 words detected. Standard undergraduate technical resumes are typically 350–650 words.",
+          "message": "Resume is Exceptionally Brief",
+          "suggestion": "Only 83 words detected. Standard undergraduate technical resumes are typically 350–650 words."
+        },
+        {
+          "id": "content-weak-verbs",
+          "category": "content",
+          "severity": "warning",
+          "title": "Limited Strong Technical Action Verbs",
+          "description": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'.",
+          "message": "Limited Strong Technical Action Verbs",
+          "suggestion": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'."
+        },
+        {
+          "id": "content-no-metrics",
+          "category": "content",
+          "severity": "warning",
+          "title": "Lack of Quantifiable Results & Metrics",
+          "description": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users').",
+          "message": "Lack of Quantifiable Results & Metrics",
+          "suggestion": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users')."
+        }
+      ],
+      "recommendations": [
+        {
+          "id": "rec-action-verbs",
+          "priority": "medium",
+          "title": "Begin bullets with action verbs",
+          "actionableTip": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "action": "Begin bullets with action verbs",
+          "reason": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "category": "Resume Quality"
+        },
+        {
+          "id": "rec-metrics",
+          "priority": "high",
+          "title": "Quantify your project outcomes",
+          "actionableTip": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "action": "Quantify your project outcomes",
+          "reason": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "category": "Resume Quality"
+        }
+      ],
+      "analyzedAt": "2026-09-07T18:43:17.023Z",
+      "disclaimer": "ATS scores are estimates and can vary between hiring systems. Use this analysis as a diagnostic to improve your resume."
+    },
+    {
+      "id": "ra_stu_34_new_1788806285059_49580ebe0bc2",
+      "studentId": "stu_34_new_1788806285059",
+      "resumeFileName": "Alex_Johnson_Resume.pdf",
+      "jobTitle": "Specified Role",
+      "hasJobDescription": true,
+      "overallScore": 65,
+      "jobMatchScore": 50,
+      "strengthTier": "Strong",
+      "summary": "ATS analysis completed against target role. Scored 65/100 with 2 matched technical skills and 50% alignment to job requirements.",
+      "categoryScores": {
+        "parseability": 80,
+        "structure": 76,
+        "skillsKeywordCoverage": 85,
+        "keywordCoverage": 85,
+        "jobMatch": 50,
+        "contentQuality": 45
+      },
+      "matchedKeywords": [
+        "python",
+        "docker"
+      ],
+      "missingKeywords": [
+        "aws",
+        "kubernetes"
+      ],
+      "detectedSections": [
+        "Education",
+        "Technical Skills",
+        "Projects",
+        "Summary / Objective / Profile"
+      ],
+      "missingSections": [
+        "Experience / Internships",
+        "Certifications",
+        "Strengths"
+      ],
+      "issues": [
+        {
+          "id": "parse-too-short",
+          "category": "parseability",
+          "severity": "warning",
+          "title": "Resume is Exceptionally Brief",
+          "description": "Only 83 words detected. Standard undergraduate technical resumes are typically 350–650 words.",
+          "message": "Resume is Exceptionally Brief",
+          "suggestion": "Only 83 words detected. Standard undergraduate technical resumes are typically 350–650 words."
+        },
+        {
+          "id": "kw-missing-requirements",
+          "category": "skills",
+          "severity": "info",
+          "title": "2 Target Keywords Not Found in Resume",
+          "description": "This role seeks: aws, kubernetes.",
+          "message": "2 Target Keywords Not Found in Resume",
+          "suggestion": "This role seeks: aws, kubernetes."
+        },
+        {
+          "id": "content-weak-verbs",
+          "category": "content",
+          "severity": "warning",
+          "title": "Limited Strong Technical Action Verbs",
+          "description": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'.",
+          "message": "Limited Strong Technical Action Verbs",
+          "suggestion": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'."
+        },
+        {
+          "id": "content-no-metrics",
+          "category": "content",
+          "severity": "warning",
+          "title": "Lack of Quantifiable Results & Metrics",
+          "description": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users').",
+          "message": "Lack of Quantifiable Results & Metrics",
+          "suggestion": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users')."
+        }
+      ],
+      "recommendations": [
+        {
+          "id": "rec-add-missing-kw",
+          "priority": "high",
+          "title": "Incorporate matching skills honestly",
+          "actionableTip": "If you have experience with aws, kubernetes, include them in your Skills or Project bullet points. Do not keyword-stuff unpracticed technologies.",
+          "action": "Incorporate matching skills honestly",
+          "reason": "If you have experience with aws, kubernetes, include them in your Skills or Project bullet points. Do not keyword-stuff unpracticed technologies.",
+          "category": "Resume Quality"
+        },
+        {
+          "id": "rec-action-verbs",
+          "priority": "medium",
+          "title": "Begin bullets with action verbs",
+          "actionableTip": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "action": "Begin bullets with action verbs",
+          "reason": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "category": "Resume Quality"
+        },
+        {
+          "id": "rec-metrics",
+          "priority": "high",
+          "title": "Quantify your project outcomes",
+          "actionableTip": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "action": "Quantify your project outcomes",
+          "reason": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "category": "Resume Quality"
+        }
+      ],
+      "analyzedAt": "2026-09-07T18:38:08.963Z",
+      "disclaimer": "ATS scores are estimates and can vary between hiring systems. Use this analysis as a diagnostic to improve your resume."
+    },
+    {
+      "id": "ra_stu_34_adv_1788806285059_949cb7fc0234",
+      "studentId": "stu_34_adv_1788806285059",
+      "resumeFileName": "Sarah_Connor_Professional_Resume.pdf",
+      "hasJobDescription": false,
+      "overallScore": 67,
+      "jobMatchScore": null,
+      "strengthTier": "Strong",
+      "summary": "General ATS diagnostic completed. Scored 67/100 across parseability, standard section structure, content quality, and general technical keyword coverage (9 skills identified).",
+      "categoryScores": {
+        "parseability": 80,
+        "structure": 62,
+        "skillsKeywordCoverage": 85,
+        "keywordCoverage": 85,
+        "jobMatch": null,
+        "contentQuality": 45
+      },
+      "matchedKeywords": [
+        "python",
+        "go",
+        "postgresql",
+        "redis",
+        "aws",
+        "docker",
+        "kubernetes",
+        "ci/cd",
+        "microservices"
+      ],
+      "missingKeywords": [],
+      "detectedSections": [
+        "Education",
+        "Technical Skills",
+        "Experience / Internships",
+        "Summary / Objective / Profile"
+      ],
+      "missingSections": [
+        "Projects",
+        "Certifications",
+        "Strengths"
+      ],
+      "issues": [
+        {
+          "id": "parse-too-short",
+          "category": "parseability",
+          "severity": "warning",
+          "title": "Resume is Exceptionally Brief",
+          "description": "Only 43 words detected. Standard undergraduate technical resumes are typically 350–650 words.",
+          "message": "Resume is Exceptionally Brief",
+          "suggestion": "Only 43 words detected. Standard undergraduate technical resumes are typically 350–650 words."
+        },
+        {
+          "id": "struct-missing-projects",
+          "category": "structure",
+          "severity": "critical",
+          "title": "Missing Section: Projects",
+          "description": "ATS parsers look for an explicit \"Projects\" section heading to categorize your qualifications.",
+          "message": "Missing Section: Projects",
+          "suggestion": "ATS parsers look for an explicit \"Projects\" section heading to categorize your qualifications."
+        },
+        {
+          "id": "content-weak-verbs",
+          "category": "content",
+          "severity": "warning",
+          "title": "Limited Strong Technical Action Verbs",
+          "description": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'.",
+          "message": "Limited Strong Technical Action Verbs",
+          "suggestion": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'."
+        },
+        {
+          "id": "content-no-metrics",
+          "category": "content",
+          "severity": "warning",
+          "title": "Lack of Quantifiable Results & Metrics",
+          "description": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users').",
+          "message": "Lack of Quantifiable Results & Metrics",
+          "suggestion": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users')."
+        }
+      ],
+      "recommendations": [
+        {
+          "id": "rec-sec-projects",
+          "priority": "high",
+          "title": "Add a dedicated \"Projects\" section",
+          "actionableTip": "Ensure there is an explicit uppercase or bold header titled \"Projects\".",
+          "action": "Add a dedicated \"Projects\" section",
+          "reason": "Ensure there is an explicit uppercase or bold header titled \"Projects\".",
+          "category": "Resume Quality"
+        },
+        {
+          "id": "rec-action-verbs",
+          "priority": "medium",
+          "title": "Begin bullets with action verbs",
+          "actionableTip": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "action": "Begin bullets with action verbs",
+          "reason": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "category": "Resume Quality"
+        },
+        {
+          "id": "rec-metrics",
+          "priority": "high",
+          "title": "Quantify your project outcomes",
+          "actionableTip": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "action": "Quantify your project outcomes",
+          "reason": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "category": "Resume Quality"
+        }
+      ],
+      "analyzedAt": "2026-09-07T18:38:08.540Z",
+      "disclaimer": "ATS scores are estimates and can vary between hiring systems. Use this analysis as a diagnostic to improve your resume."
+    },
+    {
+      "id": "ra_stu_34_new_1788806285059_7f0e06afdcd5",
+      "studentId": "stu_34_new_1788806285059",
+      "resumeFileName": "Alex_Johnson_Fresher_Resume.pdf",
+      "hasJobDescription": false,
+      "overallScore": 71,
+      "jobMatchScore": null,
+      "strengthTier": "Strong",
+      "summary": "General ATS diagnostic completed. Scored 71/100 across parseability, standard section structure, content quality, and general technical keyword coverage (10 skills identified).",
+      "categoryScores": {
+        "parseability": 80,
+        "structure": 76,
+        "skillsKeywordCoverage": 85,
+        "keywordCoverage": 85,
+        "jobMatch": null,
+        "contentQuality": 45
+      },
+      "matchedKeywords": [
+        "typescript",
+        "python",
+        "sql",
+        "react",
+        "node.js",
+        "express",
+        "sqlite",
+        "docker",
+        "git",
+        "linux"
+      ],
+      "missingKeywords": [],
+      "detectedSections": [
+        "Education",
+        "Technical Skills",
+        "Projects",
+        "Summary / Objective / Profile"
+      ],
+      "missingSections": [
+        "Experience / Internships",
+        "Certifications",
+        "Strengths"
+      ],
+      "issues": [
+        {
+          "id": "parse-too-short",
+          "category": "parseability",
+          "severity": "warning",
+          "title": "Resume is Exceptionally Brief",
+          "description": "Only 83 words detected. Standard undergraduate technical resumes are typically 350–650 words.",
+          "message": "Resume is Exceptionally Brief",
+          "suggestion": "Only 83 words detected. Standard undergraduate technical resumes are typically 350–650 words."
+        },
+        {
+          "id": "content-weak-verbs",
+          "category": "content",
+          "severity": "warning",
+          "title": "Limited Strong Technical Action Verbs",
+          "description": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'.",
+          "message": "Limited Strong Technical Action Verbs",
+          "suggestion": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'."
+        },
+        {
+          "id": "content-no-metrics",
+          "category": "content",
+          "severity": "warning",
+          "title": "Lack of Quantifiable Results & Metrics",
+          "description": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users').",
+          "message": "Lack of Quantifiable Results & Metrics",
+          "suggestion": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users')."
+        }
+      ],
+      "recommendations": [
+        {
+          "id": "rec-action-verbs",
+          "priority": "medium",
+          "title": "Begin bullets with action verbs",
+          "actionableTip": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "action": "Begin bullets with action verbs",
+          "reason": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
+          "category": "Resume Quality"
+        },
+        {
+          "id": "rec-metrics",
+          "priority": "high",
+          "title": "Quantify your project outcomes",
+          "actionableTip": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "action": "Quantify your project outcomes",
+          "reason": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
+          "category": "Resume Quality"
+        }
+      ],
+      "analyzedAt": "2026-09-07T18:38:08.335Z",
+      "disclaimer": "ATS scores are estimates and can vary between hiring systems. Use this analysis as a diagnostic to improve your resume."
+    },
+    {
+      "id": "ra_stu_ayan_test_01_696bea97869f",
       "studentId": "stu_ayan_test_01",
       "resumeFileName": "AYAN PARMAR RESUME.pdf",
       "jobTitle": "Frontend UI/UX Developer",
@@ -38492,11 +41359,11 @@
           "category": "Resume Quality"
         }
       ],
-      "analyzedAt": "2026-09-07T13:29:36.946Z",
+      "analyzedAt": "2026-09-07T18:43:27.251Z",
       "disclaimer": "ATS scores are estimates and can vary between hiring systems. Use this analysis as a diagnostic to improve your resume."
     },
     {
-      "id": "ra_stu_ayan_test_01_5cca43d73bc6",
+      "id": "ra_stu_ayan_test_01_04953ed7d4ec",
       "studentId": "stu_ayan_test_01",
       "resumeFileName": "AYAN PARMAR RESUME.pdf",
       "hasJobDescription": false,
@@ -38692,7 +41559,7 @@
           "category": "Resume Quality"
         }
       ],
-      "analyzedAt": "2026-09-07T13:29:36.562Z",
+      "analyzedAt": "2026-09-07T18:43:26.961Z",
       "disclaimer": "ATS scores are estimates and can vary between hiring systems. Use this analysis as a diagnostic to improve your resume."
     },
     {
@@ -42173,206 +45040,6 @@
       "disclaimer": "ATS scores are estimates and can vary between hiring systems. Use this score as a diagnostic to improve your resume."
     },
     {
-      "id": "ra_47fc1671-0e5d-4f66-af79-ca34f5e10ec5_dabf52ddef8c",
-      "studentId": "47fc1671-0e5d-4f66-af79-ca34f5e10ec5",
-      "resumeFileName": "AYAN PARMAR RESUME.pdf",
-      "hasJobDescription": false,
-      "overallScore": 34,
-      "jobMatchScore": null,
-      "strengthTier": "Needs Improvement",
-      "summary": "General ATS diagnostic completed. Scored 34/100 across parseability, standard section structure, content quality, and general technical keyword coverage (1 skills identified).",
-      "categoryScores": {
-        "parseability": 35,
-        "structure": 25,
-        "skillsKeywordCoverage": 30,
-        "keywordCoverage": 30,
-        "jobMatch": null,
-        "contentQuality": 45
-      },
-      "matchedKeywords": [
-        "c"
-      ],
-      "missingKeywords": [],
-      "detectedSections": [],
-      "missingSections": [
-        "Education",
-        "Technical Skills",
-        "Projects",
-        "Experience / Internships",
-        "Certifications",
-        "Summary / Objective / Profile",
-        "Strengths"
-      ],
-      "issues": [
-        {
-          "id": "parse-no-email",
-          "category": "parseability",
-          "severity": "critical",
-          "title": "Missing or Unparseable Email Address",
-          "description": "Recruiter ATS parsers could not identify a valid contact email in the header.",
-          "message": "Missing or Unparseable Email Address",
-          "suggestion": "Recruiter ATS parsers could not identify a valid contact email in the header."
-        },
-        {
-          "id": "parse-no-phone",
-          "category": "parseability",
-          "severity": "warning",
-          "title": "Missing Phone Number",
-          "description": "No standard 10-digit telephone or mobile format was detected.",
-          "message": "Missing Phone Number",
-          "suggestion": "No standard 10-digit telephone or mobile format was detected."
-        },
-        {
-          "id": "parse-no-profiles",
-          "category": "parseability",
-          "severity": "info",
-          "title": "No Professional Profile Links Detected",
-          "description": "Technical recruiters look for GitHub repositories or LinkedIn URLs for portfolio verification.",
-          "message": "No Professional Profile Links Detected",
-          "suggestion": "Technical recruiters look for GitHub repositories or LinkedIn URLs for portfolio verification."
-        },
-        {
-          "id": "parse-formatting-challenges",
-          "category": "parseability",
-          "severity": "warning",
-          "title": "Formatting May Reduce Older ATS Parsing Reliability",
-          "description": "Your document is a valid resume, but some custom formatting or letter-spacing artifacts may reduce how reliably older ATS parsers read it.",
-          "message": "Formatting May Reduce Older ATS Parsing Reliability",
-          "suggestion": "Your document is a valid resume, but some custom formatting or letter-spacing artifacts may reduce how reliably older ATS parsers read it."
-        },
-        {
-          "id": "struct-missing-education",
-          "category": "structure",
-          "severity": "critical",
-          "title": "Missing Section: Education",
-          "description": "ATS parsers look for an explicit \"Education\" section heading to categorize your qualifications.",
-          "message": "Missing Section: Education",
-          "suggestion": "ATS parsers look for an explicit \"Education\" section heading to categorize your qualifications."
-        },
-        {
-          "id": "struct-missing-technical-skills",
-          "category": "structure",
-          "severity": "critical",
-          "title": "Missing Section: Technical Skills",
-          "description": "ATS parsers look for an explicit \"Technical Skills\" section heading to categorize your qualifications.",
-          "message": "Missing Section: Technical Skills",
-          "suggestion": "ATS parsers look for an explicit \"Technical Skills\" section heading to categorize your qualifications."
-        },
-        {
-          "id": "struct-missing-projects",
-          "category": "structure",
-          "severity": "critical",
-          "title": "Missing Section: Projects",
-          "description": "ATS parsers look for an explicit \"Projects\" section heading to categorize your qualifications.",
-          "message": "Missing Section: Projects",
-          "suggestion": "ATS parsers look for an explicit \"Projects\" section heading to categorize your qualifications."
-        },
-        {
-          "id": "content-weak-verbs",
-          "category": "content",
-          "severity": "warning",
-          "title": "Limited Strong Technical Action Verbs",
-          "description": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'.",
-          "message": "Limited Strong Technical Action Verbs",
-          "suggestion": "Bullet points should start with strong decisive verbs like 'Architected', 'Deployed', or 'Optimized'."
-        },
-        {
-          "id": "content-no-metrics",
-          "category": "content",
-          "severity": "warning",
-          "title": "Lack of Quantifiable Results & Metrics",
-          "description": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users').",
-          "message": "Lack of Quantifiable Results & Metrics",
-          "suggestion": "Technical recruiters value measurable outcomes (e.g., 'reduced API response time by 30%', 'served 500+ daily users')."
-        }
-      ],
-      "recommendations": [
-        {
-          "id": "rec-email",
-          "priority": "high",
-          "title": "Add standard email in header",
-          "actionableTip": "Place a professional email address (e.g. name@institution.edu) prominently at the very top.",
-          "action": "Add standard email in header",
-          "reason": "Place a professional email address (e.g. name@institution.edu) prominently at the very top.",
-          "category": "Resume Quality"
-        },
-        {
-          "id": "rec-links",
-          "priority": "medium",
-          "title": "Include clean GitHub and LinkedIn links",
-          "actionableTip": "Add standard hyperlinks in your header: linkedin.com/in/username and github.com/username.",
-          "action": "Include clean GitHub and LinkedIn links",
-          "reason": "Add standard hyperlinks in your header: linkedin.com/in/username and github.com/username.",
-          "category": "Resume Quality"
-        },
-        {
-          "id": "rec-ats-formatting",
-          "priority": "medium",
-          "title": "Consider standard typography for high-volume automated portals",
-          "actionableTip": "For large enterprise applicant tracking systems, standard fonts and standard linear text flow ensure maximum automated extraction.",
-          "action": "Consider standard typography for high-volume automated portals",
-          "reason": "For large enterprise applicant tracking systems, standard fonts and standard linear text flow ensure maximum automated extraction.",
-          "category": "Resume Quality"
-        },
-        {
-          "id": "rec-sec-education",
-          "priority": "high",
-          "title": "Add a dedicated \"Education\" section",
-          "actionableTip": "Ensure there is an explicit uppercase or bold header titled \"Education\".",
-          "action": "Add a dedicated \"Education\" section",
-          "reason": "Ensure there is an explicit uppercase or bold header titled \"Education\".",
-          "category": "Resume Quality"
-        },
-        {
-          "id": "rec-sec-technical-skills",
-          "priority": "high",
-          "title": "Add a dedicated \"Technical Skills\" section",
-          "actionableTip": "Ensure there is an explicit uppercase or bold header titled \"Technical Skills\".",
-          "action": "Add a dedicated \"Technical Skills\" section",
-          "reason": "Ensure there is an explicit uppercase or bold header titled \"Technical Skills\".",
-          "category": "Resume Quality"
-        },
-        {
-          "id": "rec-sec-projects",
-          "priority": "high",
-          "title": "Add a dedicated \"Projects\" section",
-          "actionableTip": "Ensure there is an explicit uppercase or bold header titled \"Projects\".",
-          "action": "Add a dedicated \"Projects\" section",
-          "reason": "Ensure there is an explicit uppercase or bold header titled \"Projects\".",
-          "category": "Resume Quality"
-        },
-        {
-          "id": "rec-expand-skills",
-          "priority": "medium",
-          "title": "Expand Technical Skills Section",
-          "actionableTip": "List specific languages, databases, frameworks, and developer tools you have hands-on experience with.",
-          "action": "Expand Technical Skills Section",
-          "reason": "List specific languages, databases, frameworks, and developer tools you have hands-on experience with.",
-          "category": "Resume Quality"
-        },
-        {
-          "id": "rec-action-verbs",
-          "priority": "medium",
-          "title": "Begin bullets with action verbs",
-          "actionableTip": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
-          "action": "Begin bullets with action verbs",
-          "reason": "Replace passive expressions with active technical verbs: Designed, Engineered, Accelerated, Automated.",
-          "category": "Resume Quality"
-        },
-        {
-          "id": "rec-metrics",
-          "priority": "high",
-          "title": "Quantify your project outcomes",
-          "actionableTip": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
-          "action": "Quantify your project outcomes",
-          "reason": "Add numbers where possible: latency reduction, database records handled, test coverage percent, or user scale.",
-          "category": "Resume Quality"
-        }
-      ],
-      "analyzedAt": "2026-09-07T13:37:22.843Z",
-      "disclaimer": "ATS scores are estimates and can vary between hiring systems. Use this analysis as a diagnostic to improve your resume."
-    },
-    {
       "id": "ra_student_e01ec952031b",
       "studentId": "test_student_adv_1788782599801",
       "resumeFileName": "Resume_Document.pdf",
@@ -42625,6 +45292,523 @@
       "recommendations": [],
       "analyzedAt": "2026-09-07T11:58:46.526Z",
       "disclaimer": "ATS scores are estimates and can vary between hiring systems. Use this score as a diagnostic to improve your resume."
+    }
+  ],
+  "industryQuestions": [
+    {
+      "id": "ind_q_1788809413167_64b514",
+      "industryId": "e93a2f49-3cc2-4f48-be9f-63f53dedae96",
+      "questionText": "What is the primary role of an API Gateway in cloud microservices?",
+      "questionType": "mcq",
+      "options": [
+        {
+          "id": "opt_gw_1",
+          "label": "A",
+          "text": "Direct hardware RAID controller redundancy"
+        },
+        {
+          "id": "opt_gw_2",
+          "label": "B",
+          "text": "Request routing, rate limiting, and centralized authentication"
+        },
+        {
+          "id": "opt_gw_3",
+          "label": "C",
+          "text": "Client-side GPU shader rendering acceleration"
+        },
+        {
+          "id": "opt_gw_4",
+          "label": "D",
+          "text": "Local browser cookie session persistence"
+        }
+      ],
+      "correctOptionId": "opt_gw_2",
+      "difficulty": "beginner",
+      "complexity": "application",
+      "domainId": "cloud-engineering",
+      "conceptTag": "api-gateway",
+      "marks": 2,
+      "explanation": "API Gateways sit between clients and microservices to manage traffic routing, throttling, and auth verification.",
+      "createdAt": "2026-09-07T19:30:13.167Z",
+      "updatedAt": "2026-09-07T19:30:13.167Z"
+    },
+    {
+      "id": "ind_q_1788809412817_20f8ee",
+      "industryId": "e93a2f49-3cc2-4f48-be9f-63f53dedae96",
+      "questionText": "Which cryptographic algorithm provides asymmetric public-key encryption?",
+      "questionType": "mcq",
+      "options": [
+        {
+          "id": "opt_rsa",
+          "label": "A",
+          "text": "RSA (Rivest-Shamir-Adleman)"
+        },
+        {
+          "id": "opt_aes",
+          "label": "B",
+          "text": "AES-256 (Advanced Encryption Standard)"
+        },
+        {
+          "id": "opt_des",
+          "label": "C",
+          "text": "Triple DES"
+        },
+        {
+          "id": "opt_rc4",
+          "label": "D",
+          "text": "RC4 Stream Cipher"
+        }
+      ],
+      "correctOptionId": "opt_rsa",
+      "difficulty": "intermediate",
+      "complexity": "application",
+      "domainId": "cybersecurity",
+      "conceptTag": "public-key-crypto",
+      "marks": 3,
+      "explanation": "RSA is an asymmetric cipher utilizing mathematically linked public and private key pairs.",
+      "createdAt": "2026-09-07T19:30:12.816Z",
+      "updatedAt": "2026-09-07T19:30:12.816Z"
+    },
+    {
+      "id": "ind_q_1788809322827_6d9483",
+      "industryId": "e93a2f49-3cc2-4f48-be9f-63f53dedae96",
+      "questionText": "What is the primary role of an API Gateway in cloud microservices?",
+      "questionType": "mcq",
+      "options": [
+        {
+          "id": "opt_gw_1",
+          "label": "A",
+          "text": "Direct hardware RAID controller redundancy"
+        },
+        {
+          "id": "opt_gw_2",
+          "label": "B",
+          "text": "Request routing, rate limiting, and centralized authentication"
+        },
+        {
+          "id": "opt_gw_3",
+          "label": "C",
+          "text": "Client-side GPU shader rendering acceleration"
+        },
+        {
+          "id": "opt_gw_4",
+          "label": "D",
+          "text": "Local browser cookie session persistence"
+        }
+      ],
+      "correctOptionId": "opt_gw_2",
+      "difficulty": "beginner",
+      "complexity": "application",
+      "domainId": "cloud-engineering",
+      "conceptTag": "api-gateway",
+      "marks": 2,
+      "explanation": "API Gateways sit between clients and microservices to manage traffic routing, throttling, and auth verification.",
+      "createdAt": "2026-09-07T19:28:42.827Z",
+      "updatedAt": "2026-09-07T19:28:42.827Z"
+    },
+    {
+      "id": "ind_q_1788809322401_3e58eb",
+      "industryId": "e93a2f49-3cc2-4f48-be9f-63f53dedae96",
+      "questionText": "Which cryptographic algorithm provides asymmetric public-key encryption?",
+      "questionType": "mcq",
+      "options": [
+        {
+          "id": "opt_rsa",
+          "label": "A",
+          "text": "RSA (Rivest-Shamir-Adleman)"
+        },
+        {
+          "id": "opt_aes",
+          "label": "B",
+          "text": "AES-256 (Advanced Encryption Standard)"
+        },
+        {
+          "id": "opt_des",
+          "label": "C",
+          "text": "Triple DES"
+        },
+        {
+          "id": "opt_rc4",
+          "label": "D",
+          "text": "RC4 Stream Cipher"
+        }
+      ],
+      "correctOptionId": "opt_rsa",
+      "difficulty": "intermediate",
+      "complexity": "application",
+      "domainId": "cybersecurity",
+      "conceptTag": "public-key-crypto",
+      "marks": 3,
+      "explanation": "RSA is an asymmetric cipher utilizing mathematically linked public and private key pairs.",
+      "createdAt": "2026-09-07T19:28:42.399Z",
+      "updatedAt": "2026-09-07T19:28:42.399Z"
+    }
+  ],
+  "industryHiringPosts": [
+    {
+      "id": "hire_1788809710479_acbf1c",
+      "industryId": "1f80e367-38a7-43d0-9573-fb3d9215d64a",
+      "companyName": "Industry",
+      "roleTitle": "Cyber Security Intern",
+      "hiringType": "Full-time",
+      "industryDomain": "Technology & Software",
+      "location": "Bengaluru, India (Hybrid)",
+      "workMode": "Hybrid",
+      "salaryRange": "₹8,00,000 - ₹12,00,000 / year",
+      "experienceRequirement": "Fresher / 0-1 Years",
+      "openings": 2,
+      "deadline": "2026-10-07",
+      "description": "We are seeking motivated engineers to contribute to scalable cloud microservices, maintain data pipelines, and collaborate with cross-functional software teams.",
+      "responsibilities": [
+        "Collaborate with product and testing teams to deliver robust features.",
+        "Participate in agile sprint ceremonies and code reviews.",
+        "Maintain Security of website"
+      ],
+      "requiredSkills": [
+        "OWASP",
+        "SIEM",
+        "Networking",
+        "Python"
+      ],
+      "preferredSkills": [
+        "PostgreSQL",
+        "Docker",
+        "REST APIs"
+      ],
+      "requiredQualifications": [
+        "Bachelor's degree in Computer Science, IT, or related STEM discipline."
+      ],
+      "preferredQualifications": [
+        "Prior internship experience or open source contributions."
+      ],
+      "requiredDocumentTypes": [
+        "student_id"
+      ],
+      "interviewDetails": {
+        "mode": "Virtual",
+        "type": "Technical & Behavioral",
+        "estimatedRounds": 3,
+        "instructions": "Shortlisted candidates will receive round meeting links via email."
+      },
+      "knowledgeTest": {
+        "enabled": true,
+        "testTitle": "Cyber Security Intern Assessment",
+        "timeLimitMinutes": 30,
+        "totalMarks": 20,
+        "passingPercentage": 60,
+        "difficultyDistribution": {
+          "beginner": 2,
+          "intermediate": 2,
+          "advanced": 1
+        },
+        "selectedQuestionIds": [],
+        "testPaper": [],
+        "approvalStatus": "draft"
+      },
+      "status": "published",
+      "createdAt": "2026-09-07T19:35:10.474Z",
+      "updatedAt": "2026-09-07T19:56:58.644Z",
+      "publishedAt": "2026-09-07T19:35:10.474Z"
+    },
+    {
+      "id": "hire_1788809413642_860381",
+      "industryId": "e93a2f49-3cc2-4f48-be9f-63f53dedae96",
+      "companyName": "tcs",
+      "roleTitle": "Associate Cloud & Cyber Defense Engineer",
+      "hiringType": "Full-time",
+      "industryDomain": "Cloud & Cybersecurity",
+      "location": "Bengaluru, India (Hybrid)",
+      "workMode": "Hybrid",
+      "salaryRange": "₹10,00,000 - ₹14,00,000 / year",
+      "experienceRequirement": "Fresher / 0-1 Years",
+      "openings": 5,
+      "deadline": "2026-11-30",
+      "description": "Join our frontline defense team analyzing cloud telemetry, container security, and SIEM detections.",
+      "responsibilities": [
+        "Triage real-time intrusion alarms from SIEM and EDR platforms.",
+        "Design automated mitigation scripts using Python and Bash.",
+        "Perform vulnerability assessments on staging cloud infrastructure."
+      ],
+      "requiredSkills": [
+        "Cybersecurity",
+        "Cloud Computing",
+        "Python",
+        "Linux"
+      ],
+      "preferredSkills": [
+        "Docker",
+        "Kubernetes",
+        "SIEM",
+        "Terraform"
+      ],
+      "requiredQualifications": [
+        "Bachelor's degree in Computer Science, Information Security, or STEM field.",
+        "Minimum 65% aggregate or 6.8 CGPA."
+      ],
+      "preferredQualifications": [
+        "Security certification or active CTF competition participation."
+      ],
+      "requiredDocumentTypes": [
+        "student_id"
+      ],
+      "interviewDetails": {
+        "mode": "Virtual",
+        "type": "Technical & Behavioral",
+        "estimatedRounds": 2,
+        "instructions": "Shortlisted candidates will receive round meeting invitations."
+      },
+      "knowledgeTest": {
+        "enabled": true,
+        "testTitle": "Cloud & Cyber Defense Benchmark Exam",
+        "timeLimitMinutes": 30,
+        "totalMarks": 25,
+        "passingPercentage": 60,
+        "difficultyDistribution": {
+          "beginner": 1,
+          "intermediate": 1,
+          "advanced": 0
+        },
+        "selectedQuestionIds": [
+          "ind_q_1788809412817_20f8ee",
+          "ind_q_1788809413167_64b514"
+        ],
+        "testPaper": [
+          {
+            "id": "ind_q_1788809413167_64b514",
+            "questionText": "What is the primary role of an API Gateway in cloud microservices?",
+            "questionType": "mcq",
+            "difficulty": "beginner",
+            "domainId": "cloud-engineering",
+            "conceptTag": "api-gateway",
+            "marks": 2,
+            "options": [
+              {
+                "id": "opt_gw_1",
+                "label": "A",
+                "text": "Direct hardware RAID controller redundancy"
+              },
+              {
+                "id": "opt_gw_2",
+                "label": "B",
+                "text": "Request routing, rate limiting, and centralized authentication"
+              },
+              {
+                "id": "opt_gw_3",
+                "label": "C",
+                "text": "Client-side GPU shader rendering acceleration"
+              },
+              {
+                "id": "opt_gw_4",
+                "label": "D",
+                "text": "Local browser cookie session persistence"
+              }
+            ],
+            "correctOptionId": "opt_gw_2",
+            "explanation": "API Gateways sit between clients and microservices to manage traffic routing, throttling, and auth verification."
+          },
+          {
+            "id": "ind_q_1788809412817_20f8ee",
+            "questionText": "Which cryptographic algorithm provides asymmetric public-key encryption?",
+            "questionType": "mcq",
+            "difficulty": "intermediate",
+            "domainId": "cybersecurity",
+            "conceptTag": "public-key-crypto",
+            "marks": 3,
+            "options": [
+              {
+                "id": "opt_rsa",
+                "label": "A",
+                "text": "RSA (Rivest-Shamir-Adleman)"
+              },
+              {
+                "id": "opt_aes",
+                "label": "B",
+                "text": "AES-256 (Advanced Encryption Standard)"
+              },
+              {
+                "id": "opt_des",
+                "label": "C",
+                "text": "Triple DES"
+              },
+              {
+                "id": "opt_rc4",
+                "label": "D",
+                "text": "RC4 Stream Cipher"
+              }
+            ],
+            "correctOptionId": "opt_rsa",
+            "explanation": "RSA is an asymmetric cipher utilizing mathematically linked public and private key pairs."
+          }
+        ],
+        "approvalStatus": "approved",
+        "aiReviewStatus": "reviewed",
+        "aiReviewFeedback": {
+          "relevanceScore": 50,
+          "difficultyConsistency": "1 Beginner, 1 Intermediate, 0 Advanced",
+          "duplicateWarnings": [],
+          "skillsCoverage": [],
+          "suggestions": [
+            "Consider adding questions covering: cybersecurity, cloud computing, python, linux."
+          ],
+          "isPassed": true
+        },
+        "approvedAt": "2026-09-07T19:30:16.876Z",
+        "publishedAt": "2026-09-07T19:30:17.109Z"
+      },
+      "status": "published",
+      "createdAt": "2026-09-07T19:30:13.642Z",
+      "updatedAt": "2026-09-07T19:30:17.350Z",
+      "publishedAt": "2026-09-07T19:30:17.350Z"
+    },
+    {
+      "id": "hire_1788809333827_46b6c5",
+      "industryId": "e93a2f49-3cc2-4f48-be9f-63f53dedae96",
+      "companyName": "tcs",
+      "roleTitle": "Associate Cloud & Cyber Defense Engineer",
+      "hiringType": "Full-time",
+      "industryDomain": "Cloud & Cybersecurity",
+      "location": "Bengaluru, India (Hybrid)",
+      "workMode": "Hybrid",
+      "salaryRange": "₹10,00,000 - ₹14,00,000 / year",
+      "experienceRequirement": "Fresher / 0-1 Years",
+      "openings": 5,
+      "deadline": "2026-11-30",
+      "description": "Join our frontline defense team analyzing cloud telemetry, container security, and SIEM detections.",
+      "responsibilities": [
+        "Triage real-time intrusion alarms from SIEM and EDR platforms.",
+        "Design automated mitigation scripts using Python and Bash.",
+        "Perform vulnerability assessments on staging cloud infrastructure."
+      ],
+      "requiredSkills": [
+        "Cybersecurity",
+        "Cloud Computing",
+        "Python",
+        "Linux"
+      ],
+      "preferredSkills": [
+        "Docker",
+        "Kubernetes",
+        "SIEM",
+        "Terraform"
+      ],
+      "requiredQualifications": [
+        "Bachelor's degree in Computer Science, Information Security, or STEM field.",
+        "Minimum 65% aggregate or 6.8 CGPA."
+      ],
+      "preferredQualifications": [
+        "Security certification or active CTF competition participation."
+      ],
+      "requiredDocumentTypes": [
+        "student_id"
+      ],
+      "interviewDetails": {
+        "mode": "Virtual",
+        "type": "Technical & Behavioral",
+        "estimatedRounds": 2,
+        "instructions": "Shortlisted candidates will receive round meeting invitations."
+      },
+      "knowledgeTest": {
+        "enabled": true,
+        "testTitle": "Cloud & Cyber Defense Benchmark Exam",
+        "timeLimitMinutes": 30,
+        "totalMarks": 25,
+        "passingPercentage": 60,
+        "difficultyDistribution": {
+          "beginner": 1,
+          "intermediate": 1,
+          "advanced": 0
+        },
+        "selectedQuestionIds": [
+          "ind_q_1788809322401_3e58eb",
+          "ind_q_1788809322827_6d9483"
+        ],
+        "testPaper": [
+          {
+            "id": "ind_q_1788809322827_6d9483",
+            "questionText": "What is the primary role of an API Gateway in cloud microservices?",
+            "questionType": "mcq",
+            "difficulty": "beginner",
+            "domainId": "cloud-engineering",
+            "conceptTag": "api-gateway",
+            "marks": 2,
+            "options": [
+              {
+                "id": "opt_gw_1",
+                "label": "A",
+                "text": "Direct hardware RAID controller redundancy"
+              },
+              {
+                "id": "opt_gw_2",
+                "label": "B",
+                "text": "Request routing, rate limiting, and centralized authentication"
+              },
+              {
+                "id": "opt_gw_3",
+                "label": "C",
+                "text": "Client-side GPU shader rendering acceleration"
+              },
+              {
+                "id": "opt_gw_4",
+                "label": "D",
+                "text": "Local browser cookie session persistence"
+              }
+            ],
+            "correctOptionId": "opt_gw_2",
+            "explanation": "API Gateways sit between clients and microservices to manage traffic routing, throttling, and auth verification."
+          },
+          {
+            "id": "ind_q_1788809322401_3e58eb",
+            "questionText": "Which cryptographic algorithm provides asymmetric public-key encryption?",
+            "questionType": "mcq",
+            "difficulty": "intermediate",
+            "domainId": "cybersecurity",
+            "conceptTag": "public-key-crypto",
+            "marks": 3,
+            "options": [
+              {
+                "id": "opt_rsa",
+                "label": "A",
+                "text": "RSA (Rivest-Shamir-Adleman)"
+              },
+              {
+                "id": "opt_aes",
+                "label": "B",
+                "text": "AES-256 (Advanced Encryption Standard)"
+              },
+              {
+                "id": "opt_des",
+                "label": "C",
+                "text": "Triple DES"
+              },
+              {
+                "id": "opt_rc4",
+                "label": "D",
+                "text": "RC4 Stream Cipher"
+              }
+            ],
+            "correctOptionId": "opt_rsa",
+            "explanation": "RSA is an asymmetric cipher utilizing mathematically linked public and private key pairs."
+          }
+        ],
+        "approvalStatus": "approved",
+        "aiReviewStatus": "reviewed",
+        "aiReviewFeedback": {
+          "relevanceScore": 50,
+          "difficultyConsistency": "1 Beginner, 1 Intermediate, 0 Advanced",
+          "duplicateWarnings": [],
+          "skillsCoverage": [],
+          "suggestions": [
+            "Consider adding questions covering: cybersecurity, cloud computing, python, linux."
+          ],
+          "isPassed": true
+        },
+        "approvedAt": "2026-09-07T19:29:30.706Z",
+        "publishedAt": "2026-09-07T19:29:31.112Z"
+      },
+      "status": "published",
+      "createdAt": "2026-09-07T19:28:53.817Z",
+      "updatedAt": "2026-09-07T19:29:31.418Z",
+      "publishedAt": "2026-09-07T19:29:31.418Z"
     }
   ]
 }

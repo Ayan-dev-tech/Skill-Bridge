@@ -23,6 +23,21 @@ import type {
 } from "./learning/types";
 import type { ResumeAnalysisRecord } from "./resume/types";
 import type { JobApplicationRecord, SubmitApplicationParams } from "./applications/types";
+import type {
+  IndustryQuestionRecord,
+  CreateIndustryQuestionInput,
+  PermittedStudentTalent,
+  StudentTalentFilterParams,
+  IndustryProfileMetadata,
+  IndustryHiringPostRecord,
+  CreateHiringPostInput,
+  UpdateHiringPostInput,
+  KnowledgeTestConfig,
+  KnowledgeTestQuestionItem,
+  AIQuestionSelectionRequest,
+  AIQuestionSelectionResult,
+  AITestReviewResult,
+} from "./industry/types";
 
 export interface JobPosting {
   id: string;
@@ -240,7 +255,7 @@ export interface User {
 export interface Profile {
   userId: string;
   role: RoleType;
-  metadata: Record<string, string | number | undefined>;
+  metadata: Record<string, unknown>;
 }
 
 export interface OtpVerification {
@@ -332,6 +347,8 @@ interface DatabaseSchema {
   learningResources: LearningResourceRecord[];
   jobApplications: JobApplicationRecord[];
   resumeAnalyses: ResumeAnalysisRecord[];
+  industryQuestions: IndustryQuestionRecord[];
+  industryHiringPosts: IndustryHiringPostRecord[];
 }
 
 const DATA_DIR = path.join(process.cwd(), "data");
@@ -370,6 +387,8 @@ function ensureDbExists(): DatabaseSchema {
       learningResources: [],
       jobApplications: [],
       resumeAnalyses: [],
+      industryQuestions: [],
+      industryHiringPosts: [],
     };
   } else {
     try {
@@ -386,6 +405,8 @@ function ensureDbExists(): DatabaseSchema {
       if (!data.learningResources) data.learningResources = [];
       if (!data.jobApplications) data.jobApplications = [];
       if (!data.resumeAnalyses) data.resumeAnalyses = [];
+      if (!data.industryQuestions) data.industryQuestions = [];
+      if (!data.industryHiringPosts) data.industryHiringPosts = [];
       if (!data.educators || data.educators.length === 0) data.educators = [...SAMPLE_EDUCATORS];
       if (!data.educationPrograms || data.educationPrograms.length === 0)
         data.educationPrograms = [...SAMPLE_EDUCATION_PROGRAMS];
@@ -407,6 +428,8 @@ function ensureDbExists(): DatabaseSchema {
         learningResources: [],
         jobApplications: [],
         resumeAnalyses: [],
+        industryQuestions: [],
+        industryHiringPosts: [],
       };
     }
   }
@@ -562,6 +585,11 @@ export const db = {
     const normalized = email.toLowerCase().trim();
     const data = ensureDbExists();
     return data.users.filter((u) => u.email.toLowerCase() === normalized);
+  },
+
+  async getUsers(): Promise<User[]> {
+    const data = ensureDbExists();
+    return data.users;
   },
 
   async getUserById(id: string): Promise<User | null> {
@@ -1663,7 +1691,7 @@ export const db = {
 
   async saveJobApplication(
     paramsOrStudentId: SubmitApplicationParams | JobApplicationRecord | string,
-    paramsParam?: any
+    paramsParam?: Partial<JobApplicationRecord>
   ): Promise<JobApplicationRecord> {
     const data = ensureDbExists();
     if (!data.jobApplications) data.jobApplications = [];
@@ -1706,7 +1734,7 @@ export const db = {
         linkedinUrl: paramsParam?.linkedinUrl,
       };
     } else {
-      const p = paramsOrStudentId as any;
+      const p = paramsOrStudentId as Partial<JobApplicationRecord> & SubmitApplicationParams;
       newRecord = {
         id: p.id || `app_${p.studentId}_${Date.now()}`,
         studentId: p.studentId,
@@ -1762,13 +1790,1038 @@ export const db = {
     if (job) return job;
     const internship = initialInternships.find((i) => i.id === id);
     if (internship) return internship;
+
+    const data = ensureDbExists();
+    const publishedPost = (data.industryHiringPosts || []).find(
+      (p) => p.id === id && p.status === "published"
+    );
+    if (publishedPost) {
+      if (publishedPost.hiringType === "Internship") {
+        return {
+          id: publishedPost.id,
+          roleTitle: publishedPost.roleTitle,
+          companyName: publishedPost.companyName,
+          location: publishedPost.location,
+          workMode: publishedPost.workMode,
+          duration: "6 Months",
+          stipendRange: publishedPost.salaryRange || "₹25,000 - ₹35,000 / month",
+          postedDate: publishedPost.createdAt,
+          deadline: publishedPost.deadline,
+          description: publishedPost.description,
+          responsibilities: publishedPost.responsibilities,
+          requiredQualifications: publishedPost.requiredQualifications,
+          preferredQualifications: publishedPost.preferredQualifications,
+          requiredSkills: publishedPost.requiredSkills,
+          companyInfo: publishedPost.description,
+          applicationSource: "Skill Bridge Industry Portal",
+          requiredDocumentTypes: publishedPost.requiredDocumentTypes,
+        };
+      } else {
+        return {
+          id: publishedPost.id,
+          roleTitle: publishedPost.roleTitle,
+          companyName: publishedPost.companyName,
+          location: publishedPost.location,
+          workMode: publishedPost.workMode,
+          employmentType: publishedPost.hiringType,
+          experienceRequirement: publishedPost.experienceRequirement,
+          salaryRange: publishedPost.salaryRange || "Competitive / Industry Standard",
+          postedDate: publishedPost.createdAt,
+          deadline: publishedPost.deadline,
+          description: publishedPost.description,
+          responsibilities: publishedPost.responsibilities,
+          requiredQualifications: publishedPost.requiredQualifications,
+          preferredQualifications: publishedPost.preferredQualifications,
+          requiredSkills: publishedPost.requiredSkills,
+          companyInfo: publishedPost.description,
+          applicationSource: "Skill Bridge Industry Portal",
+          requiredDocumentTypes: publishedPost.requiredDocumentTypes,
+        };
+      }
+    }
+
     return null;
   },
 
   async getAvailableJobs(): Promise<JobPosting[]> {
-    return initialJobs;
+    const data = ensureDbExists();
+    const publishedCustomJobs = (data.industryHiringPosts || [])
+      .filter((p) => p.status === "published" && p.hiringType !== "Internship")
+      .map((p): JobPosting => ({
+        id: p.id,
+        roleTitle: p.roleTitle,
+        companyName: p.companyName,
+        location: p.location,
+        workMode: p.workMode,
+        employmentType: (p.hiringType === "Internship" ? "Full-time" : p.hiringType) as "Full-time" | "Part-time" | "Contract",
+        experienceRequirement: p.experienceRequirement,
+        salaryRange: p.salaryRange || "Competitive",
+        postedDate: p.createdAt,
+        deadline: p.deadline,
+        description: p.description,
+        responsibilities: p.responsibilities,
+        requiredQualifications: p.requiredQualifications,
+        preferredQualifications: p.preferredQualifications,
+        requiredSkills: p.requiredSkills,
+        companyInfo: p.description,
+        applicationSource: "Skill Bridge Industry Portal",
+        requiredDocumentTypes: p.requiredDocumentTypes,
+      }));
+    return [...initialJobs, ...publishedCustomJobs];
   },
+
   async getAvailableInternships(): Promise<InternshipPosting[]> {
-    return initialInternships;
+    const data = ensureDbExists();
+    const publishedCustomInternships = (data.industryHiringPosts || [])
+      .filter((p) => p.status === "published" && p.hiringType === "Internship")
+      .map((p): InternshipPosting => ({
+        id: p.id,
+        roleTitle: p.roleTitle,
+        companyName: p.companyName,
+        location: p.location,
+        workMode: p.workMode,
+        duration: "6 Months",
+        stipendRange: p.salaryRange || "₹25,000 / month",
+        postedDate: p.createdAt,
+        deadline: p.deadline,
+        description: p.description,
+        responsibilities: p.responsibilities,
+        requiredQualifications: p.requiredQualifications,
+        preferredQualifications: p.preferredQualifications,
+        requiredSkills: p.requiredSkills,
+        companyInfo: p.description,
+        applicationSource: "Skill Bridge Industry Portal",
+        requiredDocumentTypes: p.requiredDocumentTypes,
+      }));
+    return [...initialInternships, ...publishedCustomInternships];
+  },
+
+  // ==========================================================================
+  // INDUSTRY CORE METHODS
+  // ==========================================================================
+
+  async getIndustryProfile(userId: string): Promise<{
+    user: User;
+    metadata: IndustryProfileMetadata;
+  } | null> {
+    const data = ensureDbExists();
+    const user = data.users.find((u) => u.id === userId && u.role === "industry");
+    if (!user) return null;
+
+    const profile = data.profiles.find((p) => p.userId === userId);
+    const meta = (profile?.metadata || {}) as Record<string, unknown>;
+
+    const metadata: IndustryProfileMetadata = {
+      companyName: (meta.companyName as string) || user.fullName || "Partner Organization",
+      industryDomain: (meta.industryDomain as string) || (meta.industry as string) || "Technology & Software",
+      description: (meta.description as string) || "",
+      website: (meta.website as string) || "",
+      contactEmail: (meta.contactEmail as string) || user.email || "",
+      contactPhone: (meta.contactPhone as string) || (meta.phone as string) || "",
+      location: (meta.location as string) || "Pan-India / Remote",
+      logoUrl: (meta.logoUrl as string) || "",
+      workTitle: (meta.workTitle as string) || (meta.designation as string) || "Corporate Talent Lead",
+      contactPerson: (meta.contactPerson as string) || user.fullName || "",
+      demandedSkills: Array.isArray(meta.demandedSkills) ? (meta.demandedSkills as string[]) : [],
+      companySize: (meta.companySize as string) || "50-250 Employees",
+      foundedYear: (meta.foundedYear as string) || "",
+      verificationStatus: (meta.verificationStatus as "verified" | "pending" | "under_review") || "verified",
+    };
+
+    return { user, metadata };
+  },
+
+  async updateIndustryProfile(
+    userId: string,
+    updates: Partial<IndustryProfileMetadata>
+  ): Promise<IndustryProfileMetadata> {
+    const data = ensureDbExists();
+    const user = data.users.find((u) => u.id === userId && u.role === "industry");
+    if (!user) {
+      throw new Error("Industry user not found.");
+    }
+
+    let profIndex = data.profiles.findIndex((p) => p.userId === userId);
+    if (profIndex < 0) {
+      const newProf: Profile = {
+        userId,
+        role: "industry",
+        metadata: {},
+      };
+      data.profiles.push(newProf);
+      profIndex = data.profiles.length - 1;
+    }
+
+    const currentMeta = (data.profiles[profIndex].metadata || {}) as Record<string, unknown>;
+    const mergedMeta: Record<string, unknown> = {
+      ...currentMeta,
+      ...updates,
+      updatedAt: new Date().toISOString(),
+    };
+
+    data.profiles[profIndex].metadata = mergedMeta;
+
+    // Also synchronize companyName or fullName on user record if updated
+    if (updates.companyName && !user.fullName) {
+      user.fullName = updates.companyName;
+    }
+
+    saveDb(data);
+
+    return {
+      companyName: (mergedMeta.companyName as string) || user.fullName,
+      industryDomain: (mergedMeta.industryDomain as string) || "Technology & Software",
+      description: (mergedMeta.description as string) || "",
+      website: (mergedMeta.website as string) || "",
+      contactEmail: (mergedMeta.contactEmail as string) || user.email,
+      contactPhone: (mergedMeta.contactPhone as string) || "",
+      location: (mergedMeta.location as string) || "",
+      logoUrl: (mergedMeta.logoUrl as string) || "",
+      workTitle: (mergedMeta.workTitle as string) || "",
+      contactPerson: (mergedMeta.contactPerson as string) || "",
+      demandedSkills: Array.isArray(mergedMeta.demandedSkills) ? (mergedMeta.demandedSkills as string[]) : [],
+      companySize: (mergedMeta.companySize as string) || "",
+      foundedYear: (mergedMeta.foundedYear as string) || "",
+      verificationStatus: (mergedMeta.verificationStatus as "verified" | "pending") || "verified",
+    };
+  },
+
+  async getIndustryDashboardStats(userId: string, companyName?: string) {
+    const data = ensureDbExists();
+    const normCompany = companyName?.toLowerCase().trim();
+
+    // 1. Hiring Requests matching company
+    const matchingHireReqs = (data.hiringRequests || []).filter((h) => {
+      if (!normCompany) return true;
+      return h.companyName?.toLowerCase().includes(normCompany);
+    });
+
+    const activeHiring = matchingHireReqs.filter((h) => !h.isFrozen && h.status === "active").length;
+    const draftHiring = matchingHireReqs.filter((h) => h.status === "pending").length;
+
+    // 2. Job Applications matching company
+    const matchingApps = (data.jobApplications || []).filter((a) => {
+      if (!normCompany) return false;
+      return a.companyName?.toLowerCase().includes(normCompany);
+    });
+
+    const totalApplications = matchingApps.length;
+    const shortlistedCandidates = matchingApps.filter((a) => a.status === "selected" || a.status === "interview").length;
+    const upcomingInterviews = matchingApps.filter((a) => a.status === "interview").length;
+
+    // 3. Questions Count
+    const questionsCount = (data.industryQuestions || []).filter((q) => q.industryId === userId).length;
+
+    // 4. Recent Activity
+    const recentActivity = matchingApps.slice(0, 5).map((app) => ({
+      id: app.id,
+      type: (app.status === "interview" ? "interview" : app.status === "selected" ? "shortlist" : "application") as "application" | "interview" | "shortlist",
+      title: `${app.applicantFullName || "Candidate"} applied for ${app.roleTitle || "Engineering Role"}`,
+      subtitle: `${app.companyName} • Status: ${app.status.toUpperCase()}`,
+      timestamp: app.appliedAt,
+      statusBadge: app.status,
+    }));
+
+    return {
+      activeHiring,
+      draftHiring,
+      totalApplications,
+      shortlistedCandidates,
+      upcomingInterviews,
+      questionBankCount: questionsCount,
+      recentActivity,
+    };
+  },
+
+  async getPermittedStudentTalent(filters: StudentTalentFilterParams = {}): Promise<{
+    students: PermittedStudentTalent[];
+    totalCount: number;
+    page: number;
+    totalPages: number;
+  }> {
+    const data = ensureDbExists();
+    const { search = "", domain = "", level = "", page = 1, limit = 10 } = filters;
+
+    // Only students who are verified
+    const verifiedMap = new Map<string, StudentVerificationRecord>();
+    for (const v of data.studentVerifications || []) {
+      if (v.verificationStatus === "VERIFIED") {
+        verifiedMap.set(v.studentId, v);
+      }
+    }
+
+    const talentList: PermittedStudentTalent[] = [];
+
+    // Combine verified students with interest profiles, benchmarks, and skills
+    for (const user of data.users || []) {
+      if (user.role !== "student" || !user.isVerified || !verifiedMap.has(user.id)) {
+        continue;
+      }
+
+      const verRecord = verifiedMap.get(user.id);
+      const interestProf = (data.interestProfiles || []).find((ip) => ip.studentId === user.id);
+      const testResult = (data.knowledgeTestResults || []).find((kr) => kr.studentId === user.id);
+      const skillGap = (data.skillGapAnalyses || []).find((sg) => sg.studentId === user.id);
+      const userProfile = (data.profiles || []).find((p) => p.userId === user.id);
+      const meta = (userProfile?.metadata || {}) as Record<string, unknown>;
+
+      // Extract skills cleanly
+      const technicalSkills: string[] = Array.from(
+        new Set([
+          ...(Array.isArray(testResult?.strengths) ? testResult!.strengths : []),
+          ...(Array.isArray(meta.skills) ? (meta.skills as string[]) : []),
+          ...(Array.isArray(skillGap?.recommendations) ? (skillGap!.recommendations as Array<{ title?: string }>).map((r) => r.title || "").filter(Boolean) : []),
+        ])
+      );
+
+      const studentItem: PermittedStudentTalent = {
+        id: user.id,
+        fullName: user.fullName || "Student Candidate",
+        department: (meta.department as string) || "Computer Science & Engineering",
+        course: (meta.course as string) || "B.Tech Computer Science",
+        semester: typeof meta.semester === "number" ? meta.semester : 6,
+        batchYear: (meta.batchYear as string) || "2022–2026",
+        institution: (meta.institution as string) || "National Institute of Technology",
+        verifiedStatus: "VERIFIED",
+        interestDomain: interestProf?.confirmedMainDomain || (interestProf?.confirmedMainDomainId ? String(interestProf.confirmedMainDomainId) : undefined),
+        specificInterest: interestProf?.confirmedSpecificInterest,
+        knowledgeLevel: testResult?.knowledgeLevel || skillGap?.knowledgeLevel || null,
+        benchmarkScorePercent: testResult?.scorePercent ?? (typeof skillGap?.testScorePercent === "number" ? skillGap.testScorePercent : null),
+        technicalSkills: technicalSkills.length > 0 ? technicalSkills : ["Software Engineering", "Algorithms", "Web Systems"],
+        profiles: {
+          linkedIn: verRecord?.professionalProfiles?.linkedIn || (meta.linkedIn as string) || undefined,
+          gitHub: verRecord?.professionalProfiles?.gitHub || (meta.gitHub as string) || undefined,
+          portfolio: verRecord?.professionalProfiles?.portfolio || (meta.portfolio as string) || undefined,
+        },
+      };
+
+      // Apply filtering
+      if (search) {
+        const query = search.toLowerCase();
+        const matchesName = studentItem.fullName.toLowerCase().includes(query);
+        const matchesDept = studentItem.department.toLowerCase().includes(query);
+        const matchesSkills = studentItem.technicalSkills.some((s) => s.toLowerCase().includes(query));
+        if (!matchesName && !matchesDept && !matchesSkills) continue;
+      }
+
+      if (domain && domain !== "all") {
+        const dQuery = domain.toLowerCase();
+        const matchesDomain =
+          studentItem.interestDomain?.toLowerCase().includes(dQuery) ||
+          studentItem.specificInterest?.toLowerCase().includes(dQuery);
+        if (!matchesDomain) continue;
+      }
+
+      if (level && level !== "all") {
+        if (studentItem.knowledgeLevel?.toLowerCase() !== level.toLowerCase()) {
+          continue;
+        }
+      }
+
+      talentList.push(studentItem);
+    }
+
+    const totalCount = talentList.length;
+    const totalPages = Math.max(1, Math.ceil(totalCount / limit));
+    const safePage = Math.min(Math.max(1, page), totalPages);
+    const startIndex = (safePage - 1) * limit;
+    const paginated = talentList.slice(startIndex, startIndex + limit);
+
+    return {
+      students: paginated,
+      totalCount,
+      page: safePage,
+      totalPages,
+    };
+  },
+
+  async getPermittedStudentTalentById(studentId: string): Promise<PermittedStudentTalent | null> {
+    const data = ensureDbExists();
+    const user = data.users.find((u) => u.id === studentId && u.role === "student");
+    if (!user || !user.isVerified) return null;
+
+    const verRecord = (data.studentVerifications || []).find((v) => v.studentId === studentId && v.verificationStatus === "VERIFIED");
+    if (!verRecord) return null;
+
+    const interestProf = (data.interestProfiles || []).find((ip) => ip.studentId === studentId);
+    const testResult = (data.knowledgeTestResults || []).find((kr) => kr.studentId === studentId);
+    const skillGap = (data.skillGapAnalyses || []).find((sg) => sg.studentId === studentId);
+    const userProfile = (data.profiles || []).find((p) => p.userId === studentId);
+    const meta = (userProfile?.metadata || {}) as Record<string, unknown>;
+
+    const technicalSkills: string[] = Array.from(
+      new Set([
+        ...(Array.isArray(testResult?.strengths) ? testResult!.strengths : []),
+        ...(Array.isArray(meta.skills) ? (meta.skills as string[]) : []),
+        ...(Array.isArray(skillGap?.recommendations) ? (skillGap!.recommendations as Array<{ title?: string }>).map((r) => r.title || "").filter(Boolean) : []),
+      ])
+    );
+
+    return {
+      id: user.id,
+      fullName: user.fullName || "Student Candidate",
+      department: (meta.department as string) || "Computer Science & Engineering",
+      course: (meta.course as string) || "B.Tech Computer Science",
+      semester: typeof meta.semester === "number" ? meta.semester : 6,
+      batchYear: (meta.batchYear as string) || "2022–2026",
+      institution: (meta.institution as string) || "National Institute of Technology",
+      verifiedStatus: "VERIFIED",
+      interestDomain: interestProf?.confirmedMainDomain || (interestProf?.confirmedMainDomainId ? String(interestProf.confirmedMainDomainId) : undefined),
+      specificInterest: interestProf?.confirmedSpecificInterest,
+      knowledgeLevel: testResult?.knowledgeLevel || skillGap?.knowledgeLevel || null,
+      benchmarkScorePercent: testResult?.scorePercent ?? (typeof skillGap?.testScorePercent === "number" ? skillGap.testScorePercent : null),
+      technicalSkills: technicalSkills.length > 0 ? technicalSkills : ["Software Engineering", "Algorithms", "Web Systems"],
+      profiles: {
+        linkedIn: verRecord?.professionalProfiles?.linkedIn || (meta.linkedIn as string) || undefined,
+        gitHub: verRecord?.professionalProfiles?.gitHub || (meta.gitHub as string) || undefined,
+        portfolio: verRecord?.professionalProfiles?.portfolio || (meta.portfolio as string) || undefined,
+      },
+    };
+  },
+
+  async getIndustryQuestions(
+    industryId: string,
+    filters: { search?: string; difficulty?: string; domainId?: string; questionType?: string } = {}
+  ): Promise<IndustryQuestionRecord[]> {
+    const data = ensureDbExists();
+    if (!data.industryQuestions) data.industryQuestions = [];
+
+    let list = data.industryQuestions.filter((q) => q.industryId === industryId);
+
+    if (filters.search) {
+      const q = filters.search.toLowerCase();
+      list = list.filter(
+        (item) =>
+          item.questionText.toLowerCase().includes(q) ||
+          item.conceptTag.toLowerCase().includes(q) ||
+          item.options.some((o) => o.text.toLowerCase().includes(q))
+      );
+    }
+
+    if (filters.difficulty && filters.difficulty !== "all") {
+      list = list.filter((item) => item.difficulty === filters.difficulty);
+    }
+
+    if (filters.domainId && filters.domainId !== "all") {
+      list = list.filter((item) => item.domainId === filters.domainId);
+    }
+
+    if (filters.questionType && filters.questionType !== "all") {
+      list = list.filter((item) => item.questionType === filters.questionType);
+    }
+
+    return list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  },
+
+  async getIndustryQuestionById(id: string, industryId: string): Promise<IndustryQuestionRecord | null> {
+    const data = ensureDbExists();
+    if (!data.industryQuestions) data.industryQuestions = [];
+    return data.industryQuestions.find((q) => q.id === id && q.industryId === industryId) || null;
+  },
+
+  async createIndustryQuestion(
+    industryId: string,
+    input: CreateIndustryQuestionInput
+  ): Promise<IndustryQuestionRecord> {
+    const data = ensureDbExists();
+    if (!data.industryQuestions) data.industryQuestions = [];
+
+    const now = new Date().toISOString();
+    const id = `ind_q_${Date.now()}_${crypto.randomBytes(3).toString("hex")}`;
+
+    // Normalize and validate options
+    const options = input.options.map((opt, idx) => {
+      const label = opt.label || ["A", "B", "C", "D"][idx] || `Option ${idx + 1}`;
+      const optId = opt.id || `opt_${id}_${idx + 1}`;
+      return {
+        id: optId,
+        label,
+        text: opt.text.trim(),
+      };
+    });
+
+    const newRecord: IndustryQuestionRecord = {
+      id,
+      industryId,
+      questionText: input.questionText.trim(),
+      questionType: input.questionType || "mcq",
+      options,
+      correctOptionId: input.correctOptionId,
+      difficulty: input.difficulty || "intermediate",
+      complexity: input.complexity || "application",
+      domainId: input.domainId || "software",
+      conceptTag: input.conceptTag?.trim() || "general-engineering",
+      marks: typeof input.marks === "number" && input.marks > 0 ? input.marks : 1,
+      explanation: input.explanation?.trim() || "",
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    data.industryQuestions.unshift(newRecord);
+    saveDb(data);
+    return newRecord;
+  },
+
+  async updateIndustryQuestion(
+    id: string,
+    industryId: string,
+    updates: Partial<IndustryQuestionRecord>
+  ): Promise<IndustryQuestionRecord> {
+    const data = ensureDbExists();
+    if (!data.industryQuestions) data.industryQuestions = [];
+
+    const index = data.industryQuestions.findIndex((q) => q.id === id && q.industryId === industryId);
+    if (index < 0) {
+      throw new Error("Question not found or unauthorized.");
+    }
+
+    const existing = data.industryQuestions[index];
+    const now = new Date().toISOString();
+
+    const updated: IndustryQuestionRecord = {
+      ...existing,
+      ...updates,
+      id: existing.id,
+      industryId: existing.industryId,
+      updatedAt: now,
+    };
+
+    data.industryQuestions[index] = updated;
+    saveDb(data);
+    return updated;
+  },
+
+  async deleteIndustryQuestion(id: string, industryId: string): Promise<boolean> {
+    const data = ensureDbExists();
+    if (!data.industryQuestions) return false;
+
+    const initialLen = data.industryQuestions.length;
+    data.industryQuestions = data.industryQuestions.filter((q) => !(q.id === id && q.industryId === industryId));
+
+    if (data.industryQuestions.length < initialLen) {
+      saveDb(data);
+      return true;
+    }
+    return false;
+  },
+
+  // ==========================================================================
+  // SECTION 2: HIRING & POST CONFIGURATION + KNOWLEDGE TEST METHODS
+  // ==========================================================================
+
+  async getIndustryHiringPosts(
+    industryId: string,
+    filterStatus?: string
+  ): Promise<IndustryHiringPostRecord[]> {
+    const data = ensureDbExists();
+    if (!data.industryHiringPosts) data.industryHiringPosts = [];
+
+    let posts = data.industryHiringPosts.filter((p) => p.industryId === industryId);
+    if (filterStatus && filterStatus !== "all") {
+      posts = posts.filter((p) => p.status === filterStatus);
+    }
+    return posts.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+  },
+
+  async getIndustryHiringPostById(
+    industryId: string,
+    postId: string
+  ): Promise<IndustryHiringPostRecord | null> {
+    const data = ensureDbExists();
+    if (!data.industryHiringPosts) return null;
+    const post = data.industryHiringPosts.find((p) => p.id === postId && p.industryId === industryId);
+    return post || null;
+  },
+
+  async createIndustryHiringPost(
+    industryId: string,
+    companyName: string,
+    input: CreateHiringPostInput
+  ): Promise<IndustryHiringPostRecord> {
+    const data = ensureDbExists();
+    if (!data.industryHiringPosts) data.industryHiringPosts = [];
+
+    const openings = Number(input.openings);
+    if (isNaN(openings) || openings < 1) {
+      throw new Error("Number of openings must be a positive integer (minimum 1).");
+    }
+
+    const now = new Date().toISOString();
+    const id = `hire_${Date.now()}_${crypto.randomBytes(3).toString("hex")}`;
+    const status = input.status === "published" ? "published" : "draft";
+
+    if (status === "published") {
+      if (!input.roleTitle?.trim()) throw new Error("Role title is required for publishing.");
+      if (!input.description?.trim()) throw new Error("Job description is required for publishing.");
+      if (!input.location?.trim()) throw new Error("Job location is required for publishing.");
+      if (!input.requiredSkills || input.requiredSkills.length === 0) {
+        throw new Error("At least one required skill is required for publishing.");
+      }
+    }
+
+    const newRecord: IndustryHiringPostRecord = {
+      id,
+      industryId,
+      companyName: companyName || "Partner Organization",
+      roleTitle: input.roleTitle?.trim() || "Untitled Opportunity",
+      hiringType: input.hiringType || "Full-time",
+      industryDomain: input.industryDomain?.trim() || "Technology & Software",
+      location: input.location?.trim() || "Pan-India / Remote",
+      workMode: input.workMode || "Hybrid",
+      salaryRange: input.salaryRange?.trim() || "",
+      experienceRequirement: input.experienceRequirement?.trim() || "Fresher / 0-1 Years",
+      openings: Math.floor(openings),
+      deadline: input.deadline || new Date(Date.now() + 30 * 86400000).toISOString().split("T")[0],
+      description: input.description?.trim() || "",
+      responsibilities: Array.isArray(input.responsibilities) ? input.responsibilities.filter(Boolean) : [],
+      requiredSkills: Array.isArray(input.requiredSkills) ? input.requiredSkills.filter(Boolean) : [],
+      preferredSkills: Array.isArray(input.preferredSkills) ? input.preferredSkills.filter(Boolean) : [],
+      requiredQualifications: Array.isArray(input.requiredQualifications) ? input.requiredQualifications.filter(Boolean) : [],
+      preferredQualifications: Array.isArray(input.preferredQualifications) ? input.preferredQualifications.filter(Boolean) : [],
+      requiredDocumentTypes: Array.isArray(input.requiredDocumentTypes) ? input.requiredDocumentTypes.filter(Boolean) : ["student_id"],
+      interviewDetails: {
+        mode: input.interviewDetails?.mode || "Virtual",
+        type: input.interviewDetails?.type || "Technical & Behavioral",
+        estimatedRounds: input.interviewDetails?.estimatedRounds && input.interviewDetails.estimatedRounds >= 1 ? Math.floor(input.interviewDetails.estimatedRounds) : 2,
+        instructions: input.interviewDetails?.instructions?.trim() || "Shortlisted candidates will receive round calendar invites via registered email.",
+      },
+      knowledgeTest: input.knowledgeTest ? {
+        enabled: Boolean(input.knowledgeTest.enabled),
+        testTitle: input.knowledgeTest.testTitle || `${input.roleTitle || "Technical"} Assessment`,
+        timeLimitMinutes: input.knowledgeTest.timeLimitMinutes || 30,
+        totalMarks: input.knowledgeTest.totalMarks || 20,
+        passingPercentage: input.knowledgeTest.passingPercentage || 60,
+        difficultyDistribution: input.knowledgeTest.difficultyDistribution || {
+          beginner: 2,
+          intermediate: 2,
+          advanced: 1,
+        },
+        selectedQuestionIds: Array.isArray(input.knowledgeTest.selectedQuestionIds) ? input.knowledgeTest.selectedQuestionIds : [],
+        testPaper: Array.isArray(input.knowledgeTest.testPaper) ? input.knowledgeTest.testPaper : [],
+        aiReviewStatus: input.knowledgeTest.aiReviewStatus || "not_started",
+        aiReviewFeedback: input.knowledgeTest.aiReviewFeedback,
+        approvalStatus: input.knowledgeTest.approvalStatus || "draft",
+        approvedAt: input.knowledgeTest.approvedAt,
+        publishedAt: input.knowledgeTest.publishedAt,
+      } : {
+        enabled: false,
+        testTitle: `${input.roleTitle || "Technical"} Assessment`,
+        timeLimitMinutes: 30,
+        totalMarks: 20,
+        passingPercentage: 60,
+        difficultyDistribution: { beginner: 2, intermediate: 2, advanced: 1 },
+        selectedQuestionIds: [],
+        testPaper: [],
+        approvalStatus: "draft",
+      },
+      status,
+      createdAt: now,
+      updatedAt: now,
+      publishedAt: status === "published" ? now : undefined,
+    };
+
+    data.industryHiringPosts.unshift(newRecord);
+    saveDb(data);
+    return newRecord;
+  },
+
+  async updateIndustryHiringPost(
+    industryId: string,
+    postId: string,
+    updates: UpdateHiringPostInput
+  ): Promise<IndustryHiringPostRecord> {
+    const data = ensureDbExists();
+    if (!data.industryHiringPosts) data.industryHiringPosts = [];
+
+    const index = data.industryHiringPosts.findIndex((p) => p.id === postId && p.industryId === industryId);
+    if (index === -1) {
+      throw new Error("Hiring opportunity not found or unauthorized.");
+    }
+
+    const existing = data.industryHiringPosts[index];
+    const now = new Date().toISOString();
+
+    if (updates.openings !== undefined) {
+      const num = Number(updates.openings);
+      if (isNaN(num) || num < 1) {
+        throw new Error("Number of openings must be a positive integer (minimum 1).");
+      }
+      updates.openings = Math.floor(num);
+    }
+
+    const updated: IndustryHiringPostRecord = {
+      ...existing,
+      ...updates,
+      id: existing.id,
+      industryId: existing.industryId,
+      companyName: existing.companyName,
+      interviewDetails: {
+        ...existing.interviewDetails,
+        ...(updates.interviewDetails || {}),
+      },
+      knowledgeTest: updates.knowledgeTest ? {
+        ...(existing.knowledgeTest || {
+          enabled: false,
+          selectedQuestionIds: [],
+          testPaper: [],
+          approvalStatus: "draft",
+        }),
+        ...updates.knowledgeTest,
+      } : existing.knowledgeTest,
+      updatedAt: now,
+    };
+
+    data.industryHiringPosts[index] = updated;
+    saveDb(data);
+    return updated;
+  },
+
+  async publishIndustryHiringPost(
+    industryId: string,
+    postId: string
+  ): Promise<IndustryHiringPostRecord> {
+    const data = ensureDbExists();
+    if (!data.industryHiringPosts) data.industryHiringPosts = [];
+
+    const index = data.industryHiringPosts.findIndex((p) => p.id === postId && p.industryId === industryId);
+    if (index === -1) {
+      throw new Error("Hiring opportunity not found or unauthorized.");
+    }
+
+    const post = data.industryHiringPosts[index];
+
+    // Validation rules for publishing
+    if (!post.roleTitle || !post.roleTitle.trim()) {
+      throw new Error("Role title is required before publishing.");
+    }
+    if (!post.description || !post.description.trim()) {
+      throw new Error("Job description is required before publishing.");
+    }
+    if (!post.location || !post.location.trim()) {
+      throw new Error("Location is required before publishing.");
+    }
+    if (!post.openings || post.openings < 1) {
+      throw new Error("Openings must be at least 1.");
+    }
+    if (!post.requiredSkills || post.requiredSkills.length === 0) {
+      throw new Error("Please specify at least one required skill before publishing.");
+    }
+
+    // If Knowledge Test is enabled, verify approval gate
+    if (post.knowledgeTest?.enabled) {
+      if (!post.knowledgeTest.selectedQuestionIds || post.knowledgeTest.selectedQuestionIds.length === 0) {
+        throw new Error("Knowledge Test is enabled, but no questions have been selected.");
+      }
+      if (post.knowledgeTest.approvalStatus !== "approved") {
+        throw new Error("Knowledge Test question set must be explicitly approved by Industry before publishing.");
+      }
+    }
+
+    const now = new Date().toISOString();
+    post.status = "published";
+    post.publishedAt = post.publishedAt || now;
+    post.updatedAt = now;
+
+    data.industryHiringPosts[index] = post;
+    saveDb(data);
+    return post;
+  },
+
+  async deleteIndustryHiringPost(
+    industryId: string,
+    postId: string
+  ): Promise<boolean> {
+    const data = ensureDbExists();
+    if (!data.industryHiringPosts) return false;
+
+    const post = data.industryHiringPosts.find((p) => p.id === postId && p.industryId === industryId);
+    if (!post) return false;
+
+    // Only allow deleting draft posts
+    if (post.status !== "draft") {
+      throw new Error("Only draft hiring posts can be deleted. Published campaigns must be archived or frozen.");
+    }
+
+    data.industryHiringPosts = data.industryHiringPosts.filter((p) => p.id !== postId);
+    saveDb(data);
+    return true;
+  },
+
+  async updateIndustryKnowledgeTestConfig(
+    industryId: string,
+    postId: string,
+    testConfig: Partial<KnowledgeTestConfig>
+  ): Promise<IndustryHiringPostRecord> {
+    const data = ensureDbExists();
+    const index = (data.industryHiringPosts || []).findIndex((p) => p.id === postId && p.industryId === industryId);
+    if (index === -1) {
+      throw new Error("Hiring post not found or unauthorized.");
+    }
+
+    const post = data.industryHiringPosts[index];
+    const prevConfig = post.knowledgeTest || {
+      enabled: true,
+      selectedQuestionIds: [],
+      testPaper: [],
+      approvalStatus: "draft",
+    };
+
+    // Hydrate testPaper from Question Bank if selectedQuestionIds provided
+    let updatedPaper = prevConfig.testPaper;
+    if (testConfig.selectedQuestionIds) {
+      const authQuestions = (data.industryQuestions || []).filter((q) => q.industryId === industryId);
+      const selectedIds = new Set(testConfig.selectedQuestionIds);
+      updatedPaper = authQuestions
+        .filter((q) => selectedIds.has(q.id))
+        .map((q): KnowledgeTestQuestionItem => ({
+          id: q.id,
+          questionText: q.questionText,
+          questionType: q.questionType,
+          difficulty: q.difficulty,
+          domainId: q.domainId,
+          conceptTag: q.conceptTag,
+          marks: q.marks,
+          options: q.options,
+          correctOptionId: q.correctOptionId,
+          explanation: q.explanation,
+        }));
+    }
+
+    // If question set changed, reset approvalStatus if it was previously approved!
+    const questionsChanged = testConfig.selectedQuestionIds &&
+      JSON.stringify(testConfig.selectedQuestionIds.sort()) !== JSON.stringify((prevConfig.selectedQuestionIds || []).sort());
+
+    const newApprovalStatus = questionsChanged
+      ? "draft"
+      : (testConfig.approvalStatus || prevConfig.approvalStatus || "draft");
+
+    const mergedConfig: KnowledgeTestConfig = {
+      ...prevConfig,
+      ...testConfig,
+      selectedQuestionIds: testConfig.selectedQuestionIds ?? prevConfig.selectedQuestionIds,
+      testPaper: updatedPaper,
+      approvalStatus: newApprovalStatus,
+    };
+
+    post.knowledgeTest = mergedConfig;
+    post.updatedAt = new Date().toISOString();
+    data.industryHiringPosts[index] = post;
+    saveDb(data);
+    return post;
+  },
+
+  async selectAIQuestionsForPost(
+    industryId: string,
+    postId: string,
+    req: AIQuestionSelectionRequest
+  ): Promise<AIQuestionSelectionResult> {
+    const data = ensureDbExists();
+    const post = (data.industryHiringPosts || []).find((p) => p.id === postId && p.industryId === industryId);
+    if (!post) {
+      throw new Error("Hiring post not found or unauthorized.");
+    }
+
+    const pool = (data.industryQuestions || []).filter((q) => q.industryId === industryId);
+    if (pool.length === 0) {
+      return {
+        selectedQuestionIds: [],
+        questions: [],
+        selectionRationale: "No questions currently available in your Question Bank. Please author questions first.",
+        matchedSkills: [],
+      };
+    }
+
+    const targetSkills = (req.requiredSkills || post.requiredSkills || []).map((s) => s.toLowerCase());
+    const targetCount = Math.max(1, Math.min(req.targetCount || 5, pool.length));
+
+    // Score questions based on skill relevance and difficulty
+    const scored = pool.map((q) => {
+      let score = 0;
+      const qText = (q.questionText + " " + (q.conceptTag || "") + " " + (q.domainId || "")).toLowerCase();
+      const matched: string[] = [];
+
+      for (const skill of targetSkills) {
+        if (qText.includes(skill)) {
+          score += 3;
+          matched.push(skill);
+        }
+      }
+
+      if (req.difficulty && req.difficulty !== "balanced") {
+        if (q.difficulty === req.difficulty) score += 2;
+      }
+
+      return { question: q, score, matched };
+    });
+
+    // Sort by relevance score descending
+    scored.sort((a, b) => b.score - a.score);
+    const chosen = scored.slice(0, targetCount);
+
+    const questions: KnowledgeTestQuestionItem[] = chosen.map((c): KnowledgeTestQuestionItem => ({
+      id: c.question.id,
+      questionText: c.question.questionText,
+      questionType: c.question.questionType,
+      difficulty: c.question.difficulty,
+      domainId: c.question.domainId,
+      conceptTag: c.question.conceptTag,
+      marks: c.question.marks,
+      options: c.question.options,
+      correctOptionId: c.question.correctOptionId,
+      explanation: c.question.explanation,
+    }));
+
+    const allMatchedSkills = Array.from(new Set(chosen.flatMap((c) => c.matched)));
+
+    return {
+      selectedQuestionIds: questions.map((q) => q.id),
+      questions,
+      selectionRationale: `Selected ${questions.length} question(s) matching ${allMatchedSkills.length} core competencies (${allMatchedSkills.join(", ") || "General Engineering"}).`,
+      matchedSkills: allMatchedSkills,
+    };
+  },
+
+  async reviewKnowledgeTestWithAI(
+    industryId: string,
+    postId: string
+  ): Promise<AITestReviewResult> {
+    const data = ensureDbExists();
+    const post = (data.industryHiringPosts || []).find((p) => p.id === postId && p.industryId === industryId);
+    if (!post || !post.knowledgeTest) {
+      throw new Error("Hiring post or test configuration not found.");
+    }
+
+    const testPaper = post.knowledgeTest.testPaper || [];
+    if (testPaper.length === 0) {
+      throw new Error("Test paper is empty. Please select questions before requesting AI review.");
+    }
+
+    const requiredSkills = (post.requiredSkills || []).map((s) => s.toLowerCase());
+    const coveredSkills: Set<string> = new Set();
+    const duplicateWarnings: string[] = [];
+    const suggestions: string[] = [];
+
+    // Check duplicates & skills coverage
+    const seenTexts = new Map<string, string>();
+    const difficultyCounts = { beginner: 0, intermediate: 0, advanced: 0 };
+
+    for (const q of testPaper) {
+      const norm = q.questionText.trim().toLowerCase();
+      if (seenTexts.has(norm)) {
+        duplicateWarnings.push(`Duplicate or near-identical question found: "${q.questionText.slice(0, 50)}..."`);
+      } else {
+        seenTexts.set(norm, q.id);
+      }
+
+      if (q.difficulty in difficultyCounts) {
+        difficultyCounts[q.difficulty as keyof typeof difficultyCounts]++;
+      }
+
+      const qBlob = (q.questionText + " " + (q.conceptTag || "")).toLowerCase();
+      for (const s of requiredSkills) {
+        if (qBlob.includes(s)) coveredSkills.add(s);
+      }
+
+      // Check option sanity
+      if (!q.options || q.options.length !== 4) {
+        suggestions.push(`Question "${q.id}" has ${q.options?.length ?? 0} options instead of standard 4 options.`);
+      }
+      if (!q.correctOptionId || !q.options.some((opt) => opt.id === q.correctOptionId)) {
+        suggestions.push(`Question "${q.id}" has invalid or missing correctOptionId.`);
+      }
+    }
+
+    const skillsCoverage = Array.from(coveredSkills);
+    const uncoveredSkills = requiredSkills.filter((s) => !coveredSkills.has(s));
+    if (uncoveredSkills.length > 0) {
+      suggestions.push(`Consider adding questions covering: ${uncoveredSkills.join(", ")}.`);
+    }
+
+    const difficultyConsistency = `${difficultyCounts.beginner} Beginner, ${difficultyCounts.intermediate} Intermediate, ${difficultyCounts.advanced} Advanced`;
+    const relevanceScore = Math.min(100, Math.max(50, Math.round((skillsCoverage.length / Math.max(1, requiredSkills.length)) * 100)));
+
+    const result: AITestReviewResult = {
+      relevanceScore,
+      difficultyConsistency,
+      duplicateWarnings,
+      skillsCoverage,
+      suggestions: suggestions.length > 0 ? suggestions : ["All questions have valid MCQ structures and cover required competencies."],
+      isPassed: duplicateWarnings.length === 0 && suggestions.every((s) => !s.includes("invalid")),
+    };
+
+    // Update post record
+    const postIndex = data.industryHiringPosts.findIndex((p) => p.id === postId);
+    if (postIndex !== -1) {
+      data.industryHiringPosts[postIndex].knowledgeTest!.aiReviewStatus = "reviewed";
+      data.industryHiringPosts[postIndex].knowledgeTest!.aiReviewFeedback = result;
+      data.industryHiringPosts[postIndex].knowledgeTest!.approvalStatus = "ai_reviewed";
+      saveDb(data);
+    }
+
+    return result;
+  },
+
+  async approveIndustryKnowledgeTest(
+    industryId: string,
+    postId: string,
+    approved: boolean
+  ): Promise<IndustryHiringPostRecord> {
+    const data = ensureDbExists();
+    const index = (data.industryHiringPosts || []).findIndex((p) => p.id === postId && p.industryId === industryId);
+    if (index === -1) {
+      throw new Error("Hiring post not found or unauthorized.");
+    }
+
+    const post = data.industryHiringPosts[index];
+    if (!post.knowledgeTest || !post.knowledgeTest.enabled) {
+      throw new Error("Knowledge Test is not enabled for this hiring post.");
+    }
+
+    if (approved) {
+      if (!post.knowledgeTest.testPaper || post.knowledgeTest.testPaper.length === 0) {
+        throw new Error("Cannot approve an empty test paper.");
+      }
+      post.knowledgeTest.approvalStatus = "approved";
+      post.knowledgeTest.approvedAt = new Date().toISOString();
+    } else {
+      post.knowledgeTest.approvalStatus = "rejected";
+    }
+
+    post.updatedAt = new Date().toISOString();
+    data.industryHiringPosts[index] = post;
+    saveDb(data);
+    return post;
+  },
+
+  async publishIndustryKnowledgeTest(
+    industryId: string,
+    postId: string
+  ): Promise<IndustryHiringPostRecord> {
+    const data = ensureDbExists();
+    const index = (data.industryHiringPosts || []).findIndex((p) => p.id === postId && p.industryId === industryId);
+    if (index === -1) {
+      throw new Error("Hiring post not found or unauthorized.");
+    }
+
+    const post = data.industryHiringPosts[index];
+    if (!post.knowledgeTest || !post.knowledgeTest.enabled) {
+      throw new Error("Knowledge Test is not enabled for this hiring post.");
+    }
+
+    if (post.knowledgeTest.approvalStatus !== "approved") {
+      throw new Error("Knowledge Test must be approved by Industry before it can be published.");
+    }
+
+    if (!post.knowledgeTest.testPaper || post.knowledgeTest.testPaper.length === 0) {
+      throw new Error("Test paper must contain questions.");
+    }
+
+    const now = new Date().toISOString();
+    post.knowledgeTest.publishedAt = now;
+    post.updatedAt = now;
+
+    data.industryHiringPosts[index] = post;
+    saveDb(data);
+    return post;
   },
 };

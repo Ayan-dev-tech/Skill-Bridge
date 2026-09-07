@@ -192,9 +192,10 @@ export async function POST(request: Request) {
       },
       { status: 201 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error creating job application:", error);
-    if (error?.message?.includes("already submitted")) {
+    const errorMessage = error instanceof Error ? error.message : "";
+    if (errorMessage.includes("already submitted")) {
       return NextResponse.json(
         {
           success: false,
