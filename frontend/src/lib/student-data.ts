@@ -106,10 +106,10 @@ export const studentWorkflowStages: WorkflowStage[] = [
   {
     id: 6,
     slug: "resume",
-    name: "Resume Builder",
-    shortDescription: "Generate verified, skill-validated technical portfolios",
-    status: "upcoming",
-    route: "/student/resume",
+    name: "Resume Checker",
+    shortDescription: "Analyze your resume with ATS-style diagnostics, parseability checks, and keyword matching",
+    status: "available",
+    route: "/student/resume-checker",
   },
   {
     id: 7,

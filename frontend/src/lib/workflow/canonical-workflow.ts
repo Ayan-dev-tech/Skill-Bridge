@@ -21,6 +21,9 @@ export interface CanonicalWorkflowState {
   isVerificationCompleted: boolean;
   isInterestFinderCompleted: boolean;
   isKnowledgeTestCompleted: boolean;
+  isSkillGapCompleted: boolean;
+  isLearningCompleted: boolean;
+  isAdvancedVerified: boolean;
   stages: CanonicalStageItem[];
   allowedRoutes: string[];
 }
@@ -64,9 +67,9 @@ export const CANONICAL_STAGE_DEFINITIONS = [
   {
     id: 6,
     slug: "resume",
-    name: "Resume Builder",
-    shortDescription: "Generate verified, skill-validated technical portfolios",
-    route: "/student/resume",
+    name: "Resume Checker",
+    shortDescription: "Analyze your resume with ATS-style diagnostics, parseability checks, and keyword matching",
+    route: "/student/resume-checker",
   },
   {
     id: 7,
@@ -128,6 +131,8 @@ export async function getCanonicalWorkflowState(
     !isKnowledgeTestCompleted &&
     Boolean(activeKnowledgeSession);
 
+  const isAdvancedVerified = await db.isStudentAdvancedVerified(studentId);
+
   // Skill Gap completed when non-stale analysis exists
   const skillGapAnalysis = await db.getSkillGapAnalysisByStudent(studentId);
   const isSkillGapCompleted =
@@ -135,10 +140,18 @@ export async function getCanonicalWorkflowState(
     Boolean(skillGapAnalysis && !skillGapAnalysis.isStale);
 
   const isLearningCompleted = false;
-  const isResumeCompleted = false;
   const isOpportunitiesCompleted = false;
+  const isJobAccessUnlocked = isAdvancedVerified || isSkillGapCompleted;
 
-  // Determine current focus stage in strict sequential order
+  // Check if resume analysis exists
+  const resumeAnalysis = await db.getResumeAnalysisByStudent(studentId);
+  const isResumeAnalysisPresent = Boolean(resumeAnalysis);
+
+  // Check if job applications exist
+  const applications = await db.getJobApplicationsByStudent(studentId);
+  const hasApplications = applications.length > 0;
+
+  // Determine current focus stage in sequential order
   let currentStageId = 1;
   if (!isVerificationCompleted) {
     currentStageId = 1;
@@ -150,7 +163,7 @@ export async function getCanonicalWorkflowState(
     currentStageId = 4;
   } else if (!isLearningCompleted) {
     currentStageId = 5;
-  } else if (!isResumeCompleted) {
+  } else if (!isResumeAnalysisPresent) {
     currentStageId = 6;
   } else if (!isOpportunitiesCompleted) {
     currentStageId = 7;
@@ -165,7 +178,14 @@ export async function getCanonicalWorkflowState(
     "/student/settings",
     "/student/about",
     "/student/document-verification", // Stage 1 is always accessible
+    "/student/resume-checker", // Available from the beginning
+    "/student/resume", // Route alias
+    "/student/applications", // Track Applications visible and accessible from the beginning
   ];
+
+  if (isJobAccessUnlocked) {
+    allowedRoutes.push("/student/opportunities", "/student/jobs");
+  }
 
   const stages: CanonicalStageItem[] = [
     {
@@ -289,23 +309,36 @@ export async function getCanonicalWorkflowState(
       name: "Learning / Mentoring",
       shortDescription: "Access curated curriculum tracks and faculty mentorship",
       route: "/student/learning",
-      status: isLearningCompleted ? "completed" : "locked",
-      statusLabel: "Locked",
-      isLocked: true,
-      lockedReason: "Complete previous milestones to unlock Learning & Mentorship.",
-      actionText: "Locked",
+      status: isLearningCompleted
+        ? "completed"
+        : isSkillGapCompleted
+        ? "available"
+        : "locked",
+      statusLabel: isLearningCompleted
+        ? "Completed"
+        : isSkillGapCompleted
+        ? "Available"
+        : "Locked",
+      isLocked: !isSkillGapCompleted,
+      lockedReason: !isSkillGapCompleted
+        ? "Complete Skill Gap Analysis to unlock Learning & Mentoring."
+        : undefined,
+      actionText: isLearningCompleted
+        ? "Review Resources"
+        : isSkillGapCompleted
+        ? "Access Resources"
+        : "Locked",
     },
     {
       id: 6,
       slug: "resume",
-      name: "Resume Builder",
-      shortDescription: "Generate verified, skill-validated technical portfolios",
-      route: "/student/resume",
-      status: isResumeCompleted ? "completed" : "locked",
-      statusLabel: "Locked",
-      isLocked: true,
-      lockedReason: "Complete previous milestones to unlock Resume Builder.",
-      actionText: "Locked",
+      name: "Resume Checker",
+      shortDescription: "Analyze your resume with ATS-style diagnostics, parseability checks, and keyword matching",
+      route: "/student/resume-checker",
+      status: isResumeAnalysisPresent ? "completed" : "available",
+      statusLabel: isResumeAnalysisPresent ? "Analyzed" : "Available",
+      isLocked: false,
+      actionText: isResumeAnalysisPresent ? "View Analysis" : "Check Resume",
     },
     {
       id: 7,
@@ -313,11 +346,23 @@ export async function getCanonicalWorkflowState(
       name: "Jobs & Internships",
       shortDescription: "Explore curated institutional campus drives and internships",
       route: "/student/opportunities",
-      status: isOpportunitiesCompleted ? "completed" : "locked",
-      statusLabel: "Locked",
-      isLocked: true,
-      lockedReason: "Complete previous milestones to unlock Jobs & Internships.",
-      actionText: "Locked",
+      status: isOpportunitiesCompleted
+        ? "completed"
+        : isJobAccessUnlocked
+        ? "available"
+        : "locked",
+      statusLabel: isOpportunitiesCompleted
+        ? "Completed"
+        : isAdvancedVerified
+        ? "Advanced Access"
+        : isJobAccessUnlocked
+        ? "Available"
+        : "Locked",
+      isLocked: !isJobAccessUnlocked,
+      lockedReason: !isJobAccessUnlocked
+        ? "Complete the required learning stage to unlock job opportunities."
+        : undefined,
+      actionText: isJobAccessUnlocked ? "Explore Opportunities" : "Locked",
     },
     {
       id: 8,
@@ -325,16 +370,15 @@ export async function getCanonicalWorkflowState(
       name: "Track Applications",
       shortDescription: "Monitor interview schedules, shortlists, and offer status",
       route: "/student/applications",
-      status: "locked",
-      statusLabel: "Locked",
-      isLocked: true,
-      lockedReason: "Complete previous milestones to unlock Application Tracking.",
-      actionText: "Locked",
+      status: hasApplications ? "in_progress" : "available",
+      statusLabel: hasApplications ? `${applications.length} Active` : "Available",
+      isLocked: false,
+      actionText: hasApplications ? "View Applications" : "Track Applications",
     },
   ];
 
   for (const stage of stages) {
-    if (!stage.isLocked) {
+    if (!stage.isLocked && !allowedRoutes.includes(stage.route)) {
       allowedRoutes.push(stage.route);
     }
   }
@@ -349,6 +393,9 @@ export async function getCanonicalWorkflowState(
     isVerificationCompleted,
     isInterestFinderCompleted,
     isKnowledgeTestCompleted,
+    isSkillGapCompleted,
+    isLearningCompleted,
+    isAdvancedVerified,
     stages,
     allowedRoutes,
   };
@@ -458,7 +505,74 @@ export async function checkRouteAccess(
     return { allowed: true };
   }
 
-  // Later stages locked by default
+  // Stage 5: Learning / Mentoring requires Stage 4 COMPLETED
+  if (pathname.startsWith("/student/learning")) {
+    if (!workflow.isVerificationCompleted) {
+      return {
+        allowed: false,
+        redirectUrl: "/student/document-verification",
+        reason: "Complete Document Submission first.",
+      };
+    }
+    if (!workflow.isInterestFinderCompleted) {
+      return {
+        allowed: false,
+        redirectUrl: "/student/interest-finder",
+        reason: "Complete Interest Finder first.",
+      };
+    }
+    if (!workflow.isKnowledgeTestCompleted) {
+      return {
+        allowed: false,
+        redirectUrl: "/student/knowledge-testing",
+        reason: "Complete Knowledge Testing first.",
+      };
+    }
+    if (!workflow.isSkillGapCompleted) {
+      return {
+        allowed: false,
+        redirectUrl: "/student/skill-gap",
+        reason: "Complete Skill Gap Analysis before accessing Learning & Mentoring.",
+      };
+    }
+    return { allowed: true };
+  }
+
+  // Stage 6: Resume Checker is ALWAYS available for ALL students from the start
+  if (
+    pathname.startsWith("/student/resume-checker") ||
+    pathname.startsWith("/student/resume")
+  ) {
+    return { allowed: true };
+  }
+
+  // Stage 8: Track Applications is ALWAYS visible and accessible even with 0 applications
+  if (
+    pathname.startsWith("/student/applications") ||
+    pathname.startsWith("/student/application-tracker")
+  ) {
+    return { allowed: true };
+  }
+
+  // Stage 7: Jobs & Internships is unlocked if student is Advanced verified OR reached Learning stage
+  if (
+    pathname.startsWith("/student/opportunities") ||
+    pathname.startsWith("/student/jobs")
+  ) {
+    const isJobAccessUnlocked =
+      workflow.isAdvancedVerified || workflow.isSkillGapCompleted;
+    if (!isJobAccessUnlocked) {
+      return {
+        allowed: false,
+        redirectUrl: "/student/learning",
+        reason:
+          "Complete the required learning stage to unlock job opportunities.",
+      };
+    }
+    return { allowed: true };
+  }
+
+  // Fallback check against canonical stages
   const gatedStage = workflow.stages.find((s) => pathname.startsWith(s.route));
   if (gatedStage && gatedStage.isLocked) {
     return {

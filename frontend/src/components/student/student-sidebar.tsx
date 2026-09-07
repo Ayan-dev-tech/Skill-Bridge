@@ -96,8 +96,8 @@ export function StudentSidebar({
           icon: BookOpen,
         },
         {
-          name: "Resume Builder",
-          href: "/student/resume",
+          name: "Resume Checker",
+          href: "/student/resume-checker",
           icon: FileText,
         },
       ],

@@ -238,3 +238,23 @@ CREATE POLICY "Anyone can view active education programs" ON education_programs
 CREATE POLICY "Students can access their own skill gap analyses" ON skill_gap_analyses
     FOR ALL USING (auth.uid() = student_id);
 
+-- 12. Learning Resources (Curated YouTube video references & educational resources)
+CREATE TABLE IF NOT EXISTS learning_resources (
+    id TEXT PRIMARY KEY,
+    student_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    analysis_id UUID REFERENCES skill_gap_analyses(id) ON DELETE CASCADE,
+    resource_type TEXT NOT NULL DEFAULT 'youtube_video',
+    resources JSONB NOT NULL DEFAULT '[]',
+    cached_at TIMESTAMPTZ DEFAULT NOW(),
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_learning_resources_student ON learning_resources(student_id);
+CREATE INDEX IF NOT EXISTS idx_learning_resources_analysis ON learning_resources(student_id, analysis_id);
+
+ALTER TABLE learning_resources ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Students can access their own learning resources" ON learning_resources
+    FOR ALL USING (auth.uid() = student_id);
+
+

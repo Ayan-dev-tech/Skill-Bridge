@@ -91,6 +91,7 @@ interface DashboardData {
   interestProfile: InterestProfile | null;
   statistics: DashboardStatistics;
   sections: SectionItem[];
+  isAdvancedVerified?: boolean;
 }
 
 const SECTION_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -202,9 +203,17 @@ export function StudentDashboardContainer() {
       {/* 1. Header Welcome Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-border">
         <div className="space-y-1">
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full border border-border bg-muted/40 text-xs font-mono text-muted-foreground">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
-            <span>Student Verified Profile &bull; {student.id}</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full border border-border bg-muted/40 text-xs font-mono text-muted-foreground">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
+              <span>Student Verified Profile &bull; {student.id}</span>
+            </div>
+            {data.isAdvancedVerified && (
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border border-primary/30 bg-primary/10 text-xs font-semibold text-primary">
+                <Sparkles className="w-3.5 h-3.5 text-primary" />
+                <span>Advanced Profile Verified &bull; Early access to Jobs & Internships unlocked</span>
+              </div>
+            )}
           </div>
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
             Welcome back, {student.name}

@@ -79,6 +79,12 @@ export async function POST(request: Request) {
       } else {
         redirectUrl = "/student/document-verification";
       }
+    } else if (user.role === "campus") {
+      redirectUrl = "/campus";
+    } else if (user.role === "faculty") {
+      redirectUrl = "/faculty";
+    } else if (user.role === "industry") {
+      redirectUrl = "/industry";
     }
 
     const response = NextResponse.json({
@@ -100,6 +106,14 @@ export async function POST(request: Request) {
       sameSite: "lax",
       maxAge: 60 * 60 * 24 * 7,
     });
+
+    if (isAdmin) {
+      response.cookies.set("sb_admin", "true", {
+        path: "/",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 7,
+      });
+    }
 
     return response;
   } catch (error) {

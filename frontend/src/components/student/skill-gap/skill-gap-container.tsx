@@ -32,6 +32,7 @@ import {
   Layers,
   ChevronRight,
   Info,
+  Sparkles,
 } from "lucide-react";
 import {
   SkillGapApiResponse,
@@ -549,6 +550,99 @@ export function SkillGapContainer() {
           })}
         </div>
       </div>
+
+      {/* ------------------------------------------------------------------ */}
+      {/* 4.5. CHANGING TRENDS IN YOUR NICHE (FOR ADVANCED STUDENTS)        */}
+      {/* ------------------------------------------------------------------ */}
+      {data.isAdvancedVerified && data.nicheTrends && data.nicheTrends.length > 0 && (
+        <div className="space-y-4 pt-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border border-primary/20 bg-primary/10 text-xs font-semibold text-primary mb-1">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Advanced Verification Exclusive &bull; Frontier Insights</span>
+              </div>
+              <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
+                <span>What&apos;s Changing in Your Niche</span>
+                <Badge variant="outline" className="text-xs font-mono">
+                  {direction.nicheTitle}
+                </Badge>
+              </h2>
+              <p className="text-xs text-muted-foreground">
+                Personalized industry paradigm shifts grounded in your confirmed specialization and verified knowledge benchmark.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {data.nicheTrends.map((trend) => (
+              <Card
+                key={trend.id}
+                className="border-primary/20 bg-card hover:border-primary/40 transition-all flex flex-col justify-between"
+              >
+                <CardHeader className="p-5 pb-3 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Badge className="bg-primary/15 text-primary border border-primary/30 text-[10px] uppercase font-mono tracking-wider">
+                      Trending in Your Niche
+                    </Badge>
+                    <span className="text-[10px] text-muted-foreground font-mono">
+                      {trend.source}
+                    </span>
+                  </div>
+                  <CardTitle className="text-base font-bold text-foreground leading-snug">
+                    {trend.trendTitle}
+                  </CardTitle>
+                </CardHeader>
+
+                <CardContent className="p-5 pt-0 space-y-3.5 text-xs">
+                  <div className="space-y-1">
+                    <span className="font-semibold text-foreground flex items-center gap-1.5 text-[11px]">
+                      <Target className="w-3.5 h-3.5 text-primary" />
+                      Why It Matters:
+                    </span>
+                    <p className="text-muted-foreground leading-relaxed pl-5">
+                      {trend.whyItMatters}
+                    </p>
+                  </div>
+
+                  <div className="p-3 rounded-lg border border-border bg-muted/20 space-y-1.5">
+                    <div className="flex items-baseline justify-between gap-2">
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                        Recommended Skill
+                      </span>
+                      <Badge variant="outline" className="text-[10px]">
+                        Frontier Competency
+                      </Badge>
+                    </div>
+                    <p className="font-semibold text-foreground text-xs">
+                      {trend.recommendedSkill}
+                    </p>
+                  </div>
+
+                  <div className="space-y-1">
+                    <span className="font-semibold text-foreground flex items-center gap-1.5 text-[11px]">
+                      <ClipboardCheck className="w-3.5 h-3.5 text-emerald-500" />
+                      Relationship to Your Profile:
+                    </span>
+                    <p className="text-muted-foreground leading-relaxed pl-5">
+                      {trend.relationshipToProfile}
+                    </p>
+                  </div>
+
+                  <div className="pt-2 border-t border-border/60">
+                    <span className="text-[10px] uppercase font-mono tracking-wider text-muted-foreground block mb-1">
+                      Suggested Next Step:
+                    </span>
+                    <p className="text-foreground font-medium leading-relaxed">
+                      {trend.suggestedNextStep}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* ------------------------------------------------------------------ */}
       {/* 5. RECOMMENDED LEARNING PARTNERS & PROGRAMS */}

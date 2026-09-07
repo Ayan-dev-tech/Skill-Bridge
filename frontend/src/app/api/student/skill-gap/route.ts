@@ -18,6 +18,7 @@ import {
   matchProgramsToSkillGaps,
 } from "@/lib/skill-gap/engine";
 import { SkillGapAnalysisRecord, SkillGapApiResponse } from "@/lib/skill-gap/types";
+import { getPersonalizedNicheTrends } from "@/lib/skill-gap/niche-trends-service";
 
 /**
  * Resolves niche ID from confirmed specific interest text and domain ID
@@ -136,6 +137,15 @@ export async function GET(request: Request) {
       completedAt: latestKnowledgeResult.completedAt,
     };
 
+    // Compute authoritative Advanced verification & personalized niche trends
+    const isAdvancedVerified = await db.isStudentAdvancedVerified(student.id);
+    const nicheTrends = getPersonalizedNicheTrends({
+      isAdvanced: isAdvancedVerified,
+      domainId: interestProfile.confirmedMainDomainId,
+      nicheId,
+      studentSkills: latestKnowledgeResult.strengths,
+    });
+
     // 3. Check for valid, non-stale cached analysis
     const existingAnalysis = await db.getSkillGapAnalysisByStudent(student.id);
     const isCacheValid =
@@ -152,6 +162,8 @@ export async function GET(request: Request) {
         analysis: existingAnalysis,
         direction,
         knowledgeSnapshot,
+        isAdvancedVerified,
+        nicheTrends,
       });
     }
 
@@ -190,7 +202,7 @@ export async function GET(request: Request) {
 
     // 7. Persist analysis
     const analysisRecord: SkillGapAnalysisRecord = {
-      id: `sga-${Date.now()}-${crypto.randomBytes(4).toString("hex")}`,
+      id: `sga-${crypto.randomUUID()}`,
       studentId: student.id,
       interestProfileId: interestProfile.id,
       knowledgeTestResultId: latestKnowledgeResult.id,
@@ -221,6 +233,8 @@ export async function GET(request: Request) {
       analysis: analysisRecord,
       direction,
       knowledgeSnapshot,
+      isAdvancedVerified,
+      nicheTrends,
     });
   } catch (error) {
     console.error("Error in Skill Gap API (GET):", error);

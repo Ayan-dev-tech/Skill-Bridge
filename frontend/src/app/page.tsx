@@ -29,7 +29,7 @@ interface RoleConfig {
 const roleConfigs: Record<RoleType, RoleConfig> = {
   student: {
     label: "Student",
-    description: "Access skill mapping, tests, resume builder, and job portal",
+    description: "Access skill mapping, tests, resume checker, and job portal",
     emailLabel: "Student Email",
     emailPlaceholder: "student@institution.edu",
   },

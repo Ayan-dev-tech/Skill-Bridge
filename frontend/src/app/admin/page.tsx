@@ -77,7 +77,11 @@ export default function AdminPortalPage() {
   // Session verification
   React.useEffect(() => {
     if (typeof window !== "undefined") {
-      const adminSession = sessionStorage.getItem("skill_bridge_admin");
+      let adminSession = sessionStorage.getItem("skill_bridge_admin");
+      if (!adminSession && document.cookie.includes("sb_admin=true")) {
+        sessionStorage.setItem("skill_bridge_admin", "true");
+        adminSession = "true";
+      }
       if (!adminSession) {
         router.push("/");
         return;
@@ -210,19 +214,6 @@ export default function AdminPortalPage() {
     setPendingApprovalsCount((c) => Math.max(0, c - 1));
   };
 
-  if (isCheckingAuth) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="flex flex-col items-center gap-2">
-          <div className="w-6 h-6 border-2 border-foreground border-t-transparent rounded-full animate-spin" />
-          <p className="text-xs text-muted-foreground font-mono">Verifying administrative credentials...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) return null;
-
   return (
     <div className="flex h-screen bg-background text-foreground overflow-hidden">
       {/* Persistent Desktop & Mobile Drawer Sidebar */}
@@ -245,7 +236,16 @@ export default function AdminPortalPage() {
 
         {/* View Surface Content */}
         <main className="flex-1 p-4 md:p-6 max-w-7xl w-full mx-auto space-y-6">
-          {currentView === "overview" && (
+          {isCheckingAuth || !isAuthenticated ? (
+            <div className="flex flex-col items-center justify-center min-h-[400px] space-y-3">
+              <div className="w-6 h-6 border-2 border-foreground/20 border-t-foreground rounded-full animate-spin" />
+              <p className="text-xs text-muted-foreground font-mono">
+                Verifying administrative credentials...
+              </p>
+            </div>
+          ) : (
+            <>
+              {currentView === "overview" && (
             <OverviewView
               students={students}
               faculty={faculty}
@@ -330,6 +330,8 @@ export default function AdminPortalPage() {
           {currentView === "audit-logs" && <AuditLogsView />}
 
           {currentView === "settings" && <SettingsView />}
+            </>
+          )}
         </main>
       </div>
     </div>

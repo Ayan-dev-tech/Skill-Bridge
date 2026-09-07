@@ -148,9 +148,7 @@ export interface SkillGapAnalysisRecord {
   updatedAt: string;
 }
 
-// ============================================================================
-// API CONTRACTS
-// ============================================================================
+import type { NicheTrendItem } from "./niche-trends-service";
 
 export interface SkillGapApiResponse {
   success: boolean;
@@ -177,5 +175,7 @@ export interface SkillGapApiResponse {
     weaknesses: string[];
     completedAt: string;
   };
+  isAdvancedVerified?: boolean;
+  nicheTrends?: NicheTrendItem[] | null;
   error?: string;
 }
