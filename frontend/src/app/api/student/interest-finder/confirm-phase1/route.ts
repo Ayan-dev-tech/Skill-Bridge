@@ -7,9 +7,9 @@ import { getNextAdaptiveQuestion } from "@/lib/interest-engine/ai-provider";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { studentId, action, domainId } = body;
+    const { action, domainId } = body;
 
-    const { student } = await getAuthenticatedStudent(request, studentId);
+    const { student } = await getAuthenticatedStudent(request);
     const session = await db.getInterestSession(student.id);
 
     if (!session) {

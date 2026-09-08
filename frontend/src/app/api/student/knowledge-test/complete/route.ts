@@ -5,8 +5,8 @@ import { calculateTestResult } from "@/lib/knowledge-test/test-scorer";
 
 export async function POST(request: Request) {
   try {
+    const { student } = await getAuthenticatedStudent(request);
     const body = await request.json().catch(() => ({}));
-    const { student } = await getAuthenticatedStudent(request, body.studentId);
     const { sessionId } = body;
 
     if (!sessionId) {

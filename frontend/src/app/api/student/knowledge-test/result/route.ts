@@ -7,6 +7,12 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const { student } = await getAuthenticatedStudent(request);
+    if (!student || !student.id || student.id === "unauthenticated_guest") {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized. Please sign in as a student." },
+        { status: 401 }
+      );
+    }
 
     const sessionId = searchParams.get("sessionId");
     const resultId = searchParams.get("resultId");

@@ -6,6 +6,12 @@ import { DocumentVerificationService } from "@/lib/verification/service";
 export async function POST(request: Request) {
   try {
     const { student } = await getAuthenticatedStudent(request);
+    if (!student || !student.id || student.id === "unauthenticated_guest") {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized. Please sign in as a student." },
+        { status: 401 }
+      );
+    }
     const body = await request.json();
     const { linkedIn, gitHub, portfolio, other } = body;
 

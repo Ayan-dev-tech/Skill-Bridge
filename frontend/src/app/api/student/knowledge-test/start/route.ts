@@ -10,8 +10,7 @@ import { generateQuestionBatch } from "@/lib/knowledge-test/ai-question-generato
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json().catch(() => ({}));
-    const { student } = await getAuthenticatedStudent(request, body.studentId);
+    const { student } = await getAuthenticatedStudent(request);
 
     // 1. Prerequisite Gate: Verify canonical workflow authorization
     const access = await checkRouteAccess(student.id, "/student/knowledge-testing");

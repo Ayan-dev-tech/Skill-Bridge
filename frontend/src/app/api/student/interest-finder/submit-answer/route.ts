@@ -18,9 +18,9 @@ import {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { studentId, questionId, selectedOptionId, selectedOptionText, questionText } = body;
+    const { questionId, selectedOptionId, selectedOptionText, questionText } = body;
 
-    const { student } = await getAuthenticatedStudent(request, studentId);
+    const { student } = await getAuthenticatedStudent(request);
     let session = await db.getInterestSession(student.id);
 
     if (!session) {

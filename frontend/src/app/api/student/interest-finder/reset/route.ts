@@ -4,8 +4,7 @@ import { getAuthenticatedStudent } from "@/lib/student-auth";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json().catch(() => ({}));
-    const { student } = await getAuthenticatedStudent(request, body.studentId);
+    const { student } = await getAuthenticatedStudent(request);
 
     await db.clearInterestSession(student.id);
 

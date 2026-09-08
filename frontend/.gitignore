@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local runtime data & document storage
+/data/*.json
+/data/storage/
+/data/storage/**
+/data/skill_bridge.json

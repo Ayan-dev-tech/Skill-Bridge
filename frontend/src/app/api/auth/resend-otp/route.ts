@@ -71,17 +71,11 @@ export async function POST(request: Request) {
     const newOtp = generateSixDigitOtp();
     await db.createOrUpdateOtp(normalizedEmail, role, newOtp, 10);
 
-    console.log(`\n======================================================`);
-    console.log(`[Skill-Bridge Resend OTP] Destination: ${normalizedEmail} | Role: ${role}`);
-    console.log(`[Skill-Bridge Resend OTP] Verification Code: ${newOtp}`);
-    console.log(`======================================================\n`);
-
     return NextResponse.json({
       success: true,
       message: `A fresh verification code has been sent for your ${role} registration.`,
       email: normalizedEmail,
       role,
-      devOtp: process.env.NODE_ENV !== "production" ? newOtp : undefined,
     });
   } catch (error) {
     console.error("Resend OTP error:", error);

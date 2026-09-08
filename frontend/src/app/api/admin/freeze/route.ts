@@ -1,8 +1,14 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { getAuthenticatedAdmin } from "@/lib/admin-auth";
 
 export async function POST(request: Request) {
   try {
+    const { adminUser, error } = await getAuthenticatedAdmin(request);
+    if (!adminUser) {
+      return NextResponse.json({ error: error || "Unauthorized." }, { status: 401 });
+    }
+
     const body = await request.json();
     const { type, id, reason } = body;
 

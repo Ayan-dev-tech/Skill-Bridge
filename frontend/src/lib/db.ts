@@ -355,7 +355,23 @@ const DATA_DIR = path.join(process.cwd(), "data");
 const DB_FILE = path.join(DATA_DIR, "skill_bridge.json");
 
 export function hashPassword(password: string): string {
-  return crypto.createHash("sha256").update(password).digest("hex");
+  const salt = crypto.randomBytes(16).toString("hex");
+  const derived = crypto.pbkdf2Sync(password, salt, 100000, 64, "sha512").toString("hex");
+  return `pbkdf2:${salt}:${derived}`;
+}
+
+export function verifyPassword(password: string, storedHash: string): boolean {
+  if (!storedHash || !password) return false;
+  if (storedHash.startsWith("pbkdf2:")) {
+    const parts = storedHash.split(":");
+    if (parts.length !== 3) return false;
+    const [, salt, originalHash] = parts;
+    const derived = crypto.pbkdf2Sync(password, salt, 100000, 64, "sha512").toString("hex");
+    return crypto.timingSafeEqual(Buffer.from(derived), Buffer.from(originalHash));
+  }
+  // Legacy SHA-256 fallback comparison
+  const legacyHash = crypto.createHash("sha256").update(password).digest("hex");
+  return crypto.timingSafeEqual(Buffer.from(legacyHash), Buffer.from(storedHash));
 }
 
 export function generateSixDigitOtp(): string {
@@ -468,7 +484,7 @@ function ensureDbExists(): DatabaseSchema {
     modified = true;
   } else {
     // Ensure password and admin status are active
-    if (!existingAdmin.isAdmin || existingAdmin.passwordHash !== hashPassword("admin@123")) {
+    if (!existingAdmin.isAdmin || !verifyPassword("admin@123", existingAdmin.passwordHash)) {
       existingAdmin.isAdmin = true;
       existingAdmin.isVerified = true;
       existingAdmin.passwordHash = hashPassword("admin@123");
@@ -599,6 +615,16 @@ export const db = {
 
   async getUser(id: string): Promise<User | null> {
     return this.getUserById(id);
+  },
+
+  async updateUser(updatedUser: User): Promise<User> {
+    const data = ensureDbExists();
+    const index = data.users.findIndex((u) => u.id === updatedUser.id);
+    if (index >= 0) {
+      data.users[index] = updatedUser;
+      saveDb(data);
+    }
+    return updatedUser;
   },
 
   async getProfileByUserId(userId: string): Promise<Profile | null> {

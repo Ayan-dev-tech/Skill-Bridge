@@ -1,55 +1,53 @@
 import { db, User } from "./db";
+import { verifySessionToken, SESSION_COOKIE_NAME } from "./session";
 
 /**
- * Validates the authenticated student identity from the request headers or body.
- * Ensures client cannot manipulate or spoof another student's ID.
+ * Validates the authenticated student identity from verified session token or Supabase Bearer token.
+ * Rejects spoofed headers, request body IDs, and arbitrary client identity.
+ * Never creates fake fallback users.
  */
 export async function getAuthenticatedStudent(
-  request: Request,
-  providedId?: string
+  request: Request
 ): Promise<{ student: User | { id: string; fullName: string; email: string }; error?: string }> {
-  // 1. Check custom x-student-id header, bearer token, or providedId
-  let authId = request.headers.get("x-student-id") || providedId;
+  let sessionToken: string | null = null;
 
-  // 2. Check HTTP cookie sb_student_id
-  if (!authId) {
-    const cookieHeader = request.headers.get("cookie") || "";
-    const match = cookieHeader.match(/sb_student_id=([^;]+)/);
-    if (match && match[1]) {
-      authId = decodeURIComponent(match[1].trim());
-    }
+  // 1. Check HTTP-only signed session cookie
+  const cookieHeader = request.headers.get("cookie") || "";
+  const match = cookieHeader.match(new RegExp(`${SESSION_COOKIE_NAME}=([^;]+)`));
+  if (match && match[1]) {
+    sessionToken = decodeURIComponent(match[1].trim());
   }
 
-  // 3. Check Authorization Bearer header
-  if (!authId) {
+  // 2. Check Authorization Bearer header
+  if (!sessionToken) {
     const auth = request.headers.get("authorization") || "";
     if (auth.startsWith("Bearer ")) {
-      authId = auth.substring(7).trim();
+      sessionToken = auth.substring(7).trim();
     }
   }
 
-  if (authId && authId !== "anonymous") {
-    const data = await db.getAdminOverview();
-    const found = data.users.find(
-      (u) => (u.id === authId || u.email === authId) && u.role === "student"
-    );
-    if (found) {
+  if (sessionToken) {
+    // Verify HMAC-signed session
+    const payload = verifySessionToken(sessionToken);
+    if (payload && payload.userId && payload.role === "student") {
+      const found = await db.getUserById(payload.userId);
+      if (found && found.role === "student") {
+        return {
+          student: {
+            id: found.id,
+            fullName: found.fullName,
+            email: found.email,
+          },
+        };
+      }
       return {
         student: {
-          id: found.id,
-          fullName: found.fullName,
-          email: found.email,
+          id: payload.userId,
+          fullName: payload.fullName || "Student",
+          email: payload.email,
         },
       };
     }
-    // Allow authenticated student ID recorded in session
-    return {
-      student: {
-        id: authId,
-        fullName: "Student",
-        email: `${authId}@university.edu`,
-      },
-    };
   }
 
   return {
@@ -58,6 +56,6 @@ export async function getAuthenticatedStudent(
       fullName: "Guest Student",
       email: "",
     },
-    error: "Authentication required",
+    error: "Authentication required. Please sign in with a verified student account.",
   };
 }

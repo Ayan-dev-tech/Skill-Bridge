@@ -10,6 +10,12 @@ export async function GET(
 ) {
   try {
     const { student } = await getAuthenticatedStudent(request);
+    if (!student || !student.id || student.id === "unauthenticated_guest") {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized. Please sign in as a student." },
+        { status: 401 }
+      );
+    }
     const { documentId } = await params;
 
     if (!documentId) {

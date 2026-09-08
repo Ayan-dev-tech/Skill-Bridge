@@ -5,9 +5,9 @@ import { getAuthenticatedStudent } from "@/lib/student-auth";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { studentId, action, finalProfile } = body;
+    const { action, finalProfile } = body;
 
-    const { student } = await getAuthenticatedStudent(request, studentId);
+    const { student } = await getAuthenticatedStudent(request);
 
     if (action === "explore_again") {
       // Clear current active exploration session, leaving any previous confirmed profile untouched

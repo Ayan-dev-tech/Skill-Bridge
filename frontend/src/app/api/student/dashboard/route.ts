@@ -7,6 +7,12 @@ import { getCanonicalWorkflowState, checkRouteAccess } from "@/lib/workflow/cano
 export async function GET(request: Request) {
   try {
     const { student } = await getAuthenticatedStudent(request);
+    if (!student || !student.id || student.id === "unauthenticated_guest") {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized. Please sign in as a student." },
+        { status: 401 }
+      );
+    }
 
     const canonicalWorkflow = await getCanonicalWorkflowState(student.id);
 

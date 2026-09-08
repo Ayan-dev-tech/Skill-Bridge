@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limiter";
-import { db, hashPassword, RoleType } from "@/lib/db";
+import { db, verifyPassword, hashPassword, RoleType } from "@/lib/db";
+import { createSignedSessionToken, SESSION_COOKIE_NAME } from "@/lib/session";
 
 export async function POST(request: Request) {
   try {
@@ -57,13 +58,19 @@ export async function POST(request: Request) {
       );
     }
 
-    // 4. Verify password hash
-    const inputHash = hashPassword(password);
-    if (inputHash !== user.passwordHash) {
+    // 4. Verify password hash (supports PBKDF2 and backward-compatible SHA-256)
+    const passwordValid = verifyPassword(password, user.passwordHash);
+    if (!passwordValid) {
       return NextResponse.json(
         { error: "Incorrect password. Please try again." },
         { status: 401 }
       );
+    }
+
+    // Upgrade legacy password hash automatically if needed
+    if (!user.passwordHash.startsWith("pbkdf2:")) {
+      user.passwordHash = hashPassword(password);
+      await db.updateUser(user);
     }
 
     // 5. Success
@@ -87,11 +94,21 @@ export async function POST(request: Request) {
       redirectUrl = "/industry";
     }
 
+    // Create cryptographically signed session token
+    const sessionToken = createSignedSessionToken({
+      userId: user.id,
+      role: user.role,
+      email: user.email,
+      fullName: user.fullName,
+      isAdmin,
+    });
+
     const response = NextResponse.json({
       success: true,
       message: isAdmin ? "Welcome, Administrator!" : `Welcome back, ${user.fullName}!`,
       isAdmin,
       redirectUrl,
+      token: sessionToken,
       user: {
         id: user.id,
         email: user.email,
@@ -101,8 +118,20 @@ export async function POST(request: Request) {
       },
     });
 
+    // Set HTTP-only, Secure, SameSite signed session cookie
+    response.cookies.set(SESSION_COOKIE_NAME, sessionToken, {
+      path: "/",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7,
+    });
+
+    // Legacy compatibility cookie (for UI reads)
     response.cookies.set("sb_student_id", user.id, {
       path: "/",
+      httpOnly: false,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: 60 * 60 * 24 * 7,
     });
@@ -110,6 +139,8 @@ export async function POST(request: Request) {
     if (isAdmin) {
       response.cookies.set("sb_admin", "true", {
         path: "/",
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
         maxAge: 60 * 60 * 24 * 7,
       });

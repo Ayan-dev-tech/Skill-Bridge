@@ -67,9 +67,7 @@ export async function GET(request: Request) {
   try {
     const url = new URL(request.url);
     const forceRefresh = url.searchParams.get("refresh") === "true";
-    const studentIdParam = url.searchParams.get("studentId") || undefined;
-
-    const { student } = await getAuthenticatedStudent(request, studentIdParam);
+    const { student } = await getAuthenticatedStudent(request);
     if (!student || !student.id || student.id === "unauthenticated_guest") {
       return NextResponse.json<SkillGapApiResponse>(
         {
@@ -250,8 +248,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json().catch(() => ({}));
-    const { student } = await getAuthenticatedStudent(request, body.studentId);
+    const { student } = await getAuthenticatedStudent(request);
     if (!student || !student.id || student.id === "unauthenticated_guest") {
       return NextResponse.json<SkillGapApiResponse>(
         {

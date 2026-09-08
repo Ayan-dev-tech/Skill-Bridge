@@ -99,24 +99,11 @@ export async function POST(request: Request) {
     const otpCode = generateSixDigitOtp();
     await db.createOrUpdateOtp(email, role as RoleType, otpCode, 10);
 
-    // Development Console Log for convenience
-    console.log(`\n======================================================`);
-    console.log(`[Skill-Bridge OTP] Destination: ${email} | Role: ${role}`);
-    console.log(`[Skill-Bridge OTP] Verification Code: ${otpCode}`);
-    console.log(`[Skill-Bridge OTP] Valid for 10 minutes`);
-    console.log(`======================================================\n`);
-
     return NextResponse.json({
       success: true,
       message: `Verification code sent to your email for ${role} registration.`,
       email: email.toLowerCase().trim(),
       role,
-      devOtp:
-        process.env.NODE_ENV !== "production" ||
-        process.env.ENABLE_DEV_OTP === "true" ||
-        process.env.DEV_OTP === "true"
-          ? otpCode
-          : undefined,
     });
   } catch (error) {
     console.error("Registration error:", error);

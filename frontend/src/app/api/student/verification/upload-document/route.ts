@@ -10,6 +10,12 @@ import type { VerificationDocumentRecord } from "@/lib/verification/types";
 export async function POST(request: Request) {
   try {
     const { student } = await getAuthenticatedStudent(request);
+    if (!student || !student.id || student.id === "unauthenticated_guest") {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized. Please sign in as a student." },
+        { status: 401 }
+      );
+    }
     const formData = await request.formData();
 
     const file = formData.get("file") as File | null;

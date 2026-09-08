@@ -257,4 +257,87 @@ ALTER TABLE learning_resources ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Students can access their own learning resources" ON learning_resources
     FOR ALL USING (auth.uid() = student_id);
 
+-- 13. Interest Profiles & Sessions
+CREATE TABLE IF NOT EXISTS interest_profiles (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    student_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    primary_domain_id TEXT NOT NULL,
+    primary_domain_name TEXT NOT NULL,
+    recommended_niche_id TEXT NOT NULL,
+    recommended_niche_title TEXT NOT NULL,
+    domain_scores JSONB NOT NULL DEFAULT '{}'::jsonb,
+    signal_scores JSONB NOT NULL DEFAULT '{}'::jsonb,
+    confidence_level TEXT NOT NULL DEFAULT 'high',
+    confirmed_at TIMESTAMPTZ DEFAULT NOW(),
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_interest_profiles_student ON interest_profiles(student_id);
+ALTER TABLE interest_profiles ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Students can only access their own interest profile" ON interest_profiles
+    FOR ALL USING (auth.uid() = student_id);
+
+-- 14. Knowledge Test Results & Sessions
+CREATE TABLE IF NOT EXISTS knowledge_test_results (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    student_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    domain_id TEXT NOT NULL,
+    domain_name TEXT NOT NULL,
+    niche_id TEXT NOT NULL,
+    niche_title TEXT NOT NULL,
+    score INT NOT NULL,
+    max_score INT NOT NULL,
+    score_percentage NUMERIC NOT NULL,
+    knowledge_level TEXT NOT NULL,
+    completed_at TIMESTAMPTZ DEFAULT NOW(),
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_knowledge_test_results_student ON knowledge_test_results(student_id);
+ALTER TABLE knowledge_test_results ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Students can only access their own knowledge test results" ON knowledge_test_results
+    FOR ALL USING (auth.uid() = student_id);
+
+-- 15. Resume Analyses
+CREATE TABLE IF NOT EXISTS resume_analyses (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    student_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    resume_file_name TEXT NOT NULL,
+    storage_path TEXT NOT NULL,
+    ats_score NUMERIC NOT NULL,
+    overall_score NUMERIC NOT NULL,
+    parsed_skills JSONB NOT NULL DEFAULT '[]'::jsonb,
+    section_breakdown JSONB NOT NULL DEFAULT '{}'::jsonb,
+    recommendations JSONB NOT NULL DEFAULT '[]'::jsonb,
+    analyzed_at TIMESTAMPTZ DEFAULT NOW(),
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_resume_analyses_student ON resume_analyses(student_id);
+ALTER TABLE resume_analyses ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Students can only access their own resume analysis" ON resume_analyses
+    FOR ALL USING (auth.uid() = student_id);
+
+-- 16. Job Applications
+CREATE TABLE IF NOT EXISTS job_applications (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    student_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    job_id TEXT,
+    company_name TEXT NOT NULL,
+    role_title TEXT NOT NULL,
+    location TEXT,
+    employment_type TEXT,
+    status TEXT NOT NULL DEFAULT 'applied',
+    timeline JSONB NOT NULL DEFAULT '[]'::jsonb,
+    submitted_document_types JSONB NOT NULL DEFAULT '[]'::jsonb,
+    cover_letter TEXT,
+    portfolio_url TEXT,
+    github_url TEXT,
+    linkedin_url TEXT,
+    applied_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_job_applications_student ON job_applications(student_id);
+ALTER TABLE job_applications ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Students can only access their own job applications" ON job_applications
+    FOR ALL USING (auth.uid() = student_id);
+
+
 

@@ -6,6 +6,12 @@ import { DOCUMENT_CATEGORIES } from "@/lib/verification/types";
 export async function GET(request: Request) {
   try {
     const { student } = await getAuthenticatedStudent(request);
+    if (!student || !student.id || student.id === "unauthenticated_guest") {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized. Please sign in as a student." },
+        { status: 401 }
+      );
+    }
     const verification = await db.getStudentVerification(student.id);
 
     const requiredTypes = ["student_id", "passport_photo", "post_graduation_marksheet", "abc_id"];

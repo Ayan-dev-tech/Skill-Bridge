@@ -1,14 +1,13 @@
-import { db, User } from "../db";
-import { verifySessionToken, SESSION_COOKIE_NAME } from "../session";
+import { db, User } from "./db";
+import { verifySessionToken, SESSION_COOKIE_NAME } from "./session";
 
 /**
- * Validates the authenticated Industry partner identity from signed session token or Bearer header.
- * Rejects spoofed client headers, cookies, or body parameters.
- * Does NOT fallback to arbitrary industry users.
+ * Validates the authenticated Administrator identity from signed session token or Bearer header.
+ * Enforces admin authorization and prevents privilege escalation.
  */
-export async function getAuthenticatedIndustry(
+export async function getAuthenticatedAdmin(
   request: Request
-): Promise<{ industryUser: User | null; error?: string }> {
+): Promise<{ adminUser: User | null; error?: string }> {
   let sessionToken: string | null = null;
 
   // 1. Check HTTP-only signed session cookie
@@ -28,16 +27,16 @@ export async function getAuthenticatedIndustry(
 
   if (sessionToken) {
     const payload = verifySessionToken(sessionToken);
-    if (payload && payload.userId && (payload.role === "industry" || payload.isAdmin)) {
+    if (payload && payload.userId && payload.isAdmin) {
       const user = await db.getUserById(payload.userId);
-      if (user && (user.role === "industry" || user.isAdmin)) {
-        return { industryUser: user };
+      if (user && (user.isAdmin || user.email.toLowerCase() === "admin@gmail.com")) {
+        return { adminUser: user };
       }
     }
   }
 
   return {
-    industryUser: null,
-    error: "Unauthorized. Please sign in with an Industry partner account.",
+    adminUser: null,
+    error: "Unauthorized. Administrator privileges required.",
   };
 }

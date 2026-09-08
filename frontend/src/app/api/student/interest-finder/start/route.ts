@@ -7,8 +7,7 @@ import { getNextAdaptiveQuestion } from "@/lib/interest-engine/ai-provider";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json().catch(() => ({}));
-    const { student } = await getAuthenticatedStudent(request, body.studentId);
+    const { student } = await getAuthenticatedStudent(request);
 
     // Enforce sequential onboarding gating: Document Verification must be completed first
     const verification = await db.getStudentVerification(student.id);
