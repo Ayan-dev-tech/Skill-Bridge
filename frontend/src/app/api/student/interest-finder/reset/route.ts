@@ -4,7 +4,13 @@ import { getAuthenticatedStudent } from "@/lib/student-auth";
 
 export async function POST(request: Request) {
   try {
-    const { student } = await getAuthenticatedStudent(request);
+    const { student, error: authError, status: authStatus } = await getAuthenticatedStudent(request);
+    if (!student) {
+      return NextResponse.json(
+        { success: false, error: authError || "Unauthorized. Please sign in as a student." },
+        { status: authStatus || 401 }
+      );
+    }
 
     await db.clearInterestSession(student.id);
 

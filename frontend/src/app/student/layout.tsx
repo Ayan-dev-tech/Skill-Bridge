@@ -23,14 +23,12 @@ export default function StudentRootLayout({
 
   const checkWorkflowAccess = React.useCallback(async () => {
     try {
-      let sid = "";
       if (typeof window !== "undefined") {
         const stored = sessionStorage.getItem("skill_bridge_user");
         if (stored) {
           try {
             const parsed = JSON.parse(stored);
             if (parsed.id) {
-              sid = parsed.id;
               if (parsed.fullName) {
                 setProfile((prev) => ({
                   ...prev,
@@ -44,27 +42,15 @@ export default function StudentRootLayout({
             // keep default
           }
         }
-        if (!sid) {
-          const match = document.cookie.match(/sb_student_id=([^;]+)/);
-          if (match && match[1]) {
-            sid = decodeURIComponent(match[1].trim());
-          }
-        }
       }
-
-      if (!sid) {
-        // Not authenticated
+      const res = await fetch(
+        `/api/student/workflow/status?checkPath=${encodeURIComponent(pathname)}`
+      );
+      if (res.status === 401) {
         setIsAuthorized(false);
         router.replace("/");
         return;
       }
-
-      const res = await fetch(
-        `/api/student/workflow/status?checkPath=${encodeURIComponent(pathname)}`,
-        {
-          headers: { "x-student-id": sid },
-        }
-      );
       const data = await res.json();
 
       if (data.success) {

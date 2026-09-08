@@ -1,14 +1,21 @@
 import { db, User } from "./db";
 import { verifySessionToken, SESSION_COOKIE_NAME } from "./session";
 
+export interface AuthenticatedStudentResult {
+  student: User | { id: string; fullName: string; email: string } | null;
+  error?: string;
+  status: 200 | 401 | 403;
+}
+
 /**
  * Validates the authenticated student identity from verified session token or Supabase Bearer token.
  * Rejects spoofed headers, request body IDs, and arbitrary client identity.
  * Never creates fake fallback users.
+ * Returns appropriate HTTP status codes (401 for unauthenticated, 403 for role mismatch).
  */
 export async function getAuthenticatedStudent(
   request: Request
-): Promise<{ student: User | { id: string; fullName: string; email: string }; error?: string }> {
+): Promise<AuthenticatedStudentResult> {
   let sessionToken: string | null = null;
 
   // 1. Check HTTP-only signed session cookie
@@ -26,36 +33,58 @@ export async function getAuthenticatedStudent(
     }
   }
 
-  if (sessionToken) {
-    // Verify HMAC-signed session
-    const payload = verifySessionToken(sessionToken);
-    if (payload && payload.userId && payload.role === "student") {
-      const found = await db.getUserById(payload.userId);
-      if (found && found.role === "student") {
-        return {
-          student: {
-            id: found.id,
-            fullName: found.fullName,
-            email: found.email,
-          },
-        };
-      }
+  if (!sessionToken) {
+    return {
+      student: null,
+      error: "Authentication required. Please sign in.",
+      status: 401,
+    };
+  }
+
+  // Verify HMAC-signed session
+  const payload = verifySessionToken(sessionToken);
+  if (!payload || !payload.userId) {
+    return {
+      student: null,
+      error: "Invalid or expired session. Please sign in again.",
+      status: 401,
+    };
+  }
+
+  // Check role authorization: must be student or admin
+  if (payload.role !== "student" && !payload.isAdmin) {
+    return {
+      student: null,
+      error: "Forbidden. Access restricted to student accounts.",
+      status: 403,
+    };
+  }
+
+  const found = await db.getUserById(payload.userId);
+  if (found) {
+    if (found.role !== "student" && !found.isAdmin) {
       return {
-        student: {
-          id: payload.userId,
-          fullName: payload.fullName || "Student",
-          email: payload.email,
-        },
+        student: null,
+        error: "Forbidden. Access restricted to student accounts.",
+        status: 403,
       };
     }
+    return {
+      student: {
+        id: found.id,
+        fullName: found.fullName,
+        email: found.email,
+      },
+      status: 200,
+    };
   }
 
   return {
     student: {
-      id: "unauthenticated_guest",
-      fullName: "Guest Student",
-      email: "",
+      id: payload.userId,
+      fullName: payload.fullName || "Student",
+      email: payload.email,
     },
-    error: "Authentication required. Please sign in with a verified student account.",
+    status: 200,
   };
 }

@@ -10,7 +10,7 @@ import { StudentDataAccessView } from "@/components/industry/views/student-data-
 import { QuestionBankView } from "@/components/industry/views/question-bank-view";
 import { HiringManagementView } from "@/components/industry/views/hiring-management-view";
 
-export default function IndustryPortalPage() {
+function IndustryPortalContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -150,5 +150,13 @@ export default function IndustryPortalPage() {
         </main>
       </div>
     </div>
+  );
+}
+
+export default function IndustryPortalPage() {
+  return (
+    <React.Suspense fallback={<div className="flex min-h-screen items-center justify-center bg-background" />}>
+      <IndustryPortalContent />
+    </React.Suspense>
   );
 }

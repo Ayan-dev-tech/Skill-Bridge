@@ -7,7 +7,13 @@ import { getNextAdaptiveQuestion } from "@/lib/interest-engine/ai-provider";
 
 export async function POST(request: Request) {
   try {
-    const { student } = await getAuthenticatedStudent(request);
+    const { student, error: authError, status: authStatus } = await getAuthenticatedStudent(request);
+    if (!student) {
+      return NextResponse.json(
+        { success: false, error: authError || "Unauthorized. Please sign in as a student." },
+        { status: authStatus || 401 }
+      );
+    }
 
     // Enforce sequential onboarding gating: Document Verification must be completed first
     const verification = await db.getStudentVerification(student.id);

@@ -7,7 +7,13 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { action, finalProfile } = body;
 
-    const { student } = await getAuthenticatedStudent(request);
+    const { student, error: authError, status: authStatus } = await getAuthenticatedStudent(request);
+    if (!student) {
+      return NextResponse.json(
+        { success: false, error: authError || "Unauthorized. Please sign in as a student." },
+        { status: authStatus || 401 }
+      );
+    }
 
     if (action === "explore_again") {
       // Clear current active exploration session, leaving any previous confirmed profile untouched

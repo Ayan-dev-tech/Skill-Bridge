@@ -9,7 +9,13 @@ import { calculateTestResult } from "@/lib/knowledge-test/test-scorer";
 
 export async function POST(request: Request) {
   try {
-    const { student } = await getAuthenticatedStudent(request);
+    const { student, error: authError, status: authStatus } = await getAuthenticatedStudent(request);
+    if (!student) {
+      return NextResponse.json(
+        { success: false, error: authError || "Unauthorized. Please sign in as a student." },
+        { status: authStatus || 401 }
+      );
+    }
     const body = await request.json().catch(() => ({}));
     const { sessionId, questionId, selectedOptionId, timeSpentMs } = body;
 

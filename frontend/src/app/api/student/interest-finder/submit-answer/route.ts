@@ -20,7 +20,13 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { questionId, selectedOptionId, selectedOptionText, questionText } = body;
 
-    const { student } = await getAuthenticatedStudent(request);
+    const { student, error: authError, status: authStatus } = await getAuthenticatedStudent(request);
+    if (!student) {
+      return NextResponse.json(
+        { success: false, error: authError || "Unauthorized. Please sign in as a student." },
+        { status: authStatus || 401 }
+      );
+    }
     let session = await db.getInterestSession(student.id);
 
     if (!session) {

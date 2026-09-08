@@ -10,7 +10,14 @@ import { generateQuestionBatch } from "@/lib/knowledge-test/ai-question-generato
 
 export async function POST(request: Request) {
   try {
-    const { student } = await getAuthenticatedStudent(request);
+    const { student, error: authError, status: authStatus } = await getAuthenticatedStudent(request);
+    if (!student) {
+      return NextResponse.json(
+        { success: false, error: authError || "Unauthorized. Please sign in as a student." },
+        { status: authStatus || 401 }
+      );
+    }
+    const body = await request.json().catch(() => ({}));
 
     // 1. Prerequisite Gate: Verify canonical workflow authorization
     const access = await checkRouteAccess(student.id, "/student/knowledge-testing");

@@ -74,7 +74,7 @@ export async function POST(request: Request) {
     }
 
     // 5. Success
-    const isAdmin = Boolean(user.isAdmin || user.email === "admin@gmail.com");
+    const isAdmin = Boolean(user.isAdmin);
     let redirectUrl: string | undefined = undefined;
 
     if (isAdmin) {
@@ -103,12 +103,12 @@ export async function POST(request: Request) {
       isAdmin,
     });
 
+    // Notice: token is NOT included in JSON response body to prevent XSS credential exposure
     const response = NextResponse.json({
       success: true,
       message: isAdmin ? "Welcome, Administrator!" : `Welcome back, ${user.fullName}!`,
       isAdmin,
       redirectUrl,
-      token: sessionToken,
       user: {
         id: user.id,
         email: user.email,
@@ -122,15 +122,6 @@ export async function POST(request: Request) {
     response.cookies.set(SESSION_COOKIE_NAME, sessionToken, {
       path: "/",
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7,
-    });
-
-    // Legacy compatibility cookie (for UI reads)
-    response.cookies.set("sb_student_id", user.id, {
-      path: "/",
-      httpOnly: false,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: 60 * 60 * 24 * 7,
