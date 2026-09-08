@@ -9,6 +9,9 @@ import { IndustryProfileView } from "@/components/industry/views/industry-profil
 import { StudentDataAccessView } from "@/components/industry/views/student-data-access-view";
 import { QuestionBankView } from "@/components/industry/views/question-bank-view";
 import { HiringManagementView } from "@/components/industry/views/hiring-management-view";
+import { ApplicationScreeningView } from "@/components/industry/views/application-screening-view";
+import { InterviewEvaluationView } from "@/components/industry/views/interview-evaluation-view";
+import { FinalHiringAnalyticsView } from "@/components/industry/views/final-hiring-analytics-view";
 
 export default function IndustryPortalPage() {
   const router = useRouter();
@@ -62,7 +65,19 @@ export default function IndustryPortalPage() {
   // Update view from searchParams if user navigates back/forward
   React.useEffect(() => {
     const v = searchParams.get("view") as IndustryViewType;
-    if (v && ["dashboard", "profile", "hiring", "students", "question-bank"].includes(v)) {
+    if (
+      v &&
+      [
+        "dashboard",
+        "profile",
+        "hiring",
+        "screening",
+        "interview",
+        "analytics",
+        "students",
+        "question-bank",
+      ].includes(v)
+    ) {
       setCurrentView(v);
     }
   }, [searchParams]);
@@ -88,6 +103,12 @@ export default function IndustryPortalPage() {
         return "Operational Dashboard";
       case "hiring":
         return "Hiring & Post Configuration";
+      case "screening":
+        return "Application Screening";
+      case "interview":
+        return "Interview & Evaluation";
+      case "analytics":
+        return "Final Hiring & Analytics";
       case "profile":
         return "Company Profile";
       case "students":
@@ -139,8 +160,21 @@ export default function IndustryPortalPage() {
           )}
 
           {currentView === "hiring" && (
-            <HiringManagementView onNavigateToQuestionBank={() => handleSelectView("question-bank")} />
+            <HiringManagementView
+              onNavigateToQuestionBank={() => handleSelectView("question-bank")}
+              onNavigateToScreening={() => handleSelectView("screening")}
+            />
           )}
+
+          {currentView === "screening" && (
+            <ApplicationScreeningView onNavigateToInterviews={() => handleSelectView("interview")} />
+          )}
+
+          {currentView === "interview" && (
+            <InterviewEvaluationView onNavigateToFinalDecision={() => handleSelectView("analytics")} />
+          )}
+
+          {currentView === "analytics" && <FinalHiringAnalyticsView />}
 
           {currentView === "profile" && <IndustryProfileView />}
 

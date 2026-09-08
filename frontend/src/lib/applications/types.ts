@@ -49,6 +49,36 @@ export interface JobApplicationRecord {
   portfolioUrl?: string;
   githubUrl?: string;
   linkedinUrl?: string;
+  // Section 3: Screening
+  screeningStatus?: "pending" | "screened" | "shortlisted" | "rejected";
+  screeningNotes?: string;
+  documentValidationResults?: Array<{ documentType: string; status: "verified" | "pending" | "missing" }>;
+  eligibilityStatus?: "eligible" | "ineligible";
+  knowledgeTestScore?: number;
+  knowledgeTestPassed?: boolean;
+  // Section 4: Interview & Evaluation
+  interviewStatus?: "not_scheduled" | "scheduled" | "in_progress" | "completed" | "cancelled";
+  interviewRounds?: Array<{
+    roundNumber: number;
+    roundName: string;
+    mode: "Virtual" | "In-person" | "Hybrid";
+    scheduledAt?: string;
+    meetingLinkOrLocation?: string;
+    evaluationCriteria?: string;
+    score?: number;
+    feedback?: string;
+    decision?: "pending" | "passed" | "failed";
+  }>;
+  interviewFeedback?: string;
+  // Section 5: Final Hiring & Selection
+  finalStatus?: "pending" | "selected" | "rejected";
+  finalDecisionDate?: string;
+  offerDetails?: {
+    offeredRole?: string;
+    offeredCompensation?: string;
+    startDate?: string;
+    notes?: string;
+  };
 }
 
 export type JobApplication = JobApplicationRecord;

@@ -52,9 +52,10 @@ import type {
 
 interface HiringManagementViewProps {
   onNavigateToQuestionBank?: () => void;
+  onNavigateToScreening?: () => void;
 }
 
-export function HiringManagementView({ onNavigateToQuestionBank }: HiringManagementViewProps) {
+export function HiringManagementView({ onNavigateToQuestionBank, onNavigateToScreening }: HiringManagementViewProps) {
   const [posts, setPosts] = React.useState<IndustryHiringPostRecord[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
@@ -767,6 +768,18 @@ export function HiringManagementView({ onNavigateToQuestionBank }: HiringManagem
                         <FileCheck className="w-3.5 h-3.5 mr-1" />
                         <span>Test Studio</span>
                       </Button>
+                      {onNavigateToScreening && post.status === "published" && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={onNavigateToScreening}
+                          className="h-7 text-xs px-2 text-primary"
+                          title="View Candidates"
+                        >
+                          <Users className="w-3.5 h-3.5 mr-1" />
+                          <span>Applicants</span>
+                        </Button>
+                      )}
                     </div>
 
                     <div className="flex items-center gap-1.5">

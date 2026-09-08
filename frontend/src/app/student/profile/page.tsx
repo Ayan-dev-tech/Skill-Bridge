@@ -21,9 +21,25 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { defaultStudentProfile, StudentProfileData } from "@/lib/student-data";
+import { Badge } from "@/components/ui/badge";
+import { Briefcase, CheckCircle2, MapPin, DollarSign } from "lucide-react";
+
+interface AcquiredOpportunity {
+  applicationId?: string;
+  hiringPostId?: string;
+  roleTitle: string;
+  companyName: string;
+  hiringType?: string;
+  status: string;
+  startDate?: string;
+  compensation?: string;
+  acquisitionDate?: string;
+}
 
 export default function StudentProfilePage() {
   const [profile, setProfile] = React.useState<StudentProfileData>(defaultStudentProfile);
+  const [acquiredOpportunities, setAcquiredOpportunities] = React.useState<AcquiredOpportunity[]>([]);
+  const [loadingAcquired, setLoadingAcquired] = React.useState(true);
 
   React.useEffect(() => {
     if (typeof window !== "undefined") {
@@ -44,6 +60,36 @@ export default function StudentProfilePage() {
         }
       }
     }
+
+    // Load authoritative applications to find selected/acquired opportunities
+    async function loadAcquiredOpportunities() {
+      try {
+        setLoadingAcquired(true);
+        const res = await fetch("/api/student/applications");
+        const json = await res.json();
+        if (json.success && Array.isArray(json.applications)) {
+          const selectedApps = json.applications
+            .filter((a: any) => a.status === "selected" || a.finalStatus === "selected")
+            .map((a: any): AcquiredOpportunity => ({
+              applicationId: a.id,
+              hiringPostId: a.jobId,
+              roleTitle: a.offerDetails?.offeredRole || a.roleTitle || a.position || "Engineering Role",
+              companyName: a.companyName,
+              hiringType: a.employmentType || a.type || "Full-time",
+              status: "Selected / Offered",
+              startDate: a.offerDetails?.startDate,
+              compensation: a.offerDetails?.offeredCompensation || a.salaryRange,
+              acquisitionDate: a.finalDecisionDate || a.statusUpdatedAt || a.appliedAt,
+            }));
+          setAcquiredOpportunities(selectedApps);
+        }
+      } catch (err) {
+        console.error("Error loading acquired opportunities:", err);
+      } finally {
+        setLoadingAcquired(false);
+      }
+    }
+    loadAcquiredOpportunities();
   }, []);
 
   return (
@@ -156,6 +202,84 @@ export default function StudentProfilePage() {
               Launch Exploration
             </Link>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Career & Employment / Acquired Opportunities */}
+      <Card className="border-border">
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <CardTitle className="text-base font-bold text-foreground flex items-center gap-2">
+                <Briefcase className="w-4 h-4 text-emerald-500" />
+                Acquired Opportunities & Career Placements
+              </CardTitle>
+              <CardDescription className="text-xs text-muted-foreground">
+                Verified employment offers and internships acquired through Industry partner recruitment.
+              </CardDescription>
+            </div>
+            <Badge variant="outline" className="text-xs font-mono">
+              {acquiredOpportunities.length} {acquiredOpportunities.length === 1 ? "Offer" : "Offers"}
+            </Badge>
+          </div>
+        </CardHeader>
+
+        <CardContent className="p-6 pt-0 space-y-4">
+          {loadingAcquired ? (
+            <div className="py-6 text-center text-xs text-muted-foreground">
+              Loading acquired opportunities...
+            </div>
+          ) : acquiredOpportunities.length === 0 ? (
+            <div className="p-6 rounded-lg border border-dashed border-border text-center space-y-2">
+              <Briefcase className="w-8 h-8 text-muted-foreground mx-auto opacity-40" />
+              <p className="text-xs font-medium text-foreground">No Acquired Opportunities Yet</p>
+              <p className="text-[11px] text-muted-foreground max-w-sm mx-auto">
+                Once an industry partner finalizes their hiring evaluation and extends an offer, your placement details will appear here with full verification.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {acquiredOpportunities.map((opp, idx) => (
+                <div
+                  key={opp.applicationId || idx}
+                  className="p-4 rounded-xl border border-emerald-500/20 bg-emerald-500/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+                >
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <Badge className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 text-[10px]">
+                        <CheckCircle2 className="w-3 h-3 mr-1" />
+                        {opp.status}
+                      </Badge>
+                      <span className="text-[10px] font-mono text-muted-foreground uppercase">
+                        {opp.hiringType}
+                      </span>
+                    </div>
+                    <p className="text-sm font-bold text-foreground">{opp.roleTitle}</p>
+                    <p className="text-xs text-muted-foreground flex items-center gap-2">
+                      <span className="font-medium text-foreground">{opp.companyName}</span>
+                      {opp.compensation && (
+                        <>
+                          <span>&bull;</span>
+                          <span className="font-mono text-emerald-600 dark:text-emerald-400">
+                            {opp.compensation}
+                          </span>
+                        </>
+                      )}
+                    </p>
+                  </div>
+
+                  <div className="text-left sm:text-right text-[11px] font-mono text-muted-foreground space-y-0.5">
+                    {opp.acquisitionDate && (
+                      <p>Acquired: {new Date(opp.acquisitionDate).toLocaleDateString()}</p>
+                    )}
+                    {opp.startDate && (
+                      <p>Start Date: {new Date(opp.startDate).toLocaleDateString()}</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

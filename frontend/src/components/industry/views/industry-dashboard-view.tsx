@@ -245,6 +245,57 @@ export function IndustryDashboardView({ onNavigate }: IndustryDashboardViewProps
 
             <button
               type="button"
+              onClick={() => onNavigate("screening")}
+              className="w-full flex items-center justify-between p-3 rounded-md border border-border hover:bg-muted/40 transition-colors text-left"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-md bg-muted flex items-center justify-center">
+                  <Users className="w-4 h-4 text-foreground" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-foreground">Application Screening</p>
+                  <p className="text-[11px] text-muted-foreground">Review incoming student applications and credentials</p>
+                </div>
+              </div>
+              <ArrowRight className="w-3.5 h-3.5 text-muted-foreground" />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => onNavigate("interview")}
+              className="w-full flex items-center justify-between p-3 rounded-md border border-border hover:bg-muted/40 transition-colors text-left"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-md bg-muted flex items-center justify-center">
+                  <Clock className="w-4 h-4 text-foreground" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-foreground">Interview & Evaluation</p>
+                  <p className="text-[11px] text-muted-foreground">Coordinate virtual rounds and log evaluations</p>
+                </div>
+              </div>
+              <ArrowRight className="w-3.5 h-3.5 text-muted-foreground" />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => onNavigate("analytics")}
+              className="w-full flex items-center justify-between p-3 rounded-md border border-border hover:bg-muted/40 transition-colors text-left"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-md bg-muted flex items-center justify-center">
+                  <Sparkles className="w-4 h-4 text-foreground" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-foreground">Final Hiring & Analytics</p>
+                  <p className="text-[11px] text-muted-foreground">Extend official offers and view live pipeline charts</p>
+                </div>
+              </div>
+              <ArrowRight className="w-3.5 h-3.5 text-muted-foreground" />
+            </button>
+
+            <button
+              type="button"
               onClick={() => onNavigate("question-bank")}
               className="w-full flex items-center justify-between p-3 rounded-md border border-border hover:bg-muted/40 transition-colors text-left"
             >

@@ -14,7 +14,15 @@ import {
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 
-export type IndustryViewType = "dashboard" | "profile" | "hiring" | "students" | "question-bank";
+export type IndustryViewType =
+  | "dashboard"
+  | "profile"
+  | "hiring"
+  | "screening"
+  | "interview"
+  | "analytics"
+  | "students"
+  | "question-bank";
 
 interface NavItem {
   id: IndustryViewType;
@@ -61,6 +69,26 @@ export function IndustrySidebar({
           id: "profile",
           label: "Company Profile",
           icon: Building2,
+        },
+      ],
+    },
+    {
+      title: "Recruitment Workflow",
+      items: [
+        {
+          id: "screening",
+          label: "Screening",
+          icon: FileText,
+        },
+        {
+          id: "interview",
+          label: "Interviews",
+          icon: ShieldCheck,
+        },
+        {
+          id: "analytics",
+          label: "Hiring & Analytics",
+          icon: LayoutDashboard,
         },
       ],
     },

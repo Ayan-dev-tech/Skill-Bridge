@@ -836,6 +836,8 @@ export const db = {
       },
       hiringRequests: data.hiringRequests,
       campusRequests: data.campusRequests,
+      industryHiringPosts: data.industryHiringPosts || [],
+      jobApplications: data.jobApplications || [],
     };
   },
 
@@ -1867,7 +1869,7 @@ export const db = {
         applicationSource: "Skill Bridge Industry Portal",
         requiredDocumentTypes: p.requiredDocumentTypes,
       }));
-    return [...initialJobs, ...publishedCustomJobs];
+    return [...publishedCustomJobs, ...initialJobs];
   },
 
   async getAvailableInternships(): Promise<InternshipPosting[]> {
@@ -1893,7 +1895,7 @@ export const db = {
         applicationSource: "Skill Bridge Industry Portal",
         requiredDocumentTypes: p.requiredDocumentTypes,
       }));
-    return [...initialInternships, ...publishedCustomInternships];
+    return [...publishedCustomInternships, ...initialInternships];
   },
 
   // ==========================================================================
@@ -2824,4 +2826,275 @@ export const db = {
     saveDb(data);
     return post;
   },
+
+  // ==========================================================================
+  // SECTIONS 3, 4, 5: APPLICATION SCREENING, INTERVIEW, FINAL HIRING & ACQUIRED JOBS
+  // ==========================================================================
+
+  async getIndustryApplications(
+    industryId: string,
+    postId?: string
+  ): Promise<JobApplicationRecord[]> {
+    const data = ensureDbExists();
+    if (!data.jobApplications) data.jobApplications = [];
+
+    // Identify all posts belonging to this industry
+    const industryPosts = (data.industryHiringPosts || []).filter((p) => p.industryId === industryId);
+    const postIds = new Set(industryPosts.map((p) => p.id));
+
+    // Also match by company name as fallback
+    const profile = (data.profiles || []).find((p) => p.userId === industryId);
+    const companyName = ((profile?.metadata?.companyName as string) || "").toLowerCase().trim();
+
+    return data.jobApplications.filter((app) => {
+      // Must strictly belong to this industry's post or company
+      const belongsToIndustry =
+        (app.jobId && postIds.has(app.jobId)) ||
+        (Boolean(companyName) && Boolean(app.companyName) && app.companyName.toLowerCase().trim() === companyName);
+
+      if (!belongsToIndustry) {
+        return false;
+      }
+
+      if (postId) {
+        return app.jobId === postId;
+      }
+
+      return true;
+    });
+  },
+
+  async updateApplicationScreening(
+    industryId: string,
+    applicationId: string,
+    decision: "shortlisted" | "rejected" | "screened",
+    notes?: string
+  ): Promise<JobApplicationRecord> {
+    const data = ensureDbExists();
+    if (!data.jobApplications) data.jobApplications = [];
+
+    const index = data.jobApplications.findIndex((a) => a.id === applicationId);
+    if (index === -1) {
+      throw new Error("Application not found.");
+    }
+
+    const app = data.jobApplications[index];
+
+    // Verify ownership
+    const post = (data.industryHiringPosts || []).find((p) => p.id === app.jobId);
+    const profile = (data.profiles || []).find((p) => p.userId === industryId);
+    const companyName = ((profile?.metadata?.companyName as string) || "").toLowerCase().trim();
+    const isOwner = (post && post.industryId === industryId) ||
+      (companyName && app.companyName && app.companyName.toLowerCase().trim() === companyName);
+
+    if (!isOwner) {
+      throw new Error("Unauthorized to screen applications for another organization.");
+    }
+
+    const now = new Date().toISOString();
+    app.screeningStatus = decision;
+    if (notes !== undefined) app.screeningNotes = notes;
+    app.status = decision === "rejected" ? "rejected" : decision === "shortlisted" ? "in_review" : "in_review";
+    app.statusUpdatedAt = now;
+    app.updatedAt = now;
+
+    if (!app.timeline) app.timeline = [];
+    app.timeline.push({
+      id: `tl_${Date.now()}`,
+      status: app.status,
+      date: now,
+      timestamp: now,
+      title: decision === "shortlisted" ? "Application Shortlisted" : decision === "rejected" ? "Application Not Selected" : "Application Screened",
+      description: notes || `Candidate application screening completed (${decision}).`,
+    });
+
+    data.jobApplications[index] = app;
+    saveDb(data);
+    return app;
+  },
+
+  async updateApplicationInterview(
+    industryId: string,
+    applicationId: string,
+    interviewData: {
+      roundNumber?: number;
+      roundName?: string;
+      mode?: "Virtual" | "In-person" | "Hybrid";
+      scheduledAt?: string;
+      meetingLinkOrLocation?: string;
+      evaluationCriteria?: string;
+      score?: number;
+      feedback?: string;
+      decision?: "pending" | "passed" | "failed";
+      overallOutcome?: "in_progress" | "completed" | "cancelled";
+    }
+  ): Promise<JobApplicationRecord> {
+    const data = ensureDbExists();
+    if (!data.jobApplications) data.jobApplications = [];
+
+    const index = data.jobApplications.findIndex((a) => a.id === applicationId);
+    if (index === -1) {
+      throw new Error("Application not found.");
+    }
+
+    const app = data.jobApplications[index];
+
+    // Verify ownership
+    const post = (data.industryHiringPosts || []).find((p) => p.id === app.jobId);
+    const profile = (data.profiles || []).find((p) => p.userId === industryId);
+    const companyName = ((profile?.metadata?.companyName as string) || "").toLowerCase().trim();
+    const isOwner = (post && post.industryId === industryId) ||
+      (companyName && app.companyName && app.companyName.toLowerCase().trim() === companyName);
+
+    if (!isOwner) {
+      throw new Error("Unauthorized to update interviews for another organization.");
+    }
+
+    const now = new Date().toISOString();
+    if (!app.interviewRounds) app.interviewRounds = [];
+
+    const roundNum = interviewData.roundNumber || app.interviewRounds.length + 1;
+    const existingRoundIdx = app.interviewRounds.findIndex((r) => r.roundNumber === roundNum);
+
+    const roundRecord = {
+      roundNumber: roundNum,
+      roundName: interviewData.roundName || `Round ${roundNum}`,
+      mode: interviewData.mode || "Virtual",
+      scheduledAt: interviewData.scheduledAt,
+      meetingLinkOrLocation: interviewData.meetingLinkOrLocation,
+      evaluationCriteria: interviewData.evaluationCriteria,
+      score: interviewData.score,
+      feedback: interviewData.feedback,
+      decision: interviewData.decision || "pending",
+    };
+
+    if (existingRoundIdx !== -1) {
+      app.interviewRounds[existingRoundIdx] = {
+        ...app.interviewRounds[existingRoundIdx],
+        ...roundRecord,
+      };
+    } else {
+      app.interviewRounds.push(roundRecord);
+    }
+
+    app.interviewStatus = interviewData.overallOutcome || "scheduled";
+    app.status = "interview";
+    app.statusUpdatedAt = now;
+    app.updatedAt = now;
+
+    if (!app.timeline) app.timeline = [];
+    app.timeline.push({
+      id: `tl_${Date.now()}`,
+      status: "interview",
+      date: now,
+      timestamp: now,
+      title: `Interview ${roundRecord.roundName} Updated`,
+      description: `Evaluation decision: ${roundRecord.decision.toUpperCase()}. ${roundRecord.feedback || ""}`.trim(),
+    });
+
+    data.jobApplications[index] = app;
+    saveDb(data);
+    return app;
+  },
+
+  async updateFinalHiringDecision(
+    industryId: string,
+    applicationId: string,
+    decision: "selected" | "rejected",
+    offerDetails?: {
+      offeredRole?: string;
+      offeredCompensation?: string;
+      startDate?: string;
+      notes?: string;
+    }
+  ): Promise<JobApplicationRecord> {
+    const data = ensureDbExists();
+    if (!data.jobApplications) data.jobApplications = [];
+
+    const index = data.jobApplications.findIndex((a) => a.id === applicationId);
+    if (index === -1) {
+      throw new Error("Application not found.");
+    }
+
+    const app = data.jobApplications[index];
+
+    // Verify ownership
+    const post = (data.industryHiringPosts || []).find((p) => p.id === app.jobId);
+    const profile = (data.profiles || []).find((p) => p.userId === industryId);
+    const companyName = ((profile?.metadata?.companyName as string) || "").toLowerCase().trim();
+    const isOwner = (post && post.industryId === industryId) ||
+      (companyName && app.companyName && app.companyName.toLowerCase().trim() === companyName);
+
+    if (!isOwner) {
+      throw new Error("Unauthorized to set hiring decision for another organization.");
+    }
+
+    const now = new Date().toISOString();
+    app.finalStatus = decision;
+    app.finalDecisionDate = now;
+    app.status = decision === "selected" ? "selected" : "rejected";
+    app.statusUpdatedAt = now;
+    app.updatedAt = now;
+
+    if (offerDetails) {
+      app.offerDetails = offerDetails;
+    }
+
+    if (!app.timeline) app.timeline = [];
+    app.timeline.push({
+      id: `tl_${Date.now()}`,
+      status: app.status,
+      date: now,
+      timestamp: now,
+      title: decision === "selected" ? "Offer Extended / Candidate Selected" : "Application Not Selected",
+      description: decision === "selected"
+        ? `Congratulations! Candidate has been selected for ${offerDetails?.offeredRole || app.roleTitle || "the role"} at ${app.companyName}.`
+        : "Recruitment process concluded.",
+    });
+
+    data.jobApplications[index] = app;
+
+    // IF SELECTED: Persist to Student's Acquired Opportunities in their profile
+    if (decision === "selected" && app.studentId) {
+      if (!data.profiles) data.profiles = [];
+      let studentProfile = data.profiles.find((p) => p.userId === app.studentId);
+      if (!studentProfile) {
+        studentProfile = {
+          userId: app.studentId,
+          role: "student",
+          metadata: {},
+        };
+        data.profiles.push(studentProfile);
+      }
+
+      if (!studentProfile.metadata) studentProfile.metadata = {};
+      const existingAcquired = Array.isArray(studentProfile.metadata.acquiredOpportunities)
+        ? (studentProfile.metadata.acquiredOpportunities as Array<Record<string, unknown>>)
+        : [];
+
+      // Avoid duplicates for the same application/job
+      const alreadyAcquired = existingAcquired.some(
+        (opp) => opp.applicationId === app.id || (opp.hiringPostId && opp.hiringPostId === app.jobId)
+      );
+
+      if (!alreadyAcquired) {
+        existingAcquired.unshift({
+          applicationId: app.id,
+          hiringPostId: app.jobId,
+          roleTitle: offerDetails?.offeredRole || app.roleTitle || app.position || "Engineering Role",
+          companyName: app.companyName,
+          hiringType: app.employmentType || app.type || "Full-time",
+          status: "Acquired / Selected",
+          startDate: offerDetails?.startDate || undefined,
+          compensation: offerDetails?.offeredCompensation || app.salaryRange,
+          acquisitionDate: now,
+        });
+        studentProfile.metadata.acquiredOpportunities = existingAcquired;
+      }
+    }
+
+    saveDb(data);
+    return app;
+  },
 };
+

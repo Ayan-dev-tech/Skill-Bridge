@@ -560,6 +560,17 @@ export default function OpportunitiesPage() {
               </Card>
             );
           })}
+        {((activeTab === "all" && jobs.length === 0 && internships.length === 0) ||
+          (activeTab === "jobs" && jobs.length === 0) ||
+          (activeTab === "internships" && internships.length === 0)) && (
+          <Card className="border-border p-8 text-center bg-card">
+            <Briefcase className="w-8 h-8 text-muted-foreground mx-auto mb-2 opacity-50" />
+            <h3 className="text-sm font-semibold text-foreground">No opportunities currently available</h3>
+            <p className="text-xs text-muted-foreground mt-1 max-w-sm mx-auto">
+              There are currently no active openings matching this category. Please check back soon as industry partners regularly post new opportunities.
+            </p>
+          </Card>
+        )}
       </div>
 
       {/* 5. Comprehensive Opportunity & Application Modal */}

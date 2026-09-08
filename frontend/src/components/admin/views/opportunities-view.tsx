@@ -60,6 +60,56 @@ export function OpportunitiesView({ initialTab = "jobs" }: OpportunitiesViewProp
     setActiveTab(initialTab);
   }, [initialTab]);
 
+  // Authoritative Database Sync for Admin Opportunities
+  React.useEffect(() => {
+    async function loadAuthoritativeData() {
+      try {
+        const res = await fetch("/api/admin/overview");
+        const json = await res.json();
+        if (json.success && json.data) {
+          const industryPosts = json.data.industryHiringPosts || [];
+          const applications = json.data.jobApplications || [];
+
+          // Map industry hiring posts into Admin JobListing and InternshipListing formats
+          const realJobs: JobListing[] = industryPosts
+            .filter((p: any) => p.hiringType !== "Internship")
+            .map((p: any) => ({
+              id: p.id,
+              company: p.companyName,
+              position: p.roleTitle,
+              requiredSkills: p.requiredSkills || [],
+              eligibility: p.experienceRequirement || "Fresher / Direct Campus Drive",
+              location: `${p.location} (${p.workMode})`,
+              salary: p.salaryRange || "Competitive",
+              deadline: p.deadline ? new Date(p.deadline).toISOString().split("T")[0] : "Rolling",
+              applicationsCount: applications.filter((a: any) => a.jobId === p.id).length,
+              status: p.status === "published" ? "active" : p.status === "frozen" ? "frozen" : "pending",
+            }));
+
+          const realInternships: InternshipListing[] = industryPosts
+            .filter((p: any) => p.hiringType === "Internship")
+            .map((p: any) => ({
+              id: p.id,
+              company: p.companyName,
+              role: p.roleTitle,
+              duration: "6 Months",
+              requiredSkills: p.requiredSkills || [],
+              stipend: p.salaryRange || "₹25,000 / month",
+              deadline: p.deadline ? new Date(p.deadline).toISOString().split("T")[0] : "Rolling",
+              applicationsCount: applications.filter((a: any) => a.jobId === p.id).length,
+              status: p.status === "published" ? "active" : p.status === "frozen" ? "frozen" : "pending",
+            }));
+
+          setJobs([...realJobs, ...initialJobs]);
+          setInternships([...realInternships, ...initialInternships]);
+        }
+      } catch (err) {
+        console.error("Admin opportunities fetch error:", err);
+      }
+    }
+    loadAuthoritativeData();
+  }, []);
+
   // Toggle Job Freeze
   const handleToggleJobFreeze = (job: JobListing) => {
     const updated = jobs.map((j) => {

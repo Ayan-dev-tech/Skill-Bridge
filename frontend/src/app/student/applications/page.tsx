@@ -221,6 +221,84 @@ export default function ApplicationsPage() {
                     </div>
                   </CardHeader>
 
+                  {/* Interview Details (Section 4) */}
+                  {app.interviewRounds && app.interviewRounds.length > 0 && (
+                    <CardContent className="px-5 pb-4 pt-1 border-t border-border/60 mt-2">
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground block pt-2 mb-2">
+                        Interview Schedule & Evaluation
+                      </span>
+                      <div className="space-y-2">
+                        {app.interviewRounds.map((round) => (
+                          <div
+                            key={round.roundNumber}
+                            className="p-3 rounded-lg border border-border bg-muted/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs"
+                          >
+                            <div className="space-y-0.5">
+                              <div className="flex items-center gap-2">
+                                <span className="font-semibold text-foreground">{round.roundName}</span>
+                                <Badge variant="outline" className="text-[10px]">
+                                  {round.mode}
+                                </Badge>
+                                {round.decision && round.decision !== "pending" && (
+                                  <Badge
+                                    className={`text-[10px] ${
+                                      round.decision === "passed"
+                                        ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                                        : "bg-destructive/10 text-destructive border-destructive/20"
+                                    }`}
+                                  >
+                                    {round.decision.toUpperCase()}
+                                  </Badge>
+                                )}
+                              </div>
+                              {round.meetingLinkOrLocation && (
+                                <p className="text-[11px] text-muted-foreground">
+                                  Coordinates / Link: {round.meetingLinkOrLocation}
+                                </p>
+                              )}
+                              {round.feedback && (
+                                <p className="text-[11px] text-muted-foreground italic">
+                                  &ldquo;{round.feedback}&rdquo;
+                                </p>
+                              )}
+                            </div>
+                            {round.scheduledAt && (
+                              <span className="text-[10px] font-mono text-muted-foreground shrink-0">
+                                {new Date(round.scheduledAt).toLocaleString()}
+                              </span>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  )}
+
+                  {/* Final Offer Details (Section 5) */}
+                  {app.status === "selected" && app.offerDetails && (
+                    <CardContent className="px-5 pb-4 pt-1 border-t border-emerald-500/30 bg-emerald-500/5 mt-2">
+                      <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                        <div className="space-y-0.5">
+                          <span className="font-bold text-emerald-700 dark:text-emerald-300 flex items-center gap-1.5">
+                            <Sparkles className="w-3.5 h-3.5" /> Official Offer Received
+                          </span>
+                          <p className="text-[11px] text-emerald-800/80 dark:text-emerald-200/80">
+                            Role: {app.offerDetails.offeredRole || app.roleTitle} &bull; Compensation: {app.offerDetails.offeredCompensation || app.salaryRange}
+                          </p>
+                          {app.offerDetails.notes && (
+                            <p className="text-[11px] text-muted-foreground">
+                              Note: {app.offerDetails.notes}
+                            </p>
+                          )}
+                        </div>
+                        {app.offerDetails.startDate && (
+                          <span className="text-[10px] font-mono text-muted-foreground">
+                            Start Date: {new Date(app.offerDetails.startDate).toLocaleDateString()}
+                          </span>
+                        )}
+                      </div>
+                    </CardContent>
+                  )}
+
                   {/* Application Timeline Events */}
                   {app.timeline && app.timeline.length > 0 && (
                     <CardContent className="px-5 pb-4 pt-1 border-t border-border/60 mt-2">

@@ -68,7 +68,7 @@
       "id": "47fc1671-0e5d-4f66-af79-ca34f5e10ec5",
       "email": "ayanparmar54@gmail.com",
       "role": "student",
-      "passwordHash": "bc0d1176cbd5e71af0059c983012d1e1e0ec6f1498e7989d5bfbddb019496d3b",
+      "passwordHash": "pbkdf2:efdab69aca2937ab1e4daf65850a0245:b77ec685e0b7e2f6c11c2c7977d9e63c82a7648fca92b1234074c723d02842304f83f22a22da4633a107a18ecfe1dce3289313a1a7c13479faa07731c33fa874",
       "fullName": "Ayan Parmar",
       "isVerified": true,
       "createdAt": "2026-09-05T17:30:25.145Z"
@@ -1719,6 +1719,15 @@
       "isVerified": true,
       "createdAt": "2026-09-07T19:30:44.883Z",
       "passwordHash": "h"
+    },
+    {
+      "id": "1ff7662b-94c3-4c76-ac2d-039c6116499b",
+      "email": "stud@edu.in",
+      "role": "student",
+      "passwordHash": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+      "fullName": "Student",
+      "isVerified": true,
+      "createdAt": "2026-09-08T11:47:54.784Z"
     }
   ],
   "profiles": [
@@ -3109,6 +3118,52 @@
       },
       "createdAt": "2026-09-07T19:30:44.883Z",
       "updatedAt": "2026-09-07T19:30:44.883Z"
+    },
+    {
+      "userId": "stud_tester_1788867597684",
+      "role": "student",
+      "metadata": {
+        "acquiredOpportunities": [
+          {
+            "applicationId": "app_1788867597684_123",
+            "hiringPostId": "hire_1788867597784_becee7",
+            "roleTitle": "Senior AI Platform Engineer 1788867597684",
+            "companyName": "Apex AI Systems",
+            "hiringType": "Full-time",
+            "status": "Acquired / Selected",
+            "compensation": "₹22,00,000 - ₹35,00,000 / year",
+            "acquisitionDate": "2026-09-08T11:39:59.006Z"
+          }
+        ]
+      }
+    },
+    {
+      "userId": "stud_tester_1788867646557",
+      "role": "student",
+      "metadata": {
+        "acquiredOpportunities": [
+          {
+            "applicationId": "app_1788867646557_123",
+            "hiringPostId": "hire_1788867646619_58482a",
+            "roleTitle": "Senior AI Platform Engineer",
+            "companyName": "Apex AI Systems",
+            "hiringType": "Full-time",
+            "status": "Acquired / Selected",
+            "startDate": "2026-10-15",
+            "compensation": "₹28,00,000 / year",
+            "acquisitionDate": "2026-09-08T11:40:47.337Z"
+          }
+        ]
+      }
+    },
+    {
+      "userId": "1ff7662b-94c3-4c76-ac2d-039c6116499b",
+      "role": "student",
+      "metadata": {
+        "institution": "Stud",
+        "degree": "BCA",
+        "graduationYear": "2028"
+      }
     }
   ],
   "otps": [
@@ -4044,6 +4099,16 @@
       "attempts": 0,
       "verified": true,
       "createdAt": "2026-09-07T19:11:47.391Z"
+    },
+    {
+      "id": "052b7070-416d-4ab7-92f8-477e9196a5f4",
+      "email": "stud@edu.in",
+      "role": "student",
+      "otpCode": "568597",
+      "expiresAt": "2026-09-08T11:57:55.809Z",
+      "attempts": 0,
+      "verified": true,
+      "createdAt": "2026-09-08T11:47:55.809Z"
     }
   ],
   "hiringRequests": [
@@ -5097,6 +5162,39 @@
       "status": "COMPLETED",
       "createdAt": "2026-09-07T19:30:44.883Z",
       "updatedAt": "2026-09-07T19:30:44.883Z"
+    },
+    {
+      "id": "profile_1788868271624_6jpd8",
+      "studentId": "1ff7662b-94c3-4c76-ac2d-039c6116499b",
+      "sessionId": "session_1788868168553_zvs8l",
+      "confirmedMainDomain": "Cybersecurity & Defense",
+      "confirmedMainDomainId": "security",
+      "confirmedSpecificInterest": "Application Security & Vulnerability Research",
+      "explanation": "Your answers demonstrate an inclination for finding obscure code weaknesses, analyzing data validation flaws, and safeguarding user applications before deployment.",
+      "confidence": 0.87,
+      "interestSignals": {
+        "investigation": 2.3,
+        "problemSolving": 3.2,
+        "building": 0.4,
+        "creativity": 0,
+        "analysis": 0.7,
+        "experimentation": 0,
+        "optimization": 0.7,
+        "systemsThinking": 0.6,
+        "dataOrientation": 0,
+        "automation": 0.6,
+        "securityMindset": 5.2
+      },
+      "candidateDomainScores": {
+        "ai-ml": 0.19,
+        "cloud": 0.18,
+        "web": 0.12,
+        "security": 1,
+        "software": 0.46
+      },
+      "phase1AnswerCount": 4,
+      "phase2AnswerCount": 3,
+      "confirmedAt": "2026-09-08T11:51:11.624Z"
     }
   ],
   "interestSessions": [
@@ -5378,6 +5476,139 @@
       },
       "status": "confirmed",
       "updatedAt": "2026-09-07T10:55:01.299Z",
+      "broadDomain": "security"
+    },
+    {
+      "studentId": "1ff7662b-94c3-4c76-ac2d-039c6116499b",
+      "sessionId": "session_1788868168553_zvs8l",
+      "phase": 2,
+      "answers": [
+        {
+          "questionId": "p1-q1-anomaly",
+          "questionText": "You notice that a web application produces an unexpected, distorted response whenever a user enters non-standard characters in an input form. What would you be most excited to do?",
+          "selectedOptionId": "p1-q1-opt-b",
+          "selectedOptionText": "Analyze the server's input-handling logic and optimize the parsing function so it executes cleanly and safely without crashing.",
+          "phase": 1,
+          "signalDelta": {
+            "problemSolving": 0.8,
+            "optimization": 0.7,
+            "building": 0.4
+          },
+          "domainDelta": {
+            "software": 0.8,
+            "web": 0.5
+          }
+        },
+        {
+          "questionId": "p1-q2-data-records",
+          "questionText": "You are handed a raw dataset containing millions of event records from an online platform over the past year. Where does your curiosity take you first?",
+          "selectedOptionId": "p1-q2-opt-b",
+          "selectedOptionText": "Inspect timestamps and authentication logs to trace any suspicious access patterns or unauthorized privileges.",
+          "phase": 1,
+          "signalDelta": {
+            "investigation": 0.8,
+            "securityMindset": 0.8,
+            "analysis": 0.7
+          },
+          "domainDelta": {
+            "security": 0.85
+          }
+        },
+        {
+          "questionId": "p1-q3-repetitive-task",
+          "questionText": "A development team manually spends four hours every Friday packaging and deploying software releases to multiple servers. What is your reaction?",
+          "selectedOptionId": "p1-q3-opt-b",
+          "selectedOptionText": "Embed automated vulnerability scanners and integrity checks into the pipeline to block insecure releases.",
+          "phase": 1,
+          "signalDelta": {
+            "securityMindset": 0.9,
+            "automation": 0.6,
+            "investigation": 0.6
+          },
+          "domainDelta": {
+            "security": 0.85
+          }
+        },
+        {
+          "questionId": "p1-q4-system-failure",
+          "questionText": "A critical service begins freezing during peak hours, yet no crash error logs are generated. What approach do you instinctively reach for?",
+          "selectedOptionId": "p1-q4-opt-b",
+          "selectedOptionText": "Audit incoming network packets and connection states to verify whether an external entity is exhausting server connections deliberately.",
+          "phase": 1,
+          "signalDelta": {
+            "investigation": 0.9,
+            "securityMindset": 0.8,
+            "systemsThinking": 0.6
+          },
+          "domainDelta": {
+            "security": 0.85
+          }
+        },
+        {
+          "questionId": "p2-sec-q1-focus",
+          "questionText": "Within Cybersecurity & Defense, which kind of challenge sounds most captivating to you?",
+          "selectedOptionId": "p2-sec-q1-pentest",
+          "selectedOptionText": "Acting as an authorized ethical hacker to test enterprise perimeter defenses, chained vulnerabilities, and privilege escalation pathways.",
+          "phase": 2,
+          "signalDelta": {
+            "securityMindset": 0.9,
+            "problemSolving": 0.8
+          },
+          "domainDelta": {
+            "security": 1
+          }
+        },
+        {
+          "questionId": "p2-sec-q2-scenario",
+          "questionText": "You are tasked with securing an organization against unauthorized access. Which activity would you find most satisfying?",
+          "selectedOptionId": "p2-sec-q2-pentest",
+          "selectedOptionText": "Conducting an offensive black-box assessment against a newly launched service to identify whether sensitive tenant data can be exposed.",
+          "phase": 2,
+          "signalDelta": {
+            "securityMindset": 0.9,
+            "problemSolving": 0.8
+          },
+          "domainDelta": {
+            "security": 1
+          }
+        },
+        {
+          "questionId": "p2-sec-q3-depth",
+          "questionText": "What type of security artifact or project would you be proudest to publish on your engineering portfolio?",
+          "selectedOptionId": "p2-sec-q3-pentest",
+          "selectedOptionText": "A proof-of-concept offensive security tool demonstrating how chained configuration weaknesses can be uncovered before adversaries find them.",
+          "phase": 2,
+          "signalDelta": {
+            "securityMindset": 0.9,
+            "problemSolving": 0.8
+          },
+          "domainDelta": {
+            "security": 1
+          }
+        }
+      ],
+      "signalScores": {
+        "investigation": 2.3,
+        "problemSolving": 3.2,
+        "building": 0.4,
+        "creativity": 0,
+        "analysis": 0.7,
+        "experimentation": 0,
+        "optimization": 0.7,
+        "systemsThinking": 0.6,
+        "dataOrientation": 0,
+        "automation": 0.6,
+        "securityMindset": 5.2
+      },
+      "domainScores": {
+        "ai-ml": 0.19,
+        "cloud": 0.18,
+        "web": 0.12,
+        "security": 1,
+        "software": 0.46
+      },
+      "status": "confirmed",
+      "updatedAt": "2026-09-08T11:51:05.369Z",
       "broadDomain": "security"
     }
   ],
@@ -21301,6 +21532,442 @@
       "status": "completed",
       "startedAt": "2026-09-07T11:59:42.183Z",
       "updatedAt": "2026-09-07T11:59:42.343Z"
+    },
+    {
+      "sessionId": "ktest_1788868286638_bultf",
+      "studentId": "1ff7662b-94c3-4c76-ac2d-039c6116499b",
+      "domainId": "security",
+      "domainName": "Cybersecurity & Defense",
+      "specificInterest": "Application Security & Vulnerability Research",
+      "difficulty": "advanced",
+      "questions": [
+        {
+          "id": "sec-adv-1",
+          "questionText": "What underlying microarchitectural processor mechanism enables Spectre speculative execution side-channel attacks?",
+          "options": [
+            {
+              "id": "sec-adv-1-b",
+              "label": "A",
+              "text": "Memory management unit page table fragmentation allowing unprivileged user space to read kernel frames"
+            },
+            {
+              "id": "sec-adv-1-d",
+              "label": "B",
+              "text": "Improper cyclic redundancy checks on L1 data cache lines during asynchronous direct memory access"
+            },
+            {
+              "id": "sec-adv-1-a",
+              "label": "C",
+              "text": "Branch predictors executing instructions speculatively past bounds checks and leaving cache timing traces"
+            },
+            {
+              "id": "sec-adv-1-c",
+              "label": "D",
+              "text": "Hardware thermal throttling desynchronizing clock cycles between physical processor execution cores"
+            }
+          ],
+          "correctOptionId": "sec-adv-1-a",
+          "difficulty": "advanced",
+          "complexity": "fundamental",
+          "conceptTag": "spectre-microarchitectural-flaw",
+          "explanationAfterAnswer": "Spectre exploits speculative execution where CPUs predict branch targets and execute code before bounds checks complete. When squashed, cache state changes persist and leak data via timing attacks.",
+          "questionNumber": 1
+        },
+        {
+          "id": "sec-adv-2",
+          "questionText": "In modern binary exploitation, what is the primary purpose of Return-Oriented Programming (ROP)?",
+          "options": [
+            {
+              "id": "sec-adv-2-b",
+              "label": "A",
+              "text": "To defeat Data Execution Prevention (W^X / DEP) by chaining existing executable instruction sequences ending in ret"
+            },
+            {
+              "id": "sec-adv-2-d",
+              "label": "B",
+              "text": "To execute kernel shellcode by directly corrupting the hardware interrupt descriptor table from user space"
+            },
+            {
+              "id": "sec-adv-2-c",
+              "label": "C",
+              "text": "To accelerate reverse engineering by translating raw assembly opcodes into structured control flow graphs"
+            },
+            {
+              "id": "sec-adv-2-a",
+              "label": "D",
+              "text": "To defeat Address Space Layout Randomization by brute-forcing fixed virtual memory offsets in running processes"
+            }
+          ],
+          "correctOptionId": "sec-adv-2-b",
+          "difficulty": "advanced",
+          "complexity": "application",
+          "conceptTag": "rop-dep-bypass",
+          "explanationAfterAnswer": "When memory regions are marked non-executable (DEP/NX), ROP circumvents this by reusing existing snippets of executable binary code ('gadgets') ending in return instructions to build arbitrary logic.",
+          "questionNumber": 2
+        },
+        {
+          "id": "sec-adv-3",
+          "questionText": "How is Kernel Address Space Layout Randomization (KASLR) typically defeated during exploit development?",
+          "options": [
+            {
+              "id": "sec-adv-3-a",
+              "label": "A",
+              "text": "By transmitting high-volume ICMP echo requests to exhaust kernel socket buffer memory allocations"
+            },
+            {
+              "id": "sec-adv-3-c",
+              "label": "B",
+              "text": "By using an information leak vulnerability that reveals a kernel pointer to calculate the randomized base offset"
+            },
+            {
+              "id": "sec-adv-3-b",
+              "label": "C",
+              "text": "By corrupting the system real-time clock to desynchronize kernel random number generator initialization"
+            },
+            {
+              "id": "sec-adv-3-d",
+              "label": "D",
+              "text": "By modifying system security limits in user space configuration files to exceed kernel allocation limits"
+            }
+          ],
+          "correctOptionId": "sec-adv-3-c",
+          "difficulty": "advanced",
+          "complexity": "application",
+          "conceptTag": "kaslr-bypass-infoleak",
+          "explanationAfterAnswer": "KASLR randomizes the base memory location of kernel code. Attackers leverage an information disclosure bug that leaks a known kernel function pointer to calculate the base slide offset.",
+          "questionNumber": 3
+        },
+        {
+          "id": "sec-adv-4",
+          "questionText": "In Kubernetes, which container configuration enables an attacker to perform a host node breakout?",
+          "options": [
+            {
+              "id": "sec-adv-4-d",
+              "label": "A",
+              "text": "Running in privileged mode with hostPID and hostNetwork enabled or the host filesystem mounted read-write"
+            },
+            {
+              "id": "sec-adv-4-a",
+              "label": "B",
+              "text": "Configuring the pod to resolve DNS through cluster CoreDNS services rather than node-local caching daemons"
+            },
+            {
+              "id": "sec-adv-4-b",
+              "label": "C",
+              "text": "Attaching a Horizontal Pod Autoscaler that adjusts pod replica counts based on CPU utilization metrics"
+            },
+            {
+              "id": "sec-adv-4-c",
+              "label": "D",
+              "text": "Deploying a container image built on minimal Alpine Linux rather than an enterprise Linux distribution"
+            }
+          ],
+          "correctOptionId": "sec-adv-4-d",
+          "difficulty": "advanced",
+          "complexity": "application",
+          "conceptTag": "container-escape-privilege",
+          "explanationAfterAnswer": "Privileged containers disable Linux cgroup and namespace isolation. Access to host devices or the root filesystem allows escape via chroot, device access, or cgroup release agent manipulation.",
+          "questionNumber": 4
+        },
+        {
+          "id": "sec-adv-5",
+          "questionText": "What condition permits an attacker to perform a Blind Time-Based SQL Injection attack against an API?",
+          "options": [
+            {
+              "id": "sec-adv-5-c",
+              "label": "A",
+              "text": "The database connection pool suffers from connection starvation due to unindexed queries on large tables"
+            },
+            {
+              "id": "sec-adv-5-b",
+              "label": "B",
+              "text": "The database server exposes detailed error stack traces and internal schema definitions in HTTP 500 responses"
+            },
+            {
+              "id": "sec-adv-5-d",
+              "label": "C",
+              "text": "The application communicates with the database over an unencrypted network connection without TLS verification"
+            },
+            {
+              "id": "sec-adv-5-a",
+              "label": "D",
+              "text": "The endpoint returns identical responses regardless of query results, but evaluates injected delay functions"
+            }
+          ],
+          "correctOptionId": "sec-adv-5-a",
+          "difficulty": "advanced",
+          "complexity": "challenging",
+          "conceptTag": "blind-time-based-sqli",
+          "explanationAfterAnswer": "When an application leaks no data or differential error messages, an attacker injects conditional time-delay commands (like pg_sleep or WAITFOR DELAY) to infer data bit-by-bit from response times.",
+          "questionNumber": 5
+        },
+        {
+          "id": "sec-adv-6",
+          "questionText": "In SAML 2.0 implementations, what design flaw enables XML Signature Wrapping (XSW) attacks?",
+          "options": [
+            {
+              "id": "sec-adv-6-a",
+              "label": "A",
+              "text": "A mismatch between the XML structure used during signature canonicalization and that interpreted by the app"
+            },
+            {
+              "id": "sec-adv-6-b",
+              "label": "B",
+              "text": "A mismatch between the XML node validated by the signature verifier and the node consumed by business logic"
+            },
+            {
+              "id": "sec-adv-6-c",
+              "label": "C",
+              "text": "A mismatch between namespace resolution during signature verification and resolution during assertion processing"
+            },
+            {
+              "id": "sec-adv-6-d",
+              "label": "D",
+              "text": "A mismatch between schema validation of the assertion and resolution of referenced signed element identifiers"
+            }
+          ],
+          "correctOptionId": "sec-adv-6-b",
+          "difficulty": "advanced",
+          "complexity": "challenging",
+          "conceptTag": "saml-xml-signature-wrapping",
+          "explanationAfterAnswer": "XSW exploits architectural discrepancies where signature verification validates an intact assertion, while business logic retrieves user claims from an unsigned, wrapped element elsewhere in the DOM.",
+          "questionNumber": 6
+        },
+        {
+          "id": "sec-adv-7",
+          "questionText": "What cryptographic flaw made WPA2's 4-way handshake vulnerable to Key Reinstallation Attacks (KRACK)?",
+          "options": [
+            {
+              "id": "sec-adv-7-a",
+              "label": "A",
+              "text": "The access point using weak Diffie-Hellman primes that allow pre-computation attacks against session keys"
+            },
+            {
+              "id": "sec-adv-7-b",
+              "label": "B",
+              "text": "The authentication server transmitting the master pre-shared key in plaintext beacon frames during discovery"
+            },
+            {
+              "id": "sec-adv-7-d",
+              "label": "C",
+              "text": "The wireless controller generating predictable initialization vectors during RC4 stream cipher encapsulation"
+            },
+            {
+              "id": "sec-adv-7-c",
+              "label": "D",
+              "text": "The client reinstalling an in-use pairwise key upon receiving retransmitted Message 3, resetting the packet counter"
+            }
+          ],
+          "correctOptionId": "sec-adv-7-c",
+          "difficulty": "advanced",
+          "complexity": "challenging",
+          "conceptTag": "krack-wpa2-handshake",
+          "explanationAfterAnswer": "KRACK exploits Message 3 retransmission. When re-received, vulnerable clients reinstall the already active PTK and reset its transmit replay counter (nonce), enabling keystream reuse attacks.",
+          "questionNumber": 7
+        },
+        {
+          "id": "sec-adv-8",
+          "questionText": "Why is ML-KEM (Kyber) categorized as lattice-based post-quantum cryptography?",
+          "options": [
+            {
+              "id": "sec-adv-8-c",
+              "label": "A",
+              "text": "It generates symmetric one-time pads derived from cosmic background radiation sensors embedded in security modules"
+            },
+            {
+              "id": "sec-adv-8-b",
+              "label": "B",
+              "text": "It utilizes super-singular elliptic curve isogenies requiring exponential classical resources to compute path morphisms"
+            },
+            {
+              "id": "sec-adv-8-d",
+              "label": "C",
+              "text": "Its security relies on high-dimensional lattice vector problems that cannot be solved efficiently by Shor's algorithm"
+            },
+            {
+              "id": "sec-adv-8-a",
+              "label": "D",
+              "text": "It employs quantum key distribution channels that leverage photon entanglement to detect eavesdropping on optical lines"
+            }
+          ],
+          "correctOptionId": "sec-adv-8-d",
+          "difficulty": "advanced",
+          "complexity": "challenging",
+          "conceptTag": "post-quantum-lattice-crypto",
+          "explanationAfterAnswer": "ML-KEM security reduces to the Module Learning with Errors (M-LWE) problem over high-dimensional lattices, which resists both classical algorithms and quantum attacks based on Shor's algorithm.",
+          "questionNumber": 8
+        },
+        {
+          "id": "sec-adv-9",
+          "questionText": "In eBPF security observability tooling, how can a root-privileged adversary attempt to blind kernel telemetry?",
+          "options": [
+            {
+              "id": "sec-adv-9-d",
+              "label": "A",
+              "text": "By adjusting system timezone configurations to create clock drift between worker nodes and the control plane"
+            },
+            {
+              "id": "sec-adv-9-c",
+              "label": "B",
+              "text": "By installing unapproved compilers on the host worker node to trigger local static binary analysis warnings"
+            },
+            {
+              "id": "sec-adv-9-b",
+              "label": "C",
+              "text": "By modifying userspace /etc/resolv.conf configuration files to redirect internal DNS queries to external resolvers"
+            },
+            {
+              "id": "sec-adv-9-a",
+              "label": "D",
+              "text": "By detaching kernel tracepoints via bpf syscalls or flooding the ring buffer to induce massive unlogged event drops"
+            }
+          ],
+          "correctOptionId": "sec-adv-9-a",
+          "difficulty": "advanced",
+          "complexity": "challenging",
+          "conceptTag": "ebpf-telemetry-evasion",
+          "explanationAfterAnswer": "An adversary with root or CAP_BPF can interact directly with the bpf() syscall to detach attached probes, corrupt BPF maps, or generate high-volume synthetic events to overflow ring buffers.",
+          "questionNumber": 9
+        },
+        {
+          "id": "sec-adv-10",
+          "questionText": "Which defense mechanism specifically protects cloud instance metadata endpoints (169.254.169.254) against SSRF?",
+          "options": [
+            {
+              "id": "sec-adv-10-a",
+              "label": "A",
+              "text": "Configuring public DNS records to map internal private IP subnets to corporate reverse proxy load balancers"
+            },
+            {
+              "id": "sec-adv-10-b",
+              "label": "B",
+              "text": "Enforcing IMDSv2 requiring session-oriented PUT requests with signed token headers alongside strict egress filtering"
+            },
+            {
+              "id": "sec-adv-10-d",
+              "label": "C",
+              "text": "Enforcing multi-factor authentication on all administrative SSH connections established to worker compute nodes"
+            },
+            {
+              "id": "sec-adv-10-c",
+              "label": "D",
+              "text": "Encoding all outbound HTTP request bodies into base64 strings before transmitting them over network gateways"
+            }
+          ],
+          "correctOptionId": "sec-adv-10-b",
+          "difficulty": "advanced",
+          "complexity": "challenging",
+          "conceptTag": "imdsv2-ssrf-mitigation",
+          "explanationAfterAnswer": "IMDSv2 requires clients to first execute a PUT request to generate a session token (which standard SSRF vectors cannot easily forge) before querying metadata, and sets token hop limits to block proxies.",
+          "questionNumber": 10
+        }
+      ],
+      "answers": [
+        {
+          "questionId": "sec-adv-1",
+          "questionNumber": 1,
+          "selectedOptionId": "sec-adv-1-a",
+          "correctOptionId": "sec-adv-1-a",
+          "isCorrect": true,
+          "timeSpentMs": 25131,
+          "conceptTag": "spectre-microarchitectural-flaw",
+          "complexity": "fundamental"
+        },
+        {
+          "questionId": "sec-adv-2",
+          "questionNumber": 2,
+          "selectedOptionId": "sec-adv-2-b",
+          "correctOptionId": "sec-adv-2-b",
+          "isCorrect": true,
+          "timeSpentMs": 45957,
+          "conceptTag": "rop-dep-bypass",
+          "complexity": "application"
+        },
+        {
+          "questionId": "sec-adv-3",
+          "questionNumber": 3,
+          "selectedOptionId": "sec-adv-3-c",
+          "correctOptionId": "sec-adv-3-c",
+          "isCorrect": true,
+          "timeSpentMs": 16181,
+          "conceptTag": "kaslr-bypass-infoleak",
+          "complexity": "application"
+        },
+        {
+          "questionId": "sec-adv-4",
+          "questionNumber": 4,
+          "selectedOptionId": "sec-adv-4-d",
+          "correctOptionId": "sec-adv-4-d",
+          "isCorrect": true,
+          "timeSpentMs": 14569,
+          "conceptTag": "container-escape-privilege",
+          "complexity": "application"
+        },
+        {
+          "questionId": "sec-adv-5",
+          "questionNumber": 5,
+          "selectedOptionId": "sec-adv-5-a",
+          "correctOptionId": "sec-adv-5-a",
+          "isCorrect": true,
+          "timeSpentMs": 11745,
+          "conceptTag": "blind-time-based-sqli",
+          "complexity": "challenging"
+        },
+        {
+          "questionId": "sec-adv-6",
+          "questionNumber": 6,
+          "selectedOptionId": "sec-adv-6-b",
+          "correctOptionId": "sec-adv-6-b",
+          "isCorrect": true,
+          "timeSpentMs": 8071,
+          "conceptTag": "saml-xml-signature-wrapping",
+          "complexity": "challenging"
+        },
+        {
+          "questionId": "sec-adv-7",
+          "questionNumber": 7,
+          "selectedOptionId": "sec-adv-7-c",
+          "correctOptionId": "sec-adv-7-c",
+          "isCorrect": true,
+          "timeSpentMs": 11507,
+          "conceptTag": "krack-wpa2-handshake",
+          "complexity": "challenging"
+        },
+        {
+          "questionId": "sec-adv-8",
+          "questionNumber": 8,
+          "selectedOptionId": "sec-adv-8-d",
+          "correctOptionId": "sec-adv-8-d",
+          "isCorrect": true,
+          "timeSpentMs": 11873,
+          "conceptTag": "post-quantum-lattice-crypto",
+          "complexity": "challenging"
+        },
+        {
+          "questionId": "sec-adv-9",
+          "questionNumber": 9,
+          "selectedOptionId": "sec-adv-9-a",
+          "correctOptionId": "sec-adv-9-a",
+          "isCorrect": true,
+          "timeSpentMs": 13533,
+          "conceptTag": "ebpf-telemetry-evasion",
+          "complexity": "challenging"
+        },
+        {
+          "questionId": "sec-adv-10",
+          "questionNumber": 10,
+          "selectedOptionId": "sec-adv-10-a",
+          "correctOptionId": "sec-adv-10-b",
+          "isCorrect": false,
+          "timeSpentMs": 4362,
+          "conceptTag": "imdsv2-ssrf-mitigation",
+          "complexity": "challenging"
+        }
+      ],
+      "currentQuestionIndex": 10,
+      "status": "completed",
+      "startedAt": "2026-09-08T11:51:26.638Z",
+      "updatedAt": "2026-09-08T11:55:17.516Z"
     }
   ],
   "knowledgeTestResults": [
@@ -24837,6 +25504,141 @@
         "SQL"
       ],
       "completedAt": "2026-09-07T19:30:44.883Z"
+    },
+    {
+      "id": "result_1788868517698_utl6p",
+      "studentId": "1ff7662b-94c3-4c76-ac2d-039c6116499b",
+      "sessionId": "ktest_1788868286638_bultf",
+      "domainId": "security",
+      "domainName": "Cybersecurity & Defense",
+      "specificInterest": "Application Security & Vulnerability Research",
+      "difficulty": "advanced",
+      "totalQuestions": 10,
+      "correctCount": 9,
+      "score": 36,
+      "maxScore": 40,
+      "pointsPerQuestion": 4,
+      "scorePercent": 90,
+      "performanceTier": "Expert",
+      "knowledgeLevel": "Expert",
+      "strengths": [
+        "Spectre Microarchitectural Flaw",
+        "Rop Dep Bypass",
+        "Kaslr Bypass Infoleak",
+        "Container Escape Privilege",
+        "Blind Time Based Sqli",
+        "Saml Xml Signature Wrapping",
+        "Krack Wpa2 Handshake",
+        "Post Quantum Lattice Crypto",
+        "Ebpf Telemetry Evasion"
+      ],
+      "weaknesses": [
+        "Imdsv2 Ssrf Mitigation"
+      ],
+      "questionBreakdown": [
+        {
+          "questionNumber": 1,
+          "questionText": "What underlying microarchitectural processor mechanism enables Spectre speculative execution side-channel attacks?",
+          "selectedOption": "Branch predictors executing instructions speculatively past bounds checks and leaving cache timing traces",
+          "correctOption": "Branch predictors executing instructions speculatively past bounds checks and leaving cache timing traces",
+          "isCorrect": true,
+          "conceptTag": "Spectre Microarchitectural Flaw",
+          "complexity": "fundamental",
+          "explanation": "Spectre exploits speculative execution where CPUs predict branch targets and execute code before bounds checks complete. When squashed, cache state changes persist and leak data via timing attacks."
+        },
+        {
+          "questionNumber": 2,
+          "questionText": "In modern binary exploitation, what is the primary purpose of Return-Oriented Programming (ROP)?",
+          "selectedOption": "To defeat Data Execution Prevention (W^X / DEP) by chaining existing executable instruction sequences ending in ret",
+          "correctOption": "To defeat Data Execution Prevention (W^X / DEP) by chaining existing executable instruction sequences ending in ret",
+          "isCorrect": true,
+          "conceptTag": "Rop Dep Bypass",
+          "complexity": "application",
+          "explanation": "When memory regions are marked non-executable (DEP/NX), ROP circumvents this by reusing existing snippets of executable binary code ('gadgets') ending in return instructions to build arbitrary logic."
+        },
+        {
+          "questionNumber": 3,
+          "questionText": "How is Kernel Address Space Layout Randomization (KASLR) typically defeated during exploit development?",
+          "selectedOption": "By using an information leak vulnerability that reveals a kernel pointer to calculate the randomized base offset",
+          "correctOption": "By using an information leak vulnerability that reveals a kernel pointer to calculate the randomized base offset",
+          "isCorrect": true,
+          "conceptTag": "Kaslr Bypass Infoleak",
+          "complexity": "application",
+          "explanation": "KASLR randomizes the base memory location of kernel code. Attackers leverage an information disclosure bug that leaks a known kernel function pointer to calculate the base slide offset."
+        },
+        {
+          "questionNumber": 4,
+          "questionText": "In Kubernetes, which container configuration enables an attacker to perform a host node breakout?",
+          "selectedOption": "Running in privileged mode with hostPID and hostNetwork enabled or the host filesystem mounted read-write",
+          "correctOption": "Running in privileged mode with hostPID and hostNetwork enabled or the host filesystem mounted read-write",
+          "isCorrect": true,
+          "conceptTag": "Container Escape Privilege",
+          "complexity": "application",
+          "explanation": "Privileged containers disable Linux cgroup and namespace isolation. Access to host devices or the root filesystem allows escape via chroot, device access, or cgroup release agent manipulation."
+        },
+        {
+          "questionNumber": 5,
+          "questionText": "What condition permits an attacker to perform a Blind Time-Based SQL Injection attack against an API?",
+          "selectedOption": "The endpoint returns identical responses regardless of query results, but evaluates injected delay functions",
+          "correctOption": "The endpoint returns identical responses regardless of query results, but evaluates injected delay functions",
+          "isCorrect": true,
+          "conceptTag": "Blind Time Based Sqli",
+          "complexity": "challenging",
+          "explanation": "When an application leaks no data or differential error messages, an attacker injects conditional time-delay commands (like pg_sleep or WAITFOR DELAY) to infer data bit-by-bit from response times."
+        },
+        {
+          "questionNumber": 6,
+          "questionText": "In SAML 2.0 implementations, what design flaw enables XML Signature Wrapping (XSW) attacks?",
+          "selectedOption": "A mismatch between the XML node validated by the signature verifier and the node consumed by business logic",
+          "correctOption": "A mismatch between the XML node validated by the signature verifier and the node consumed by business logic",
+          "isCorrect": true,
+          "conceptTag": "Saml Xml Signature Wrapping",
+          "complexity": "challenging",
+          "explanation": "XSW exploits architectural discrepancies where signature verification validates an intact assertion, while business logic retrieves user claims from an unsigned, wrapped element elsewhere in the DOM."
+        },
+        {
+          "questionNumber": 7,
+          "questionText": "What cryptographic flaw made WPA2's 4-way handshake vulnerable to Key Reinstallation Attacks (KRACK)?",
+          "selectedOption": "The client reinstalling an in-use pairwise key upon receiving retransmitted Message 3, resetting the packet counter",
+          "correctOption": "The client reinstalling an in-use pairwise key upon receiving retransmitted Message 3, resetting the packet counter",
+          "isCorrect": true,
+          "conceptTag": "Krack Wpa2 Handshake",
+          "complexity": "challenging",
+          "explanation": "KRACK exploits Message 3 retransmission. When re-received, vulnerable clients reinstall the already active PTK and reset its transmit replay counter (nonce), enabling keystream reuse attacks."
+        },
+        {
+          "questionNumber": 8,
+          "questionText": "Why is ML-KEM (Kyber) categorized as lattice-based post-quantum cryptography?",
+          "selectedOption": "Its security relies on high-dimensional lattice vector problems that cannot be solved efficiently by Shor's algorithm",
+          "correctOption": "Its security relies on high-dimensional lattice vector problems that cannot be solved efficiently by Shor's algorithm",
+          "isCorrect": true,
+          "conceptTag": "Post Quantum Lattice Crypto",
+          "complexity": "challenging",
+          "explanation": "ML-KEM security reduces to the Module Learning with Errors (M-LWE) problem over high-dimensional lattices, which resists both classical algorithms and quantum attacks based on Shor's algorithm."
+        },
+        {
+          "questionNumber": 9,
+          "questionText": "In eBPF security observability tooling, how can a root-privileged adversary attempt to blind kernel telemetry?",
+          "selectedOption": "By detaching kernel tracepoints via bpf syscalls or flooding the ring buffer to induce massive unlogged event drops",
+          "correctOption": "By detaching kernel tracepoints via bpf syscalls or flooding the ring buffer to induce massive unlogged event drops",
+          "isCorrect": true,
+          "conceptTag": "Ebpf Telemetry Evasion",
+          "complexity": "challenging",
+          "explanation": "An adversary with root or CAP_BPF can interact directly with the bpf() syscall to detach attached probes, corrupt BPF maps, or generate high-volume synthetic events to overflow ring buffers."
+        },
+        {
+          "questionNumber": 10,
+          "questionText": "Which defense mechanism specifically protects cloud instance metadata endpoints (169.254.169.254) against SSRF?",
+          "selectedOption": "Configuring public DNS records to map internal private IP subnets to corporate reverse proxy load balancers",
+          "correctOption": "Enforcing IMDSv2 requiring session-oriented PUT requests with signed token headers alongside strict egress filtering",
+          "isCorrect": false,
+          "conceptTag": "Imdsv2 Ssrf Mitigation",
+          "complexity": "challenging",
+          "explanation": "IMDSv2 requires clients to first execute a PUT request to generate a session token (which standard SSRF vectors cannot easily forge) before querying metadata, and sets token hop limits to block proxies."
+        }
+      ],
+      "totalTimeMs": 162929,
+      "completedAt": "2026-09-08T11:55:17.699Z"
     }
   ],
   "studentVerifications": [
@@ -32866,6 +33668,67 @@
       "documents": [],
       "createdAt": "2026-09-07T19:38:52.738Z",
       "updatedAt": "2026-09-07T19:38:52.739Z"
+    },
+    {
+      "studentId": "1ff7662b-94c3-4c76-ac2d-039c6116499b",
+      "verificationStatus": "VERIFIED",
+      "documents": [
+        {
+          "id": "0d2ddfbc-adbd-4d2d-aeee-1521489c01e5",
+          "studentId": "1ff7662b-94c3-4c76-ac2d-039c6116499b",
+          "documentType": "student_id",
+          "fileName": "id card.png",
+          "fileType": "image/png",
+          "fileSizeBytes": 672388,
+          "storagePath": "student/1ff7662b-94c3-4c76-ac2d-039c6116499b/documents/student_id/0d2ddfbc-adbd-4d2d-aeee-1521489c01e5/student_id_1788868133201.png",
+          "uploadedAt": "2026-09-08T11:48:53.366Z",
+          "uploadStatus": "completed"
+        },
+        {
+          "id": "75ed284c-9497-4bef-b777-268d6e375ecf",
+          "studentId": "1ff7662b-94c3-4c76-ac2d-039c6116499b",
+          "documentType": "passport_photo",
+          "fileName": "Passport size photo.jpeg",
+          "fileType": "image/jpeg",
+          "fileSizeBytes": 115729,
+          "storagePath": "student/1ff7662b-94c3-4c76-ac2d-039c6116499b/documents/passport_photo/75ed284c-9497-4bef-b777-268d6e375ecf/passport_photo_1788868147691.jpeg",
+          "uploadedAt": "2026-09-08T11:49:07.740Z",
+          "uploadStatus": "completed"
+        },
+        {
+          "id": "bb3f72cb-0257-4c69-b023-8624fc2bd00c",
+          "studentId": "1ff7662b-94c3-4c76-ac2d-039c6116499b",
+          "documentType": "post_graduation_marksheet",
+          "groupId": "post_graduation_marksheet",
+          "fileName": "12.jpeg",
+          "fileType": "image/jpeg",
+          "fileSizeBytes": 236429,
+          "storagePath": "student/1ff7662b-94c3-4c76-ac2d-039c6116499b/documents/post_graduation_marksheet/bb3f72cb-0257-4c69-b023-8624fc2bd00c/post_graduation_marksheet_1788868149009.jpeg",
+          "uploadedAt": "2026-09-08T11:49:09.039Z",
+          "uploadStatus": "completed"
+        },
+        {
+          "id": "807fd2eb-d2c2-46c2-9bcf-a3ead62c1739",
+          "studentId": "1ff7662b-94c3-4c76-ac2d-039c6116499b",
+          "documentType": "abc_id",
+          "fileName": "10.jpeg",
+          "fileType": "image/jpeg",
+          "fileSizeBytes": 552282,
+          "storagePath": "student/1ff7662b-94c3-4c76-ac2d-039c6116499b/documents/abc_id/807fd2eb-d2c2-46c2-9bcf-a3ead62c1739/abc_id_1788868150202.jpeg",
+          "uploadedAt": "2026-09-08T11:49:10.251Z",
+          "uploadStatus": "completed"
+        }
+      ],
+      "createdAt": "2026-09-08T11:48:15.874Z",
+      "updatedAt": "2026-09-08T11:49:14.168Z",
+      "completedAt": "2026-09-08T11:49:10.517Z",
+      "professionalProfiles": {
+        "linkedIn": "",
+        "gitHub": "",
+        "portfolio": "",
+        "other": "",
+        "updatedAt": "2026-09-08T11:49:12.432Z"
+      }
     }
   ],
   "skillGapAnalyses": [
@@ -37677,6 +38540,298 @@
       "isStale": false,
       "createdAt": "2026-09-07T19:30:44.883Z",
       "updatedAt": "2026-09-07T19:30:44.883Z"
+    },
+    {
+      "id": "sga-a76bbeef-068a-4487-a14a-b105737b4a5a",
+      "studentId": "1ff7662b-94c3-4c76-ac2d-039c6116499b",
+      "interestProfileId": "profile_1788868271624_6jpd8",
+      "knowledgeTestResultId": "result_1788868517698_utl6p",
+      "domainId": "security",
+      "domainName": "Cybersecurity & Defense",
+      "nicheId": "app-sec",
+      "nicheTitle": "Application Security & Vulnerability Research",
+      "difficulty": "advanced",
+      "testScore": 36,
+      "testMaxScore": 40,
+      "testScorePercent": 90,
+      "knowledgeLevel": "Expert",
+      "skillProfileVersion": "1.0",
+      "executiveSummary": "Based on your advanced assessment score of 36/40 (90%), we identified 6 target competencies to strengthen your trajectory toward Application Security & Vulnerability Research. Addressing the high-priority gaps first will establish a solid industry-ready foundation.",
+      "skillGaps": [
+        {
+          "skillId": "auth-identity",
+          "skillName": "Authentication & Identity Management",
+          "category": "Identity & Access",
+          "priority": "medium",
+          "priorityLabel": "Medium Priority",
+          "currentLevel": "Needs Verification",
+          "targetLevel": "Strong Foundation",
+          "evidence": "Essential capability for Application Security & Vulnerability Research; not directly evaluated in current assessment session.",
+          "whyItMatters": "Authentication & Identity Management is fundamental to Application Security & Vulnerability Research: Multi-factor verification, cryptographic session tokens, JWT structure validation, and secure cookie storage.",
+          "recommendedAction": "Focus on structured practice with mfa principles, jwt structure, session tokens to progress towards Strong Foundation.",
+          "testedCount": 0,
+          "correctCount": 0,
+          "accuracyPercent": null
+        },
+        {
+          "skillId": "web-security",
+          "skillName": "Web Security & OWASP Top 10",
+          "category": "Threat Mitigation",
+          "priority": "medium",
+          "priorityLabel": "Medium Priority",
+          "currentLevel": "Needs Verification",
+          "targetLevel": "Strong Foundation",
+          "evidence": "Essential capability for Application Security & Vulnerability Research; not directly evaluated in current assessment session.",
+          "whyItMatters": "Web Security & OWASP Top 10 is fundamental to Application Security & Vulnerability Research: Identifying and mitigating injection vulnerabilities (SQLi, NoSQLi), cross-site scripting (XSS), and CSRF.",
+          "recommendedAction": "Focus on structured practice with sql injection, stored xss, csrf tokens to progress towards Strong Foundation.",
+          "testedCount": 0,
+          "correctCount": 0,
+          "accuracyPercent": null
+        },
+        {
+          "skillId": "secure-coding",
+          "skillName": "Secure Coding & Input Sanitization",
+          "category": "Software Hardening",
+          "priority": "medium",
+          "priorityLabel": "Medium Priority",
+          "currentLevel": "Needs Verification",
+          "targetLevel": "Proficient",
+          "evidence": "Essential capability for Application Security & Vulnerability Research; not directly evaluated in current assessment session.",
+          "whyItMatters": "Secure Coding & Input Sanitization is fundamental to Application Security & Vulnerability Research: Defensive programming, parameterized queries, strict schema validation, and memory safety checks.",
+          "recommendedAction": "Focus on structured practice with input validation, parameterized queries, buffer overflow to progress towards Proficient.",
+          "testedCount": 0,
+          "correctCount": 0,
+          "accuracyPercent": null
+        },
+        {
+          "skillId": "api-security",
+          "skillName": "API Security & Rate Limiting",
+          "category": "Architecture",
+          "priority": "medium",
+          "priorityLabel": "Medium Priority",
+          "currentLevel": "Developing",
+          "targetLevel": "Proficient",
+          "evidence": "Core capability expected for target industry roles; requires structured learning.",
+          "whyItMatters": "API Security & Rate Limiting is fundamental to Application Security & Vulnerability Research: Enforcing broken object-level authorization (BOLA) defenses, token expiry, and gateway throttling.",
+          "recommendedAction": "Focus on structured practice with bola mitigation, rate limiting, cors configuration to progress towards Proficient.",
+          "testedCount": 0,
+          "correctCount": 0,
+          "accuracyPercent": null
+        },
+        {
+          "skillId": "vuln-assessment",
+          "skillName": "Vulnerability Research & Threat Modeling",
+          "category": "Analysis",
+          "priority": "medium",
+          "priorityLabel": "Medium Priority",
+          "currentLevel": "Developing",
+          "targetLevel": "Proficient",
+          "evidence": "Core capability expected for target industry roles; requires structured learning.",
+          "whyItMatters": "Vulnerability Research & Threat Modeling is fundamental to Application Security & Vulnerability Research: Deconstructing software attack surfaces, CVSS scoring, and root-cause remediation.",
+          "recommendedAction": "Focus on structured practice with threat modeling, cvss metrics, static analysis to progress towards Proficient.",
+          "testedCount": 0,
+          "correctCount": 0,
+          "accuracyPercent": null
+        },
+        {
+          "skillId": "cryptography-basics",
+          "skillName": "Applied Cryptography & TLS",
+          "category": "Cryptographic Controls",
+          "priority": "low",
+          "priorityLabel": "Low Priority",
+          "currentLevel": "Developing",
+          "targetLevel": "Strong Foundation",
+          "evidence": "Supplementary skill to accelerate long-term career growth in Application Security & Vulnerability Research.",
+          "whyItMatters": "Applied Cryptography & TLS is fundamental to Application Security & Vulnerability Research: Symmetric vs. asymmetric cipher selection, digital certificates, and transport layer security.",
+          "recommendedAction": "Focus on structured practice with symmetric vs asymmetric, tls handshake, public key infrastructure to progress towards Strong Foundation.",
+          "testedCount": 0,
+          "correctCount": 0,
+          "accuracyPercent": null
+        }
+      ],
+      "recommendations": [
+        {
+          "programId": "prog-sec-appsec-fundamentals",
+          "program": {
+            "id": "prog-sec-appsec-fundamentals",
+            "educatorId": "edu-owasp",
+            "educatorName": "OWASP Foundation Educational Resources",
+            "title": "OWASP Application Security & Secure Coding Foundations",
+            "description": "Deep dive into input sanitization, mitigation of OWASP Top 10 vulnerabilities, secure session tokens, and cryptographic identity storage.",
+            "programUrl": "https://owasp.org/www-project-top-ten/",
+            "domains": [
+              "security"
+            ],
+            "niches": [
+              "app-sec",
+              "soc-threat"
+            ],
+            "skillIds": [
+              "auth-identity",
+              "web-security",
+              "secure-coding",
+              "api-security",
+              "vuln-assessment"
+            ],
+            "difficulty": "beginner",
+            "deliveryType": "Online Self-Paced",
+            "duration": "4 Weeks (4–6 hrs/wk)",
+            "certification": "Certificate of Completion",
+            "verifiedStatus": "external_opportunity",
+            "active": true,
+            "createdAt": "2026-01-15T00:00:00.000Z",
+            "updatedAt": "2026-03-01T00:00:00.000Z"
+          },
+          "matchScore": 98,
+          "matchTier": "Best Match",
+          "matchedGapCount": 5,
+          "matchedHighPriorityCount": 0,
+          "coveredGaps": [
+            "Authentication & Identity Management",
+            "Web Security & OWASP Top 10",
+            "Secure Coding & Input Sanitization",
+            "API Security & Rate Limiting",
+            "Vulnerability Research & Threat Modeling"
+          ],
+          "matchExplanation": "Recommended because it covers: ✓ Authentication & Identity Management, ✓ Web Security & OWASP Top 10, ✓ Secure Coding & Input Sanitization, ✓ API Security & Rate Limiting, ✓ Vulnerability Research & Threat Modeling and addresses 5 of your 6 identified skill gaps."
+        },
+        {
+          "programId": "prog-sec-openssf-dev",
+          "program": {
+            "id": "prog-sec-openssf-dev",
+            "educatorId": "edu-openssf",
+            "educatorName": "Open Source Security Foundation (OpenSSF)",
+            "title": "Developing Secure Software & Supply Chain Hardening (LFD121)",
+            "description": "Comprehensive training on secure software design principles, input validation, avoiding buffer overflows and injection, and dependency auditing.",
+            "programUrl": "https://openssf.org/training/courses/",
+            "domains": [
+              "security",
+              "software"
+            ],
+            "niches": [
+              "app-sec",
+              "cloud-sec",
+              "clean-code"
+            ],
+            "skillIds": [
+              "secure-coding",
+              "auth-identity",
+              "crypto-foundations",
+              "code-smell-elimination",
+              "infra-as-code-sec"
+            ],
+            "difficulty": "intermediate",
+            "deliveryType": "Online Self-Paced",
+            "duration": "6 Weeks (5 hrs/wk)",
+            "certification": "OpenSSF Verified Digital Badge",
+            "verifiedStatus": "external_opportunity",
+            "active": true,
+            "createdAt": "2026-01-15T00:00:00.000Z",
+            "updatedAt": "2026-03-01T00:00:00.000Z"
+          },
+          "matchScore": 55,
+          "matchTier": "Strong Match",
+          "matchedGapCount": 2,
+          "matchedHighPriorityCount": 0,
+          "coveredGaps": [
+            "Authentication & Identity Management",
+            "Secure Coding & Input Sanitization"
+          ],
+          "matchExplanation": "Recommended because it covers: ✓ Authentication & Identity Management, ✓ Secure Coding & Input Sanitization and addresses 2 of your 6 identified skill gaps."
+        },
+        {
+          "programId": "prog-sec-pentest-methodology",
+          "program": {
+            "id": "prog-sec-pentest-methodology",
+            "educatorId": "edu-skillbridge-labs",
+            "educatorName": "Skill Bridge Open Labs (Sample Provider)",
+            "title": "Offensive Security & Ethical Penetration Testing Track",
+            "description": "Step-by-step methodologies for network port scanning, service enumeration, Active Directory privilege escalation, and formal vulnerability disclosure.",
+            "programUrl": "https://github.com/skillbridge/pentest-foundations",
+            "domains": [
+              "security"
+            ],
+            "niches": [
+              "pentest-red",
+              "app-sec"
+            ],
+            "skillIds": [
+              "port-scanning",
+              "privilege-escalation",
+              "wireless-attacks",
+              "ad-exploitation",
+              "metasploit-foundations",
+              "report-generation",
+              "vuln-assessment"
+            ],
+            "difficulty": "intermediate",
+            "deliveryType": "Hands-on Lab",
+            "duration": "5 Weeks (6 hrs/wk)",
+            "certification": "Red Team Lab Challenge Badge",
+            "verifiedStatus": "sample_provider",
+            "active": true,
+            "createdAt": "2026-01-15T00:00:00.000Z",
+            "updatedAt": "2026-03-01T00:00:00.000Z"
+          },
+          "matchScore": 45,
+          "matchTier": "Relevant",
+          "matchedGapCount": 1,
+          "matchedHighPriorityCount": 0,
+          "coveredGaps": [
+            "Vulnerability Research & Threat Modeling"
+          ],
+          "matchExplanation": "Recommended because it covers: ✓ Vulnerability Research & Threat Modeling and addresses 1 of your 6 identified skill gaps."
+        },
+        {
+          "programId": "prog-web-api-backend",
+          "program": {
+            "id": "prog-web-api-backend",
+            "educatorId": "edu-owasp",
+            "educatorName": "OWASP Foundation Educational Resources",
+            "title": "High-Performance REST & GraphQL API Engineering",
+            "description": "Design resilient backend web APIs: database indexing, connection pooling, Redis distributed caching, rate-limiting, and schema validation.",
+            "programUrl": "https://owasp.org/www-project-api-security/",
+            "domains": [
+              "web",
+              "software"
+            ],
+            "niches": [
+              "backend-services",
+              "api-backend",
+              "distributed-web"
+            ],
+            "skillIds": [
+              "rest-api-design",
+              "relational-indexing",
+              "distributed-caching",
+              "async-queues",
+              "database-migrations",
+              "api-rate-limiting",
+              "api-security"
+            ],
+            "difficulty": "intermediate",
+            "deliveryType": "Online Self-Paced",
+            "duration": "5 Weeks (6 hrs/wk)",
+            "certification": "API Systems Specialist Certificate",
+            "verifiedStatus": "external_opportunity",
+            "active": true,
+            "createdAt": "2026-01-15T00:00:00.000Z",
+            "updatedAt": "2026-03-01T00:00:00.000Z"
+          },
+          "matchScore": 45,
+          "matchTier": "Relevant",
+          "matchedGapCount": 1,
+          "matchedHighPriorityCount": 0,
+          "coveredGaps": [
+            "API Security & Rate Limiting"
+          ],
+          "matchExplanation": "Recommended because it covers: ✓ API Security & Rate Limiting and addresses 1 of your 6 identified skill gaps."
+        }
+      ],
+      "aiGenerated": false,
+      "isStale": false,
+      "createdAt": "2026-09-08T11:55:34.311Z",
+      "updatedAt": "2026-09-08T11:55:34.311Z"
     }
   ],
   "educators": [
@@ -38881,14 +40036,14 @@
       "type": "youtube_video",
       "resources": [
         {
-          "id": "yt_P76HENxLAaw",
-          "videoId": "P76HENxLAaw",
-          "title": "Application Security Explained in Under 10 Minutes 🔒",
-          "description": "Want to protect your applications from cyber threats but short on time? In this fast-paced under 10 minute guide, we break down ...",
-          "channelTitle": "Under 10 Minutes",
-          "thumbnailUrl": "https://i.ytimg.com/vi/P76HENxLAaw/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBdZfvYs5JhMKciN5bOPaioXMxlgw",
-          "publishedAt": "1 year ago",
-          "videoUrl": "https://www.youtube.com/watch?v=P76HENxLAaw",
+          "id": "yt_u3dQbOEfZ6M",
+          "videoId": "u3dQbOEfZ6M",
+          "title": "Cloud Applications Security Essentials",
+          "description": "Cloud Applications Security Essentials covers Applications and management APIs OWASP Vulnerabilities Cloud related ...",
+          "channelTitle": "IT Certificates",
+          "thumbnailUrl": "https://i.ytimg.com/vi/u3dQbOEfZ6M/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDVVYpA4BkafEH1kcdDowptXHkJsA",
+          "publishedAt": "5 years ago",
+          "videoUrl": "https://www.youtube.com/watch?v=u3dQbOEfZ6M",
           "skillId": "auth-identity",
           "skillName": "Authentication & Identity Management",
           "priority": "medium",
@@ -38896,14 +40051,14 @@
           "relevanceReason": "Recommended because it covers Authentication & Identity Management core fundamentals related to your medium-priority skill gap."
         },
         {
-          "id": "yt_mox6DL4zK7I",
-          "videoId": "mox6DL4zK7I",
-          "title": "Authentication Vulnerabilities | Complete Guide",
-          "description": "In this video, we cover the theory behind authentication vulnerabilities, how to find these types of vulnerabilities, how to exploit ...",
-          "channelTitle": "Rana Khalil",
-          "thumbnailUrl": "https://i.ytimg.com/vi/mox6DL4zK7I/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDk8_O9tLC1nh3qIT6PQS7_uy4mEw",
-          "publishedAt": "3 years ago",
-          "videoUrl": "https://www.youtube.com/watch?v=mox6DL4zK7I",
+          "id": "yt_v_lSTHPp0Kw",
+          "videoId": "v_lSTHPp0Kw",
+          "title": "🛡️ AWS Cognito Security Deep Dive | Cloud Penetration Testing Demystified 🌐",
+          "description": "Welcome to our Cloud Penetration Testing series! In this video, we unravel the intricacies of AWS Cognito and explore its security ...",
+          "channelTitle": "Punit Darji",
+          "thumbnailUrl": "https://i.ytimg.com/vi/v_lSTHPp0Kw/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBjz1kDmJrxdu9xSYFQGmuOZ38tvg",
+          "publishedAt": "2 years ago",
+          "videoUrl": "https://www.youtube.com/watch?v=v_lSTHPp0Kw",
           "skillId": "auth-identity",
           "skillName": "Authentication & Identity Management",
           "priority": "medium",
@@ -38971,29 +40126,14 @@
           "relevanceReason": "Recommended because it covers Web Security & OWASP Top 10 core fundamentals related to your medium-priority skill gap."
         },
         {
-          "id": "yt_pYK802pSufw",
-          "videoId": "pYK802pSufw",
-          "title": "Secure Coding Best Practices | Cybersecurity Interview | Secure Coding Practices | Secure Coding",
-          "description": "Application Security: https://www.youtube.com/playlist?list=PL2QcdSWyXri1YFAqkgJIiDYnIhmq2nswp Cybersecurity Interview ...",
-          "channelTitle": "CyberPlatter",
-          "thumbnailUrl": "https://i.ytimg.com/vi/pYK802pSufw/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCw_c-vWKa4ZQBcUjGdVwrLR6M1Vw",
-          "publishedAt": "2 years ago",
-          "videoUrl": "https://www.youtube.com/watch?v=pYK802pSufw",
-          "skillId": "secure-coding",
-          "skillName": "Secure Coding & Input Sanitization",
-          "priority": "medium",
-          "difficulty": "beginner",
-          "relevanceReason": "Recommended because it covers Secure Coding & Input Sanitization core fundamentals related to your medium-priority skill gap."
-        },
-        {
-          "id": "yt_24-OTZVG4Zk",
-          "videoId": "24-OTZVG4Zk",
-          "title": "Secure Coding Input Validation and Data Sanitization",
-          "description": "OWASP TALKS APRIL 2022 EDITION.",
-          "channelTitle": "OWASP LAGOS CHAPTER",
-          "thumbnailUrl": "https://i.ytimg.com/vi/24-OTZVG4Zk/hq720.jpg?sqp=-oaymwE2CNAFEJQDSFXyq4qpAygIARUAAIhCGAFwAcABBvABAfgB_gmAAtAFigIMCAAQARhlIGUoZTAP&rs=AOn4CLBzU93djwYJVAa6ebqy7V482BYWRQ",
-          "publishedAt": "4 years ago",
-          "videoUrl": "https://www.youtube.com/watch?v=24-OTZVG4Zk",
+          "id": "yt_mVCPqDo2wiM",
+          "videoId": "mVCPqDo2wiM",
+          "title": "Application Security Full Course 2026 | Application Security Tutorial For Beginners | Simplilearn",
+          "description": "AI-Powered Cybersecurity Mastery ...",
+          "channelTitle": "Simplilearn",
+          "thumbnailUrl": "https://i.ytimg.com/vi/mVCPqDo2wiM/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDrlzyTsQiFcZR5h2jknc2w1zNVMQ",
+          "publishedAt": "11 months ago",
+          "videoUrl": "https://www.youtube.com/watch?v=mVCPqDo2wiM",
           "skillId": "secure-coding",
           "skillName": "Secure Coding & Input Sanitization",
           "priority": "medium",
@@ -39014,9 +40154,24 @@
           "priority": "medium",
           "difficulty": "beginner",
           "relevanceReason": "Recommended because it covers Secure Coding & Input Sanitization core fundamentals related to your medium-priority skill gap."
+        },
+        {
+          "id": "yt_Qnl2BjxXpkk",
+          "videoId": "Qnl2BjxXpkk",
+          "title": "Application Security Crash Course | Web Application Security Tutorial | Simplilearn",
+          "description": "IITK - Advanced Executive Program in Cybersecurity ...",
+          "channelTitle": "Simplilearn",
+          "thumbnailUrl": "https://i.ytimg.com/vi/Qnl2BjxXpkk/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAyDet03_EULoOli328a4_p8ZwnDQ",
+          "publishedAt": "2 years ago",
+          "videoUrl": "https://www.youtube.com/watch?v=Qnl2BjxXpkk",
+          "skillId": "secure-coding",
+          "skillName": "Secure Coding & Input Sanitization",
+          "priority": "medium",
+          "difficulty": "beginner",
+          "relevanceReason": "Recommended because it covers Secure Coding & Input Sanitization core fundamentals related to your medium-priority skill gap."
         }
       ],
-      "cachedAt": "2026-09-07T10:58:35.650Z"
+      "cachedAt": "2026-09-08T06:46:54.654Z"
     },
     {
       "id": "lr_43a69d7a-8521-41eb-ade3-8659f17099e2_sga-1788779563620-b66d62be",
@@ -39379,9 +40534,352 @@
         }
       ],
       "cachedAt": "2026-09-07T11:59:24.746Z"
+    },
+    {
+      "id": "lr_1ff7662b-94c3-4c76-ac2d-039c6116499b_sga-a76bbeef-068a-4487-a14a-b105737b4a5a",
+      "studentId": "1ff7662b-94c3-4c76-ac2d-039c6116499b",
+      "analysisId": "sga-a76bbeef-068a-4487-a14a-b105737b4a5a",
+      "type": "youtube_video",
+      "resources": [
+        {
+          "id": "yt_Jzr0Jdnq_EI",
+          "videoId": "Jzr0Jdnq_EI",
+          "title": "OWASP Top 10 2025: Your complete guide to securing your applications",
+          "description": "Want to secure your application but not sure where to start? This video breaks down the OWASP Top 10 (2025)—what changed ...",
+          "channelTitle": "Aikido Security",
+          "thumbnailUrl": "https://i.ytimg.com/vi/Jzr0Jdnq_EI/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBGgYsbs26AaytgvbSme4ruRUPWBw",
+          "publishedAt": "8 months ago",
+          "videoUrl": "https://www.youtube.com/watch?v=Jzr0Jdnq_EI",
+          "skillId": "web-security",
+          "skillName": "Web Security & OWASP Top 10",
+          "priority": "medium",
+          "difficulty": "advanced",
+          "relevanceReason": "Recommended because it covers Web Security & OWASP Top 10 advanced architectural patterns related to your medium-priority skill gap."
+        },
+        {
+          "id": "yt_YYe0FdfdgDU",
+          "videoId": "YYe0FdfdgDU",
+          "title": "OWASP API Security Top 10 Course – Secure Your Web Apps",
+          "description": "Learn about the OWASP API Security Top 10, 2023 edition. In this crash course, you will learn about each security risk and learn ...",
+          "channelTitle": "freeCodeCamp.org",
+          "thumbnailUrl": "https://i.ytimg.com/vi/YYe0FdfdgDU/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAgt5752JA0-hgybvQKNnMaTmxm8Q",
+          "publishedAt": "3 years ago",
+          "videoUrl": "https://www.youtube.com/watch?v=YYe0FdfdgDU",
+          "skillId": "web-security",
+          "skillName": "Web Security & OWASP Top 10",
+          "priority": "medium",
+          "difficulty": "advanced",
+          "relevanceReason": "Recommended because it covers Web Security & OWASP Top 10 advanced architectural patterns related to your medium-priority skill gap."
+        },
+        {
+          "id": "yt_wUaeKEl1RCw",
+          "videoId": "wUaeKEl1RCw",
+          "title": "OWASP Top 10 Web Application Security Risks",
+          "description": "1. Injection 2. Broken Authentication 3. Sensitive Data Exposure 4. XML External Entities 5. Broken Access Control 6. Security ...",
+          "channelTitle": "Telusko",
+          "thumbnailUrl": "https://i.ytimg.com/vi/wUaeKEl1RCw/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAdfm_sFfnDkcWDhickDGephAVAbw",
+          "publishedAt": "5 years ago",
+          "videoUrl": "https://www.youtube.com/watch?v=wUaeKEl1RCw",
+          "skillId": "web-security",
+          "skillName": "Web Security & OWASP Top 10",
+          "priority": "medium",
+          "difficulty": "advanced",
+          "relevanceReason": "Recommended because it covers Web Security & OWASP Top 10 advanced architectural patterns related to your medium-priority skill gap."
+        },
+        {
+          "id": "yt_pYK802pSufw",
+          "videoId": "pYK802pSufw",
+          "title": "Secure Coding Best Practices | Cybersecurity Interview | Secure Coding Practices | Secure Coding",
+          "description": "Application Security: https://www.youtube.com/playlist?list=PL2QcdSWyXri1YFAqkgJIiDYnIhmq2nswp Cybersecurity Interview ...",
+          "channelTitle": "CyberPlatter",
+          "thumbnailUrl": "https://i.ytimg.com/vi/pYK802pSufw/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCw_c-vWKa4ZQBcUjGdVwrLR6M1Vw",
+          "publishedAt": "2 years ago",
+          "videoUrl": "https://www.youtube.com/watch?v=pYK802pSufw",
+          "skillId": "secure-coding",
+          "skillName": "Secure Coding & Input Sanitization",
+          "priority": "medium",
+          "difficulty": "advanced",
+          "relevanceReason": "Recommended because it covers Secure Coding & Input Sanitization advanced architectural patterns related to your medium-priority skill gap."
+        },
+        {
+          "id": "yt_nthEXs12nFE",
+          "videoId": "nthEXs12nFE",
+          "title": "Cybersecurity Architecture: Application Security",
+          "description": "IBM Security QRadar EDR : https://ibm.biz/Bdymjj IBM Security X-Force Threat Intelligence Index 2023: https://ibm.biz/BdymjZ ...",
+          "channelTitle": "IBM Technology",
+          "thumbnailUrl": "https://i.ytimg.com/vi/nthEXs12nFE/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCaxKGBVnVwZnlv2CwTVXQaiL83xw",
+          "publishedAt": "3 years ago",
+          "videoUrl": "https://www.youtube.com/watch?v=nthEXs12nFE",
+          "skillId": "secure-coding",
+          "skillName": "Secure Coding & Input Sanitization",
+          "priority": "medium",
+          "difficulty": "advanced",
+          "relevanceReason": "Recommended because it covers Secure Coding & Input Sanitization advanced architectural patterns related to your medium-priority skill gap."
+        },
+        {
+          "id": "yt_Cz4e_rNULPA",
+          "videoId": "Cz4e_rNULPA",
+          "title": "23. Snyk Tutorial | #Snyk Security in One Shot | Secure Code, Libraries, IaC Files & Images",
+          "description": "We'll be learning most important topics required in DevSecOps Practices TimeStamps: 00:00 Intro to Snyk 02:38 What is Snyk.io ...",
+          "channelTitle": "Manthan Dhole",
+          "thumbnailUrl": "https://i.ytimg.com/vi/Cz4e_rNULPA/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBaF3J4-6Pc79Q0hrHuz1HU_z4vmw",
+          "publishedAt": "9 months ago",
+          "videoUrl": "https://www.youtube.com/watch?v=Cz4e_rNULPA",
+          "skillId": "secure-coding",
+          "skillName": "Secure Coding & Input Sanitization",
+          "priority": "medium",
+          "difficulty": "advanced",
+          "relevanceReason": "Recommended because it covers Secure Coding & Input Sanitization advanced architectural patterns related to your medium-priority skill gap."
+        }
+      ],
+      "cachedAt": "2026-09-08T11:55:52.892Z"
     }
   ],
   "jobApplications": [
+    {
+      "id": "app_1788867646557_123",
+      "studentId": "stud_tester_1788867646557",
+      "jobId": "hire_1788867646619_58482a",
+      "companyName": "Apex AI Systems",
+      "roleTitle": "Senior AI Platform Engineer 1788867646557",
+      "position": "Senior AI Platform Engineer 1788867646557",
+      "location": "Bengaluru, India",
+      "type": "Full-time",
+      "employmentType": "Full-time",
+      "salaryRange": "₹22,00,000 - ₹35,00,000 / year",
+      "status": "selected",
+      "appliedAt": "2026-09-08T11:40:46.773Z",
+      "statusUpdatedAt": "2026-09-08T11:40:47.337Z",
+      "timeline": [
+        {
+          "id": "ev_1788867646557",
+          "status": "applied",
+          "title": "Application Submitted",
+          "description": "Application submitted for review.",
+          "timestamp": "2026-09-08T11:40:46.773Z"
+        },
+        {
+          "id": "tl_1788867647077",
+          "status": "in_review",
+          "date": "2026-09-08T11:40:47.077Z",
+          "timestamp": "2026-09-08T11:40:47.077Z",
+          "title": "Application Shortlisted",
+          "description": "Candidate demonstrates strong distributed systems fundamentals and good academic track record."
+        },
+        {
+          "id": "tl_1788867647197",
+          "status": "interview",
+          "date": "2026-09-08T11:40:47.197Z",
+          "timestamp": "2026-09-08T11:40:47.197Z",
+          "title": "Interview Technical Systems Deep-Dive Updated",
+          "description": "Evaluation decision: PASSED. Strong candidate with articulate answers on distributed bottleneck mitigations."
+        },
+        {
+          "id": "tl_1788867647337",
+          "status": "selected",
+          "date": "2026-09-08T11:40:47.337Z",
+          "timestamp": "2026-09-08T11:40:47.337Z",
+          "title": "Offer Extended / Candidate Selected",
+          "description": "Congratulations! Candidate has been selected for Senior AI Platform Engineer at Apex AI Systems."
+        }
+      ],
+      "applicantFullName": "Aarav Sharma",
+      "applicantEmail": "aarav.1788867646557@example.com",
+      "applicantPhone": "+91 9876543210",
+      "coverLetter": "Passionate about high-throughput ML systems and scalable infrastructure.",
+      "screeningStatus": "shortlisted",
+      "screeningNotes": "Candidate demonstrates strong distributed systems fundamentals and good academic track record.",
+      "updatedAt": "2026-09-08T11:40:47.337Z",
+      "interviewRounds": [
+        {
+          "roundNumber": 1,
+          "roundName": "Technical Systems Deep-Dive",
+          "mode": "Virtual",
+          "scheduledAt": "2026-09-09T11:40:47.147Z",
+          "meetingLinkOrLocation": "https://meet.skillbridge.edu/interview-ai-platform",
+          "evaluationCriteria": "Exemplary understanding of distributed caching and Python concurrency.",
+          "score": 88,
+          "feedback": "Strong candidate with articulate answers on distributed bottleneck mitigations.",
+          "decision": "passed"
+        }
+      ],
+      "interviewStatus": "scheduled",
+      "finalStatus": "selected",
+      "finalDecisionDate": "2026-09-08T11:40:47.337Z",
+      "offerDetails": {
+        "offeredRole": "Senior AI Platform Engineer",
+        "offeredCompensation": "₹28,00,000 / year",
+        "startDate": "2026-10-15",
+        "notes": "We are delighted to extend an offer for Senior AI Platform Engineer. Relocation allowance included."
+      }
+    },
+    {
+      "id": "app_1788867597684_123",
+      "studentId": "stud_tester_1788867597684",
+      "jobId": "hire_1788867597784_becee7",
+      "companyName": "Apex AI Systems",
+      "roleTitle": "Senior AI Platform Engineer 1788867597684",
+      "position": "Senior AI Platform Engineer 1788867597684",
+      "location": "Bengaluru, India",
+      "type": "Full-time",
+      "employmentType": "Full-time",
+      "salaryRange": "₹22,00,000 - ₹35,00,000 / year",
+      "status": "selected",
+      "appliedAt": "2026-09-08T11:39:57.980Z",
+      "statusUpdatedAt": "2026-09-08T11:39:59.006Z",
+      "timeline": [
+        {
+          "id": "ev_1788867597684",
+          "status": "applied",
+          "title": "Application Submitted",
+          "description": "Application submitted for review.",
+          "timestamp": "2026-09-08T11:39:57.980Z"
+        },
+        {
+          "id": "tl_1788867598389",
+          "status": "in_review",
+          "date": "2026-09-08T11:39:58.389Z",
+          "timestamp": "2026-09-08T11:39:58.389Z",
+          "title": "Application Shortlisted",
+          "description": "Candidate demonstrates strong distributed systems fundamentals and good academic track record."
+        },
+        {
+          "id": "tl_1788867598580",
+          "status": "interview",
+          "date": "2026-09-08T11:39:58.579Z",
+          "timestamp": "2026-09-08T11:39:58.579Z",
+          "title": "Interview Technical Systems Deep-Dive Updated",
+          "description": "Evaluation decision: PASSED. Strong candidate with articulate answers on distributed bottleneck mitigations."
+        },
+        {
+          "id": "tl_1788867599006",
+          "status": "selected",
+          "date": "2026-09-08T11:39:59.006Z",
+          "timestamp": "2026-09-08T11:39:59.006Z",
+          "title": "Offer Extended / Candidate Selected",
+          "description": "Congratulations! Candidate has been selected for Senior AI Platform Engineer 1788867597684 at Apex AI Systems."
+        }
+      ],
+      "applicantFullName": "Aarav Sharma",
+      "applicantEmail": "aarav.1788867597684@example.com",
+      "applicantPhone": "+91 9876543210",
+      "coverLetter": "Passionate about high-throughput ML systems and scalable infrastructure.",
+      "screeningStatus": "shortlisted",
+      "screeningNotes": "Candidate demonstrates strong distributed systems fundamentals and good academic track record.",
+      "updatedAt": "2026-09-08T11:39:59.006Z",
+      "interviewRounds": [
+        {
+          "roundNumber": 1,
+          "roundName": "Technical Systems Deep-Dive",
+          "mode": "Virtual",
+          "scheduledAt": "2026-09-09T11:39:58.506Z",
+          "meetingLinkOrLocation": "https://meet.skillbridge.edu/interview-ai-platform",
+          "evaluationCriteria": "Exemplary understanding of distributed caching and Python concurrency.",
+          "score": 88,
+          "feedback": "Strong candidate with articulate answers on distributed bottleneck mitigations.",
+          "decision": "passed"
+        }
+      ],
+      "interviewStatus": "scheduled",
+      "finalStatus": "selected",
+      "finalDecisionDate": "2026-09-08T11:39:59.006Z",
+      "offerDetails": "We are delighted to extend an offer for Senior AI Platform Engineer."
+    },
+    {
+      "id": "app_1788867538394_123",
+      "studentId": "stud_tester_1788867538394",
+      "jobId": "hire_1788867538554_0b039c",
+      "companyName": "Apex AI Systems",
+      "roleTitle": "Senior AI Platform Engineer 1788867538394",
+      "position": "Senior AI Platform Engineer 1788867538394",
+      "location": "Bengaluru, India",
+      "type": "Full-time",
+      "employmentType": "Full-time",
+      "salaryRange": "₹22,00,000 - ₹35,00,000 / year",
+      "status": "in_review",
+      "appliedAt": "2026-09-08T11:38:58.713Z",
+      "statusUpdatedAt": "2026-09-08T11:38:58.941Z",
+      "timeline": [
+        {
+          "id": "ev_1788867538394",
+          "status": "applied",
+          "title": "Application Submitted",
+          "description": "Application submitted for review.",
+          "timestamp": "2026-09-08T11:38:58.713Z"
+        },
+        {
+          "id": "tl_1788867538941",
+          "status": "in_review",
+          "date": "2026-09-08T11:38:58.941Z",
+          "timestamp": "2026-09-08T11:38:58.941Z",
+          "title": "Application Shortlisted",
+          "description": "Candidate demonstrates strong distributed systems fundamentals and good academic track record."
+        }
+      ],
+      "applicantFullName": "Aarav Sharma",
+      "applicantEmail": "aarav.1788867538394@example.com",
+      "applicantPhone": "+91 9876543210",
+      "coverLetter": "Passionate about high-throughput ML systems and scalable infrastructure.",
+      "screeningStatus": "shortlisted",
+      "screeningNotes": "Candidate demonstrates strong distributed systems fundamentals and good academic track record.",
+      "updatedAt": "2026-09-08T11:38:58.941Z"
+    },
+    {
+      "id": "app_1788867497359_123",
+      "studentId": "stud_tester_1788867497359",
+      "jobId": "hire_1788867497431_464504",
+      "companyName": "Apex AI Systems",
+      "roleTitle": "Senior AI Platform Engineer 1788867497359",
+      "position": "Senior AI Platform Engineer 1788867497359",
+      "location": "Bengaluru, India",
+      "type": "Full-time",
+      "employmentType": "Full-time",
+      "salaryRange": "₹22,00,000 - ₹35,00,000 / year",
+      "status": "applied",
+      "appliedAt": "2026-09-08T11:38:17.619Z",
+      "statusUpdatedAt": "2026-09-08T11:38:17.676Z",
+      "timeline": [
+        {
+          "id": "ev_1788867497359",
+          "status": "applied",
+          "title": "Application Submitted",
+          "description": "Application submitted for review.",
+          "timestamp": "2026-09-08T11:38:17.619Z"
+        }
+      ],
+      "applicantFullName": "Aarav Sharma",
+      "applicantEmail": "aarav.1788867497359@example.com",
+      "applicantPhone": "+91 9876543210",
+      "coverLetter": "Passionate about high-throughput ML systems and scalable infrastructure."
+    },
+    {
+      "id": "app_1788867430570_123",
+      "studentId": "stud_tester_1788867430570",
+      "jobId": "hire_1788867430659_038aa0",
+      "companyName": "Apex AI Systems",
+      "roleTitle": "Senior AI Platform Engineer 1788867430570",
+      "position": "Senior AI Platform Engineer 1788867430570",
+      "location": "Bengaluru, India",
+      "type": "Full-time",
+      "employmentType": "Full-time",
+      "salaryRange": "₹22,00,000 - ₹35,00,000 / year",
+      "status": "applied",
+      "appliedAt": "2026-09-08T11:37:10.825Z",
+      "statusUpdatedAt": "2026-09-08T11:37:10.889Z",
+      "timeline": [
+        {
+          "id": "ev_1788867430570",
+          "status": "applied",
+          "title": "Application Submitted",
+          "description": "Application submitted for review.",
+          "timestamp": "2026-09-08T11:37:10.825Z"
+        }
+      ],
+      "applicantFullName": "Aarav Sharma",
+      "applicantEmail": "aarav.1788867430570@example.com",
+      "applicantPhone": "+91 9876543210",
+      "coverLetter": "Passionate about high-throughput ML systems and scalable infrastructure."
+    },
     {
       "id": "app-1788809453023-sy93g",
       "studentId": "stu_34_adv_1788809444883",
@@ -45445,6 +46943,384 @@
     }
   ],
   "industryHiringPosts": [
+    {
+      "id": "hire_1788867646619_58482a",
+      "industryId": "ind_tester_1788867646557",
+      "companyName": "Apex AI Systems",
+      "roleTitle": "Senior AI Platform Engineer 1788867646557",
+      "hiringType": "Full-time",
+      "industryDomain": "Artificial Intelligence",
+      "location": "Bengaluru, India",
+      "workMode": "Hybrid",
+      "salaryRange": "₹22,00,000 - ₹35,00,000 / year",
+      "experienceRequirement": "Mid-Senior Level",
+      "openings": 2,
+      "deadline": "2026-10-08",
+      "description": "Architect and scale distributed inference clusters with low latency and robust fault tolerance.",
+      "responsibilities": [
+        "Architect and scale distributed inference clusters.",
+        "Collaborate with security and product teams on AI governance."
+      ],
+      "requiredSkills": [
+        "Python",
+        "PyTorch",
+        "Kubernetes",
+        "FastAPI"
+      ],
+      "preferredSkills": [
+        "Docker",
+        "Terraform"
+      ],
+      "requiredQualifications": [
+        "B.Tech/M.Tech in CS or related quantitative discipline.",
+        "3+ years experience designing cloud AI pipelines."
+      ],
+      "preferredQualifications": [],
+      "requiredDocumentTypes": [
+        "student_id"
+      ],
+      "interviewDetails": {
+        "mode": "Virtual",
+        "type": "Technical & Behavioral",
+        "estimatedRounds": 2,
+        "instructions": "Shortlisted candidates will receive round calendar invites via registered email."
+      },
+      "knowledgeTest": {
+        "enabled": true,
+        "testTitle": "AI Platform Screening Assessment",
+        "timeLimitMinutes": 45,
+        "totalMarks": 20,
+        "passingPercentage": 70,
+        "difficultyDistribution": {
+          "beginner": 2,
+          "intermediate": 2,
+          "advanced": 1
+        },
+        "selectedQuestionIds": [],
+        "testPaper": [],
+        "aiReviewStatus": "not_started",
+        "approvalStatus": "draft"
+      },
+      "status": "published",
+      "createdAt": "2026-09-08T11:40:46.606Z",
+      "updatedAt": "2026-09-08T11:40:46.606Z",
+      "publishedAt": "2026-09-08T11:40:46.606Z"
+    },
+    {
+      "id": "hire_1788867597784_becee7",
+      "industryId": "ind_tester_1788867597684",
+      "companyName": "Apex AI Systems",
+      "roleTitle": "Senior AI Platform Engineer 1788867597684",
+      "hiringType": "Full-time",
+      "industryDomain": "Artificial Intelligence",
+      "location": "Bengaluru, India",
+      "workMode": "Hybrid",
+      "salaryRange": "₹22,00,000 - ₹35,00,000 / year",
+      "experienceRequirement": "Mid-Senior Level",
+      "openings": 2,
+      "deadline": "2026-10-08",
+      "description": "Architect and scale distributed inference clusters with low latency and robust fault tolerance.",
+      "responsibilities": [
+        "Architect and scale distributed inference clusters.",
+        "Collaborate with security and product teams on AI governance."
+      ],
+      "requiredSkills": [
+        "Python",
+        "PyTorch",
+        "Kubernetes",
+        "FastAPI"
+      ],
+      "preferredSkills": [
+        "Docker",
+        "Terraform"
+      ],
+      "requiredQualifications": [
+        "B.Tech/M.Tech in CS or related quantitative discipline.",
+        "3+ years experience designing cloud AI pipelines."
+      ],
+      "preferredQualifications": [],
+      "requiredDocumentTypes": [
+        "student_id"
+      ],
+      "interviewDetails": {
+        "mode": "Virtual",
+        "type": "Technical & Behavioral",
+        "estimatedRounds": 2,
+        "instructions": "Shortlisted candidates will receive round calendar invites via registered email."
+      },
+      "knowledgeTest": {
+        "enabled": true,
+        "testTitle": "AI Platform Screening Assessment",
+        "timeLimitMinutes": 45,
+        "totalMarks": 20,
+        "passingPercentage": 70,
+        "difficultyDistribution": {
+          "beginner": 2,
+          "intermediate": 2,
+          "advanced": 1
+        },
+        "selectedQuestionIds": [],
+        "testPaper": [],
+        "aiReviewStatus": "not_started",
+        "approvalStatus": "draft"
+      },
+      "status": "published",
+      "createdAt": "2026-09-08T11:39:57.769Z",
+      "updatedAt": "2026-09-08T11:39:57.769Z",
+      "publishedAt": "2026-09-08T11:39:57.769Z"
+    },
+    {
+      "id": "hire_1788867538554_0b039c",
+      "industryId": "ind_tester_1788867538394",
+      "companyName": "Apex AI Systems",
+      "roleTitle": "Senior AI Platform Engineer 1788867538394",
+      "hiringType": "Full-time",
+      "industryDomain": "Artificial Intelligence",
+      "location": "Bengaluru, India",
+      "workMode": "Hybrid",
+      "salaryRange": "₹22,00,000 - ₹35,00,000 / year",
+      "experienceRequirement": "Mid-Senior Level",
+      "openings": 2,
+      "deadline": "2026-10-08",
+      "description": "Architect and scale distributed inference clusters with low latency and robust fault tolerance.",
+      "responsibilities": [
+        "Architect and scale distributed inference clusters.",
+        "Collaborate with security and product teams on AI governance."
+      ],
+      "requiredSkills": [
+        "Python",
+        "PyTorch",
+        "Kubernetes",
+        "FastAPI"
+      ],
+      "preferredSkills": [
+        "Docker",
+        "Terraform"
+      ],
+      "requiredQualifications": [
+        "B.Tech/M.Tech in CS or related quantitative discipline.",
+        "3+ years experience designing cloud AI pipelines."
+      ],
+      "preferredQualifications": [],
+      "requiredDocumentTypes": [
+        "student_id"
+      ],
+      "interviewDetails": {
+        "mode": "Virtual",
+        "type": "Technical & Behavioral",
+        "estimatedRounds": 2,
+        "instructions": "Shortlisted candidates will receive round calendar invites via registered email."
+      },
+      "knowledgeTest": {
+        "enabled": true,
+        "testTitle": "AI Platform Screening Assessment",
+        "timeLimitMinutes": 45,
+        "totalMarks": 20,
+        "passingPercentage": 70,
+        "difficultyDistribution": {
+          "beginner": 2,
+          "intermediate": 2,
+          "advanced": 1
+        },
+        "selectedQuestionIds": [],
+        "testPaper": [],
+        "aiReviewStatus": "not_started",
+        "approvalStatus": "draft"
+      },
+      "status": "published",
+      "createdAt": "2026-09-08T11:38:58.532Z",
+      "updatedAt": "2026-09-08T11:38:58.532Z",
+      "publishedAt": "2026-09-08T11:38:58.532Z"
+    },
+    {
+      "id": "hire_1788867497431_464504",
+      "industryId": "ind_tester_1788867497359",
+      "companyName": "Apex AI Systems",
+      "roleTitle": "Senior AI Platform Engineer 1788867497359",
+      "hiringType": "Full-time",
+      "industryDomain": "Artificial Intelligence",
+      "location": "Bengaluru, India",
+      "workMode": "Hybrid",
+      "salaryRange": "₹22,00,000 - ₹35,00,000 / year",
+      "experienceRequirement": "Mid-Senior Level",
+      "openings": 2,
+      "deadline": "2026-10-08",
+      "description": "Architect and scale distributed inference clusters with low latency and robust fault tolerance.",
+      "responsibilities": [
+        "Architect and scale distributed inference clusters.",
+        "Collaborate with security and product teams on AI governance."
+      ],
+      "requiredSkills": [
+        "Python",
+        "PyTorch",
+        "Kubernetes",
+        "FastAPI"
+      ],
+      "preferredSkills": [
+        "Docker",
+        "Terraform"
+      ],
+      "requiredQualifications": [
+        "B.Tech/M.Tech in CS or related quantitative discipline.",
+        "3+ years experience designing cloud AI pipelines."
+      ],
+      "preferredQualifications": [],
+      "requiredDocumentTypes": [
+        "student_id"
+      ],
+      "interviewDetails": {
+        "mode": "Virtual",
+        "type": "Technical & Behavioral",
+        "estimatedRounds": 2,
+        "instructions": "Shortlisted candidates will receive round calendar invites via registered email."
+      },
+      "knowledgeTest": {
+        "enabled": true,
+        "testTitle": "AI Platform Screening Assessment",
+        "timeLimitMinutes": 45,
+        "totalMarks": 20,
+        "passingPercentage": 70,
+        "difficultyDistribution": {
+          "beginner": 2,
+          "intermediate": 2,
+          "advanced": 1
+        },
+        "selectedQuestionIds": [],
+        "testPaper": [],
+        "aiReviewStatus": "not_started",
+        "approvalStatus": "draft"
+      },
+      "status": "published",
+      "createdAt": "2026-09-08T11:38:17.417Z",
+      "updatedAt": "2026-09-08T11:38:17.417Z",
+      "publishedAt": "2026-09-08T11:38:17.417Z"
+    },
+    {
+      "id": "hire_1788867430659_038aa0",
+      "industryId": "ind_tester_1788867430570",
+      "companyName": "Apex AI Systems",
+      "roleTitle": "Senior AI Platform Engineer 1788867430570",
+      "hiringType": "Full-time",
+      "industryDomain": "Artificial Intelligence",
+      "location": "Bengaluru, India",
+      "workMode": "Hybrid",
+      "salaryRange": "₹22,00,000 - ₹35,00,000 / year",
+      "experienceRequirement": "Mid-Senior Level",
+      "openings": 2,
+      "deadline": "2026-10-08",
+      "description": "Architect and scale distributed inference clusters with low latency and robust fault tolerance.",
+      "responsibilities": [
+        "Architect and scale distributed inference clusters.",
+        "Collaborate with security and product teams on AI governance."
+      ],
+      "requiredSkills": [
+        "Python",
+        "PyTorch",
+        "Kubernetes",
+        "FastAPI"
+      ],
+      "preferredSkills": [
+        "Docker",
+        "Terraform"
+      ],
+      "requiredQualifications": [
+        "B.Tech/M.Tech in CS or related quantitative discipline.",
+        "3+ years experience designing cloud AI pipelines."
+      ],
+      "preferredQualifications": [],
+      "requiredDocumentTypes": [
+        "student_id"
+      ],
+      "interviewDetails": {
+        "mode": "Virtual",
+        "type": "Technical & Behavioral",
+        "estimatedRounds": 2,
+        "instructions": "Shortlisted candidates will receive round calendar invites via registered email."
+      },
+      "knowledgeTest": {
+        "enabled": true,
+        "testTitle": "AI Platform Screening Assessment",
+        "timeLimitMinutes": 45,
+        "totalMarks": 20,
+        "passingPercentage": 70,
+        "difficultyDistribution": {
+          "beginner": 2,
+          "intermediate": 2,
+          "advanced": 1
+        },
+        "selectedQuestionIds": [],
+        "testPaper": [],
+        "aiReviewStatus": "not_started",
+        "approvalStatus": "draft"
+      },
+      "status": "published",
+      "createdAt": "2026-09-08T11:37:10.653Z",
+      "updatedAt": "2026-09-08T11:37:10.653Z",
+      "publishedAt": "2026-09-08T11:37:10.653Z"
+    },
+    {
+      "id": "hire_1788867379455_da8449",
+      "industryId": "ind_tester_1788867379378",
+      "companyName": "Apex AI Systems",
+      "roleTitle": "Senior AI Platform Engineer 1788867379378",
+      "hiringType": "Full-time",
+      "industryDomain": "Artificial Intelligence",
+      "location": "Bengaluru, India",
+      "workMode": "Hybrid",
+      "salaryRange": "₹22,00,000 - ₹35,00,000 / year",
+      "experienceRequirement": "Mid-Senior Level",
+      "openings": 2,
+      "deadline": "2026-10-08",
+      "description": "Architect and scale distributed inference clusters with low latency and robust fault tolerance.",
+      "responsibilities": [
+        "Architect and scale distributed inference clusters.",
+        "Collaborate with security and product teams on AI governance."
+      ],
+      "requiredSkills": [
+        "Python",
+        "PyTorch",
+        "Kubernetes",
+        "FastAPI"
+      ],
+      "preferredSkills": [
+        "Docker",
+        "Terraform"
+      ],
+      "requiredQualifications": [
+        "B.Tech/M.Tech in CS or related quantitative discipline.",
+        "3+ years experience designing cloud AI pipelines."
+      ],
+      "preferredQualifications": [],
+      "requiredDocumentTypes": [
+        "student_id"
+      ],
+      "interviewDetails": {
+        "mode": "Virtual",
+        "type": "Technical & Behavioral",
+        "estimatedRounds": 2,
+        "instructions": "Shortlisted candidates will receive round calendar invites via registered email."
+      },
+      "knowledgeTest": {
+        "enabled": true,
+        "testTitle": "AI Platform Screening Assessment",
+        "timeLimitMinutes": 45,
+        "totalMarks": 20,
+        "passingPercentage": 70,
+        "difficultyDistribution": {
+          "beginner": 2,
+          "intermediate": 2,
+          "advanced": 1
+        },
+        "selectedQuestionIds": [],
+        "testPaper": [],
+        "aiReviewStatus": "not_started",
+        "approvalStatus": "draft"
+      },
+      "status": "published",
+      "createdAt": "2026-09-08T11:36:19.451Z",
+      "updatedAt": "2026-09-08T11:36:19.451Z",
+      "publishedAt": "2026-09-08T11:36:19.451Z"
+    },
     {
       "id": "hire_1788809710479_acbf1c",
       "industryId": "1f80e367-38a7-43d0-9573-fb3d9215d64a",
