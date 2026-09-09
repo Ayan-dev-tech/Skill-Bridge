@@ -32,12 +32,53 @@ import {
 } from "lucide-react";
 import { initialApprovals, ApprovalQueueItem } from "@/lib/admin-data";
 
+import { AdminApprovalItem } from "@/lib/admin/types";
+
 interface ApprovalsViewProps {
   onApprovalsCountChange?: (count: number) => void;
+  liveApprovals?: AdminApprovalItem[];
+  onApproveLiveItem?: (item: AdminApprovalItem) => void;
+  onRejectLiveItem?: (item: AdminApprovalItem) => void;
 }
 
-export function ApprovalsView({ onApprovalsCountChange }: ApprovalsViewProps) {
-  const [approvals, setApprovals] = React.useState<ApprovalQueueItem[]>(initialApprovals);
+export function ApprovalsView({
+  onApprovalsCountChange,
+  liveApprovals,
+  onApproveLiveItem,
+  onRejectLiveItem,
+}: ApprovalsViewProps) {
+  const [approvals, setApprovals] = React.useState<ApprovalQueueItem[]>(() => {
+    if (liveApprovals && liveApprovals.length > 0) {
+      return liveApprovals.map((a) => ({
+        id: a.id,
+        type: a.type as any,
+        title: a.title,
+        submittedBy: a.submittedBy,
+        submissionDate: a.submissionDate,
+        details: a.details,
+        status: a.status,
+      }));
+    }
+    return initialApprovals;
+  });
+
+  // Sync if liveApprovals changes from backend
+  React.useEffect(() => {
+    if (liveApprovals) {
+      setApprovals(
+        liveApprovals.map((a) => ({
+          id: a.id,
+          type: a.type as any,
+          title: a.title,
+          submittedBy: a.submittedBy,
+          submissionDate: a.submissionDate,
+          details: a.details,
+          status: a.status,
+        }))
+      );
+    }
+  }, [liveApprovals]);
+
   const [searchQuery, setSearchQuery] = React.useState("");
   const [statusFilter, setStatusFilter] = React.useState<"all" | "pending" | "approved" | "rejected">("pending");
   const [typeFilter, setTypeFilter] = React.useState<string>("all");
@@ -53,10 +94,15 @@ export function ApprovalsView({ onApprovalsCountChange }: ApprovalsViewProps) {
   }, [approvals, onApprovalsCountChange]);
 
   const handleApprove = (item: ApprovalQueueItem) => {
+    const liveMatch = liveApprovals?.find((l) => l.id === item.id);
+    if (liveMatch && onApproveLiveItem) {
+      onApproveLiveItem(liveMatch);
+    }
+
     setApprovals((prev) =>
       prev.map((a) => (a.id === item.id ? { ...a, status: "approved" } : a))
     );
-    setActionAlert(`Approved: "${item.title}". Permissions have been provisioned.`);
+    setActionAlert(`Approved: "${item.title}". Permissions provisioned.`);
     if (selectedItem?.id === item.id) {
       setSelectedItem({ ...selectedItem, status: "approved" });
     }
@@ -67,17 +113,22 @@ export function ApprovalsView({ onApprovalsCountChange }: ApprovalsViewProps) {
     const reason = prompt("Enter justification for rejection:", "Does not meet institutional accreditation criteria.");
     if (reason === null) return;
 
+    const liveMatch = liveApprovals?.find((l) => l.id === item.id);
+    if (liveMatch && onRejectLiveItem) {
+      onRejectLiveItem(liveMatch);
+    }
+
     setApprovals((prev) =>
       prev.map((a) => (a.id === item.id ? { ...a, status: "rejected" } : a))
     );
-    setActionAlert(`Rejected: "${item.title}". Notification dispatched.`);
+    setActionAlert(`Rejected: "${item.title}". Rejection recorded.`);
     if (selectedItem?.id === item.id) {
       setSelectedItem({ ...selectedItem, status: "rejected" });
     }
     setTimeout(() => setActionAlert(null), 4000);
   };
 
-  const types = ["all", "Industry Partner", "Job", "Faculty", "Course", "Student"];
+  const types = ["all", "Industry Partner", "Campus Partner", "Student Verification", "Job", "Faculty", "Course", "Student"];
 
   const filteredApprovals = React.useMemo(() => {
     return approvals.filter((a) => {

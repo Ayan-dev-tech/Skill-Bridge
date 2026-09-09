@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { db } from "@/lib/db";
 import { getAuthenticatedStudent } from "@/lib/student-auth";
 import { getCanonicalWorkflowState, checkRouteAccess } from "@/lib/workflow/canonical-workflow";
 
@@ -9,6 +10,9 @@ export async function GET(request: Request) {
     const checkPath = searchParams.get("checkPath");
 
     const workflow = await getCanonicalWorkflowState(student.id);
+    const verification = await db.getStudentVerification(student.id);
+    const passportDoc = verification?.documents?.find((d: { documentType: string; id: string }) => d.documentType === "passport_photo");
+    const passportPhotoUrl = passportDoc ? `/api/student/verification/document/${passportDoc.id}` : undefined;
 
     let routeCheck = undefined;
     if (checkPath) {
@@ -20,6 +24,7 @@ export async function GET(request: Request) {
       studentId: student.id,
       workflow,
       routeCheck,
+      passportPhotoUrl,
     });
   } catch (error) {
     console.error("Workflow status API error:", error);

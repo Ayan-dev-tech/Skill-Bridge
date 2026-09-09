@@ -4,6 +4,8 @@ import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { GlobalHeader } from "@/components/navigation/global-header";
 import { IndustrySidebar, IndustryViewType } from "@/components/industry/industry-sidebar";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { IndustryDashboardView } from "@/components/industry/views/industry-dashboard-view";
 import { IndustryProfileView } from "@/components/industry/views/industry-profile-view";
 import { StudentDataAccessView } from "@/components/industry/views/student-data-access-view";
@@ -13,7 +15,7 @@ import { ApplicationScreeningView } from "@/components/industry/views/applicatio
 import { InterviewEvaluationView } from "@/components/industry/views/interview-evaluation-view";
 import { FinalHiringAnalyticsView } from "@/components/industry/views/final-hiring-analytics-view";
 
-export default function IndustryPortalPage() {
+function IndustryPortalContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -121,68 +123,86 @@ export default function IndustryPortalPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground select-none">
-      {/* Global Header */}
-      <GlobalHeader
-        portal="industry"
-        breadcrumb={{
-          section: "Corporate",
-          title: getBreadcrumbTitle(),
-        }}
-        user={user}
-        onOpenMobile={() => setMobileNavOpen(true)}
-        onLogout={handleLogout}
-        notificationsCount={1}
-        notificationItems={[
-          {
-            id: "notif-ind-1",
-            title: "Authorized Partner",
-            message: "Direct campus recruitment and student discovery verified.",
-            time: "Active",
-          },
-        ]}
-      />
-
-      <div className="flex-1 flex w-full">
-        {/* Sidebar */}
-        <IndustrySidebar
-          currentView={currentView}
-          onSelectView={handleSelectView}
-          questionsCount={questionsCount}
-          mobileOpen={mobileNavOpen}
-          onCloseMobile={() => setMobileNavOpen(false)}
+    <SidebarProvider defaultOpen={true}>
+      <div className="h-screen flex flex-col w-full bg-background text-foreground select-none overflow-hidden">
+        {/* Global Header */}
+        <GlobalHeader
+          portal="industry"
+          breadcrumb={{
+            section: "Corporate",
+            title: getBreadcrumbTitle(),
+          }}
+          user={user}
+          onLogout={handleLogout}
+          notificationsCount={1}
+          notificationItems={[
+            {
+              id: "notif-ind-1",
+              title: "Authorized Partner",
+              message: "Direct campus recruitment and student discovery verified.",
+              time: "Active",
+            },
+          ]}
         />
 
-        {/* Main Content Area */}
-        <main className="flex-1 p-4 md:p-8 overflow-y-auto min-w-0">
-          {currentView === "dashboard" && (
-            <IndustryDashboardView onNavigate={handleSelectView} />
-          )}
+        <div className="flex-1 flex w-full min-h-0 overflow-hidden">
+          {/* Sidebar */}
+          <IndustrySidebar
+            currentView={currentView}
+            onSelectView={handleSelectView}
+            questionsCount={questionsCount}
+          />
 
-          {currentView === "hiring" && (
-            <HiringManagementView
-              onNavigateToQuestionBank={() => handleSelectView("question-bank")}
-              onNavigateToScreening={() => handleSelectView("screening")}
-            />
-          )}
+          {/* Main Content Area with Clean ScrollArea */}
+          <SidebarInset className="flex-1 min-w-0 h-full p-0 border-0 overflow-hidden">
+            <ScrollArea className="size-full">
+              <div className="p-4 md:p-8 min-w-0 max-w-7xl mx-auto space-y-6">
+                {currentView === "dashboard" && (
+                  <IndustryDashboardView onNavigate={handleSelectView} />
+                )}
 
-          {currentView === "screening" && (
-            <ApplicationScreeningView onNavigateToInterviews={() => handleSelectView("interview")} />
-          )}
+                {currentView === "hiring" && (
+                  <HiringManagementView
+                    onNavigateToQuestionBank={() => handleSelectView("question-bank")}
+                    onNavigateToScreening={() => handleSelectView("screening")}
+                  />
+                )}
 
-          {currentView === "interview" && (
-            <InterviewEvaluationView onNavigateToFinalDecision={() => handleSelectView("analytics")} />
-          )}
+                {currentView === "screening" && (
+                  <ApplicationScreeningView onNavigateToInterviews={() => handleSelectView("interview")} />
+                )}
 
-          {currentView === "analytics" && <FinalHiringAnalyticsView />}
+                {currentView === "interview" && (
+                  <InterviewEvaluationView onNavigateToFinalDecision={() => handleSelectView("analytics")} />
+                )}
 
-          {currentView === "profile" && <IndustryProfileView />}
+                {currentView === "analytics" && <FinalHiringAnalyticsView />}
 
-          {currentView === "students" && <StudentDataAccessView />}
+                {currentView === "profile" && <IndustryProfileView />}
 
-          {currentView === "question-bank" && <QuestionBankView />}
-        </main>
+                {currentView === "students" && <StudentDataAccessView />}
+
+                {currentView === "question-bank" && <QuestionBankView />}
+              </div>
+            </ScrollArea>
+          </SidebarInset>
+        </div>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }
+
+export default function IndustryPortalPage() {
+  return (
+    <React.Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-background text-muted-foreground text-xs">
+          Loading Industry Portal...
+        </div>
+      }
+    >
+      <IndustryPortalContent />
+    </React.Suspense>
+  );
+}
+

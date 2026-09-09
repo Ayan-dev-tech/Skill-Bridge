@@ -14,6 +14,7 @@ export interface StudentProfileData {
   batchYear: string;
   institution: string;
   currentWorkflowStage: number; // 1 to 7
+  photoUrl?: string;
 }
 
 export type WorkflowStageStatus =

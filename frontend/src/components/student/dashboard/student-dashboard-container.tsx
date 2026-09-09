@@ -201,21 +201,21 @@ export function StudentDashboardContainer() {
   return (
     <div className="space-y-6 max-w-6xl mx-auto py-2">
       {/* 1. Header Welcome Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-border">
-        <div className="space-y-1">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border/80">
+        <div className="space-y-1.5">
           <div className="flex flex-wrap items-center gap-2">
-            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full border border-border bg-muted/40 text-xs font-mono text-muted-foreground">
+            <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full border border-border/80 bg-muted/40 text-xs font-mono text-muted-foreground shadow-2xs">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
               <span>Student Verified Profile &bull; {student.id}</span>
             </div>
             {data.isAdvancedVerified && (
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border border-primary/30 bg-primary/10 text-xs font-semibold text-primary">
+              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full border border-primary/30 bg-primary/10 text-xs font-semibold text-primary shadow-2xs">
                 <Sparkles className="w-3.5 h-3.5 text-primary" />
                 <span>Advanced Profile Verified &bull; Early access to Jobs & Internships unlocked</span>
               </div>
             )}
           </div>
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+          <h1 className="text-2xl md:text-3xl font-heading font-bold tracking-tight text-foreground">
             Welcome back, {student.name}
           </h1>
           <p className="text-xs md:text-sm text-muted-foreground">
@@ -223,16 +223,16 @@ export function StudentDashboardContainer() {
           </p>
         </div>
 
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-2.5 shrink-0">
           {sections.find((s) => s.id === "interest-finder")?.status !== "locked" && (
-            <Button variant="outline" size="sm" asChild>
+            <Button variant="outline" size="sm" asChild className="rounded-full shadow-2xs">
               <Link href="/student/interest-finder" className="text-xs">
                 <Compass className="w-3.5 h-3.5 mr-1.5" />
                 Interest Explorer
               </Link>
             </Button>
           )}
-          <Button size="sm" asChild>
+          <Button size="sm" asChild className="rounded-full shadow-xs">
             <Link href={currentFocus.actionHref} className="text-xs">
               {currentFocus.actionText} <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
             </Link>
@@ -241,11 +241,11 @@ export function StudentDashboardContainer() {
       </div>
 
       {/* 2. 8-Stage Journey Progression Track */}
-      <Card className="border-border bg-card">
+      <Card className="border border-border/80 bg-card shadow-xs rounded-xl">
         <CardHeader className="pb-3 pt-4 px-4 sm:px-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <CardTitle className="text-sm font-semibold tracking-tight text-foreground flex items-center gap-2">
+              <CardTitle className="text-sm font-heading font-semibold tracking-tight text-foreground flex items-center gap-2">
                 <Layers className="w-4 h-4 text-muted-foreground" />
                 Skill Bridge Student Journey
               </CardTitle>
@@ -259,7 +259,7 @@ export function StudentDashboardContainer() {
               </span>
             </div>
           </div>
-          <Progress value={progressPercent} className="h-1.5 mt-2" />
+          <Progress value={progressPercent} className="h-1.5 mt-2 rounded-full" />
         </CardHeader>
 
         <CardContent className="px-4 sm:px-6 pb-4 pt-1">
@@ -275,14 +275,14 @@ export function StudentDashboardContainer() {
                 <Link
                   key={sec.id}
                   href={isLocked ? "#" : sec.href}
-                  className={`group p-2 rounded-lg border text-left transition-all ${
+                  className={`group p-2.5 rounded-xl border text-left transition-all ${
                     isCurrent
-                      ? "border-primary bg-primary/5 ring-1 ring-primary"
+                      ? "border-primary bg-primary/5 ring-1 ring-primary/60 shadow-2xs"
                       : isCompleted
-                      ? "border-border bg-muted/20 hover:bg-muted/40"
+                      ? "border-border/80 bg-muted/20 hover:bg-muted/40"
                       : isAvailable
-                      ? "border-border hover:border-foreground/30 hover:bg-muted/30"
-                      : "border-border/40 bg-muted/10 opacity-60 cursor-not-allowed"
+                      ? "border-border/80 hover:border-foreground/30 hover:bg-muted/30"
+                      : "border-border/40 bg-muted/10 opacity-50 cursor-not-allowed"
                   }`}
                   onClick={(e) => {
                     if (isLocked) {
@@ -307,7 +307,7 @@ export function StudentDashboardContainer() {
                       <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground" />
                     )}
                   </div>
-                  <p className="text-[11px] font-semibold text-foreground truncate leading-tight">
+                  <p className="text-[11px] font-medium text-foreground truncate leading-tight">
                     {sec.name}
                   </p>
                   <span
@@ -339,10 +339,10 @@ export function StudentDashboardContainer() {
       {/* 3. Real Account Statistics Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Metric 1: Knowledge Test Benchmark */}
-        <Card className="border-border bg-card">
+        <Card className="border border-border/80 bg-card shadow-xs rounded-xl">
           <CardContent className="p-4 space-y-2">
             <div className="flex items-center justify-between text-muted-foreground">
-              <span className="text-xs font-medium uppercase tracking-wider">
+              <span className="text-[10px] font-mono font-medium uppercase tracking-wider">
                 Technical Benchmark
               </span>
               <ClipboardCheck className="w-4 h-4 text-foreground/70" />
@@ -350,22 +350,22 @@ export function StudentDashboardContainer() {
             <div>
               {statistics.knowledgeTestScore !== null ? (
                 <div className="flex items-baseline gap-1.5">
-                  <span className="text-2xl font-bold tracking-tight text-foreground">
+                  <span className="text-2xl md:text-3xl font-heading font-bold tracking-tight text-foreground">
                     {statistics.knowledgeTestScore}
                   </span>
                   <span className="text-xs font-semibold text-muted-foreground">
                     / {statistics.knowledgeTestMaxScore} Pts
                   </span>
-                  <Badge variant="outline" className="ml-auto text-[10px] capitalize">
+                  <Badge variant="outline" className="ml-auto text-[10px] capitalize rounded-full">
                     {statistics.knowledgeLevel || "Calibrated"}
                   </Badge>
                 </div>
               ) : (
                 <div className="flex items-baseline gap-2">
-                  <span className="text-xl font-semibold text-muted-foreground">
+                  <span className="text-xl font-heading font-semibold text-muted-foreground">
                     Not Taken
                   </span>
-                  <Badge variant="secondary" className="ml-auto text-[10px]">
+                  <Badge variant="secondary" className="ml-auto text-[10px] rounded-full">
                     Pending
                   </Badge>
                 </div>
@@ -380,23 +380,23 @@ export function StudentDashboardContainer() {
         </Card>
 
         {/* Metric 2: Document Submission */}
-        <Card className="border-border bg-card">
+        <Card className="border border-border/80 bg-card shadow-xs rounded-xl">
           <CardContent className="p-4 space-y-2">
             <div className="flex items-center justify-between text-muted-foreground">
-              <span className="text-xs font-medium uppercase tracking-wider">
+              <span className="text-[10px] font-mono font-medium uppercase tracking-wider">
                 Document Submission
               </span>
               <FileCheck className="w-4 h-4 text-foreground/70" />
             </div>
             <div>
               <div className="flex items-baseline gap-1.5">
-                <span className="text-2xl font-bold tracking-tight text-foreground">
+                <span className="text-2xl md:text-3xl font-heading font-bold tracking-tight text-foreground">
                   {statistics.verifiedDocumentsCount}
                 </span>
                 <span className="text-xs text-muted-foreground">
                   / 4 Required Submitted
                 </span>
-                <Badge variant="outline" className="ml-auto text-[10px]">
+                <Badge variant="outline" className="ml-auto text-[10px] rounded-full">
                   Stage 1
                 </Badge>
               </div>
@@ -408,22 +408,22 @@ export function StudentDashboardContainer() {
         </Card>
 
         {/* Metric 3: Skill Gap Analysis */}
-        <Card className="border-border bg-card">
+        <Card className="border border-border/80 bg-card shadow-xs rounded-xl">
           <CardContent className="p-4 space-y-2">
             <div className="flex items-center justify-between text-muted-foreground">
-              <span className="text-xs font-medium uppercase tracking-wider">
+              <span className="text-[10px] font-mono font-medium uppercase tracking-wider">
                 Skill Gap Matrix
               </span>
               <TrendingUp className="w-4 h-4 text-foreground/70" />
             </div>
             <div>
               <div className="flex items-baseline gap-1.5">
-                <span className="text-xl font-bold tracking-tight text-foreground">
+                <span className="text-xl md:text-2xl font-heading font-bold tracking-tight text-foreground">
                   {statistics.skillGapsIdentified > 0
                     ? `${statistics.skillGapsIdentified} Gaps Calibrated`
                     : "Pending Stage 2"}
                 </span>
-                <Badge variant="secondary" className="ml-auto text-[10px]">
+                <Badge variant="secondary" className="ml-auto text-[10px] rounded-full">
                   Stage 4
                 </Badge>
               </div>
@@ -435,21 +435,21 @@ export function StudentDashboardContainer() {
         </Card>
 
         {/* Metric 4: Placement Applications */}
-        <Card className="border-border bg-card">
+        <Card className="border border-border/80 bg-card shadow-xs rounded-xl">
           <CardContent className="p-4 space-y-2">
             <div className="flex items-center justify-between text-muted-foreground">
-              <span className="text-xs font-medium uppercase tracking-wider">
+              <span className="text-[10px] font-mono font-medium uppercase tracking-wider">
                 Applications
               </span>
               <Briefcase className="w-4 h-4 text-foreground/70" />
             </div>
             <div>
               <div className="flex items-baseline gap-1.5">
-                <span className="text-2xl font-bold tracking-tight text-foreground">
+                <span className="text-2xl md:text-3xl font-heading font-bold tracking-tight text-foreground">
                   {statistics.activeApplicationsCount}
                 </span>
                 <span className="text-xs text-muted-foreground">Active Submissions</span>
-                <Badge variant="outline" className="ml-auto text-[10px]">
+                <Badge variant="outline" className="ml-auto text-[10px] rounded-full">
                   Stage 7-8
                 </Badge>
               </div>
@@ -502,19 +502,19 @@ export function StudentDashboardContainer() {
         </Card>
 
         {/* Confirmed Interest Profile Card */}
-        <Card className="border-border bg-card flex flex-col justify-between">
+        <Card className="border border-border/80 bg-card shadow-xs rounded-xl flex flex-col justify-between">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <Badge variant="outline" className="text-[11px] font-mono">
+              <Badge variant="outline" className="text-[10px] font-mono rounded-full">
                 Stage 01 Foundation
               </Badge>
               {interestProfile && (
-                <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
+                <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1 font-mono">
                   <CheckCircle2 className="w-3.5 h-3.5" /> Confirmed
                 </span>
               )}
             </div>
-            <CardTitle className="text-lg font-bold text-foreground mt-2">
+            <CardTitle className="text-lg font-heading font-bold text-foreground mt-2">
               {interestProfile ? interestProfile.specificInterest : "Interest Profile Not Calibrated"}
             </CardTitle>
             <CardDescription className="text-xs text-muted-foreground">
@@ -527,7 +527,7 @@ export function StudentDashboardContainer() {
           <CardContent className="pt-0">
             {interestProfile ? (
               <div className="space-y-3">
-                <div className="p-3 rounded-lg border border-border bg-muted/10 text-xs space-y-1">
+                <div className="p-3 rounded-xl border border-border/80 bg-muted/20 text-xs space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground">Specialization Alignment:</span>
                     <span className="font-semibold text-foreground">
@@ -543,38 +543,38 @@ export function StudentDashboardContainer() {
                 </div>
 
                 <div className="flex items-center justify-between pt-1">
-                  <Button variant="outline" size="sm" asChild className="text-xs">
+                  <Button variant="outline" size="sm" asChild className="text-xs rounded-full shadow-2xs">
                     <Link href="/student/interest-finder">
                       <Compass className="w-3.5 h-3.5 mr-1.5" />
                       Retake Discovery Engine
                     </Link>
                   </Button>
                   {sections.find((s) => s.id === "knowledge-testing")?.status !== "locked" ? (
-                    <Button size="sm" variant="ghost" asChild className="text-xs">
+                    <Button size="sm" variant="ghost" asChild className="text-xs rounded-full">
                       <Link href="/student/knowledge-testing">
                         Proceed to Technical Benchmark <ChevronRight className="w-3.5 h-3.5 ml-1" />
                       </Link>
                     </Button>
                   ) : (
-                    <Button size="sm" variant="ghost" disabled className="text-xs opacity-60">
+                    <Button size="sm" variant="ghost" disabled className="text-xs opacity-60 rounded-full">
                       <Lock className="w-3.5 h-3.5 mr-1" /> Benchmark Locked
                     </Button>
                   )}
                 </div>
               </div>
             ) : (
-              <div className="p-4 rounded-lg border border-dashed border-border text-center space-y-2">
+              <div className="p-4 rounded-xl border border-dashed border-border/80 text-center space-y-2">
                 <p className="text-xs text-muted-foreground">
                   You haven&apos;t confirmed your engineering interest profile yet. Complete the Interest Finder to unlock your personalized curriculum.
                 </p>
                 {sections.find((s) => s.id === "interest-finder")?.status !== "locked" ? (
-                  <Button size="sm" asChild>
+                  <Button size="sm" asChild className="rounded-full shadow-xs">
                     <Link href="/student/interest-finder">
                       Start Interest Discovery <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
                     </Link>
                   </Button>
                 ) : (
-                  <Button size="sm" disabled className="opacity-60">
+                  <Button size="sm" disabled className="opacity-60 rounded-full">
                     <Lock className="w-3.5 h-3.5 mr-1.5" /> Discovery Locked
                   </Button>
                 )}
@@ -588,7 +588,7 @@ export function StudentDashboardContainer() {
       <div className="space-y-3 pt-2">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold tracking-tight text-foreground">
+            <h2 className="text-lg font-heading font-bold tracking-tight text-foreground">
               Complete Skill Bridge Workflow
             </h2>
             <p className="text-xs text-muted-foreground">
@@ -609,12 +609,12 @@ export function StudentDashboardContainer() {
             return (
               <Card
                 key={section.id}
-                className={`border transition-all flex flex-col justify-between ${
+                className={`border transition-all flex flex-col justify-between rounded-xl ${
                   isLocked
-                    ? "border-border/60 bg-muted/5 opacity-75"
+                    ? "border-border/60 bg-muted/10 opacity-70"
                     : isCompleted
-                    ? "border-border bg-card hover:border-foreground/30"
-                    : "border-border bg-card hover:border-foreground/40 shadow-xs"
+                    ? "border-border/80 bg-card hover:border-border shadow-2xs"
+                    : "border-border/80 bg-card hover:border-foreground/30 shadow-xs"
                 }`}
               >
                 <CardHeader className="p-4 pb-2 space-y-2">
@@ -640,7 +640,7 @@ export function StudentDashboardContainer() {
                           ? "outline"
                           : "secondary"
                       }
-                      className="text-[10px] font-mono capitalize"
+                      className="text-[10px] font-mono capitalize rounded-full"
                     >
                       {isCompleted
                         ? "Completed"
@@ -658,7 +658,7 @@ export function StudentDashboardContainer() {
                     <span className="text-[10px] font-mono text-muted-foreground uppercase">
                       Stage 0{section.stage}
                     </span>
-                    <CardTitle className="text-sm font-semibold text-foreground">
+                    <CardTitle className="text-sm font-heading font-semibold text-foreground">
                       {section.name}
                     </CardTitle>
                   </div>
@@ -681,7 +681,7 @@ export function StudentDashboardContainer() {
                       <span className="text-[11px] font-medium text-muted-foreground">
                         {isCompleted ? "Stage Completed" : "Ready to Proceed"}
                       </span>
-                      <Button variant="ghost" size="sm" asChild className="h-7 text-xs px-2">
+                      <Button variant="ghost" size="sm" asChild className="h-7 text-xs px-2.5 rounded-full">
                         <Link href={section.href}>
                           {isCompleted ? "Review" : "Open"} <ArrowRight className="w-3 h-3 ml-1" />
                         </Link>

@@ -57,6 +57,7 @@ export function StudentHeader({
         name: profile.fullName,
         meta: profile.semester ? `Sem ${profile.semester}` : undefined,
         email: profile.email,
+        avatarUrl: profile.photoUrl,
       }}
       onOpenMobile={onOpenMobile}
       onLogout={handleLogout}

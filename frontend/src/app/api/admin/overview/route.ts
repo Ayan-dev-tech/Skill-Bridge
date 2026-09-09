@@ -1,17 +1,17 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { AdminLiveService } from "@/lib/admin/admin-service";
 
 export async function GET() {
   try {
-    const overview = await db.getAdminOverview();
+    const liveOverview = AdminLiveService.getLiveOverview();
     return NextResponse.json({
       success: true,
-      data: overview,
+      data: liveOverview,
     });
   } catch (error) {
     console.error("Admin overview error:", error);
     return NextResponse.json(
-      { error: "Failed to load admin overview data." },
+      { error: "Failed to load admin live overview data." },
       { status: 500 }
     );
   }

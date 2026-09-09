@@ -1,15 +1,20 @@
 "use client";
 
 import * as React from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { AdminSidebar, AdminViewType } from "@/components/admin/admin-sidebar";
 import { AdminHeader } from "@/components/admin/admin-header";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useAdminLiveUpdates } from "@/lib/admin/use-admin-live-updates";
 
 // Views
 import { OverviewView } from "@/components/admin/views/overview-view";
 import { StudentsView } from "@/components/admin/views/students-view";
 import { FacultyView } from "@/components/admin/views/faculty-view";
 import { IndustryView } from "@/components/admin/views/industry-view";
+import { CampusView } from "@/components/admin/views/campus-view";
 import { SkillLibraryView } from "@/components/admin/views/skill-library-view";
 import { SkillGapsView } from "@/components/admin/views/skill-gaps-view";
 import { OpportunitiesView } from "@/components/admin/views/opportunities-view";
@@ -24,7 +29,7 @@ import {
   SettingsView,
 } from "@/components/admin/views/system-views";
 
-// Master Seed Data
+// Master Seed Data (Fallback & Defaults)
 import {
   initialStudents,
   initialFaculty,
@@ -57,7 +62,19 @@ export default function AdminPortalPage() {
   const [currentView, setCurrentView] = React.useState<AdminViewType>("overview");
   const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
 
-  // Core Data Stores
+  // Live Realtime & Activity Hook
+  const {
+    data: liveData,
+    isLoading: isLiveLoading,
+    isRefreshing,
+    lastSyncedAt,
+    realtimeStatus,
+    refreshData,
+    handleApprovalAction,
+    handleToggleFreeze,
+  } = useAdminLiveUpdates();
+
+  // Core Data Stores (with seed fallbacks)
   const [students, setStudents] = React.useState<StudentProfile[]>(initialStudents);
   const [faculty, setFaculty] = React.useState<FacultyMember[]>(initialFaculty);
   const [industry, setIndustry] = React.useState<IndustryPartner[]>(initialIndustry);
@@ -69,10 +86,10 @@ export default function AdminPortalPage() {
   const [approvals, setApprovals] = React.useState<ApprovalQueueItem[]>(initialApprovals);
   const [auditLogs, setAuditLogs] = React.useState<AuditLogItem[]>(initialAuditLogs);
 
-  // Dynamic Pending Counter
-  const [pendingApprovalsCount, setPendingApprovalsCount] = React.useState(
-    initialApprovals.filter((a) => a.status === "pending").length
-  );
+  // Dynamic Pending Counter (prioritize live data)
+  const pendingApprovalsCount =
+    liveData?.stats.pendingApprovalsCount ??
+    approvals.filter((a) => a.status === "pending").length;
 
   // Session verification
   React.useEffect(() => {
@@ -132,60 +149,25 @@ export default function AdminPortalPage() {
     );
   };
 
-  // Industry Partner Freeze Handler with Backend Sync
+  // Industry Partner Freeze Handler with Backend Sync & Live State
   const handleToggleIndustryFreeze = async (companyId: string) => {
     const target = industry.find((c) => c.id === companyId);
     if (!target) return;
 
-    const willFreeze = !target.isFrozen;
-    const reason = willFreeze
-      ? prompt(
-          `Enter reason for freezing ${target.companyName} hiring:`,
-          "Suspicious recruitment activity flagged by compliance"
-        )
-      : undefined;
+    await handleToggleFreeze("company", companyId, target.companyName, target.isFrozen);
 
-    if (willFreeze && reason === null) return; // cancelled
-
-    // Update local state
+    // Also update local list
     setIndustry((prev) =>
       prev.map((c) => {
         if (c.id === companyId) {
           return {
             ...c,
-            isFrozen: willFreeze,
-            freezeReason: willFreeze ? reason || "Suspicious hiring behavior flagged" : undefined,
+            isFrozen: !c.isFrozen,
           };
         }
         return c;
       })
     );
-
-    // Append to Audit Logs
-    const newLog: AuditLogItem = {
-      id: `log-${Date.now()}`,
-      actor: "Admin (admin@gmail.com)",
-      action: willFreeze ? "Company Hiring Frozen" : "Company Hiring Restored",
-      resource: `${target.companyName} (ID: ${target.id})`,
-      timestamp: new Date().toISOString().replace("T", " ").slice(0, 19),
-      status: willFreeze ? "Flagged" : "Success",
-    };
-    setAuditLogs((prev) => [newLog, ...prev]);
-
-    // Backend endpoint call for persistent database sync
-    try {
-      await fetch("/api/admin/freeze", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "company",
-          id: companyId,
-          reason: reason || undefined,
-        }),
-      });
-    } catch (e) {
-      console.warn("Backend sync notification failed:", e);
-    }
   };
 
   const handleApproveIndustry = (companyId: string) => {
@@ -201,139 +183,183 @@ export default function AdminPortalPage() {
 
   // Approvals Quick Handlers
   const handleApproveItem = (id: string) => {
-    setApprovals((prev) =>
-      prev.map((a) => (a.id === id ? { ...a, status: "approved" } : a))
-    );
-    setPendingApprovalsCount((c) => Math.max(0, c - 1));
+    const liveMatch = liveData?.approvals.find((a) => a.id === id);
+    if (liveMatch) {
+      handleApprovalAction(liveMatch, "approved");
+    } else {
+      setApprovals((prev) =>
+        prev.map((a) => (a.id === id ? { ...a, status: "approved" } : a))
+      );
+    }
   };
 
   const handleRejectItem = (id: string) => {
-    setApprovals((prev) =>
-      prev.map((a) => (a.id === id ? { ...a, status: "rejected" } : a))
-    );
-    setPendingApprovalsCount((c) => Math.max(0, c - 1));
+    const liveMatch = liveData?.approvals.find((a) => a.id === id);
+    if (liveMatch) {
+      handleApprovalAction(liveMatch, "rejected");
+    } else {
+      setApprovals((prev) =>
+        prev.map((a) => (a.id === id ? { ...a, status: "rejected" } : a))
+      );
+    }
   };
 
   return (
-    <div className="flex h-screen bg-background text-foreground overflow-hidden">
-      {/* Persistent Desktop & Mobile Drawer Sidebar */}
-      <AdminSidebar
-        currentView={currentView}
-        onSelectView={(v) => setCurrentView(v)}
-        pendingApprovalsCount={pendingApprovalsCount}
-        mobileOpen={mobileNavOpen}
-        onCloseMobile={() => setMobileNavOpen(false)}
-      />
-
-      {/* Main Workspace Column */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
-        {/* Sticky Header */}
-        <AdminHeader
+    <SidebarProvider>
+      <div className="flex h-screen w-full bg-background text-foreground overflow-hidden">
+        {/* Persistent Desktop & Mobile Drawer Sidebar */}
+        <AdminSidebar
           currentView={currentView}
-          onOpenMobile={() => setMobileNavOpen(true)}
-          onLogout={handleLogout}
+          onSelectView={(v) => setCurrentView(v)}
+          pendingApprovalsCount={pendingApprovalsCount}
+          mobileOpen={mobileNavOpen}
+          onCloseMobile={() => setMobileNavOpen(false)}
         />
 
-        {/* View Surface Content */}
-        <main className="flex-1 p-4 md:p-6 max-w-7xl w-full mx-auto space-y-6">
-          {isCheckingAuth || !isAuthenticated ? (
-            <div className="flex flex-col items-center justify-center min-h-[400px] space-y-3">
-              <div className="w-6 h-6 border-2 border-foreground/20 border-t-foreground rounded-full animate-spin" />
-              <p className="text-xs text-muted-foreground font-mono">
-                Verifying administrative credentials...
-              </p>
-            </div>
-          ) : (
-            <>
-              {currentView === "overview" && (
-            <OverviewView
-              students={students}
-              faculty={faculty}
-              industry={industry}
-              jobs={jobs}
-              internships={internships}
-              certifications={certifications}
-              approvals={approvals}
-              auditLogs={auditLogs}
-              onNavigate={(v) => setCurrentView(v)}
-              onApprove={handleApproveItem}
-              onReject={handleRejectItem}
-            />
-          )}
+        {/* Main Workspace Column */}
+        <SidebarInset className="flex flex-col min-w-0 flex-1 h-full overflow-hidden">
+          {/* Header with Live Telemetry & Sync */}
+          <AdminHeader
+            currentView={currentView}
+            onOpenMobile={() => setMobileNavOpen(true)}
+            onLogout={handleLogout}
+            realtimeStatus={realtimeStatus}
+            isRefreshing={isRefreshing}
+            onRefresh={refreshData}
+            lastSyncedAt={lastSyncedAt}
+            notificationsCount={liveData?.notifications.length || 1}
+            notificationItems={liveData?.notifications.map((n) => ({
+              id: n.id,
+              title: n.title,
+              message: n.message,
+              time: n.sentAt,
+            }))}
+          />
 
-          {currentView === "students" && (
-            <StudentsView
-              students={students}
-              onToggleStatus={handleToggleStudentStatus}
-            />
-          )}
+          {/* Clean ScrollArea for View Surface Content */}
+          <ScrollArea className="flex-1 w-full min-h-0">
+            <main className="p-4 md:p-6 max-w-7xl w-full mx-auto space-y-6">
+              {isCheckingAuth || !isAuthenticated || (isLiveLoading && !liveData) ? (
+                <div className="space-y-6 animate-pulse py-4">
+                  <div className="flex items-center justify-between">
+                    <Skeleton className="h-8 w-64 rounded-lg" />
+                    <Skeleton className="h-8 w-32 rounded-lg" />
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-9 gap-3">
+                    {Array.from({ length: 9 }).map((_, i) => (
+                      <Skeleton key={i} className="h-20 rounded-lg" />
+                    ))}
+                  </div>
+                  <Skeleton className="h-96 w-full rounded-xl" />
+                </div>
+              ) : (
+                <>
+                  {currentView === "overview" && (
+                    <OverviewView
+                      students={students}
+                      faculty={faculty}
+                      industry={industry}
+                      jobs={jobs}
+                      internships={internships}
+                      certifications={certifications}
+                      approvals={approvals}
+                      auditLogs={auditLogs}
+                      onNavigate={(v) => setCurrentView(v)}
+                      onApprove={handleApproveItem}
+                      onReject={handleRejectItem}
+                      liveOverview={liveData}
+                      onApproveLiveItem={(item) => handleApprovalAction(item, "approved")}
+                      onRejectLiveItem={(item) => handleApprovalAction(item, "rejected")}
+                    />
+                  )}
 
-          {currentView === "faculty" && (
-            <FacultyView
-              faculty={faculty}
-              onToggleStatus={handleToggleFacultyStatus}
-              onApprove={handleApproveFaculty}
-            />
-          )}
+                  {currentView === "students" && (
+                    <StudentsView
+                      students={students}
+                      onToggleStatus={handleToggleStudentStatus}
+                    />
+                  )}
 
-          {currentView === "industry" && (
-            <IndustryView
-              industry={industry}
-              onToggleFreeze={handleToggleIndustryFreeze}
-              onApprove={handleApproveIndustry}
-            />
-          )}
+                  {currentView === "faculty" && (
+                    <FacultyView
+                      faculty={faculty}
+                      onToggleStatus={handleToggleFacultyStatus}
+                      onApprove={handleApproveFaculty}
+                    />
+                  )}
 
-          {currentView === "skill-library" && (
-            <SkillLibraryView
-              skills={skills}
-              onAddSkill={handleAddSkill}
-            />
-          )}
+                  {currentView === "industry" && (
+                    <IndustryView
+                      industry={industry}
+                      onToggleFreeze={handleToggleIndustryFreeze}
+                      onApprove={handleApproveIndustry}
+                    />
+                  )}
 
-          {currentView === "skill-gaps" && <SkillGapsView />}
+                  {currentView === "campus" && (
+                    <CampusView
+                      campuses={liveData?.campusList || []}
+                      onToggleFreeze={(type, id, name, isFrozen) =>
+                        handleToggleFreeze("campus", id, name, isFrozen)
+                      }
+                    />
+                  )}
 
-          {currentView === "jobs" && (
-            <OpportunitiesView initialTab="jobs" />
-          )}
+                  {currentView === "skill-library" && (
+                    <SkillLibraryView
+                      skills={skills}
+                      onAddSkill={handleAddSkill}
+                    />
+                  )}
 
-          {currentView === "internships" && (
-            <OpportunitiesView initialTab="internships" />
-          )}
+                  {currentView === "skill-gaps" && <SkillGapsView />}
 
-          {currentView === "courses" && (
-            <LearningView initialTab="courses" />
-          )}
+                  {currentView === "jobs" && (
+                    <OpportunitiesView initialTab="jobs" />
+                  )}
 
-          {currentView === "assessments" && (
-            <LearningView initialTab="assessments" />
-          )}
+                  {currentView === "internships" && (
+                    <OpportunitiesView initialTab="internships" />
+                  )}
 
-          {currentView === "certifications" && (
-            <LearningView initialTab="certifications" />
-          )}
+                  {currentView === "courses" && (
+                    <LearningView initialTab="courses" />
+                  )}
 
-          {currentView === "analytics" && <AnalyticsView />}
+                  {currentView === "assessments" && (
+                    <LearningView initialTab="assessments" />
+                  )}
 
-          {currentView === "reports" && <ReportsView />}
+                  {currentView === "certifications" && (
+                    <LearningView initialTab="certifications" />
+                  )}
 
-          {currentView === "approvals" && (
-            <ApprovalsView
-              onApprovalsCountChange={(count) => setPendingApprovalsCount(count)}
-            />
-          )}
+                  {currentView === "analytics" && <AnalyticsView />}
 
-          {currentView === "notifications" && <NotificationsView />}
+                  {currentView === "reports" && <ReportsView />}
 
-          {currentView === "admins" && <AdminsView />}
+                  {currentView === "approvals" && (
+                    <ApprovalsView
+                      liveApprovals={liveData?.approvals}
+                      onApproveLiveItem={(item) => handleApprovalAction(item, "approved")}
+                      onRejectLiveItem={(item) => handleApprovalAction(item, "rejected")}
+                      onApprovalsCountChange={(count) => {}}
+                    />
+                  )}
 
-          {currentView === "audit-logs" && <AuditLogsView />}
+                  {currentView === "notifications" && <NotificationsView />}
 
-          {currentView === "settings" && <SettingsView />}
-            </>
-          )}
-        </main>
+                  {currentView === "admins" && <AdminsView />}
+
+                  {currentView === "audit-logs" && <AuditLogsView />}
+
+                  {currentView === "settings" && <SettingsView />}
+                </>
+              )}
+            </main>
+          </ScrollArea>
+        </SidebarInset>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }

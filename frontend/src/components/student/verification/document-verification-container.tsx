@@ -10,6 +10,19 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
+import { toast } from "@/components/ui/sonner";
 import {
   Shield,
   CheckCircle2,
@@ -118,9 +131,11 @@ export function DocumentVerificationContainer() {
     const data = await res.json();
     if (data.success) {
       setVerification(data.verification);
+      toast.success(`${file.name} uploaded successfully.`);
       setSuccessNotice(`${file.name} uploaded successfully.`);
       setTimeout(() => setSuccessNotice(null), 3500);
     } else {
+      toast.error(data.error || "Failed to upload document.");
       throw new Error(data.error || "Failed to upload document.");
     }
   };
@@ -142,12 +157,15 @@ export function DocumentVerificationContainer() {
       const data = await res.json();
       if (data.success) {
         setVerification(data.verification);
+        toast.success("Document removed successfully.");
         setSuccessNotice(`Document removed.`);
         setTimeout(() => setSuccessNotice(null), 3000);
       } else {
+        toast.error(data.error || "Failed to delete document.");
         setErrorMessage(data.error || "Failed to delete document.");
       }
     } catch {
+      toast.error("Error removing document.");
       setErrorMessage("Error removing document.");
     } finally {
       setIsDeleting(false);
@@ -234,15 +252,15 @@ export function DocumentVerificationContainer() {
 
   if (loading) {
     return (
-      <div className="max-w-5xl mx-auto py-8 px-4 space-y-6 animate-pulse">
-        <div className="h-6 bg-muted rounded w-1/4" />
-        <div className="h-10 bg-muted rounded w-1/2" />
-        <div className="h-16 bg-card rounded-xl border border-border" />
+      <div className="max-w-5xl mx-auto py-8 px-4 space-y-6">
+        <Skeleton className="h-6 w-1/4 rounded-md" />
+        <Skeleton className="h-10 w-1/2 rounded-md" />
+        <Skeleton className="h-20 w-full rounded-xl" />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="h-44 bg-card rounded-xl border border-border" />
-          <div className="h-44 bg-card rounded-xl border border-border" />
-          <div className="h-44 bg-card rounded-xl border border-border" />
-          <div className="h-44 bg-card rounded-xl border border-border" />
+          <Skeleton className="h-44 rounded-xl" />
+          <Skeleton className="h-44 rounded-xl" />
+          <Skeleton className="h-44 rounded-xl" />
+          <Skeleton className="h-44 rounded-xl" />
         </div>
       </div>
     );
@@ -262,14 +280,14 @@ export function DocumentVerificationContainer() {
           </nav>
 
           <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2 pt-1">
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+            <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-foreground">
               Document Submission
             </h1>
 
             {/* Small Trust / Security Message */}
-            <div className="inline-flex items-center gap-1.5 text-xs text-muted-foreground bg-card border border-border px-2.5 py-1 rounded-md shadow-2xs">
+            <div className="inline-flex items-center gap-1.5 text-xs text-muted-foreground bg-card border border-border/80 px-3 py-1 rounded-full shadow-2xs font-mono">
               <Shield className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-              <span>Your documents are securely stored and accessible only to you.</span>
+              <span>Your documents are securely stored and encrypted.</span>
             </div>
           </div>
 
@@ -281,7 +299,7 @@ export function DocumentVerificationContainer() {
         {/* ================= 2. COMPACT HORIZONTAL STEPPER ================= */}
         <div
           aria-label="Student Journey Steps"
-          className="bg-card border border-border rounded-xl p-3 shadow-2xs"
+          className="bg-card border border-border/80 rounded-xl p-3 shadow-2xs"
         >
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
             {JOURNEY_STEPS.map((stepItem, idx) => {
@@ -300,11 +318,11 @@ export function DocumentVerificationContainer() {
                   key={stepItem.step}
                   className={`flex items-center gap-2 px-2.5 py-2 rounded-lg border text-xs transition-colors ${
                     isCurrent
-                      ? "bg-blue-500/10 border-blue-500/30 text-blue-400 font-semibold"
+                      ? "bg-primary/10 border-primary/30 text-primary font-semibold shadow-2xs"
                       : isDone
-                      ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400 font-medium"
+                      ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-medium"
                       : isAvailable
-                      ? "bg-card border-blue-500/40 text-blue-400 font-medium hover:bg-blue-500/10 cursor-pointer"
+                      ? "bg-card border-primary/40 text-primary font-medium hover:bg-primary/5 cursor-pointer"
                       : "bg-muted/30 border-border/50 text-muted-foreground/40 select-none"
                   }`}
                 >
@@ -313,9 +331,9 @@ export function DocumentVerificationContainer() {
                       isDone
                         ? "bg-emerald-600 text-white"
                         : isCurrent
-                        ? "bg-blue-600 text-white"
+                        ? "bg-primary text-primary-foreground"
                         : isAvailable
-                        ? "bg-blue-500/20 text-blue-400"
+                        ? "bg-primary/20 text-primary"
                         : "bg-muted text-muted-foreground/50"
                     }`}
                   >
@@ -341,38 +359,38 @@ export function DocumentVerificationContainer() {
 
         {/* Global Notices */}
         {errorMessage && (
-          <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-xs text-red-400 flex items-start gap-2.5 animate-in fade-in">
-            <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
-            <div className="flex-1">{errorMessage}</div>
-            <button
-              onClick={() => setErrorMessage(null)}
-              className="text-red-400 hover:text-red-300 font-bold px-1"
-            >
-              ×
-            </button>
-          </div>
+          <Alert variant="destructive">
+            <AlertCircle className="w-4 h-4" />
+            <div>
+              <AlertTitle>Submission Alert</AlertTitle>
+              <AlertDescription>{errorMessage}</AlertDescription>
+            </div>
+          </Alert>
         )}
 
         {successNotice && (
-          <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-xs text-emerald-400 flex items-center gap-2.5 animate-in fade-in">
-            <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-            <span>{successNotice}</span>
-          </div>
+          <Alert variant="success">
+            <CheckCircle2 className="w-4 h-4" />
+            <div>
+              <AlertTitle>Verified Action</AlertTitle>
+              <AlertDescription>{successNotice}</AlertDescription>
+            </div>
+          </Alert>
         )}
 
         {/* ================= 3. COMPACT PROGRESS BAR & CHIPS ================= */}
-        <Card className="border border-border bg-card shadow-2xs rounded-xl overflow-hidden">
+        <Card className="border border-border/80 bg-card shadow-xs rounded-xl overflow-hidden">
           <CardContent className="p-4 space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div className="space-y-0.5">
-                <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
+                <p className="text-[11px] font-mono font-medium text-muted-foreground uppercase tracking-wider">
                   Required Documents
                 </p>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-xl font-bold text-foreground">
+                  <span className="text-xl font-heading font-bold text-foreground">
                     {completedRequiredCount} of {requiredCategories.length} completed
                   </span>
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-xs text-muted-foreground font-mono">
                     ({progressPercent}%)
                   </span>
                 </div>
@@ -383,12 +401,8 @@ export function DocumentVerificationContainer() {
                   Optional: <strong className="text-foreground">{optionalAddedCount} of 5 added</strong>
                 </span>
                 <Badge
-                  variant="outline"
-                  className={`text-xs px-2.5 py-0.5 font-semibold ${
-                    isAllRequiredCompleted
-                      ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30"
-                      : "bg-blue-500/15 text-blue-400 border-blue-500/30"
-                  }`}
+                  variant={isAllRequiredCompleted ? "success" : "default"}
+                  className="text-xs px-3 py-0.5 font-medium rounded-full"
                 >
                   {isAllRequiredCompleted ? "All Required Submitted" : `${progressPercent}% Completed`}
                 </Badge>
@@ -408,10 +422,10 @@ export function DocumentVerificationContainer() {
                 return (
                   <div
                     key={c.id}
-                    className={`flex items-center gap-2 p-1.5 px-2 rounded-md border text-xs ${
+                    className={`flex items-center gap-2 p-1.5 px-2.5 rounded-lg border text-xs ${
                       isUploaded
-                        ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400 font-medium"
-                        : "bg-muted/40 border-border text-muted-foreground"
+                        ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-medium"
+                        : "bg-muted/40 border-border/80 text-muted-foreground"
                     }`}
                   >
                     {isUploaded ? (
@@ -434,11 +448,11 @@ export function DocumentVerificationContainer() {
               <div className="flex items-center gap-2">
                 <h2
                   id="required-docs-heading"
-                  className="text-base font-bold text-foreground tracking-tight"
+                  className="text-base font-heading font-bold text-foreground tracking-tight"
                 >
                   REQUIRED DOCUMENTS
                 </h2>
-                <Badge className="bg-red-500/15 text-red-400 border border-red-500/30 text-[10px] uppercase font-bold tracking-wider">
+                <Badge variant="destructive" className="text-[10px] uppercase font-bold tracking-wider rounded-full">
                   Mandatory
                 </Badge>
               </div>
@@ -703,48 +717,42 @@ export function DocumentVerificationContainer() {
       )}
 
       {/* 2. Delete Confirmation Dialog */}
-      {deleteCandidate && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150"
-          onClick={() => !isDeleting && setDeleteCandidate(null)}
-        >
-          <div
-            className="bg-card text-card-foreground rounded-xl shadow-xl max-w-md w-full p-5 border border-border space-y-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-full bg-red-500/15 text-red-400 flex items-center justify-center shrink-0">
-                <AlertCircle className="w-5 h-5" />
+      <AlertDialog
+        open={Boolean(deleteCandidate)}
+        onOpenChange={(open) => {
+          if (!open && !isDeleting) setDeleteCandidate(null);
+        }}
+      >
+        {deleteCandidate && (
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-destructive/15 text-destructive flex items-center justify-center shrink-0">
+                  <AlertCircle className="w-5 h-5" />
+                </div>
+                <div>
+                  <AlertDialogTitle>Remove this document?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to remove{" "}
+                    <span className="font-semibold text-foreground">
+                      {deleteCandidate.fileName}
+                    </span>
+                    ? This action cannot be undone.
+                  </AlertDialogDescription>
+                </div>
               </div>
-              <div className="space-y-1">
-                <h3 className="text-sm font-bold text-foreground">
-                  Remove this document?
-                </h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  Are you sure you want to remove <span className="font-semibold text-foreground">{deleteCandidate.fileName}</span>? This action cannot be undone.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-end gap-2 pt-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="h-8 text-xs border-border text-foreground hover:bg-muted"
-                onClick={() => setDeleteCandidate(null)}
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel
                 disabled={isDeleting}
+                onClick={() => setDeleteCandidate(null)}
               >
                 Cancel
-              </Button>
-              <Button
-                type="button"
-                size="sm"
-                className="h-8 text-xs bg-red-600 hover:bg-red-500 text-white font-semibold"
-                onClick={handleConfirmDelete}
+              </AlertDialogCancel>
+              <AlertDialogAction
+                variant="destructive"
                 disabled={isDeleting}
+                onClick={handleConfirmDelete}
               >
                 {isDeleting ? (
                   <>
@@ -754,11 +762,11 @@ export function DocumentVerificationContainer() {
                 ) : (
                   "Yes, Remove"
                 )}
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        )}
+      </AlertDialog>
     </div>
   );
 }

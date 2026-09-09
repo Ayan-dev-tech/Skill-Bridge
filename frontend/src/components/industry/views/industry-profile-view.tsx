@@ -26,6 +26,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { toast } from "@/components/ui/sonner";
 import type { IndustryProfile, IndustryProfileMetadata } from "@/lib/industry/types";
 
 export function IndustryProfileView() {
@@ -151,13 +155,16 @@ export function IndustryProfileView() {
         type: "success",
         text: "Industry organization profile saved successfully.",
       });
+      toast.success("Industry organization profile saved successfully.");
       setFormData((prev) => ({ ...prev, demandedSkills: parsedSkills }));
     } catch (err: unknown) {
       console.error("Save profile error:", err);
+      const msg = err instanceof Error ? err.message : "Failed to save profile.";
       setStatusMessage({
         type: "error",
-        text: err instanceof Error ? err.message : "Failed to save profile.",
+        text: msg,
       });
+      toast.error(msg);
     } finally {
       setIsSaving(false);
     }
@@ -165,9 +172,14 @@ export function IndustryProfileView() {
 
   if (isLoading) {
     return (
-      <div className="py-20 text-center space-y-3">
-        <Loader2 className="w-6 h-6 animate-spin mx-auto text-muted-foreground" />
-        <p className="text-xs text-muted-foreground">Loading industry organization profile...</p>
+      <div className="space-y-6 max-w-4xl mx-auto py-4">
+        <div className="space-y-2">
+          <Skeleton className="h-6 w-48 rounded-full" />
+          <Skeleton className="h-8 w-80 rounded-lg" />
+          <Skeleton className="h-4 w-96 rounded" />
+        </div>
+        <Skeleton className="h-10 w-full max-w-md rounded-lg" />
+        <Skeleton className="h-80 w-full rounded-xl" />
       </div>
     );
   }
@@ -198,33 +210,40 @@ export function IndustryProfileView() {
       </div>
 
       {statusMessage && (
-        <div
-          className={`p-3.5 rounded-md border text-xs flex items-center gap-2.5 ${
-            statusMessage.type === "success"
-              ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
-              : "border-destructive/40 bg-destructive/10 text-destructive"
-          }`}
-        >
+        <Alert variant={statusMessage.type === "success" ? "success" : "destructive"}>
           {statusMessage.type === "success" ? (
-            <CheckCircle2 className="w-4 h-4 shrink-0" />
+            <CheckCircle2 className="w-4 h-4" />
           ) : (
-            <AlertCircle className="w-4 h-4 shrink-0" />
+            <AlertCircle className="w-4 h-4" />
           )}
-          <span>{statusMessage.text}</span>
-        </div>
+          <div>
+            <AlertTitle>
+              {statusMessage.type === "success" ? "Profile Updated" : "Submission Notice"}
+            </AlertTitle>
+            <AlertDescription>{statusMessage.text}</AlertDescription>
+          </div>
+        </Alert>
       )}
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
-        <Card className="border-border bg-card">
-          <CardHeader className="p-4 pb-3 border-b border-border">
-            <CardTitle className="text-sm font-semibold text-foreground">
-              Organization Details
-            </CardTitle>
-            <CardDescription className="text-xs text-muted-foreground">
-              Official company information displayed on campus drives and student postings
-            </CardDescription>
-          </CardHeader>
+        <Tabs defaultValue="organization" className="w-full space-y-4">
+          <TabsList className="grid grid-cols-3 max-w-md">
+            <TabsTrigger value="organization" className="text-xs">Company</TabsTrigger>
+            <TabsTrigger value="recruiter" className="text-xs">Recruiter</TabsTrigger>
+            <TabsTrigger value="skills" className="text-xs">Skills</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="organization">
+            <Card className="border-border bg-card">
+              <CardHeader className="p-4 pb-3 border-b border-border">
+                <CardTitle className="text-sm font-semibold text-foreground">
+                  Organization Details
+                </CardTitle>
+                <CardDescription className="text-xs text-muted-foreground">
+                  Official company information displayed on campus drives and student postings
+                </CardDescription>
+              </CardHeader>
           <CardContent className="p-4 space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
@@ -314,7 +333,9 @@ export function IndustryProfileView() {
             </div>
           </CardContent>
         </Card>
+      </TabsContent>
 
+      <TabsContent value="recruiter">
         <Card className="border-border bg-card">
           <CardHeader className="p-4 pb-3 border-b border-border">
             <CardTitle className="text-sm font-semibold text-foreground">
@@ -383,7 +404,9 @@ export function IndustryProfileView() {
             </div>
           </CardContent>
         </Card>
+      </TabsContent>
 
+      <TabsContent value="skills">
         <Card className="border-border bg-card">
           <CardHeader className="p-4 pb-3 border-b border-border">
             <CardTitle className="text-sm font-semibold text-foreground">
@@ -422,6 +445,8 @@ export function IndustryProfileView() {
             )}
           </CardContent>
         </Card>
+      </TabsContent>
+    </Tabs>
 
         {/* Submit */}
         <div className="flex items-center justify-end gap-3 pt-2">

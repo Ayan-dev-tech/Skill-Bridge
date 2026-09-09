@@ -12,6 +12,27 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
+import {
   Award,
   TrendingUp,
   BarChart3,
@@ -43,8 +64,8 @@ export function FinalHiringAnalyticsView() {
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [timeRange, setTimeRange] = React.useState<"all" | "30d" | "90d">("all");
 
-  // Selection Modal
   const [selectedAppForOffer, setSelectedAppForOffer] = React.useState<JobApplicationRecord | null>(null);
+  const [appToRejectFinal, setAppToRejectFinal] = React.useState<JobApplicationRecord | null>(null);
   const [offeredRole, setOfferedRole] = React.useState("");
   const [offeredComp, setOfferedComp] = React.useState("");
   const [startDate, setStartDate] = React.useState("");
@@ -71,7 +92,9 @@ export function FinalHiringAnalyticsView() {
       }
     } catch (err: unknown) {
       console.error("Fetch analytics data error:", err);
-      setError(err instanceof Error ? err.message : "Failed to load hiring analytics.");
+      const msg = err instanceof Error ? err.message : "Failed to load hiring analytics.";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -82,13 +105,14 @@ export function FinalHiringAnalyticsView() {
   }, [fetchData]);
 
   // Handle Final Decision
-  const handleFinalDecision = async (decision: "selected" | "rejected") => {
-    if (!selectedAppForOffer) return;
+  const handleFinalDecision = async (decision: "selected" | "rejected", targetApp?: JobApplicationRecord) => {
+    const target = targetApp || selectedAppForOffer;
+    if (!target) return;
     try {
       setIsSubmittingOffer(true);
       setError(null);
 
-      const res = await fetch(`/api/industry/applications/${selectedAppForOffer.id}/final-decision`, {
+      const res = await fetch(`/api/industry/applications/${target.id}/final-decision`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -96,8 +120,8 @@ export function FinalHiringAnalyticsView() {
           offerDetails:
             decision === "selected"
               ? {
-                  offeredRole: offeredRole.trim() || selectedAppForOffer.roleTitle,
-                  offeredCompensation: offeredComp.trim() || selectedAppForOffer.salaryRange,
+                  offeredRole: offeredRole.trim() || target.roleTitle,
+                  offeredCompensation: offeredComp.trim() || target.salaryRange,
                   startDate: startDate || undefined,
                   notes: offerNotes.trim() || undefined,
                 }
@@ -110,16 +134,18 @@ export function FinalHiringAnalyticsView() {
         throw new Error(json.error || "Failed to finalize candidate hiring decision.");
       }
 
-      setSuccessMessage(
-        decision === "selected"
-          ? `Offer extended! Candidate profile now reflects acquired placement.`
-          : "Candidate status updated to not selected."
-      );
+      if (decision === "selected") {
+        toast.success(`Offer extended to ${target.applicantFullName || "candidate"}! Profile updated with placement.`);
+      } else {
+        toast.error(`Candidate ${target.applicantFullName || ""} marked as not selected.`);
+      }
       setSelectedAppForOffer(null);
+      setAppToRejectFinal(null);
       await fetchData();
-      setTimeout(() => setSuccessMessage(null), 3500);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Failed to save final decision.");
+      const msg = err instanceof Error ? err.message : "Failed to save final decision.";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setIsSubmittingOffer(false);
     }
@@ -274,19 +300,13 @@ export function FinalHiringAnalyticsView() {
         </div>
       </div>
 
-      {/* Alerts */}
-      {successMessage && (
-        <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-md text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 shrink-0" />
-          <span>{successMessage}</span>
-        </div>
-      )}
-
+      {/* Error Alert */}
       {error && (
-        <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-md text-xs text-destructive flex items-center gap-2">
-          <AlertCircle className="w-4 h-4 shrink-0" />
-          <span>{error}</span>
-        </div>
+        <Alert variant="destructive">
+          <AlertCircle className="w-4 h-4" />
+          <AlertTitle>Hiring Analytics Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
       )}
 
       {/* KPI Cards */}
@@ -430,34 +450,32 @@ export function FinalHiringAnalyticsView() {
               No hiring posts created yet.
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs border-collapse">
-                <thead>
-                  <tr className="border-b border-border bg-muted/30 font-medium text-muted-foreground">
-                    <th className="p-3 pl-4">Hiring Post</th>
-                    <th className="p-3">Openings</th>
-                    <th className="p-3">Applications</th>
-                    <th className="p-3">Shortlisted</th>
-                    <th className="p-3">Interviewed</th>
-                    <th className="p-3 pr-4">Hired / Offered</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border/60">
-                  {postPerformance.map((item) => (
-                    <tr key={item.id} className="hover:bg-muted/20 transition-colors">
-                      <td className="p-3 pl-4 font-semibold text-foreground">{item.roleTitle}</td>
-                      <td className="p-3 font-mono">{item.openings}</td>
-                      <td className="p-3 font-mono font-semibold">{item.applications}</td>
-                      <td className="p-3 font-mono">{item.shortlisted}</td>
-                      <td className="p-3 font-mono">{item.interviewed}</td>
-                      <td className="p-3 pr-4 font-mono font-bold text-emerald-600 dark:text-emerald-400">
-                        {item.hired} / {item.openings}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-muted/30 hover:bg-muted/30">
+                  <TableHead className="pl-4">Hiring Post</TableHead>
+                  <TableHead>Openings</TableHead>
+                  <TableHead>Applications</TableHead>
+                  <TableHead>Shortlisted</TableHead>
+                  <TableHead>Interviewed</TableHead>
+                  <TableHead className="pr-4">Hired / Offered</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {postPerformance.map((item) => (
+                  <TableRow key={item.id} className="hover:bg-muted/20">
+                    <TableCell className="pl-4 font-semibold text-foreground">{item.roleTitle}</TableCell>
+                    <TableCell className="font-mono">{item.openings}</TableCell>
+                    <TableCell className="font-mono font-semibold">{item.applications}</TableCell>
+                    <TableCell className="font-mono">{item.shortlisted}</TableCell>
+                    <TableCell className="font-mono">{item.interviewed}</TableCell>
+                    <TableCell className="pr-4 font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                      {item.hired} / {item.openings}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           )}
         </CardContent>
       </Card>
@@ -525,34 +543,40 @@ export function FinalHiringAnalyticsView() {
         </CardHeader>
 
         <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse">
-              <thead>
-                <tr className="border-b border-border bg-muted/30 font-medium text-muted-foreground">
-                  <th className="p-3 pl-4">Candidate</th>
-                  <th className="p-3">Opportunity</th>
-                  <th className="p-3">Interview Rounds</th>
-                  <th className="p-3">Final Decision Status</th>
-                  <th className="p-3 pr-4 text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border/60">
-                {filteredApplications.map((app) => {
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-muted/30 hover:bg-muted/30">
+                <TableHead className="pl-4">Candidate</TableHead>
+                <TableHead>Opportunity</TableHead>
+                <TableHead>Interview Rounds</TableHead>
+                <TableHead>Final Decision Status</TableHead>
+                <TableHead className="pr-4 text-right">Action</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredApplications.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
+                    No candidate records found for current criteria.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filteredApplications.map((app) => {
                   const isHired = app.status === "selected" || app.finalStatus === "selected";
                   const isRejected = app.status === "rejected" || app.finalStatus === "rejected";
                   return (
-                    <tr key={app.id} className="hover:bg-muted/20 transition-colors">
-                      <td className="p-3 pl-4">
+                    <TableRow key={app.id} className="hover:bg-muted/20">
+                      <TableCell className="pl-4">
                         <p className="font-semibold text-foreground">{app.applicantFullName || "Candidate"}</p>
                         <p className="text-[11px] text-muted-foreground font-mono">{app.applicantEmail}</p>
-                      </td>
+                      </TableCell>
 
-                      <td className="p-3">
+                      <TableCell>
                         <p className="font-semibold text-foreground">{app.roleTitle}</p>
                         <p className="text-[11px] text-muted-foreground">{app.employmentType || "Full-time"}</p>
-                      </td>
+                      </TableCell>
 
-                      <td className="p-3 font-mono">
+                      <TableCell className="font-mono">
                         {app.interviewRounds && app.interviewRounds.length > 0 ? (
                           <span className="text-foreground font-semibold">
                             {app.interviewRounds.length} round(s) evaluated
@@ -560,9 +584,9 @@ export function FinalHiringAnalyticsView() {
                         ) : (
                           <span className="text-muted-foreground">—</span>
                         )}
-                      </td>
+                      </TableCell>
 
-                      <td className="p-3">
+                      <TableCell>
                         {isHired ? (
                           <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-[10px]">
                             <CheckCircle2 className="w-3 h-3 mr-1" /> Selected / Hired
@@ -576,9 +600,9 @@ export function FinalHiringAnalyticsView() {
                             Pending Decision
                           </Badge>
                         )}
-                      </td>
+                      </TableCell>
 
-                      <td className="p-3 pr-4 text-right">
+                      <TableCell className="pr-4 text-right">
                         {!isHired && (
                           <Button
                             size="xs"
@@ -599,13 +623,13 @@ export function FinalHiringAnalyticsView() {
                             Placement Confirmed
                           </span>
                         )}
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   );
-                })}
-              </tbody>
-            </table>
-          </div>
+                })
+              )}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
 
@@ -695,7 +719,7 @@ export function FinalHiringAnalyticsView() {
                   variant="destructive"
                   size="sm"
                   disabled={isSubmittingOffer}
-                  onClick={() => handleFinalDecision("rejected")}
+                  onClick={() => setAppToRejectFinal(selectedAppForOffer)}
                   className="text-xs"
                 >
                   Reject Candidate
@@ -713,6 +737,34 @@ export function FinalHiringAnalyticsView() {
           </div>
         </div>
       )}
+
+      {/* Destructive Action Alert Dialog for Final Rejection */}
+      <AlertDialog
+        open={Boolean(appToRejectFinal)}
+        onOpenChange={(open) => !open && setAppToRejectFinal(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Decline Candidate for this Position?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to mark {appToRejectFinal?.applicantFullName || "this candidate"} as Not Selected for {appToRejectFinal?.roleTitle}? This decision will finalize their application process for this hiring opportunity.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              variant="destructive"
+              onClick={() => {
+                if (appToRejectFinal) {
+                  handleFinalDecision("rejected", appToRejectFinal);
+                }
+              }}
+            >
+              Confirm Rejection
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

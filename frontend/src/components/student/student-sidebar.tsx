@@ -17,9 +17,23 @@ import {
   Settings,
   Info,
   X,
-  Sparkles,
   Lock,
 } from "lucide-react";
+import {
+  Sidebar,
+  SidebarHeader,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarMenuBadge,
+  SidebarRail,
+} from "@/components/ui/sidebar";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { StudentProfileData, defaultStudentProfile } from "@/lib/student-data";
 import { StudentProfileBadge } from "./student-profile-badge";
 import type { CanonicalWorkflowState } from "@/lib/workflow/canonical-workflow";
@@ -139,21 +153,26 @@ export function StudentSidebar({
     },
   ];
 
-  const isDocVerification = pathname.startsWith("/student/document-verification");
+  const initials = profile.fullName
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
-  const sidebarContent = (
-    <div className="flex flex-col h-full select-none bg-background border-r border-border text-foreground">
+  return (
+    <Sidebar collapsible="icon" className="border-r border-sidebar-border bg-sidebar select-none">
       {/* Brand Header */}
-      <div className="flex items-center justify-between px-5 h-14 border-b border-border shrink-0">
-        <Link href="/student/dashboard" className="flex items-center gap-2.5">
-          <div className="w-5 h-5 rounded-md font-bold text-xs flex items-center justify-center bg-foreground text-background">
+      <SidebarHeader className="h-16 md:h-[68px] flex-row items-center justify-between px-3 border-b border-sidebar-border shrink-0">
+        <Link href="/student/dashboard" className="flex items-center gap-2.5 overflow-hidden">
+          <div className="w-7 h-7 rounded-lg font-heading font-bold text-xs flex items-center justify-center bg-foreground text-background shadow-xs shrink-0">
             S
           </div>
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-sm tracking-tight text-foreground">
+          <div className="flex items-center gap-2 group-data-[collapsible=icon]:hidden">
+            <span className="font-heading font-bold text-sm tracking-tight text-foreground whitespace-nowrap">
               SKILL BRIDGE
             </span>
-            <span className="text-[10px] font-mono px-1.5 py-0.2 rounded border uppercase font-semibold border-border bg-muted/40 text-muted-foreground">
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full border uppercase font-semibold border-sidebar-border bg-sidebar-accent/60 text-muted-foreground whitespace-nowrap">
               Student
             </span>
           </div>
@@ -161,104 +180,105 @@ export function StudentSidebar({
         {onCloseMobile && (
           <button
             onClick={onCloseMobile}
-            className="md:hidden p-1 rounded text-muted-foreground hover:text-foreground"
+            className="md:hidden p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/50 transition-colors"
             aria-label="Close navigation drawer"
           >
             <X className="w-4 h-4" />
           </button>
         )}
-      </div>
+      </SidebarHeader>
 
-      {/* Navigation Tree */}
-      <div className="flex-1 overflow-y-auto py-3 px-3 space-y-4 text-xs">
-        {sections.map((section, sIdx) => (
-          <div key={sIdx} className="space-y-0.5">
-            <p className="px-2.5 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/70">
-              {section.title}
-            </p>
-            {section.items.map((item) => {
-              const Icon = item.icon;
-              const isActive =
-                pathname === item.href ||
-                (item.href === "/student/dashboard" && pathname === "/student");
+      {/* Navigation Tree with clean ScrollArea inside SidebarContent */}
+      <SidebarContent className="p-0 overflow-hidden flex-1 min-h-0">
+        <ScrollArea className="h-full">
+          <div className="flex flex-col gap-3 p-2">
+            {sections.map((section, sIdx) => (
+              <SidebarGroup key={sIdx} className="p-0 h-auto shrink-0">
+                <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/60 px-2 py-1 h-7">
+                  {section.title}
+                </SidebarGroupLabel>
+                <SidebarMenu className="gap-0.5">
+                  {section.items.map((item) => {
+                    const Icon = item.icon;
+                    const isActive =
+                      pathname === item.href ||
+                      (item.href === "/student/dashboard" && pathname === "/student");
 
-              const matchingStage = workflow?.stages.find((s) => s.route === item.href);
-              const isStageLocked = matchingStage ? matchingStage.isLocked : false;
-              const isDashboardLocked =
-                item.href === "/student/dashboard" && workflow ? !workflow.isVerificationCompleted : false;
-              const isLocked = isStageLocked || isDashboardLocked;
+                    const matchingStage = workflow?.stages.find((s) => s.route === item.href);
+                    const isStageLocked = matchingStage ? matchingStage.isLocked : false;
+                    const isDashboardLocked =
+                      item.href === "/student/dashboard" && workflow
+                        ? !workflow.isVerificationCompleted
+                        : false;
+                    const isLocked = isStageLocked || isDashboardLocked;
 
-              if (isLocked) {
-                return (
-                  <div
-                    key={item.href}
-                    className="w-full flex items-center justify-between px-2.5 py-2 rounded-md font-medium cursor-not-allowed select-none opacity-60 text-muted-foreground/40"
-                    title={matchingStage?.lockedReason || "Locked until prerequisite milestones are completed."}
-                  >
-                    <div className="flex items-center gap-2.5 truncate">
-                      <Icon className="w-4 h-4 shrink-0 text-muted-foreground/40" />
-                      <span className="truncate">{item.name}</span>
-                    </div>
-                    <Lock className="w-3 h-3 shrink-0 text-muted-foreground/50" />
-                  </div>
-                );
-              }
+                    if (isLocked) {
+                      return (
+                        <SidebarMenuItem key={item.href} className="h-auto shrink-0">
+                          <SidebarMenuButton
+                            tooltip={matchingStage?.lockedReason || `${item.name} (Locked)`}
+                            disabled
+                            className="opacity-40 cursor-not-allowed select-none"
+                          >
+                            <Icon className="size-4 shrink-0 text-muted-foreground/50" />
+                            <span>{item.name}</span>
+                            <Lock className="size-3 ml-auto text-muted-foreground/50 group-data-[collapsible=icon]:hidden" />
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      );
+                    }
 
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => {
-                    if (onCloseMobile) onCloseMobile();
-                  }}
-                  className={`w-full flex items-center justify-between px-2.5 py-2 rounded-md font-medium transition-colors ${
-                    isActive
-                      ? "bg-foreground text-background shadow-xs font-semibold"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 truncate">
-                    <Icon className="w-4 h-4 shrink-0" />
-                    <span className="truncate">{item.name}</span>
-                  </div>
-                  {item.isCurrentEntry && !isActive && (
-                    <span className="text-[10px] font-mono px-1.5 py-0.2 rounded font-semibold border bg-muted text-foreground border-border">
-                      Start
-                    </span>
-                  )}
-                </Link>
-              );
-            })}
+                    return (
+                      <SidebarMenuItem key={item.href} className="h-auto shrink-0">
+                        <SidebarMenuButton
+                          asChild
+                          isActive={isActive}
+                          tooltip={item.name}
+                        >
+                          <Link
+                            href={item.href}
+                            onClick={() => {
+                              if (onCloseMobile) onCloseMobile();
+                            }}
+                          >
+                            <Icon className="size-4 shrink-0" />
+                            <span>{item.name}</span>
+                          </Link>
+                        </SidebarMenuButton>
+                        {item.isCurrentEntry && !isActive && (
+                          <SidebarMenuBadge className="text-[9px] font-mono px-1.5 py-0.2 rounded-full border bg-muted/60 text-foreground border-border/80">
+                            Start
+                          </SidebarMenuBadge>
+                        )}
+                      </SidebarMenuItem>
+                    );
+                  })}
+                </SidebarMenu>
+              </SidebarGroup>
+            ))}
           </div>
-        ))}
-      </div>
+        </ScrollArea>
+      </SidebarContent>
 
       {/* Student Identity Footer */}
-      <div className="p-3 border-t border-border shrink-0">
-        <StudentProfileBadge profile={profile} compact={true} />
-      </div>
-    </div>
-  );
-
-  return (
-    <>
-      {/* Desktop Persistent Sidebar */}
-      <aside className="hidden md:flex w-64 shrink-0 h-screen sticky top-0 flex-col">
-        {sidebarContent}
-      </aside>
-
-      {/* Mobile Drawer Overlay */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-50 md:hidden flex">
-          <div
-            className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
-            onClick={onCloseMobile}
-          />
-          <div className="relative w-64 max-w-[80vw] h-full shadow-2xl animate-in slide-in-from-left duration-200">
-            {sidebarContent}
-          </div>
+      <SidebarFooter className="p-2 border-t border-sidebar-border shrink-0">
+        <div className="group-data-[collapsible=icon]:hidden">
+          <StudentProfileBadge profile={profile} compact={true} />
         </div>
-      )}
-    </>
+        <div className="hidden group-data-[collapsible=icon]:flex items-center justify-center py-1">
+          <Avatar className="size-8 rounded-md shrink-0">
+            {profile.photoUrl && (
+              <AvatarImage src={profile.photoUrl} alt={profile.fullName} />
+            )}
+            <AvatarFallback className="text-[10px] font-semibold bg-foreground text-background">
+              {initials}
+            </AvatarFallback>
+          </Avatar>
+        </div>
+      </SidebarFooter>
+
+      {/* Interactive collapse rail */}
+      <SidebarRail />
+    </Sidebar>
   );
 }

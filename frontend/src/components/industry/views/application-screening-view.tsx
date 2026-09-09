@@ -12,6 +12,27 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
+import {
   Users,
   Search,
   Filter,
@@ -39,7 +60,6 @@ export function ApplicationScreeningView({ onNavigateToInterviews }: Application
   const [applications, setApplications] = React.useState<JobApplicationRecord[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = React.useState<string | null>(null);
 
   // Filters
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -48,6 +68,7 @@ export function ApplicationScreeningView({ onNavigateToInterviews }: Application
 
   // Selected Application for Detail Modal
   const [selectedApp, setSelectedApp] = React.useState<JobApplicationRecord | null>(null);
+  const [appToReject, setAppToReject] = React.useState<JobApplicationRecord | null>(null);
   const [screeningNotes, setScreeningNotes] = React.useState("");
   const [isUpdating, setIsUpdating] = React.useState(false);
 
@@ -63,7 +84,9 @@ export function ApplicationScreeningView({ onNavigateToInterviews }: Application
       setApplications(json.applications || []);
     } catch (err: unknown) {
       console.error("Fetch applications error:", err);
-      setError(err instanceof Error ? err.message : "Failed to load applications.");
+      const msg = err instanceof Error ? err.message : "Failed to load applications.";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -73,7 +96,7 @@ export function ApplicationScreeningView({ onNavigateToInterviews }: Application
     fetchApplications();
   }, [fetchApplications]);
 
-  const handleDecision = async (appId: string, decision: "shortlisted" | "rejected" | "screened") => {
+  const handleDecision = async (appId: string, decision: "shortlisted" | "rejected" | "screened", notesOverride?: string) => {
     try {
       setIsUpdating(true);
       setError(null);
@@ -82,20 +105,28 @@ export function ApplicationScreeningView({ onNavigateToInterviews }: Application
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           decision,
-          notes: screeningNotes.trim() || undefined,
+          notes: notesOverride !== undefined ? notesOverride : screeningNotes.trim() || undefined,
         }),
       });
       const json = await res.json();
       if (!res.ok || !json.success) {
         throw new Error(json.error || "Failed to record screening decision.");
       }
-      setSuccessMessage(`Candidate application marked as ${decision}.`);
+      if (decision === "shortlisted") {
+        toast.success("Candidate shortlisted for interview successfully.");
+      } else if (decision === "rejected") {
+        toast.error("Application marked as rejected.");
+      } else {
+        toast.success(`Application updated to ${decision}.`);
+      }
       setSelectedApp(null);
+      setAppToReject(null);
       setScreeningNotes("");
       await fetchApplications();
-      setTimeout(() => setSuccessMessage(null), 3000);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Failed to update decision.");
+      const msg = err instanceof Error ? err.message : "Failed to update decision.";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setIsUpdating(false);
     }
@@ -163,19 +194,13 @@ export function ApplicationScreeningView({ onNavigateToInterviews }: Application
         )}
       </div>
 
-      {/* Alerts */}
-      {successMessage && (
-        <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-md text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 shrink-0" />
-          <span>{successMessage}</span>
-        </div>
-      )}
-
+      {/* Error Alert */}
       {error && (
-        <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-md text-xs text-destructive flex items-center gap-2">
-          <AlertCircle className="w-4 h-4 shrink-0" />
-          <span>{error}</span>
-        </div>
+        <Alert variant="destructive">
+          <AlertCircle className="w-4 h-4" />
+          <AlertTitle>Screening Notification</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
       )}
 
       {/* Controls & Filter Bar */}
@@ -240,142 +265,168 @@ export function ApplicationScreeningView({ onNavigateToInterviews }: Application
         </CardHeader>
 
         <CardContent className="p-0">
-          {loading ? (
-            <div className="py-12 text-center text-xs text-muted-foreground">
-              Loading candidate applications...
-            </div>
-          ) : filteredApps.length === 0 ? (
-            <div className="p-8 text-center space-y-2">
-              <Users className="w-8 h-8 text-muted-foreground mx-auto opacity-40" />
-              <p className="text-xs font-semibold text-foreground">No applications found</p>
-              <p className="text-[11px] text-muted-foreground max-w-sm mx-auto">
-                {searchQuery || statusFilter !== "all" || selectedPostFilter !== "all"
-                  ? "No candidate applications match the selected filter criteria."
-                  : "Candidates will appear here as soon as students apply to your published hiring opportunities."}
-              </p>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs border-collapse">
-                <thead>
-                  <tr className="border-b border-border bg-muted/30 font-medium text-muted-foreground">
-                    <th className="p-3 pl-4">Candidate</th>
-                    <th className="p-3">Hiring Opportunity</th>
-                    <th className="p-3">Skill Match</th>
-                    <th className="p-3">Documents</th>
-                    <th className="p-3">Screening Status</th>
-                    <th className="p-3">Applied Date</th>
-                    <th className="p-3 pr-4 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border/60">
-                  {filteredApps.map((app) => {
-                    const scrStatus = app.screeningStatus || "pending";
-                    return (
-                      <tr key={app.id} className="hover:bg-muted/20 transition-colors">
-                        <td className="p-3 pl-4">
-                          <p className="font-semibold text-foreground">
-                            {app.applicantFullName || "Candidate"}
-                          </p>
-                          <p className="text-[11px] text-muted-foreground font-mono">
-                            {app.applicantEmail || "—"}
-                          </p>
-                        </td>
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-muted/30 hover:bg-muted/30">
+                <TableHead className="pl-4">Candidate</TableHead>
+                <TableHead>Hiring Opportunity</TableHead>
+                <TableHead>Skill Match</TableHead>
+                <TableHead>Documents</TableHead>
+                <TableHead>Screening Status</TableHead>
+                <TableHead>Applied Date</TableHead>
+                <TableHead className="pr-4 text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {loading ? (
+                Array.from({ length: 4 }).map((_, i) => (
+                  <TableRow key={i}>
+                    <TableCell className="pl-4">
+                      <Skeleton className="h-4 w-28 mb-1" />
+                      <Skeleton className="h-3 w-36" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-32 mb-1" />
+                      <Skeleton className="h-3 w-20" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-12" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-20" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-5 w-16" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-3 w-16" />
+                    </TableCell>
+                    <TableCell className="pr-4 text-right">
+                      <Skeleton className="h-7 w-24 ml-auto" />
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : filteredApps.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="h-32 text-center">
+                    <div className="space-y-2 py-4">
+                      <Users className="w-8 h-8 text-muted-foreground mx-auto opacity-40" />
+                      <p className="text-xs font-semibold text-foreground">No applications found</p>
+                      <p className="text-[11px] text-muted-foreground max-w-sm mx-auto">
+                        {searchQuery || statusFilter !== "all" || selectedPostFilter !== "all"
+                          ? "No candidate applications match the selected filter criteria."
+                          : "Candidates will appear here as soon as students apply to your published hiring opportunities."}
+                      </p>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filteredApps.map((app) => {
+                  const scrStatus = app.screeningStatus || "pending";
+                  return (
+                    <TableRow key={app.id} className="hover:bg-muted/20">
+                      <TableCell className="pl-4">
+                        <p className="font-semibold text-foreground">
+                          {app.applicantFullName || "Candidate"}
+                        </p>
+                        <p className="text-[11px] text-muted-foreground font-mono">
+                          {app.applicantEmail || "—"}
+                        </p>
+                      </TableCell>
 
-                        <td className="p-3">
-                          <p className="font-semibold text-foreground">
-                            {app.roleTitle || "Engineering Role"}
-                          </p>
-                          <p className="text-[11px] text-muted-foreground">
-                            {app.employmentType || app.type || "Full-time"}
-                          </p>
-                        </td>
+                      <TableCell>
+                        <p className="font-semibold text-foreground">
+                          {app.roleTitle || "Engineering Role"}
+                        </p>
+                        <p className="text-[11px] text-muted-foreground">
+                          {app.employmentType || app.type || "Full-time"}
+                        </p>
+                      </TableCell>
 
-                        <td className="p-3 font-mono">
-                          {app.matchScoreAtApplication !== undefined ? (
-                            <span className="font-semibold text-emerald-600 dark:text-emerald-400">
-                              {app.matchScoreAtApplication}%
-                            </span>
-                          ) : (
-                            <span className="text-muted-foreground">—</span>
-                          )}
-                        </td>
+                      <TableCell className="font-mono">
+                        {app.matchScoreAtApplication !== undefined ? (
+                          <span className="font-semibold text-emerald-600 dark:text-emerald-400">
+                            {app.matchScoreAtApplication}%
+                          </span>
+                        ) : (
+                          <span className="text-muted-foreground">—</span>
+                        )}
+                      </TableCell>
 
-                        <td className="p-3">
-                          {app.submittedDocumentTypes && app.submittedDocumentTypes.length > 0 ? (
-                            <span className="text-[11px] text-foreground flex items-center gap-1 font-mono">
-                              <FileCheck className="w-3.5 h-3.5 text-emerald-500" />
-                              {app.submittedDocumentTypes.length} verified
-                            </span>
-                          ) : (
-                            <span className="text-[11px] text-muted-foreground">Standard</span>
-                          )}
-                        </td>
+                      <TableCell>
+                        {app.submittedDocumentTypes && app.submittedDocumentTypes.length > 0 ? (
+                          <span className="text-[11px] text-foreground flex items-center gap-1 font-mono">
+                            <FileCheck className="w-3.5 h-3.5 text-emerald-500" />
+                            {app.submittedDocumentTypes.length} verified
+                          </span>
+                        ) : (
+                          <span className="text-[11px] text-muted-foreground">Standard</span>
+                        )}
+                      </TableCell>
 
-                        <td className="p-3">
-                          <Badge
-                            variant={
-                              scrStatus === "shortlisted"
-                                ? "default"
-                                : scrStatus === "rejected"
-                                ? "destructive"
-                                : "outline"
-                            }
-                            className="text-[10px] capitalize"
+                      <TableCell>
+                        <Badge
+                          variant={
+                            scrStatus === "shortlisted"
+                              ? "default"
+                              : scrStatus === "rejected"
+                              ? "destructive"
+                              : "outline"
+                          }
+                          className="text-[10px] capitalize"
+                        >
+                          {scrStatus}
+                        </Badge>
+                      </TableCell>
+
+                      <TableCell className="font-mono text-[11px] text-muted-foreground">
+                        {new Date(app.appliedAt).toLocaleDateString()}
+                      </TableCell>
+
+                      <TableCell className="pr-4 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <Button
+                            size="xs"
+                            variant="outline"
+                            onClick={() => {
+                              setSelectedApp(app);
+                              setScreeningNotes(app.screeningNotes || "");
+                            }}
+                            className="text-xs h-7 gap-1"
                           >
-                            {scrStatus}
-                          </Badge>
-                        </td>
+                            <Eye className="w-3 h-3" />
+                            <span>Review</span>
+                          </Button>
 
-                        <td className="p-3 font-mono text-[11px] text-muted-foreground">
-                          {new Date(app.appliedAt).toLocaleDateString()}
-                        </td>
-
-                        <td className="p-3 pr-4 text-right">
-                          <div className="flex items-center justify-end gap-1.5">
-                            <Button
-                              size="xs"
-                              variant="outline"
-                              onClick={() => {
-                                setSelectedApp(app);
-                                setScreeningNotes(app.screeningNotes || "");
-                              }}
-                              className="text-xs h-7 gap-1"
-                            >
-                              <Eye className="w-3 h-3" />
-                              <span>Review</span>
-                            </Button>
-
-                            {scrStatus === "pending" && (
-                              <>
-                                <Button
-                                  size="xs"
-                                  onClick={() => handleDecision(app.id, "shortlisted")}
-                                  className="text-xs h-7 bg-emerald-600 hover:bg-emerald-700 text-white"
-                                  title="Shortlist for interview"
-                                >
-                                  <Check className="w-3 h-3 mr-0.5" /> Shortlist
-                                </Button>
-                                <Button
-                                  size="xs"
-                                  variant="ghost"
-                                  onClick={() => handleDecision(app.id, "rejected")}
-                                  className="text-xs h-7 text-destructive hover:text-destructive"
-                                  title="Reject application"
-                                >
-                                  <X className="w-3 h-3" />
-                                </Button>
-                              </>
-                            )}
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
+                          {scrStatus === "pending" && (
+                            <>
+                              <Button
+                                size="xs"
+                                onClick={() => handleDecision(app.id, "shortlisted")}
+                                className="text-xs h-7 bg-emerald-600 hover:bg-emerald-700 text-white"
+                                title="Shortlist for interview"
+                              >
+                                <Check className="w-3 h-3 mr-0.5" /> Shortlist
+                              </Button>
+                              <Button
+                                size="xs"
+                                variant="ghost"
+                                onClick={() => setAppToReject(app)}
+                                className="text-xs h-7 text-destructive hover:text-destructive"
+                                title="Reject application"
+                              >
+                                <X className="w-3 h-3" />
+                              </Button>
+                            </>
+                          )}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
+              )}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
 
@@ -495,7 +546,7 @@ export function ApplicationScreeningView({ onNavigateToInterviews }: Application
                   variant="destructive"
                   size="sm"
                   disabled={isUpdating}
-                  onClick={() => handleDecision(selectedApp.id, "rejected")}
+                  onClick={() => setAppToReject(selectedApp)}
                   className="text-xs"
                 >
                   Reject
@@ -513,6 +564,34 @@ export function ApplicationScreeningView({ onNavigateToInterviews }: Application
           </div>
         </div>
       )}
+
+      {/* Confirmation Alert Dialog for Rejection */}
+      <AlertDialog
+        open={Boolean(appToReject)}
+        onOpenChange={(open) => !open && setAppToReject(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Reject Candidate Application?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to reject the application for {appToReject?.applicantFullName || "this candidate"} for the position of {appToReject?.roleTitle}? This action will update the student&apos;s application record.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              variant="destructive"
+              onClick={() => {
+                if (appToReject) {
+                  handleDecision(appToReject.id, "rejected");
+                }
+              }}
+            >
+              Reject Application
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

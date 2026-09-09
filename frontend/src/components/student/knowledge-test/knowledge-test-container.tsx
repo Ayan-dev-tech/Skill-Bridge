@@ -12,6 +12,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { toast } from "@/components/ui/sonner";
 import {
   Brain,
   CheckCircle2,
@@ -266,7 +269,7 @@ export function KnowledgeTestContainer() {
 
       const data = await res.json();
       if (!data.success) {
-        alert(data.error || "Failed to submit answer.");
+        toast.error(data.error || "Failed to submit answer.");
         return;
       }
 
@@ -277,6 +280,7 @@ export function KnowledgeTestContainer() {
       if (data.isCompleted && data.result) {
         setTestResult(data.result);
         setActiveSessionId(null);
+        toast.success(`Assessment completed! Score: ${data.result.scorePercent}% (${data.result.performanceTier})`);
         if (["Proficient", "Strong", "Expert"].includes(data.result.performanceTier)) {
           try {
             confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
@@ -342,16 +346,20 @@ export function KnowledgeTestContainer() {
     return (
       <div className="space-y-6 max-w-4xl mx-auto py-8">
         <div className="space-y-3">
-          <div className="h-6 w-48 bg-muted/60 rounded animate-pulse" />
-          <div className="h-8 w-96 bg-muted/80 rounded animate-pulse" />
-          <div className="h-4 w-full max-w-xl bg-muted/40 rounded animate-pulse" />
+          <Skeleton className="h-6 w-48 rounded" />
+          <Skeleton className="h-8 w-96 rounded" />
+          <Skeleton className="h-4 w-full max-w-xl rounded" />
         </div>
         <Card className="border-border">
-          <CardContent className="p-8 flex flex-col items-center justify-center space-y-3">
-            <Brain className="w-8 h-8 animate-spin text-muted-foreground" />
-            <p className="text-sm text-muted-foreground">
-              Loading knowledge assessment battery...
-            </p>
+          <CardContent className="p-8 space-y-4">
+            <Skeleton className="h-6 w-1/3 rounded" />
+            <Skeleton className="h-20 w-full rounded" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+              <Skeleton className="h-14 rounded-lg" />
+              <Skeleton className="h-14 rounded-lg" />
+              <Skeleton className="h-14 rounded-lg" />
+              <Skeleton className="h-14 rounded-lg" />
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -380,38 +388,34 @@ export function KnowledgeTestContainer() {
           </p>
         </div>
 
-        <Card className="border-amber-500/30 bg-amber-500/5">
-          <CardContent className="p-6 md:p-8 space-y-5">
-            <div className="flex items-start gap-4">
-              <div className="p-3 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
-                <AlertCircle className="w-6 h-6" />
-              </div>
-              <div className="space-y-1.5 flex-1">
-                <h3 className="font-semibold text-foreground text-base">
-                  Interest Finder Profile Required
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Before we can evaluate your technical strengths and identify skill gaps, you must
-                  first complete the <strong>Interest Finder</strong> exploration (Stage 2).
-                  This identifies whether your assessment should test Cybersecurity, Cloud &
-                  DevOps, AI & Machine Learning, Web Systems, or Core Software Engineering.
-                </p>
-              </div>
+        <Alert variant="warning" className="p-6">
+          <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0" />
+          <div className="space-y-3">
+            <div>
+              <AlertTitle className="text-base font-semibold text-foreground">
+                Interest Finder Profile Required
+              </AlertTitle>
+              <AlertDescription className="text-sm leading-relaxed mt-1">
+                Before we can evaluate your technical strengths and identify skill gaps, you must
+                first complete the <strong>Interest Finder</strong> exploration (Stage 2).
+                This identifies whether your assessment should test Cybersecurity, Cloud &
+                DevOps, AI & Machine Learning, Web Systems, or Core Software Engineering.
+              </AlertDescription>
             </div>
 
-            <div className="pt-2 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="pt-3 border-t border-amber-500/20 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="text-xs text-muted-foreground flex items-center gap-1.5">
                 <Clock className="w-3.5 h-3.5" />
                 <span>Takes approximately 3–5 minutes to complete</span>
               </div>
-              <Button asChild className="w-full sm:w-auto">
+              <Button asChild size="sm" className="w-full sm:w-auto">
                 <Link href="/student/interest-finder">
                   Begin Interest Finder <ArrowRight className="w-4 h-4 ml-1.5" />
                 </Link>
               </Button>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </Alert>
       </div>
     );
   }
