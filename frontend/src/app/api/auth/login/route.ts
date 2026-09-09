@@ -107,6 +107,22 @@ export async function POST(request: Request) {
       maxAge: 60 * 60 * 24 * 7,
     });
 
+    if (user.role === "campus") {
+      response.cookies.set("sb_campus_id", user.id, {
+        path: "/",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 7,
+      });
+    }
+
+    if (user.role === "faculty") {
+      response.cookies.set("sb_faculty_id", user.id, {
+        path: "/",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 7,
+      });
+    }
+
     if (isAdmin) {
       response.cookies.set("sb_admin", "true", {
         path: "/",

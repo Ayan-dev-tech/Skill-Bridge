@@ -118,24 +118,30 @@ export default function LoginPage() {
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center p-4 bg-background text-foreground selection:bg-muted selection:text-foreground">
       {/* Top Navigation Bar */}
-      <header className="absolute top-0 left-0 right-0 flex items-center justify-between px-6 py-4 border-b border-border">
-        <div className="flex items-center gap-2">
-          <span className="font-semibold text-lg tracking-tight">Skill-Bridge</span>
+      <header className="absolute top-0 left-0 right-0 flex items-center justify-between px-6 py-3.5 border-b border-border/80 bg-background/80 backdrop-blur-md">
+        <div className="flex items-center gap-2.5">
+          <div className="w-6 h-6 rounded-lg font-heading font-bold text-xs flex items-center justify-center bg-foreground text-background shadow-xs">
+            S
+          </div>
+          <span className="font-heading font-bold text-base tracking-tight">Skill-Bridge</span>
         </div>
         <div className="flex items-center gap-3">
-          <ThemeToggle />
+          <ThemeToggle className="h-8 w-8 rounded-lg border border-border/80 bg-card/60 shadow-2xs" />
         </div>
       </header>
 
       {/* Main Login Card */}
       <main className="w-full max-w-md my-16">
-        <Card className="border-border shadow-sm">
-          <CardHeader className="text-center space-y-1">
-            <CardTitle className="text-2xl font-bold tracking-tight">
+        <Card className="border border-border/80 bg-card shadow-md rounded-2xl">
+          <CardHeader className="text-center space-y-1.5 pb-3">
+            <div className="mx-auto w-10 h-10 rounded-xl bg-muted/60 border border-border/80 flex items-center justify-center mb-1 text-foreground shadow-2xs font-heading font-bold text-sm">
+              SB
+            </div>
+            <CardTitle className="text-2xl font-heading font-bold tracking-tight text-foreground">
               Welcome to Skill-Bridge
             </CardTitle>
-            <CardDescription className="text-muted-foreground text-sm">
-              Select your role to access your portal
+            <CardDescription className="text-muted-foreground text-xs">
+              Select your role to access your authoritative portal
             </CardDescription>
           </CardHeader>
 
@@ -150,24 +156,26 @@ export default function LoginPage() {
               }}
               className="w-full"
             >
-              <TabsList className="grid w-full grid-cols-4 mb-2">
-                <TabsTrigger value="student">Student</TabsTrigger>
-                <TabsTrigger value="faculty">Faculty</TabsTrigger>
-                <TabsTrigger value="campus">Campus</TabsTrigger>
-                <TabsTrigger value="industry">Industry</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-4 mb-3 h-10 p-1 rounded-xl border border-border/80 bg-muted/50">
+                <TabsTrigger value="student" className="rounded-lg text-xs font-medium">Student</TabsTrigger>
+                <TabsTrigger value="faculty" className="rounded-lg text-xs font-medium">Faculty</TabsTrigger>
+                <TabsTrigger value="campus" className="rounded-lg text-xs font-medium">Campus</TabsTrigger>
+                <TabsTrigger value="industry" className="rounded-lg text-xs font-medium">Industry</TabsTrigger>
               </TabsList>
 
               {(Object.keys(roleConfigs) as RoleType[]).map((role) => {
                 const config = roleConfigs[role];
                 return (
-                  <TabsContent key={role} value={role} className="space-y-4 pt-2">
-                    <p className="text-xs text-muted-foreground">
+                  <TabsContent key={role} value={role} className="space-y-4 pt-1">
+                    <p className="text-xs text-muted-foreground leading-relaxed">
                       {config.description}
                     </p>
 
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                    <form onSubmit={handleSubmit} className="space-y-3.5">
                       <div className="space-y-1.5">
-                        <Label htmlFor={`${role}-email`}>{config.emailLabel}</Label>
+                        <Label htmlFor={`${role}-email`} className="text-xs font-medium text-foreground">
+                          {config.emailLabel}
+                        </Label>
                         <Input
                           id={`${role}-email`}
                           type="email"
@@ -176,15 +184,18 @@ export default function LoginPage() {
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           disabled={isLoading}
+                          className="h-9 rounded-lg border-border/80 bg-input/20"
                         />
                       </div>
 
                       <div className="space-y-1.5">
                         <div className="flex items-center justify-between">
-                          <Label htmlFor={`${role}-password`}>Password</Label>
+                          <Label htmlFor={`${role}-password`} className="text-xs font-medium text-foreground">
+                            Password
+                          </Label>
                           <a
                             href="#forgot"
-                            className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-4"
+                            className="text-[11px] text-muted-foreground hover:text-foreground underline underline-offset-4 transition-colors"
                             onClick={(e) => {
                               e.preventDefault();
                               alert("Password reset will be available upon backend integration.");
@@ -201,24 +212,25 @@ export default function LoginPage() {
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           disabled={isLoading}
+                          className="h-9 rounded-lg border-border/80 bg-input/20"
                         />
                       </div>
 
                       {errorMessage && (
-                        <div className="p-3 rounded-lg border border-destructive/30 bg-destructive/10 text-xs text-destructive">
+                        <div className="p-3 rounded-xl border border-destructive/30 bg-destructive/10 text-xs text-destructive">
                           {errorMessage}
                         </div>
                       )}
 
                       {successMessage && (
-                        <div className="p-3 rounded-lg border border-border bg-muted/40 text-xs text-foreground">
+                        <div className="p-3 rounded-xl border border-border/80 bg-muted/40 text-xs text-foreground">
                           {successMessage}
                         </div>
                       )}
 
                       <Button
                         type="submit"
-                        className="w-full"
+                        className="w-full h-10 rounded-xl font-heading font-medium tracking-wide shadow-xs mt-1"
                         disabled={isLoading}
                       >
                         {isLoading ? "Signing in..." : `Sign in as ${config.label}`}
@@ -230,7 +242,7 @@ export default function LoginPage() {
             </Tabs>
           </CardContent>
 
-          <CardFooter className="flex flex-col items-center justify-center gap-2 border-t border-border pt-4 pb-4">
+          <CardFooter className="flex flex-col items-center justify-center gap-2 border-t border-border/60 pt-4 pb-4">
             <p className="text-xs text-muted-foreground text-center">
               Don&apos;t have an account?{" "}
               <Link
@@ -245,8 +257,8 @@ export default function LoginPage() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full text-center py-4 border-t border-border mt-auto">
-        <p className="text-xs text-muted-foreground">
+      <footer className="w-full text-center py-4 border-t border-border/80 mt-auto">
+        <p className="text-xs text-muted-foreground font-mono">
           &copy; {new Date().getFullYear()} Skill-Bridge Platform. All rights reserved.
         </p>
       </footer>

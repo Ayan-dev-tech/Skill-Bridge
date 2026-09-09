@@ -1,21 +1,32 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Outfit, Raleway, Roboto_Slab, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const outfit = Outfit({
   subsets: ["latin"],
+  variable: "--font-sans",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const raleway = Raleway({
   subsets: ["latin"],
+  variable: "--font-heading",
+});
+
+const robotoSlab = Roboto_Slab({
+  subsets: ["latin"],
+  variable: "--font-serif",
+});
+
+const fontMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
 });
 
 export const metadata: Metadata = {
   title: "Skill-Bridge",
-  description: "Skill-Bridge Platform - Role-based Access",
+  description: "Skill-Bridge Platform - Role-based Career & Verification Ecosystem",
 };
 
 export default function RootLayout({
@@ -24,10 +35,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background text-foreground`}
-      >
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${outfit.variable} ${raleway.variable} ${robotoSlab.variable} ${fontMono.variable} font-sans antialiased`}
+    >
+      <body className="min-h-screen bg-background text-foreground font-sans antialiased selection:bg-primary/15 selection:text-foreground">
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -35,6 +48,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <Toaster richColors closeButton position="top-right" />
         </ThemeProvider>
       </body>
     </html>

@@ -6,6 +6,7 @@ import {
   Users,
   GraduationCap,
   Building2,
+  School,
   BookOpen,
   TrendingUp,
   Briefcase,
@@ -20,14 +21,28 @@ import {
   ShieldCheck,
   History,
   Settings,
-  X,
 } from "lucide-react";
+import {
+  Sidebar,
+  SidebarHeader,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarMenuBadge,
+  SidebarRail,
+} from "@/components/ui/sidebar";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export type AdminViewType =
   | "overview"
   | "students"
   | "faculty"
   | "industry"
+  | "campus"
   | "skill-library"
   | "skill-gaps"
   | "jobs"
@@ -67,7 +82,6 @@ export function AdminSidebar({
   currentView,
   onSelectView,
   pendingApprovalsCount = 4,
-  mobileOpen = false,
   onCloseMobile,
 }: AdminSidebarProps) {
   const sections: NavSection[] = [
@@ -80,6 +94,7 @@ export function AdminSidebar({
         { id: "students", label: "Students", icon: Users },
         { id: "faculty", label: "Faculty", icon: GraduationCap },
         { id: "industry", label: "Industry", icon: Building2 },
+        { id: "campus", label: "Campus", icon: School },
       ],
     },
     {
@@ -128,103 +143,91 @@ export function AdminSidebar({
     },
   ];
 
-  const sidebarContent = (
-    <div className="flex flex-col h-full bg-background border-r border-border text-foreground select-none">
+  return (
+    <Sidebar collapsible="icon">
       {/* Brand Header */}
-      <div className="flex items-center justify-between px-5 h-14 border-b border-border">
+      <SidebarHeader className="h-16 md:h-[68px] flex justify-center border-b border-sidebar-border px-4 shrink-0">
         <div className="flex items-center gap-2.5">
-          <div className="w-5 h-5 rounded-md bg-foreground text-background font-bold text-xs flex items-center justify-center">
+          <div className="w-7 h-7 rounded-lg bg-foreground text-background font-heading font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">
             S
           </div>
-          <span className="font-semibold text-sm tracking-tight">SKILL BRIDGE</span>
-        </div>
-        {onCloseMobile && (
-          <button
-            onClick={onCloseMobile}
-            className="md:hidden text-muted-foreground hover:text-foreground p-1 rounded"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        )}
-      </div>
-
-      {/* Navigation Tree */}
-      <div className="flex-1 overflow-y-auto py-3 px-3 space-y-4 text-xs">
-        {sections.map((section, sIdx) => (
-          <div key={sIdx} className="space-y-0.5">
-            {section.title && (
-              <p className="px-2.5 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/70">
-                {section.title}
-              </p>
-            )}
-            {section.items.map((item) => {
-              const Icon = item.icon;
-              const isActive = currentView === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => {
-                    onSelectView(item.id);
-                    if (onCloseMobile) onCloseMobile();
-                  }}
-                  className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-md font-medium transition-colors ${
-                    isActive
-                      ? "bg-foreground text-background shadow-xs font-semibold"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 truncate">
-                    <Icon className="w-4 h-4 shrink-0" />
-                    <span className="truncate">{item.label}</span>
-                  </div>
-                  {item.badge !== undefined && (
-                    <span
-                      className={`text-[10px] font-mono px-1.5 py-0.2 rounded font-semibold ${
-                        isActive
-                          ? "bg-background text-foreground"
-                          : "bg-muted text-foreground border border-border"
-                      }`}
-                    >
-                      {item.badge}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        ))}
-      </div>
-
-      {/* Footer / System Status */}
-      <div className="p-3 border-t border-border bg-muted/20 text-[11px] text-muted-foreground flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
-          <span>Admin Portal Live</span>
-        </div>
-        <span className="font-mono text-[10px]">v1.2.4</span>
-      </div>
-    </div>
-  );
-
-  return (
-    <>
-      {/* Desktop Persistent Sidebar */}
-      <aside className="hidden md:flex w-60 shrink-0 h-screen sticky top-0 flex-col">
-        {sidebarContent}
-      </aside>
-
-      {/* Mobile Drawer Overlay */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-50 md:hidden flex">
-          <div
-            className="fixed inset-0 bg-black/60 backdrop-blur-xs"
-            onClick={onCloseMobile}
-          />
-          <div className="relative w-64 max-w-[80vw] h-full shadow-xl">
-            {sidebarContent}
+          <div className="flex flex-col min-w-0 group-data-[collapsible=icon]:hidden">
+            <span className="font-heading font-bold text-sm tracking-tight text-foreground truncate">
+              SKILL BRIDGE
+            </span>
+            <span className="text-[10px] font-mono uppercase font-semibold text-muted-foreground">
+              Admin Portal
+            </span>
           </div>
         </div>
-      )}
-    </>
+      </SidebarHeader>
+
+      {/* Navigation Content with ScrollArea */}
+      <SidebarContent className="p-0 overflow-hidden flex-1 min-h-0">
+        <ScrollArea className="h-full">
+          <div className="flex flex-col gap-3 p-2">
+            {sections.map((section, sIdx) => (
+              <SidebarGroup key={sIdx} className="p-0 h-auto shrink-0">
+                {section.title && (
+                  <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/60 px-2 py-1 h-7">
+                    {section.title}
+                  </SidebarGroupLabel>
+                )}
+                <SidebarMenu className="gap-0.5">
+                  {section.items.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = currentView === item.id;
+                    return (
+                      <SidebarMenuItem key={item.id} className="h-auto shrink-0">
+                        <SidebarMenuButton
+                          isActive={isActive}
+                          tooltip={item.label}
+                          onClick={() => {
+                            onSelectView(item.id);
+                            if (onCloseMobile) onCloseMobile();
+                          }}
+                          className="gap-2.5"
+                        >
+                          <Icon className="w-4 h-4 shrink-0" />
+                          <span className="truncate">{item.label}</span>
+                        </SidebarMenuButton>
+                        {item.badge !== undefined && (
+                          <SidebarMenuBadge
+                            className={
+                              isActive
+                                ? "bg-primary text-primary-foreground"
+                                : "bg-muted text-foreground border border-border/80"
+                            }
+                          >
+                            {item.badge}
+                          </SidebarMenuBadge>
+                        )}
+                      </SidebarMenuItem>
+                    );
+                  })}
+                </SidebarMenu>
+              </SidebarGroup>
+            ))}
+          </div>
+        </ScrollArea>
+      </SidebarContent>
+
+      {/* Footer / System Telemetry */}
+      <SidebarFooter className="border-t border-sidebar-border p-3">
+        <div className="flex items-center justify-between text-[11px] text-muted-foreground group-data-[collapsible=icon]:justify-center">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block shrink-0" />
+            <span className="font-mono text-[11px] group-data-[collapsible=icon]:hidden">
+              Admin Portal Live
+            </span>
+          </div>
+          <span className="font-mono text-[10px] group-data-[collapsible=icon]:hidden">
+            v1.2.4
+          </span>
+        </div>
+      </SidebarFooter>
+
+      <SidebarRail />
+    </Sidebar>
   );
 }

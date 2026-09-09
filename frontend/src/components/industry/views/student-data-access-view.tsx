@@ -45,6 +45,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import type { PermittedStudentTalent } from "@/lib/industry/types";
 
 export function StudentDataAccessView() {
@@ -177,22 +180,41 @@ export function StudentDataAccessView() {
       </Card>
 
       {error && (
-        <div className="p-4 rounded-md border border-destructive/40 bg-destructive/10 text-destructive text-xs flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 shrink-0" />
-            <span>{error}</span>
+        <Alert variant="destructive">
+          <AlertCircle className="w-4 h-4" />
+          <div className="flex items-center justify-between w-full">
+            <div>
+              <AlertTitle>Talent Search Error</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </div>
+            <Button size="sm" variant="outline" onClick={() => fetchStudents(page)} className="h-7 text-xs ml-4">
+              Retry
+            </Button>
           </div>
-          <Button size="sm" variant="ghost" onClick={() => fetchStudents(page)} className="h-7 text-xs">
-            Retry
-          </Button>
-        </div>
+        </Alert>
       )}
 
       {/* Student Cards Grid */}
       {isLoading ? (
-        <div className="py-20 text-center space-y-3">
-          <Loader2 className="w-6 h-6 animate-spin mx-auto text-muted-foreground" />
-          <p className="text-xs text-muted-foreground">Filtering verified student profiles...</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[1, 2, 3, 4].map((i) => (
+            <Card key={i} className="border-border bg-card p-4 space-y-3">
+              <div className="flex items-start justify-between">
+                <div className="space-y-1.5 w-2/3">
+                  <Skeleton className="h-5 w-40 rounded" />
+                  <Skeleton className="h-4 w-48 rounded" />
+                  <Skeleton className="h-3 w-32 rounded" />
+                </div>
+                <Skeleton className="h-6 w-20 rounded-full" />
+              </div>
+              <Skeleton className="h-10 w-full rounded" />
+              <div className="flex gap-2">
+                <Skeleton className="h-5 w-16 rounded-full" />
+                <Skeleton className="h-5 w-16 rounded-full" />
+                <Skeleton className="h-5 w-16 rounded-full" />
+              </div>
+            </Card>
+          ))}
         </div>
       ) : students.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -372,122 +394,129 @@ export function StudentDataAccessView() {
             </div>
 
             <div className="p-5 overflow-y-auto space-y-4 text-xs">
-              <div className="grid grid-cols-2 gap-3 p-3 rounded-md bg-muted/20 border border-border">
-                <div>
-                  <span className="text-muted-foreground block text-[11px]">Academic Course</span>
-                  <span className="font-medium text-foreground">{selectedStudent.course}</span>
-                </div>
-                <div>
-                  <span className="text-muted-foreground block text-[11px]">Department</span>
-                  <span className="font-medium text-foreground">{selectedStudent.department}</span>
-                </div>
-                <div>
-                  <span className="text-muted-foreground block text-[11px]">Current Semester</span>
-                  <span className="font-medium text-foreground">Semester {selectedStudent.semester}</span>
-                </div>
-                <div>
-                  <span className="text-muted-foreground block text-[11px]">Batch Year</span>
-                  <span className="font-medium text-foreground">{selectedStudent.batchYear}</span>
-                </div>
-              </div>
+              <Tabs defaultValue="profile" className="w-full">
+                <TabsList className="grid grid-cols-3 mb-4">
+                  <TabsTrigger value="profile" className="text-xs">Academic</TabsTrigger>
+                  <TabsTrigger value="competency" className="text-xs">Competency</TabsTrigger>
+                  <TabsTrigger value="portfolios" className="text-xs">Portfolios</TabsTrigger>
+                </TabsList>
 
-              {/* Technical Benchmarks */}
-              <div className="space-y-2">
-                <p className="font-semibold text-foreground flex items-center gap-1.5">
-                  <Award className="w-4 h-4 text-emerald-500" />
-                  <span>Technical Competency Calibration</span>
-                </p>
-                <div className="p-3 rounded-md border border-border bg-card space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground">Calibrated Knowledge Tier:</span>
-                    <Badge variant="secondary" className="font-semibold uppercase text-[10px]">
-                      {selectedStudent.knowledgeLevel || "Calibrating"}
-                    </Badge>
+                <TabsContent value="profile" className="space-y-4">
+                  <div className="grid grid-cols-2 gap-3 p-3 rounded-md bg-muted/20 border border-border">
+                    <div>
+                      <span className="text-muted-foreground block text-[11px]">Academic Course</span>
+                      <span className="font-medium text-foreground">{selectedStudent.course}</span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground block text-[11px]">Department</span>
+                      <span className="font-medium text-foreground">{selectedStudent.department}</span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground block text-[11px]">Current Semester</span>
+                      <span className="font-medium text-foreground">Semester {selectedStudent.semester}</span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground block text-[11px]">Batch Year</span>
+                      <span className="font-medium text-foreground">{selectedStudent.batchYear}</span>
+                    </div>
                   </div>
-                  {selectedStudent.benchmarkScorePercent !== null && (
-                    <div className="flex items-center justify-between">
-                      <span className="text-muted-foreground">Evaluation Score:</span>
-                      <span className="font-mono font-bold text-foreground">
-                        {selectedStudent.benchmarkScorePercent}%
-                      </span>
-                    </div>
-                  )}
-                  {selectedStudent.interestDomain && (
-                    <div className="flex items-center justify-between">
-                      <span className="text-muted-foreground">Domain Specialization:</span>
-                      <span className="font-medium text-foreground">{selectedStudent.interestDomain}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
+                </TabsContent>
 
-              {/* Verified Technical Skills */}
-              <div className="space-y-2">
-                <p className="font-semibold text-foreground">Demonstrated Skills & Proficiencies</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {selectedStudent.technicalSkills.map((skill, idx) => (
-                    <Badge key={idx} variant="outline" className="text-xs font-normal">
-                      {skill}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
+                <TabsContent value="competency" className="space-y-4">
+                  {/* Technical Benchmarks */}
+                  <div className="space-y-2">
+                    <p className="font-semibold text-foreground flex items-center gap-1.5">
+                      <Award className="w-4 h-4 text-emerald-500" />
+                      <span>Technical Competency Calibration</span>
+                    </p>
+                    <div className="p-3 rounded-md border border-border bg-card space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">Calibrated Knowledge Tier:</span>
+                        <Badge variant="secondary" className="font-semibold uppercase text-[10px]">
+                          {selectedStudent.knowledgeLevel || "Calibrating"}
+                        </Badge>
+                      </div>
+                      {selectedStudent.benchmarkScorePercent !== null && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-muted-foreground">Evaluation Score:</span>
+                          <span className="font-mono font-bold text-foreground">
+                            {selectedStudent.benchmarkScorePercent}%
+                          </span>
+                        </div>
+                      )}
+                      {selectedStudent.interestDomain && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-muted-foreground">Domain Specialization:</span>
+                          <span className="font-medium text-foreground">{selectedStudent.interestDomain}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
 
-              {/* Professional Links */}
-              <div className="space-y-2 pt-2 border-t border-border">
-                <p className="font-semibold text-foreground">Verified External Portfolios</p>
-                <div className="flex flex-col gap-2">
-                  {selectedStudent.profiles.gitHub && (
-                    <a
-                      href={selectedStudent.profiles.gitHub}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2.5 rounded-md border border-border hover:bg-muted/40 flex items-center justify-between transition-colors"
-                    >
-                      <div className="flex items-center gap-2">
-                        <GitHubIcon className="w-4 h-4" />
-                        <span className="truncate">{selectedStudent.profiles.gitHub}</span>
-                      </div>
-                      <ExternalLink className="w-3 h-3 text-muted-foreground" />
-                    </a>
-                  )}
-                  {selectedStudent.profiles.linkedIn && (
-                    <a
-                      href={selectedStudent.profiles.linkedIn}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2.5 rounded-md border border-border hover:bg-muted/40 flex items-center justify-between transition-colors"
-                    >
-                      <div className="flex items-center gap-2">
-                        <LinkedInIcon className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                        <span className="truncate">{selectedStudent.profiles.linkedIn}</span>
-                      </div>
-                      <ExternalLink className="w-3 h-3 text-muted-foreground" />
-                    </a>
-                  )}
-                  {selectedStudent.profiles.portfolio && (
-                    <a
-                      href={selectedStudent.profiles.portfolio}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2.5 rounded-md border border-border hover:bg-muted/40 flex items-center justify-between transition-colors"
-                    >
-                      <div className="flex items-center gap-2">
-                        <Globe className="w-4 h-4" />
-                        <span className="truncate">{selectedStudent.profiles.portfolio}</span>
-                      </div>
-                      <ExternalLink className="w-3 h-3 text-muted-foreground" />
-                    </a>
-                  )}
-                  {!selectedStudent.profiles.gitHub &&
-                    !selectedStudent.profiles.linkedIn &&
-                    !selectedStudent.profiles.portfolio && (
-                      <p className="text-muted-foreground italic text-[11px]">
-                        Candidate has not provided external public portfolio links.
-                      </p>
+                  {/* Verified Technical Skills */}
+                  <div className="space-y-2">
+                    <p className="font-semibold text-foreground">Demonstrated Skills & Proficiencies</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {selectedStudent.technicalSkills.map((skill, idx) => (
+                        <Badge key={idx} variant="outline" className="text-xs font-normal">
+                          {skill}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="portfolios" className="space-y-3">
+                  <p className="font-semibold text-foreground">Verified External Portfolios</p>
+                  <div className="flex flex-col gap-2">
+                    {selectedStudent.profiles.gitHub && (
+                      <a
+                        href={selectedStudent.profiles.gitHub}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2.5 rounded-md border border-border hover:bg-muted/40 flex items-center justify-between transition-colors"
+                      >
+                        <div className="flex items-center gap-2">
+                          <GitHubIcon className="w-4 h-4" />
+                          <span className="truncate">{selectedStudent.profiles.gitHub}</span>
+                        </div>
+                        <ExternalLink className="w-3 h-3 text-muted-foreground" />
+                      </a>
                     )}
-                </div>
-              </div>
+                    {selectedStudent.profiles.linkedIn && (
+                      <a
+                        href={selectedStudent.profiles.linkedIn}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2.5 rounded-md border border-border hover:bg-muted/40 flex items-center justify-between transition-colors"
+                      >
+                        <div className="flex items-center gap-2">
+                          <LinkedInIcon className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                          <span className="truncate">{selectedStudent.profiles.linkedIn}</span>
+                        </div>
+                        <ExternalLink className="w-3 h-3 text-muted-foreground" />
+                      </a>
+                    )}
+                    {selectedStudent.profiles.portfolio && (
+                      <a
+                        href={selectedStudent.profiles.portfolio}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2.5 rounded-md border border-border hover:bg-muted/40 flex items-center justify-between transition-colors"
+                      >
+                        <div className="flex items-center gap-2">
+                          <Globe className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                          <span className="truncate">{selectedStudent.profiles.portfolio}</span>
+                        </div>
+                        <ExternalLink className="w-3 h-3 text-muted-foreground" />
+                      </a>
+                    )}
+                    {!selectedStudent.profiles.gitHub && !selectedStudent.profiles.linkedIn && !selectedStudent.profiles.portfolio && (
+                      <p className="text-muted-foreground italic py-2">No external links provided.</p>
+                    )}
+                  </div>
+                </TabsContent>
+              </Tabs>
             </div>
 
             <div className="p-3 border-t border-border bg-muted/20 flex items-center justify-end">

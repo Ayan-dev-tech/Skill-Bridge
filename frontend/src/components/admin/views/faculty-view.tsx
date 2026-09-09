@@ -10,6 +10,25 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 import { FacultyMember } from "@/lib/admin-data";
 import { Search, Filter, CheckCircle2, UserX, UserCheck } from "lucide-react";
 
@@ -26,6 +45,7 @@ export function FacultyView({
 }: FacultyViewProps) {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [deptFilter, setDeptFilter] = React.useState("All");
+  const [facultyToDeactivate, setFacultyToDeactivate] = React.useState<FacultyMember | null>(null);
 
   const departments = React.useMemo(() => {
     return ["All", ...Array.from(new Set(faculty.map((f) => f.department)))];
@@ -45,6 +65,28 @@ export function FacultyView({
     }
     return true;
   });
+
+  const handleApprove = (id: string, name: string) => {
+    onApprove(id);
+    toast.success(`Faculty account for ${name} approved successfully.`);
+  };
+
+  const handleToggleClick = (f: FacultyMember) => {
+    if (f.status === "verified") {
+      setFacultyToDeactivate(f);
+    } else {
+      onToggleStatus(f.id);
+      toast.success(`Faculty account for ${f.name} activated.`);
+    }
+  };
+
+  const confirmDeactivation = () => {
+    if (facultyToDeactivate) {
+      onToggleStatus(facultyToDeactivate.id);
+      toast.success(`Faculty account for ${facultyToDeactivate.name} deactivated.`);
+      setFacultyToDeactivate(null);
+    }
+  };
 
   return (
     <Card className="border-border">
@@ -88,31 +130,37 @@ export function FacultyView({
       </CardHeader>
 
       <CardContent className="p-0">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="border-b border-border bg-muted/40 font-medium text-muted-foreground">
-                <th className="p-3 pl-6">Faculty Member</th>
-                <th className="p-3">Department & Title</th>
-                <th className="p-3">Curricular Subjects</th>
-                <th className="p-3">Courses</th>
-                <th className="p-3">Assessments</th>
-                <th className="p-3">Status</th>
-                <th className="p-3 pr-6 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {filtered.map((f) => (
-                <tr key={f.id} className="hover:bg-muted/20 transition-colors">
-                  <td className="p-3 pl-6">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-muted/40 hover:bg-muted/40">
+              <TableHead className="pl-6">Faculty Member</TableHead>
+              <TableHead>Department & Title</TableHead>
+              <TableHead>Curricular Subjects</TableHead>
+              <TableHead>Courses</TableHead>
+              <TableHead>Assessments</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead className="pr-6 text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filtered.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={7} className="h-24 text-center text-muted-foreground">
+                  No faculty records found.
+                </TableCell>
+              </TableRow>
+            ) : (
+              filtered.map((f) => (
+                <TableRow key={f.id} className="hover:bg-muted/20">
+                  <TableCell className="pl-6">
                     <p className="font-semibold text-foreground">{f.name}</p>
                     <p className="text-muted-foreground font-mono text-[11px]">{f.email}</p>
-                  </td>
-                  <td className="p-3">
+                  </TableCell>
+                  <TableCell>
                     <p className="font-medium text-foreground">{f.designation}</p>
                     <p className="text-muted-foreground text-[11px]">{f.department}</p>
-                  </td>
-                  <td className="p-3 max-w-xs">
+                  </TableCell>
+                  <TableCell className="max-w-xs">
                     <div className="flex flex-wrap gap-1">
                       {f.subjects.map((sub, i) => (
                         <span key={i} className="px-1.5 py-0.5 rounded text-[10px] border border-border bg-muted/20">
@@ -120,10 +168,10 @@ export function FacultyView({
                         </span>
                       ))}
                     </div>
-                  </td>
-                  <td className="p-3 font-mono font-medium">{f.coursesHandled} active</td>
-                  <td className="p-3 font-mono font-medium">{f.assessmentsCreated} created</td>
-                  <td className="p-3">
+                  </TableCell>
+                  <TableCell className="font-mono font-medium">{f.coursesHandled} active</TableCell>
+                  <TableCell className="font-mono font-medium">{f.assessmentsCreated} created</TableCell>
+                  <TableCell>
                     <span
                       className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold uppercase ${
                         f.status === "verified"
@@ -135,13 +183,13 @@ export function FacultyView({
                     >
                       {f.status}
                     </span>
-                  </td>
-                  <td className="p-3 pr-6 text-right space-x-1.5">
+                  </TableCell>
+                  <TableCell className="pr-6 text-right space-x-1.5">
                     {f.status === "pending" && (
                       <Button
                         variant="default"
                         size="xs"
-                        onClick={() => onApprove(f.id)}
+                        onClick={() => handleApprove(f.id, f.name)}
                         className="h-7 text-[11px] gap-1"
                       >
                         <CheckCircle2 className="w-3 h-3" /> Approve Account
@@ -150,7 +198,7 @@ export function FacultyView({
                     <Button
                       variant="outline"
                       size="xs"
-                      onClick={() => onToggleStatus(f.id)}
+                      onClick={() => handleToggleClick(f)}
                       className="h-7 text-[11px]"
                     >
                       {f.status === "verified" ? (
@@ -163,13 +211,34 @@ export function FacultyView({
                         </span>
                       )}
                     </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
       </CardContent>
+
+      {/* Confirmation Alert Dialog for Deactivation */}
+      <AlertDialog
+        open={Boolean(facultyToDeactivate)}
+        onOpenChange={(open) => !open && setFacultyToDeactivate(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Deactivate Faculty Member?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to deactivate {facultyToDeactivate?.name}? Their access to course management, student evaluation, and assessment authoring will be suspended.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction variant="destructive" onClick={confirmDeactivation}>
+              Deactivate Account
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
   );
 }

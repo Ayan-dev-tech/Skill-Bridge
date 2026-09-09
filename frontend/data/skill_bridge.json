@@ -1728,6 +1728,42 @@
       "fullName": "Student",
       "isVerified": true,
       "createdAt": "2026-09-08T11:47:54.784Z"
+    },
+    {
+      "id": "campus-user-1",
+      "email": "placement@dtu.ac.in",
+      "role": "campus",
+      "passwordHash": "097dc25b1d80d89da676d563806e42e61c8525a34dbcfb0c014f496ce02ceb28",
+      "fullName": "DTU Placement Cell",
+      "isVerified": true,
+      "createdAt": "2026-09-08T18:39:00.508Z"
+    },
+    {
+      "id": "campus-user-2",
+      "email": "placement@nit.edu",
+      "role": "campus",
+      "passwordHash": "097dc25b1d80d89da676d563806e42e61c8525a34dbcfb0c014f496ce02ceb28",
+      "fullName": "NIT Trichy Placement Cell",
+      "isVerified": true,
+      "createdAt": "2026-09-08T18:39:00.508Z"
+    },
+    {
+      "id": "bb3787c8-0320-43f1-8299-34723baa625e",
+      "email": "bcahod@christcollegerajkot.edu.in",
+      "role": "campus",
+      "passwordHash": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+      "fullName": "Dr. Shailendra sinh Jadeja",
+      "isVerified": true,
+      "createdAt": "2026-09-09T11:00:39.264Z"
+    },
+    {
+      "id": "a6c59093-ddc8-40a9-97e2-ab63f3c4d37b",
+      "email": "riddhi@christcollegerajkot.edu.in",
+      "role": "faculty",
+      "passwordHash": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+      "fullName": "Dr. Riddhi Tanna",
+      "isVerified": true,
+      "createdAt": "2026-09-09T17:53:09.111Z"
     }
   ],
   "profiles": [
@@ -3164,6 +3200,88 @@
         "degree": "BCA",
         "graduationYear": "2028"
       }
+    },
+    {
+      "userId": "campus-user-1",
+      "role": "campus",
+      "metadata": {
+        "institutionName": "Delhi Technological University",
+        "institutionCode": "DTU-001",
+        "type": "University",
+        "address": "Campus Road",
+        "city": "Delhi",
+        "state": "Delhi",
+        "country": "India",
+        "website": "https://dtu.ac.in",
+        "contactEmail": "placement@dtu.ac.in",
+        "contactPhone": "+91-11-12345678",
+        "establishedYear": "1941",
+        "accreditation": [
+          "AICTE",
+          "NBA",
+          "NAAC A+"
+        ],
+        "departments": [
+          "Computer Science",
+          "Information Technology",
+          "Electronics",
+          "Mechanical",
+          "Civil"
+        ],
+        "approvedIntake": 1200
+      }
+    },
+    {
+      "userId": "campus-user-2",
+      "role": "campus",
+      "metadata": {
+        "institutionName": "National Institute of Technology, Trichy",
+        "institutionCode": "NIT-001",
+        "type": "University",
+        "address": "Campus Road",
+        "city": "Trichy",
+        "state": "Tamil Nadu",
+        "country": "India",
+        "website": "https://nitt.edu",
+        "contactEmail": "placement@nit.edu",
+        "contactPhone": "+91-11-12345678",
+        "establishedYear": "1941",
+        "accreditation": [
+          "AICTE",
+          "NBA",
+          "NAAC A+"
+        ],
+        "departments": [
+          "Computer Science",
+          "Information Technology",
+          "Electronics",
+          "Mechanical",
+          "Civil"
+        ],
+        "approvedIntake": 1200
+      }
+    },
+    {
+      "userId": "bb3787c8-0320-43f1-8299-34723baa625e",
+      "role": "campus",
+      "metadata": {
+        "institution": "Christ College, Rajkot",
+        "campusCode": "C-906",
+        "officialTitle": "HOD"
+      }
+    },
+    {
+      "userId": "a6c59093-ddc8-40a9-97e2-ab63f3c4d37b",
+      "role": "faculty",
+      "metadata": {
+        "institution": "Christ College, Rajkot",
+        "department": "BCA",
+        "designation": "C-906",
+        "phone": "+91 1234567890",
+        "officeLocation": "Christ College, Rajkot",
+        "bio": "Faculty mentor focusing on algorithms, distributed computing, and student career readiness.",
+        "updatedAt": "2026-09-09T17:55:56.274Z"
+      }
     }
   ],
   "otps": [
@@ -4109,6 +4227,26 @@
       "attempts": 0,
       "verified": true,
       "createdAt": "2026-09-08T11:47:55.809Z"
+    },
+    {
+      "id": "a7750675-a37a-420f-8ac3-323d868b60cc",
+      "email": "bcahod@christcollegerajkot.edu.in",
+      "role": "campus",
+      "otpCode": "934240",
+      "expiresAt": "2026-09-09T11:10:39.339Z",
+      "attempts": 0,
+      "verified": true,
+      "createdAt": "2026-09-09T11:00:39.339Z"
+    },
+    {
+      "id": "5de85c68-1c03-422e-b1c4-18e68e55d943",
+      "email": "riddhi@christcollegerajkot.edu.in",
+      "role": "faculty",
+      "otpCode": "147225",
+      "expiresAt": "2026-09-09T18:03:09.206Z",
+      "attempts": 0,
+      "verified": true,
+      "createdAt": "2026-09-09T17:53:09.206Z"
     }
   ],
   "hiringRequests": [
@@ -25727,7 +25865,7 @@
     },
     {
       "studentId": "stu_verify_test_1788690793290",
-      "verificationStatus": "DOCUMENTS_PENDING",
+      "verificationStatus": "VERIFIED",
       "documents": [
         {
           "id": "6a001466-e267-4ff8-9de0-364c151c36fa",
@@ -25789,7 +25927,8 @@
         }
       ],
       "createdAt": "2026-09-06T10:33:13.729Z",
-      "updatedAt": "2026-09-06T10:33:15.889Z"
+      "updatedAt": "2026-09-09T18:19:07.412Z",
+      "completedAt": "2026-09-09T18:19:07.415Z"
     },
     {
       "studentId": "stu_verify_test_1788690842932",
@@ -26216,7 +26355,7 @@
     },
     {
       "studentId": "2f311123-9b7e-44cb-b301-84db1348c583",
-      "verificationStatus": "DOCUMENTS_PENDING",
+      "verificationStatus": "VERIFIED",
       "documents": [
         {
           "id": "56be9889-d9fa-4f8d-80b6-6f8f2bbc94b6",
@@ -26251,11 +26390,12 @@
         }
       ],
       "createdAt": "2026-09-06T11:16:16.273Z",
-      "updatedAt": "2026-09-06T11:16:25.652Z"
+      "updatedAt": "2026-09-09T18:19:08.827Z",
+      "completedAt": "2026-09-09T18:19:08.832Z"
     },
     {
       "studentId": "b26413bf-4f15-4d88-945d-ff4e6d2c8b5d",
-      "verificationStatus": "DOCUMENTS_PENDING",
+      "verificationStatus": "VERIFIED",
       "documents": [
         {
           "id": "1e1704b8-aa63-48fc-9380-36c5a101d340",
@@ -26321,7 +26461,8 @@
         }
       ],
       "createdAt": "2026-09-06T11:16:53.392Z",
-      "updatedAt": "2026-09-06T11:17:12.183Z"
+      "updatedAt": "2026-09-09T18:19:14.037Z",
+      "completedAt": "2026-09-09T18:19:14.037Z"
     },
     {
       "studentId": "6eadef1a-74b9-46c9-9df0-75da89fc0d2e",
@@ -26520,7 +26661,7 @@
     },
     {
       "studentId": "a8091b49-aaf2-4913-b9eb-d4113aba9d13",
-      "verificationStatus": "DOCUMENTS_PENDING",
+      "verificationStatus": "VERIFIED",
       "documents": [
         {
           "id": "0cee7964-f17e-444b-b313-56fd2cbf4c6f",
@@ -26535,11 +26676,12 @@
         }
       ],
       "createdAt": "2026-09-06T18:26:09.088Z",
-      "updatedAt": "2026-09-06T18:26:10.805Z"
+      "updatedAt": "2026-09-09T18:19:12.801Z",
+      "completedAt": "2026-09-09T18:19:12.802Z"
     },
     {
       "studentId": "d07bf4b2-d802-4259-a5ac-3f9f0c6253be",
-      "verificationStatus": "DOCUMENTS_PENDING",
+      "verificationStatus": "VERIFIED",
       "documents": [
         {
           "id": "fc8f9aa1-cbed-41a1-88d7-70a298950b0f",
@@ -26609,11 +26751,12 @@
         }
       ],
       "createdAt": "2026-09-06T18:27:06.660Z",
-      "updatedAt": "2026-09-06T18:27:10.269Z"
+      "updatedAt": "2026-09-09T18:19:15.236Z",
+      "completedAt": "2026-09-09T18:19:15.236Z"
     },
     {
       "studentId": "2d7e4196-441f-4c66-84b0-d6cd40dc4214",
-      "verificationStatus": "DOCUMENTS_PENDING",
+      "verificationStatus": "VERIFIED",
       "documents": [
         {
           "id": "59f5d0d7-07af-4ee5-9c37-640e9c1cc353",
@@ -26733,18 +26876,19 @@
         }
       ],
       "createdAt": "2026-09-06T18:27:35.263Z",
-      "updatedAt": "2026-09-06T18:27:42.897Z",
+      "updatedAt": "2026-09-09T18:19:16.370Z",
       "professionalProfiles": {
         "linkedIn": "https://linkedin.com/in/alex-student",
         "gitHub": "https://github.com/alex-student",
         "portfolio": "https://alex-student.dev",
         "other": "https://dribbble.com/alex-student",
         "updatedAt": "2026-09-06T18:27:42.692Z"
-      }
+      },
+      "completedAt": "2026-09-09T18:19:16.370Z"
     },
     {
       "studentId": "7accf3dd-3cd8-4ce9-955b-1d68070b2c61",
-      "verificationStatus": "DOCUMENTS_PENDING",
+      "verificationStatus": "VERIFIED",
       "documents": [
         {
           "id": "8c553120-0214-476b-a21e-13f9bb58a1f7",
@@ -26864,14 +27008,15 @@
         }
       ],
       "createdAt": "2026-09-06T18:28:08.295Z",
-      "updatedAt": "2026-09-06T18:28:12.712Z",
+      "updatedAt": "2026-09-09T18:19:14.412Z",
       "professionalProfiles": {
         "linkedIn": "https://linkedin.com/in/alex-student",
         "gitHub": "https://github.com/alex-student",
         "portfolio": "https://alex-student.dev",
         "other": "https://dribbble.com/alex-student",
         "updatedAt": "2026-09-06T18:28:12.455Z"
-      }
+      },
+      "completedAt": "2026-09-09T18:19:14.413Z"
     },
     {
       "studentId": "9801387f-5d25-4809-bb25-1c6a416bacc9",
@@ -30748,7 +30893,7 @@
     },
     {
       "studentId": "stu_34_adv_1788784335671",
-      "verificationStatus": "DOCUMENTS_PENDING",
+      "verificationStatus": "VERIFIED",
       "verifiedAt": "2026-09-07T12:32:15.671Z",
       "documents": [
         {
@@ -30783,7 +30928,8 @@
         }
       ],
       "createdAt": "2026-09-07T12:32:15.671Z",
-      "updatedAt": "2026-09-07T12:32:19.920Z"
+      "updatedAt": "2026-09-09T18:19:15.920Z",
+      "completedAt": "2026-09-09T18:19:15.920Z"
     },
     {
       "studentId": "stu_34_lrn_1788784335671",
@@ -30904,7 +31050,7 @@
     },
     {
       "studentId": "stu_34_adv_1788784438121",
-      "verificationStatus": "DOCUMENTS_PENDING",
+      "verificationStatus": "VERIFIED",
       "verifiedAt": "2026-09-07T12:33:58.121Z",
       "documents": [
         {
@@ -30939,7 +31085,8 @@
         }
       ],
       "createdAt": "2026-09-07T12:33:58.121Z",
-      "updatedAt": "2026-09-07T12:34:00.955Z"
+      "updatedAt": "2026-09-09T18:19:19.492Z",
+      "completedAt": "2026-09-09T18:19:19.492Z"
     },
     {
       "studentId": "stu_34_lrn_1788784438121",
@@ -31060,7 +31207,7 @@
     },
     {
       "studentId": "stu_34_adv_1788784460729",
-      "verificationStatus": "DOCUMENTS_PENDING",
+      "verificationStatus": "VERIFIED",
       "verifiedAt": "2026-09-07T12:34:20.729Z",
       "documents": [
         {
@@ -31095,7 +31242,8 @@
         }
       ],
       "createdAt": "2026-09-07T12:34:20.729Z",
-      "updatedAt": "2026-09-07T12:34:22.671Z"
+      "updatedAt": "2026-09-09T18:19:18.088Z",
+      "completedAt": "2026-09-09T18:19:18.089Z"
     },
     {
       "studentId": "stu_34_lrn_1788784460729",
@@ -33720,7 +33868,7 @@
         }
       ],
       "createdAt": "2026-09-08T11:48:15.874Z",
-      "updatedAt": "2026-09-08T11:49:14.168Z",
+      "updatedAt": "2026-09-09T12:25:19.192Z",
       "completedAt": "2026-09-08T11:49:10.517Z",
       "professionalProfiles": {
         "linkedIn": "",
@@ -46943,6 +47091,69 @@
     }
   ],
   "industryHiringPosts": [
+    {
+      "id": "hire_1788954629621_a3de85",
+      "industryId": "1f80e367-38a7-43d0-9573-fb3d9215d64a",
+      "companyName": "Industry",
+      "roleTitle": "Bug Bounty Intern",
+      "hiringType": "Internship",
+      "industryDomain": "Technology & Software",
+      "location": "Bengaluru, India (Hybrid)",
+      "workMode": "Remote",
+      "salaryRange": "15000",
+      "experienceRequirement": "Fresher / 0-1 Years",
+      "openings": 50,
+      "deadline": "2026-10-30",
+      "description": "We are seeking motivated engineers to contribute to scalable cloud microservices, maintain data pipelines, and collaborate with cross-functional software teams.",
+      "responsibilities": [
+        "Design, implement, and maintain scalable back-end microservices.",
+        "Collaborate with product and testing teams to deliver robust features.",
+        "Participate in agile sprint ceremonies and code reviews."
+      ],
+      "requiredSkills": [
+        "TypeScript",
+        "React",
+        "Node.js",
+        "Bug Bounty"
+      ],
+      "preferredSkills": [
+        "PostgreSQL",
+        "Docker",
+        "REST APIs"
+      ],
+      "requiredQualifications": [
+        "Bachelor's degree in Computer Science, IT, or B.Tech/ B.E"
+      ],
+      "preferredQualifications": [],
+      "requiredDocumentTypes": [
+        "student_id"
+      ],
+      "interviewDetails": {
+        "mode": "Virtual",
+        "type": "Technical & Behavioral",
+        "estimatedRounds": 2,
+        "instructions": "Shortlisted candidates will receive round meeting links via email."
+      },
+      "knowledgeTest": {
+        "enabled": false,
+        "testTitle": "Bug Bounty Intern Assessment",
+        "timeLimitMinutes": 30,
+        "totalMarks": 20,
+        "passingPercentage": 60,
+        "difficultyDistribution": {
+          "beginner": 2,
+          "intermediate": 2,
+          "advanced": 1
+        },
+        "selectedQuestionIds": [],
+        "testPaper": [],
+        "approvalStatus": "draft"
+      },
+      "status": "published",
+      "createdAt": "2026-09-09T11:50:29.618Z",
+      "updatedAt": "2026-09-09T11:50:29.618Z",
+      "publishedAt": "2026-09-09T11:50:29.618Z"
+    },
     {
       "id": "hire_1788867646619_58482a",
       "industryId": "ind_tester_1788867646557",

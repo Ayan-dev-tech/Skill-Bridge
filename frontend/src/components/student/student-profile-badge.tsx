@@ -3,6 +3,7 @@
 import * as React from "react";
 import { StudentProfileData } from "@/lib/student-data";
 import { GraduationCap, Hash, Mail } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface StudentProfileBadgeProps {
   profile: StudentProfileData;
@@ -24,13 +25,21 @@ export function StudentProfileBadge({
   if (compact) {
     return (
       <div className="flex items-center gap-2.5 p-2 rounded-lg border border-border bg-muted/20 text-xs">
-        <div className="w-8 h-8 rounded-md bg-foreground text-background font-semibold text-xs flex items-center justify-center shrink-0">
-          {initials}
-        </div>
+        <Avatar className="size-8 rounded-md shrink-0">
+          {profile.photoUrl && (
+            <AvatarImage src={profile.photoUrl} alt={profile.fullName} />
+          )}
+          <AvatarFallback className="rounded-md bg-foreground text-background font-semibold text-xs">
+            {initials}
+          </AvatarFallback>
+        </Avatar>
         <div className="min-w-0 flex-1">
           <p className="font-semibold text-foreground truncate">{profile.fullName}</p>
-          <p className="text-muted-foreground text-[11px] truncate font-mono">
-            {profile.course} • Sem {profile.semester}
+          <p className="text-muted-foreground text-[11px] truncate">
+            {profile.course}
+          </p>
+          <p className="text-muted-foreground text-[10px] font-mono">
+            Semester {profile.semester}
           </p>
         </div>
       </div>
@@ -40,9 +49,14 @@ export function StudentProfileBadge({
   return (
     <div className="p-4 rounded-lg border border-border bg-card text-xs space-y-3">
       <div className="flex items-start gap-3">
-        <div className="w-10 h-10 rounded-md bg-foreground text-background font-bold text-sm flex items-center justify-center shrink-0">
-          {initials}
-        </div>
+        <Avatar className="size-10 rounded-md shrink-0">
+          {profile.photoUrl && (
+            <AvatarImage src={profile.photoUrl} alt={profile.fullName} />
+          )}
+          <AvatarFallback className="rounded-md bg-foreground text-background font-bold text-sm">
+            {initials}
+          </AvatarFallback>
+        </Avatar>
         <div className="min-w-0 flex-1 space-y-0.5">
           <div className="flex items-center gap-2">
             <h4 className="font-semibold text-sm text-foreground tracking-tight truncate">

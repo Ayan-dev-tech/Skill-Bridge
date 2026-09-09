@@ -7,6 +7,9 @@ import { StudentHeader } from "@/components/student/student-header";
 import { WorkflowProgress } from "@/components/student/workflow-progress";
 import { StudentProfileData, defaultStudentProfile } from "@/lib/student-data";
 import { StudentFooter } from "@/components/student/student-footer";
+import { Skeleton } from "@/components/ui/skeleton";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import type { CanonicalWorkflowState } from "@/lib/workflow/canonical-workflow";
 
 export default function StudentRootLayout({
@@ -76,6 +79,13 @@ export default function StudentRootLayout({
           return;
         }
 
+        if (data.passportPhotoUrl) {
+          setProfile((prev) => ({
+            ...prev,
+            photoUrl: data.passportPhotoUrl,
+          }));
+        }
+
         setIsAuthorized(true);
       }
     } catch (err) {
@@ -90,52 +100,57 @@ export default function StudentRootLayout({
   const isDocVerification = pathname.startsWith("/student/document-verification");
 
   return (
-    <div className="flex h-screen bg-background text-foreground overflow-hidden">
-      {/* Persistent Desktop Sidebar & Mobile Drawer */}
-      <StudentSidebar
-        mobileOpen={mobileNavOpen}
-        onCloseMobile={() => setMobileNavOpen(false)}
-        profile={profile}
-        workflow={workflow}
-      />
-
-      {/* Main Workspace Column */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
-        {/* Compact Authenticated Header */}
-        <StudentHeader
-          onOpenMobile={() => setMobileNavOpen(true)}
+    <SidebarProvider defaultOpen={true}>
+      <div className="flex h-screen w-full bg-background text-foreground overflow-hidden">
+        {/* Persistent Desktop Sidebar & Mobile Drawer */}
+        <StudentSidebar
           profile={profile}
+          workflow={workflow}
         />
 
-        {/* Workflow Progression & Active Page Content */}
-        <main
-          className={`flex-1 w-full mx-auto ${
-            isDocVerification
-              ? "p-4 md:p-6 max-w-5xl space-y-6"
-              : "p-4 md:p-6 max-w-6xl space-y-6"
-          }`}
-        >
-          {/* Visual Sequential Workflow Progression (omitted on document submission to avoid duplicate journey stepper) */}
-          {!isDocVerification && <WorkflowProgress workflow={workflow} />}
+        {/* Main Workspace Column */}
+        <SidebarInset className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+          {/* Header */}
+          <StudentHeader
+            profile={profile}
+          />
 
-          {/* Child Page Content or Redirecting Guard */}
-          <div className="min-h-[calc(100vh-22rem)] animate-in fade-in duration-200 motion-reduce:animate-none">
-            {!isAuthorized ? (
-              <div className="flex flex-col items-center justify-center min-h-[300px] space-y-3">
-                <div className="w-6 h-6 border-2 border-foreground/20 border-t-foreground rounded-full animate-spin" />
-                <p className="text-xs text-muted-foreground font-mono">
-                  Verifying workflow authorization...
-                </p>
+          {/* Clean ScrollArea for Main Content and Footer */}
+          <ScrollArea className="flex-1 w-full min-h-0">
+            {/* Workflow Progression & Active Page Content */}
+            <main
+              className={`w-full mx-auto ${
+                isDocVerification
+                  ? "p-4 md:p-6 max-w-5xl space-y-6"
+                  : "p-4 md:p-6 max-w-6xl space-y-6"
+              }`}
+            >
+              {/* Visual Sequential Workflow Progression (omitted on document submission to avoid duplicate journey stepper) */}
+              {!isDocVerification && <WorkflowProgress workflow={workflow} />}
+
+              {/* Child Page Content or Redirecting Guard */}
+              <div className="min-h-[calc(100vh-22rem)] animate-in fade-in duration-200 motion-reduce:animate-none">
+                {!isAuthorized ? (
+                  <div className="space-y-4 py-6 animate-pulse">
+                    <Skeleton className="h-8 w-56 rounded-lg" />
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <Skeleton className="h-28 rounded-xl" />
+                      <Skeleton className="h-28 rounded-xl" />
+                      <Skeleton className="h-28 rounded-xl" />
+                    </div>
+                    <Skeleton className="h-64 w-full rounded-xl" />
+                  </div>
+                ) : (
+                  children
+                )}
               </div>
-            ) : (
-              children
-            )}
-          </div>
-        </main>
+            </main>
 
-        {/* Professional Application Footer */}
-        <StudentFooter />
+            {/* Professional Application Footer */}
+            <StudentFooter />
+          </ScrollArea>
+        </SidebarInset>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }

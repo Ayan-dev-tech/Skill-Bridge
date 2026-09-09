@@ -10,6 +10,26 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
 import { IndustryPartner } from "@/lib/admin-data";
 import { Search, ShieldAlert, CheckCircle2, Globe, Mail, Eye, X } from "lucide-react";
 
@@ -26,6 +46,7 @@ export function IndustryView({
 }: IndustryViewProps) {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [selectedCompany, setSelectedCompany] = React.useState<IndustryPartner | null>(null);
+  const [companyToFreeze, setCompanyToFreeze] = React.useState<IndustryPartner | null>(null);
 
   const filtered = industry.filter((c) => {
     if (searchQuery.trim()) {
@@ -40,6 +61,28 @@ export function IndustryView({
     }
     return true;
   });
+
+  const handleApprove = (id: string, name: string) => {
+    onApprove(id);
+    toast.success(`${name} verified and approved for campus hiring.`);
+  };
+
+  const handleFreezeToggle = (c: IndustryPartner) => {
+    if (c.isFrozen) {
+      onToggleFreeze(c.id);
+      toast.success(`Hiring activities restored for ${c.companyName}.`);
+    } else {
+      setCompanyToFreeze(c);
+    }
+  };
+
+  const confirmFreeze = () => {
+    if (companyToFreeze) {
+      onToggleFreeze(companyToFreeze.id);
+      toast.error(`Company ${companyToFreeze.companyName} has been frozen.`);
+      setCompanyToFreeze(null);
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -66,36 +109,42 @@ export function IndustryView({
         </CardHeader>
 
         <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse">
-              <thead>
-                <tr className="border-b border-border bg-muted/40 font-medium text-muted-foreground">
-                  <th className="p-3 pl-6">Company & Domain</th>
-                  <th className="p-3">Primary Contact</th>
-                  <th className="p-3">Skills Demanded</th>
-                  <th className="p-3">Open Jobs</th>
-                  <th className="p-3">Internships</th>
-                  <th className="p-3">Hiring Status</th>
-                  <th className="p-3 pr-6 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {filtered.map((c) => (
-                  <tr
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-muted/40 hover:bg-muted/40">
+                <TableHead className="pl-6">Company & Domain</TableHead>
+                <TableHead>Primary Contact</TableHead>
+                <TableHead>Skills Demanded</TableHead>
+                <TableHead>Open Jobs</TableHead>
+                <TableHead>Internships</TableHead>
+                <TableHead>Hiring Status</TableHead>
+                <TableHead className="pr-6 text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filtered.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="h-24 text-center text-muted-foreground">
+                    No matching industry partners found.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filtered.map((c) => (
+                  <TableRow
                     key={c.id}
                     className={`transition-colors ${
                       c.isFrozen ? "bg-destructive/5 hover:bg-destructive/10" : "hover:bg-muted/20"
                     }`}
                   >
-                    <td className="p-3 pl-6">
+                    <TableCell className="pl-6">
                       <p className="font-semibold text-foreground">{c.companyName}</p>
                       <p className="text-muted-foreground text-[11px]">{c.industry}</p>
-                    </td>
-                    <td className="p-3">
+                    </TableCell>
+                    <TableCell>
                       <p className="font-medium text-foreground">{c.contactPerson}</p>
                       <p className="text-muted-foreground font-mono text-[11px]">{c.contactEmail}</p>
-                    </td>
-                    <td className="p-3 max-w-xs">
+                    </TableCell>
+                    <TableCell className="max-w-xs">
                       <div className="flex flex-wrap gap-1">
                         {c.demandedSkills.map((sk, i) => (
                           <span key={i} className="px-1.5 py-0.5 rounded text-[10px] border border-border bg-muted/20">
@@ -103,10 +152,10 @@ export function IndustryView({
                           </span>
                         ))}
                       </div>
-                    </td>
-                    <td className="p-3 font-mono font-medium">{c.openJobs} slots</td>
-                    <td className="p-3 font-mono font-medium">{c.activeInternships} slots</td>
-                    <td className="p-3">
+                    </TableCell>
+                    <TableCell className="font-mono font-medium">{c.openJobs} slots</TableCell>
+                    <TableCell className="font-mono font-medium">{c.activeInternships} slots</TableCell>
+                    <TableCell>
                       {c.isFrozen ? (
                         <div className="space-y-0.5">
                           <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold border border-destructive/40 bg-destructive/15 text-destructive uppercase">
@@ -127,8 +176,8 @@ export function IndustryView({
                           {c.status}
                         </span>
                       )}
-                    </td>
-                    <td className="p-3 pr-6 text-right space-x-1.5">
+                    </TableCell>
+                    <TableCell className="pr-6 text-right space-x-1.5">
                       <Button
                         variant="outline"
                         size="xs"
@@ -142,7 +191,7 @@ export function IndustryView({
                         <Button
                           variant="default"
                           size="xs"
-                          onClick={() => onApprove(c.id)}
+                          onClick={() => handleApprove(c.id, c.companyName)}
                           className="h-7 text-[11px] gap-1"
                         >
                           <CheckCircle2 className="w-3 h-3" /> Approve
@@ -152,22 +201,22 @@ export function IndustryView({
                       <Button
                         variant={c.isFrozen ? "default" : "destructive"}
                         size="xs"
-                        onClick={() => onToggleFreeze(c.id)}
+                        onClick={() => handleFreezeToggle(c)}
                         className="h-7 text-[11px] gap-1"
                       >
                         <ShieldAlert className="w-3 h-3" />
                         {c.isFrozen ? "Restore Hiring" : "Freeze Company"}
                       </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
 
-      {/* Company Detail Drawer */}
+      {/* Company Detail Drawer with Tabs */}
       {selectedCompany && (
         <div className="fixed inset-0 z-50 flex justify-end">
           <div className="fixed inset-0 bg-black/60 backdrop-blur-xs" onClick={() => setSelectedCompany(null)} />
@@ -186,45 +235,50 @@ export function IndustryView({
               </button>
             </div>
 
-            <div className="space-y-2">
-              <p className="font-semibold text-foreground uppercase tracking-wider text-[10px] text-muted-foreground">
-                Company Information
-              </p>
-              <div className="p-3 rounded border border-border bg-muted/20 space-y-1.5">
-                <p><span className="text-muted-foreground">Point of Contact:</span> <span className="font-medium text-foreground">{selectedCompany.contactPerson}</span></p>
-                <p><span className="text-muted-foreground">Verification:</span> <span className="capitalize font-medium text-foreground">{selectedCompany.status}</span></p>
-                <p><span className="text-muted-foreground">Partnership Established:</span> <span className="font-mono text-foreground">{selectedCompany.joinedDate}</span></p>
-              </div>
-            </div>
+            <Tabs defaultValue="info" className="w-full">
+              <TabsList className="w-full grid grid-cols-3">
+                <TabsTrigger value="info">Info</TabsTrigger>
+                <TabsTrigger value="demands">Skill Demands</TabsTrigger>
+                <TabsTrigger value="stats">Hiring Stats</TabsTrigger>
+              </TabsList>
 
-            <div className="space-y-2">
-              <p className="font-semibold text-foreground uppercase tracking-wider text-[10px] text-muted-foreground">
-                Skills Demanded by {selectedCompany.companyName}
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                {selectedCompany.demandedSkills.map((sk, i) => (
-                  <span key={i} className="px-2 py-1 rounded border border-border bg-card font-medium text-foreground">
-                    {sk}
-                  </span>
-                ))}
-              </div>
-            </div>
+              <TabsContent value="info" className="space-y-4 mt-4">
+                <div className="p-3 rounded border border-border bg-muted/20 space-y-2">
+                  <p><span className="text-muted-foreground">Point of Contact:</span> <span className="font-medium text-foreground">{selectedCompany.contactPerson}</span></p>
+                  <p><span className="text-muted-foreground">Verification:</span> <span className="capitalize font-medium text-foreground">{selectedCompany.status}</span></p>
+                  <p><span className="text-muted-foreground">Partnership Established:</span> <span className="font-mono text-foreground">{selectedCompany.joinedDate}</span></p>
+                  <p><span className="text-muted-foreground">Hiring State:</span> <span className="font-medium text-foreground">{selectedCompany.isFrozen ? "Frozen" : "Active"}</span></p>
+                </div>
+              </TabsContent>
 
-            <div className="space-y-2">
-              <p className="font-semibold text-foreground uppercase tracking-wider text-[10px] text-muted-foreground">
-                Hiring Statistics
-              </p>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="p-3 rounded border border-border bg-card">
-                  <p className="text-muted-foreground text-[11px]">Open Jobs</p>
-                  <p className="text-xl font-bold font-mono text-foreground">{selectedCompany.openJobs}</p>
+              <TabsContent value="demands" className="space-y-4 mt-4">
+                <div className="space-y-2">
+                  <p className="font-semibold text-foreground uppercase tracking-wider text-[10px] text-muted-foreground">
+                    Skills Demanded by {selectedCompany.companyName}
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {selectedCompany.demandedSkills.map((sk, i) => (
+                      <span key={i} className="px-2 py-1 rounded border border-border bg-card font-medium text-foreground">
+                        {sk}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-                <div className="p-3 rounded border border-border bg-card">
-                  <p className="text-muted-foreground text-[11px]">Active Internships</p>
-                  <p className="text-xl font-bold font-mono text-foreground">{selectedCompany.activeInternships}</p>
+              </TabsContent>
+
+              <TabsContent value="stats" className="space-y-4 mt-4">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="p-3 rounded border border-border bg-card">
+                    <p className="text-muted-foreground text-[11px]">Open Jobs</p>
+                    <p className="text-xl font-bold font-mono text-foreground">{selectedCompany.openJobs}</p>
+                  </div>
+                  <div className="p-3 rounded border border-border bg-card">
+                    <p className="text-muted-foreground text-[11px]">Active Internships</p>
+                    <p className="text-xl font-bold font-mono text-foreground">{selectedCompany.activeInternships}</p>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </TabsContent>
+            </Tabs>
 
             <div className="pt-4 border-t border-border flex justify-end">
               <Button variant="outline" size="sm" onClick={() => setSelectedCompany(null)}>
@@ -234,6 +288,27 @@ export function IndustryView({
           </div>
         </div>
       )}
+
+      {/* Confirmation Alert Dialog for Freeze Company */}
+      <AlertDialog
+        open={Boolean(companyToFreeze)}
+        onOpenChange={(open) => !open && setCompanyToFreeze(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Freeze Industry Partner?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to freeze {companyToFreeze?.companyName}? Freezing will immediately suspend all active job postings, stop accepting student applications, and flag the recruiter account for administrative review.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction variant="destructive" onClick={confirmFreeze}>
+              Freeze Partner
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
