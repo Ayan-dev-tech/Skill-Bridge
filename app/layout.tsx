@@ -1,17 +1,14 @@
-import { Geist, Geist_Mono, Roboto_Slab, Public_Sans } from "next/font/google"
+import { Geist, Geist_Mono, Roboto_Slab, Public_Sans, Outfit, Raleway } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils";
 
-const publicSansHeading = Public_Sans({subsets:['latin'],variable:'--font-heading'});
+const ralewayHeading = Raleway({subsets:['latin'],variable:'--font-heading'});
 
 const robotoSlab = Roboto_Slab({subsets:['latin'],variable:'--font-serif'});
 
-const fontSans = Geist({
-  subsets: ["latin"],
-  variable: "--font-sans",
-})
+const outfit = Outfit({subsets:['latin'],variable:'--font-sans'})
 
 const fontMono = Geist_Mono({
   subsets: ["latin"],
@@ -27,7 +24,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", fontSans.variable, fontMono.variable, "font-serif", robotoSlab.variable, publicSansHeading.variable)}
+      className={cn("antialiased", fontMono.variable, robotoSlab.variable, "font-sans", outfit.variable, ralewayHeading.variable)}
     >
       <body>
         <ThemeProvider>{children}</ThemeProvider>
