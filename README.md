@@ -1,655 +1,671 @@
-# Skill-Bridge
-Sih Problem Statement 26044 
+# SkillBridge
 
+**AYUSH Skill Mapping, Academia–Industry Collaboration, Internship & Placement Intelligence Platform**
 
-## Smart Skill Development, Assessment and Industry Connect Platform
+> SIH Problem Statement 26044 — Prototype
 
-
-SkillBridge is an integrated digital platform designed to bridge the gap between students, faculty, educational institutions, and industry through skill assessment, skill-gap identification, personalized learning, resume development, and employment opportunities.
-
-The platform creates a unified ecosystem where students can understand and improve their skills, faculty can mentor students, campuses can monitor skill and placement outcomes, and industries can discover candidates based on verified skills and requirements.
+**Problem Statement:** Portal for Academia–Industry Collaboration for Skill Mapping, Internships and Placement  
+**Organization:** Ministry of Ayush  
+**Domain:** AYUSH · Education · Skill Development · Employability · Academia–Industry Collaboration
 
 ---
 
 ## Problem Statement
 
-There is often a disconnect between:
+AYUSH academic institutions — covering Ayurveda, Yoga & Naturopathy, Unani, Siddha, and Homoeopathy — and the pharmaceutical, wellness, and healthcare industries often operate in silos. This disconnect creates several challenges:
 
-* Students and the skills demanded by industry
-* Faculty and student skill development
-* Campuses and placement intelligence
-* Industry and qualified candidates
+- **Skill mismatch** between what graduates learn and what industry requires
+- **Limited visibility** into student competencies for recruiters and institutions
+- **Difficulty finding suitable talent** with verified, domain-specific skills
+- **Restricted access** to verified internship and placement opportunities
+- **Minimal academia–industry collaboration** in research and curriculum design
+- **Research and R&D collaboration gaps** between institutions and industry
+- **Poor understanding** of emerging industry skill demand within academic programs
+- **No centralized skill intelligence** at the institutional or national level
 
-Students may not clearly understand which skills they lack for their desired career paths, while companies may struggle to identify candidates whose actual skills match their requirements.
-
-SkillBridge addresses this gap by creating a single ecosystem for skill discovery, assessment, development, verification, and employment.
+SkillBridge addresses these gaps by creating a unified digital ecosystem where students, institutions, industry, and the Ministry of Ayush can collaborate on skill development, assessment, internship placement, and research.
 
 ---
 
-## Solution
+## Proposed Solution
 
-SkillBridge connects four major stakeholders through a single role-based platform:
+SkillBridge is an integrated platform connecting four stakeholder layers:
 
 ```text
-                         SkillBridge
-                              |
-          +-------------------+-------------------+
-          |                   |                   |
-       Student             Faculty             Campus
-          |                   |                   |
-          +-------------------+-------------------+
-                              |
-                           Industry
+    Student
+       ↕
+   Institution
+       ↕
+    Industry
+       ↕
+    Ministry
 ```
 
-Each stakeholder receives dedicated functionality while sharing a common platform, database, authentication system, and intelligence layer.
-
----
-
-# Platform Roles
-
-## Student
-
-Students can:
-
-* Create and manage their profile
-* Discover career interests
-* Take knowledge and skill assessments
-* Determine their current skill level
-* Identify skill gaps
-* Receive personalized learning recommendations
-* Build ATS-friendly resumes
-* Upload and manage certificates and documents
-* Discover internships and jobs
-* Check job compatibility
-* Apply for opportunities
-* Track applications
-* Monitor skill development
-
-### Student Flow
+### Core Flow
 
 ```text
-Profile
-   |
-Interest Discovery
-   |
-Knowledge / Skill Assessment
-   |
-Skill Profile
-   |
-Skill Gap Analysis
-   |
-Personalized Learning
-   |
-Resume Builder
-   |
-Job / Internship Matching
-   |
-Application
-   |
-Application Tracking
+ASSESS → MAP SKILLS → IDENTIFY SKILL GAPS → IMPROVE → GAIN EXPERIENCE
+                                                           ↓
+                                              MATCH WITH INDUSTRY
+                                                           ↓
+                                            INTERNSHIP / PLACEMENT
+                                                           ↓
+                                              R&D COLLABORATION
 ```
 
----
-
-## Faculty
-
-Faculty members can:
-
-* Monitor student skill development
-* View assessment performance
-* Identify common skill gaps
-* Track learning progress
-* Recommend learning resources
-* Mentor students
-* Monitor placement readiness
-* Analyze student performance
-
-Faculty can use aggregated student insights to identify areas where additional training, mentoring, or curriculum improvements are required.
+The platform creates a continuous connection between academic competency development and industry requirements — enabling skill-driven recruitment, targeted learning, and evidence-based policy decisions.
 
 ---
 
-## Campus
+## Platform Roles
 
-Campus administrators can:
+### Student
 
-* Manage students and faculty
-* Manage institutional data
-* Monitor student skill levels
-* Track placement readiness
-* Analyze skill-gap trends
-* Manage industry connections
-* Monitor internships and placements
-* View institutional performance analytics
+- AYUSH profile with discipline and specialization
+- AYUSH Skill Passport (planned — see [Roadmap](#roadmap))
+- Knowledge assessments with difficulty levels
+- Skill-gap analysis with personalized recommendations
+- Interest discovery and career path exploration
+- Learning recommendations (YouTube-based educational resources)
+- Resume builder and ATS compatibility analysis
+- Document upload, verification, and face verification
+- Jobs and internship discovery with readiness checks
+- Application submission and tracking
+- Workflow-based onboarding progress
 
-The campus dashboard provides a centralized view of the institution's skill-development and placement ecosystem.
+### Institution (Campus / Faculty)
+
+> Currently implemented as **Campus** and **Faculty** portals
+
+- Student skill analytics and performance monitoring
+- Assessment analytics and learning progress tracking
+- Skill-gap intelligence across student cohorts
+- Industry demand visibility (planned)
+- Internship and placement management (planned)
+- R&D collaboration (planned)
+
+### Industry
+
+- Organization registration and profile management
+- Talent discovery with access to permitted student data
+- Job and internship posting with skill requirements
+- Custom question bank creation for screening
+- Application screening and interview evaluation
+- Hiring management pipeline (post → screen → interview → hire)
+- Hiring analytics and recruitment insights
+- R&D problem statements (planned)
+
+### Admin
+
+> Administrative oversight portal currently implemented
+
+- Platform-wide overview and analytics
+- Student, faculty, and industry management
+- Skill library management
+- Skill-gap monitoring across the platform
+- Opportunity (jobs/internships) management
+- Learning resource management
+- Approval queues and audit logs
+- Reports and system configuration
+
+### Ministry (Planned)
+
+- National AYUSH skill intelligence dashboard
+- Institution performance and skill-gap intelligence
+- Industry demand and placement trend visibility
+- R&D collaboration and innovation/IP overview
+
+> The Ministry role is planned. Prototype/demo data must not be represented as official government statistics.
 
 ---
 
-## Industry
+## AYUSH Focus
 
-Industry users can:
+SkillBridge is designed around the five AYUSH disciplines:
 
-* Register their organization
-* Complete organization verification
-* Create job and internship opportunities
-* Define required skills
-* Specify eligibility criteria
-* Discover suitable candidates
-* View candidate skill profiles
-* Shortlist candidates
-* Manage applications
-* Track recruitment stages
+| Discipline | Abbreviation |
+|---|---|
+| Ayurveda | A |
+| Yoga & Naturopathy | Y |
+| Unani | U |
+| Siddha | S |
+| Homoeopathy | H |
 
-### Industry Flow
+### AYUSH Skill Taxonomy (Planned)
+
+The platform will use an extensible skill taxonomy covering competency areas such as:
+
+- Clinical Knowledge & Clinical Reasoning
+- Diagnostics & Emergency/Triage Awareness
+- Research Methodology & Biostatistics
+- Pharmacovigilance & Herb-Drug Interaction Awareness
+- Digital Health & EHR/ABDM Awareness
+- Communication & Patient Counselling
+- Regulatory Awareness & Healthcare Administration
+- Scientific Validation & Documentation
+- Entrepreneurship & Industry Skills
+
+> The AYUSH-specific skill taxonomy is planned. The current implementation uses a general-purpose domain and niche system for interest discovery, knowledge testing, and skill-gap analysis. Extending this to AYUSH-specific competency areas is part of the roadmap.
+
+---
+
+## AYUSH Skill Passport (Planned)
+
+The AYUSH Skill Passport will consolidate a student's verified competency profile:
+
+- Knowledge competency (assessment results)
+- Practical competency (scenario-based assessments)
+- Research competency
+- Digital health competency
+- Pharmacovigilance competency
+- Communication skills
+- Industry readiness
+- Skill gaps and development areas
+- Internship and work experience records
+- Certifications and verified credentials
+
+> The Skill Passport is planned. Currently, students have individual skill profiles built from interest discovery, knowledge test results, and skill-gap analyses. The Passport concept will unify these into a single portable credential.
+
+---
+
+## Assessment System
+
+### Currently Implemented
+
+**Knowledge Assessment Engine**
+
+- Multi-difficulty testing: Beginner, Intermediate, Advanced
+- Question complexity tiers: Fundamental, Application, Challenging Reasoning
+- AI-powered question generation (integrated with question bank)
+- Question bank with 200K+ data file for domain/niche coverage
+- Question validation and deduplication
+- Scored results with performance tiers (Needs Foundation → Expert)
+- Strengths and weakness analysis
+- Detailed question-by-question breakdown with explanations
+- Persisted test sessions and results
+
+**Industry Question Bank**
+
+- Industry partners can create custom screening questions
+- Question management with metadata
+
+### Assessment Roadmap (Planned)
+
+**NEET UG-oriented Knowledge Assessment**
+
+Practice and knowledge mapping aligned with undergraduate AYUSH competency areas.
+
+> This does NOT conduct official NEET UG examinations. It provides NEET-oriented practice and knowledge assessment for competency mapping.
+
+**AIAPGET PG-oriented Knowledge Assessment**
+
+Practice and knowledge mapping aligned with postgraduate AYUSH competency areas.
+
+> This does NOT conduct official AIAPGET PG examinations. It provides AIAPGET-oriented practice and knowledge assessment for competency mapping.
+
+**Practical Scenario Lab**
+
+Case and scenario-based assessment covering:
+
+- Clinical reasoning and diagnostics awareness
+- Triage and escalation awareness
+- Research methodology
+- Pharmacovigilance
+- Digital health scenarios
+- Communication and patient counselling
+- Regulatory awareness
+
+**Industry Skill Assessment**
+
+Assessment of skills relevant to specific industry roles and job requirements.
+
+---
+
+## Question Bank Roadmap (Planned)
+
+The platform is intended to support a large, structured question bank covering:
+
+- NEET UG-oriented questions
+- AIAPGET PG-oriented questions
+- Practical scenario questions
+- Industry skill questions
+
+Question metadata architecture will support:
+
+| Field | Purpose |
+|---|---|
+| Subject | Academic subject area |
+| Topic | Specific topic within subject |
+| Difficulty | Beginner / Intermediate / Advanced |
+| Cognitive Level | Recall / Application / Analysis |
+| Skill Mapping | Linked competency areas |
+| Explanation | Detailed answer rationale |
+| Source / Reference | Attribution |
+| Exam Category | NEET UG / AIAPGET PG / Practical / Industry |
+
+> The current question bank contains general-purpose questions organized by domain and niche. Expansion to AYUSH-specific validated question banks is planned.
+
+---
+
+## Industry Skill Demand Intelligence (Planned)
+
+Industry partners will be able to define:
+
+- Required and preferred skills for roles
+- Job roles and internship roles with skill requirements
+- Research requirements and emerging skills
+- Experience level expectations
+
+SkillBridge will compare:
 
 ```text
-Company Registration
-        |
-Organization Verification
-        |
-Create Job / Internship
-        |
-Define Requirements
-        |
-Candidate Matching
-        |
-Shortlisting
-        |
-Interview
-        |
-Hiring
+INDUSTRY DEMAND (required skills, roles, emerging needs)
+        vs
+STUDENT SKILL SUPPLY (assessment results, competencies, gaps)
 ```
 
----
+to identify macro-level skill gaps and inform curriculum alignment.
 
-# AI-Powered Intelligence
-
-SkillBridge uses AI along with deterministic rule-based systems to provide personalized insights and recommendations.
-
-## Skill Gap Analysis
-
-The system compares a student's current skills with the skills required for their desired career or target job.
-
-```text
-Student's Current Skills
-          +
-Desired Career / Target Job
-          +
-Required Skills
-          |
-          v
-    Skill Gap Engine
-          |
-          v
-Missing / Weak Skills
-          |
-          v
-Personalized Recommendations
-```
-
-AI can help explain:
-
-* Which skills are missing
-* Which skills need improvement
-* Why a skill is important
-* What the student should learn next
-* Which opportunities match the student's current profile
+> Currently, industry partners can post jobs/internships with required skills, and the matching engine evaluates student compatibility. The aggregate demand intelligence layer is planned.
 
 ---
 
-# Intelligent Job Matching
+## Verified Internships (Planned)
 
-The matching engine evaluates candidates against job requirements using multiple factors:
+The planned verified AYUSH internship ecosystem includes:
 
-* Skills
-* Assessment scores
-* Education
-* Certifications
-* Experience
-* Job requirements
+- Verified organization registration and vetting
+- Internship roles with eligibility and skill requirements
+- Duration, stipend, and location details
+- Application, selection, and completion workflows
+- Completion certificates and experience verification
 
-A weighted scoring system can be used to calculate compatibility.
-
-Example:
-
-```text
-Skills            45%
-Education         20%
-Assessment Score  15%
-Experience        10%
-Certifications    10%
-```
-
-The system can also explain the match.
-
-Example:
-
-```text
-Compatibility: 87%
-
-Strong Matches:
-- Python
-- SQL
-- Problem Solving
-
-Skill Gaps:
-- Docker
-- Linux
-- Networking
-```
+> Currently, internship postings with skill requirements and student applications are implemented. The full verified internship lifecycle (verification, completion tracking, certificate issuance) is planned.
 
 ---
 
-# Knowledge and Skill Assessment
+## R&D Collaboration (Planned)
 
-The assessment system evaluates students based on their current knowledge and skills.
+Industry partners will be able to publish:
 
-Multiple difficulty levels can be supported:
+- Research problem statements
+- R&D requirements with required skills and research domains
+- Expected outcomes and collaboration terms
 
-```text
-Beginner
-   |
-Intermediate
-   |
-Advanced
-```
-
-Assessment results contribute to the student's skill profile and can be used to identify areas requiring improvement.
-
-The system can dynamically update a student's knowledge level based on assessment performance.
+Institutions and students can discover relevant R&D opportunities and participate in structured collaboration workflows.
 
 ---
 
-# Document Verification
+## Innovation / IP (Planned)
 
-Students can upload relevant documents such as:
+The Innovation/IP layer will support:
 
-* Academic marksheets
-* Student identification
-* Certifications
-* Skill certificates
-* Resume
-* Other supporting documents
-
-The verification pipeline can process uploaded documents through:
-
-```text
-Document Upload
-      |
-File Validation
-      |
-OCR / Text Extraction
-      |
-Information Extraction
-      |
-Profile Cross-Check
-      |
-Verification Status
-```
-
-Possible verification states:
-
-```text
-Verified
-Needs Review
-Rejected
-```
-
-Where official verification APIs are available, they can be integrated in future versions.
+- Research outputs and publications
+- Patents and technologies
+- Licensing opportunities
+- Academia–industry collaboration tracking
 
 ---
 
-# Resume Builder and ATS Analysis
+## Ministry Intelligence (Planned)
 
-Students can create structured, ATS-friendly resumes using their profile information.
+### National AYUSH Skill Intelligence
 
-The resume system can analyze:
+The Ministry dashboard will provide aggregate indicators across:
 
-* Skills
-* Education
-* Projects
-* Certifications
-* Experience
-* Keywords
-* Job-description compatibility
+| Indicator | Description |
+|---|---|
+| Student Competency | Aggregate skill levels across AYUSH disciplines |
+| Skill Supply | Available competencies in the graduate pipeline |
+| Industry Demand | Skills and roles required by industry partners |
+| Skill Gaps | National-level gap between supply and demand |
+| Internship Availability | Active verified internship positions |
+| Placement Trends | Hiring outcomes and employment patterns |
+| Institution Performance | Institutional skill-development effectiveness |
+| R&D Activity | Ongoing research collaborations |
+| Innovation/IP | Patent and technology output |
 
-### ATS Workflow
-
-```text
-Resume
-  +
-Job Description
-       |
-Text Extraction
-       |
-Skill / Keyword Analysis
-       |
-Compatibility Analysis
-       |
-ATS Score
-       |
-Missing Skills and Improvements
-```
+> All Ministry-level data will be aggregated and anonymized. Prototype data must not be represented as official government statistics.
 
 ---
 
-# Recommendation Engine
-
-SkillBridge generates recommendations based on:
-
-* Career interests
-* Assessment performance
-* Current skills
-* Skill gaps
-* Resume
-* Target jobs
-* Learning progress
-
-Recommendations can include:
-
-* Courses
-* Skills to learn
-* Projects
-* Certifications
-* Practice resources
-* Internship opportunities
-* Job opportunities
-
----
-
-# Authentication and Security
-
-The platform uses role-based access control.
+## System Architecture
 
 ```text
-                    Authentication
-                         |
-          +--------------+--------------+
-          |              |              |
-       Student         Faculty        Campus
-                                        |
-                                     Industry
-```
-
-Each role receives access only to the features and data relevant to that role.
-
-Security mechanisms include:
-
-* Authentication
-* Role-Based Access Control
-* Row Level Security
-* Secure file storage
-* Input validation
-* Protected APIs
-* Server-side authorization
-
----
-
-# System Architecture
-
-```text
-                         +----------------------+
-                         |       Next.js        |
-                         | Frontend + UI + API  |
-                         +----------+-----------+
+                     +------------------------------+
+                     |           Next.js             |
+                     |   Frontend + UI + API Routes  |
+                     +--------------+---------------+
                                     |
                    +----------------+----------------+
                    |                |                |
                    v                v                v
               Supabase          Storage            Auth
-                   |
-                   v
+                   |          (Documents,       (OTP-based,
+                   v           Resumes)        Role-based)
               PostgreSQL
                    |
                 pgvector
                    |
                    v
-             Matching Engine
+             +-----------+
+             |  FastAPI   |
+             | Python AI  |
+             +-----+-----+
                    |
-                   v
-             +-------------+
-             |   FastAPI   |
-             | Python AI   |
-             +------+------+
-                    |
-                    v
-              AI / ML Models
+          +--------+--------+
+          |                 |
+          v                 v
+    OCR Engine        Face Verifier
+    (Tesseract)      (Quality Check)
 ```
 
 ---
 
-# Tech Stack
+## Tech Stack
 
-## Frontend
+### Frontend
 
-* Next.js
-* TypeScript
-* Tailwind CSS
-* shadcn/ui
+| Technology | Purpose |
+|---|---|
+| Next.js 16 | Full-stack React framework |
+| React 19 | UI library |
+| TypeScript | Type-safe development |
+| Tailwind CSS 4 | Utility-first styling |
+| shadcn/ui | Component library |
+| Lucide React | Icon system |
 
-## Backend
+### Backend
 
-* Next.js API Routes
-* Python
-* FastAPI
+| Technology | Purpose |
+|---|---|
+| Next.js API Routes | Application APIs and business logic |
+| Python + FastAPI | AI/ML services, OCR, and verification |
 
-## Database
+### Database & Storage
 
-* PostgreSQL
-* Supabase
-* pgvector
+| Technology | Purpose |
+|---|---|
+| PostgreSQL | Primary relational database |
+| Supabase | Database platform, auth, and storage |
+| pgvector | Vector storage for semantic matching |
+| Supabase Storage | Document and resume file storage |
 
-## Authentication and Storage
+### Authentication & Security
 
-* Supabase Auth
-* Supabase Storage
-* Row Level Security
+| Technology | Purpose |
+|---|---|
+| Custom OTP-based Auth | Email + OTP verification per role |
+| Role-Based Access Control | Student, Faculty, Campus, Industry, Admin |
+| Row Level Security (RLS) | Database-level data protection |
+| Session-based Auth | Signed cookie sessions |
 
-## AI and Intelligence
+### AI & Intelligence
 
-* Python
-* Rule-Based Engine
-* Ollama
-* Open-Source LLMs
-* Embeddings
-* pgvector
+| Technology | Purpose |
+|---|---|
+| Python | AI/ML processing backend |
+| Tesseract OCR | Document text extraction |
+| pypdf | PDF processing |
+| sentence-transformers | Embeddings for semantic matching |
+| Rule-Based Engine | Scoring, matching, eligibility |
+| Question Generation | AI-powered assessment questions |
 
-## Search and Matching
+### Deployment
 
-* PostgreSQL Full-Text Search
-* pgvector
-* Weighted Matching Algorithm
-
-## Document and Resume Processing
-
-* PDF/Text Extraction
-* OCR
-* ATS Analysis Engine
-
-## Deployment
-
-* Vercel
-* Supabase
-* GitHub
-
-## Development
-
-* Git
-* GitHub
-* Antigravity Pro
+| Technology | Purpose |
+|---|---|
+| Vercel | Frontend and Next.js deployment |
+| Supabase Cloud | Database and storage hosting |
+| GitHub | Version control and CI/CD |
 
 ---
 
-# Zero-Cost Development Strategy
+## Current Implementation vs Roadmap
 
-The project is designed around a zero-cost development strategy.
+| Feature | Status |
+|---|---|
+| Authentication (OTP + Role-based Login) | ✅ Implemented |
+| Registration (Multi-role with OTP verification) | ✅ Implemented |
+| Role-Based Access Control (Student, Faculty, Campus, Industry, Admin) | ✅ Implemented |
+| Student Dashboard | ✅ Implemented |
+| Student Profile & Settings | ✅ Implemented |
+| Interest Discovery Engine | ✅ Implemented |
+| Knowledge Assessment (Multi-difficulty, AI questions) | ✅ Implemented |
+| Question Bank (200K+ general-purpose data) | ✅ Implemented |
+| Skill-Gap Analysis Engine | ✅ Implemented |
+| Learning Recommendations (YouTube-based) | ✅ Implemented |
+| Resume Builder / ATS Analyzer | ✅ Implemented |
+| Document Upload & OCR Verification | ✅ Implemented |
+| Face Verification (Biometric quality check) | ✅ Implemented |
+| Job & Internship Listings | ✅ Implemented |
+| Job Readiness Check & Matching | ✅ Implemented |
+| Application Submission & Tracking | ✅ Implemented |
+| Student Workflow Progress Tracking | ✅ Implemented |
+| Industry Portal (Dashboard, Profile, Hiring Pipeline) | ✅ Implemented |
+| Industry Question Bank | ✅ Implemented |
+| Industry Student Data Access | ✅ Implemented |
+| Industry Application Screening & Interview Evaluation | ✅ Implemented |
+| Industry Hiring Analytics | ✅ Implemented |
+| Admin Portal (Overview, Students, Faculty, Industry, Skills, Analytics) | ✅ Implemented |
+| Admin Skill Library & Skill-Gap Monitoring | ✅ Implemented |
+| Admin Approvals & Audit Logs | ✅ Implemented |
+| Faculty Portal (Basic) | ✅ Implemented (placeholder) |
+| Campus Portal (Basic) | ✅ Implemented (placeholder) |
+| Educator Catalog (Sample learning providers) | ✅ Implemented |
+| AYUSH Discipline Specialization | 🔄 In Progress |
+| AYUSH Skill Taxonomy | 📋 Planned |
+| AYUSH Skill Passport | 📋 Planned |
+| NEET UG-oriented Assessment | 📋 Planned |
+| AIAPGET PG-oriented Assessment | 📋 Planned |
+| Practical Scenario Lab | 📋 Planned |
+| Industry Skill Demand Intelligence (Aggregate) | 📋 Planned |
+| Verified Internship Lifecycle | 📋 Planned |
+| R&D Collaboration Hub | 📋 Planned |
+| Ministry Intelligence Dashboard | 📋 Planned |
+| Innovation / IP Showcase | 📋 Planned |
 
-The architecture prioritizes:
+---
 
-* Free-tier infrastructure
-* Open-source software
-* Local AI models where practical
-* Free database services
-* Free hosting options
-* Open-source libraries
+## SIH Demonstration Story
 
-### Target Cost
+### Student Journey
 
 ```text
-Development Cost:  ₹0
-Software Cost:     ₹0
-Infrastructure:    Free Tier
-AI:                Open Source / Local
+Student joins SkillBridge
+        ↓
+Creates AYUSH profile (discipline, interests)
+        ↓
+Completes interest discovery
+        ↓
+Takes knowledge assessment (difficulty-adaptive)
+        ↓
+Gets skill competency profile with strengths/weaknesses
+        ↓
+Skill gaps are identified with personalized recommendations
+        ↓
+Accesses curated learning resources
+        ↓
+Builds ATS-compatible resume
+        ↓
+Discovers relevant jobs and internships
+        ↓
+Checks readiness and applies
+        ↓
+Tracks applications
+        ↓
+Explores R&D opportunities (planned)
 ```
+
+### Industry Journey
+
+```text
+Industry partner registers and creates profile
+        ↓
+Posts jobs and internships with skill requirements
+        ↓
+Creates screening question bank
+        ↓
+Discovers and accesses student talent
+        ↓
+Screens applications and evaluates candidates
+        ↓
+Manages hiring pipeline
+        ↓
+Posts R&D problem statements (planned)
+```
+
+### Institution Journey
+
+```text
+Institution monitors student competencies
+        ↓
+Identifies skill gaps across cohorts
+        ↓
+Tracks industry demand alignment
+        ↓
+Supports internship and placement workflows
+        ↓
+Collaborates on R&D (planned)
+```
+
+### Ministry View
+
+```text
+Aggregate AYUSH skill intelligence (planned)
+        ↓
+Skill supply vs demand visibility
+        ↓
+Internship and placement trends
+        ↓
+R&D and innovation activity
+```
+
+---
+
+## Roadmap
+
+| Phase | Focus | Status |
+|---|---|---|
+| **Phase 1** | AYUSH platform transformation — adapt existing platform for AYUSH disciplines, profiles, and domain structure | 🔄 In Progress |
+| **Phase 2** | Assessment + Question Bank — NEET UG-oriented, AIAPGET PG-oriented, and practical scenario assessments with AYUSH question banks | 📋 Planned |
+| **Phase 3** | Skill Gap + Skill Passport — AYUSH Skill Passport consolidating all competency data into a portable credential | 📋 Planned |
+| **Phase 4** | Verified Internship + Industry Matching — full internship lifecycle with verification, completion tracking, and skill-based matching | 📋 Planned |
+| **Phase 5** | R&D Collaboration — industry R&D problem marketplace, institution participation, and research workflows | 📋 Planned |
+| **Phase 6** | Ministry Skill Intelligence — national-level AYUSH skill, placement, and R&D dashboards | 📋 Planned |
+| **Phase 7** | Innovation / IP — research output tracking, patents, licensing, and academia–industry IP collaboration | 📋 Planned |
+
+---
+
+## SIH PS 26044 Alignment
+
+| SIH Requirement | SkillBridge Solution |
+|---|---|
+| **Skill Mapping** | AYUSH Skill Passport + Knowledge Assessment + Skill-Gap Analysis + Interest Discovery Engine |
+| **Internship Matching** | Verified AYUSH Internship Ecosystem + Readiness Checks + Skill-Based Matching |
+| **Placement** | Job Discovery + ATS Resume Analysis + Application Pipeline + Hiring Management |
+| **Academia–Industry Collaboration** | Industry Portal + Institution Portal + R&D Hub + Question Bank Collaboration |
+| **Industry Skill Demand** | Skill Demand Intelligence (aggregate demand vs supply analysis) |
+| **National Intelligence** | Ministry Dashboard (aggregate AYUSH skill, placement, and R&D indicators) |
+| **Research / R&D** | R&D Problem Marketplace (industry publishes problems, institutions participate) |
+| **Innovation / IP** | Innovation & IP Showcase (research outputs, patents, licensing) |
+
+---
+
+## Repository Structure
+
+```text
+Skill-Bridge/
+├── frontend/                  # Next.js application
+│   ├── src/
+│   │   ├── app/               # Pages and API routes
+│   │   │   ├── student/       # Student portal (15 routes)
+│   │   │   ├── industry/      # Industry portal
+│   │   │   ├── admin/         # Admin portal
+│   │   │   ├── campus/        # Campus portal
+│   │   │   ├── faculty/       # Faculty portal
+│   │   │   ├── register/      # Registration
+│   │   │   └── api/           # API routes (auth, student, admin, industry)
+│   │   ├── components/        # UI components by role
+│   │   └── lib/               # Business logic
+│   │       ├── knowledge-test/ # Assessment engine
+│   │       ├── skill-gap/      # Skill-gap analysis engine
+│   │       ├── interest-engine/ # Interest discovery
+│   │       ├── resume/         # ATS analysis
+│   │       ├── learning/       # Learning recommendations
+│   │       ├── verification/   # Document verification
+│   │       ├── workflow/       # Student onboarding workflow
+│   │       ├── applications/   # Job applications
+│   │       ├── industry/       # Industry logic
+│   │       └── db.ts           # Database layer
+│   └── supabase/              # Database schema (schema.sql)
+├── backend/                   # Python FastAPI service
+│   └── app/
+│       ├── main.py            # API endpoints
+│       ├── ocr/               # OCR engine (Tesseract)
+│       └── services/          # Face verification
+└── README.md
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- Python 3.10+
+- Supabase project (free tier)
+
+### Frontend
+
+```bash
+cd frontend
+cp .env.example .env.local
+# Update Supabase credentials in .env.local
+npm install
+npm run dev
+```
+
+### Backend (Python AI/OCR Service)
+
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+---
+
+## Zero-Cost Development Strategy
+
+The project is designed around a zero-cost development approach:
+
+- Free-tier infrastructure (Supabase, Vercel)
+- Open-source software and libraries
+- Local AI models where practical
+- No paid API dependencies for core functionality
 
 Free-tier limitations may apply depending on usage.
 
 ---
 
-# Core Modules
+## Project Status
 
-| Module                | Purpose                                    |
-| --------------------- | ------------------------------------------ |
-| Student Management    | Student profiles and career data           |
-| Skill Assessment      | Evaluate student knowledge                 |
-| Skill Gap Analysis    | Identify missing skills                    |
-| AI Recommendations    | Personalized development paths             |
-| Learning              | Recommended learning resources             |
-| Resume Builder        | Create structured resumes                  |
-| ATS Analyzer          | Analyze resume-job compatibility           |
-| Job Portal            | Jobs and internships                       |
-| Matching Engine       | Match students with opportunities          |
-| Document Verification | Manage and verify documents                |
-| Faculty Dashboard     | Monitor student development                |
-| Campus Dashboard      | Institutional analytics                    |
-| Industry Portal       | Recruitment and hiring                     |
-| Analytics             | Skills, performance and placement insights |
-
----
-
-# Key Features
-
-* Unified Student-Faculty-Campus-Industry ecosystem
-* Skill-based student profiling
-* Adaptive knowledge assessment
-* AI-powered skill-gap analysis
-* Personalized learning recommendations
-* Intelligent job matching
-* ATS-friendly resume generation
-* Resume-job compatibility analysis
-* Document management and verification
-* Role-based dashboards
-* Application tracking
-* Industry recruitment portal
-* Institutional skill analytics
-* Secure authentication and data access
-
----
-
-# End-to-End Ecosystem
-
-```text
-                  STUDENT
-                     |
-                     v
-              Skill Assessment
-                     |
-                     v
-               Skill Profile
-                     |
-                     v
-              Skill Gap Analysis
-                     |
-              +------+------+
-              |             |
-              v             v
-        Learning Path    Job Matching
-              |             |
-              v             v
-       Skill Improvement  Applications
-              |             |
-              +------+------+
-                     |
-                     v
-                Resume / ATS
-                     |
-                     v
-                  INDUSTRY
-                     |
-                     v
-                Recruitment
-                     |
-                     v
-                   HIRING
-```
-
-Faculty and campus stakeholders support and monitor the ecosystem through mentoring, analytics, and institutional insights.
-
----
-
-# Expected Impact
-
-SkillBridge aims to:
-
-* Reduce the gap between education and industry requirements
-* Help students understand their actual skill levels
-* Provide personalized skill-development paths
-* Improve student employability
-* Make recruitment more skill-oriented
-* Help institutions identify training requirements
-* Give faculty actionable student insights
-* Help companies discover better-matched candidates
-* Improve transparency throughout the recruitment process
-
----
-
-# Future Scope
-
-The platform can be extended with:
-
-* Government and academic verification APIs
-* College ERP integrations
-* Industry certification integrations
-* Advanced AI career guidance
-* Interview preparation
-* AI-powered mock interviews
-* Industry-specific assessments
-* Placement prediction
-* Advanced institutional analytics
-* Multilingual support
-* Mobile applications
-
----
-
-# Target Users
-
-| User     | Primary Objective                   |
-| -------- | ----------------------------------- |
-| Student  | Learn, improve skills and get hired |
-| Faculty  | Mentor and monitor students         |
-| Campus   | Manage skills and placements        |
-| Industry | Discover and hire suitable talent   |
-
----
-
-# Vision
-
-> Learn → Improve → Get Matched → Get Hired
-
-SkillBridge aims to create a connected ecosystem where education, skills, institutions, and industry work together to make students more career-ready and recruitment more skill-driven.
+This project is being developed as a Smart India Hackathon (SIH) prototype aligned with Problem Statement 26044. The platform currently provides a functional skill assessment, skill-gap analysis, job matching, and recruitment ecosystem. The AYUSH specialization, Skill Passport, advanced assessments, R&D collaboration, and Ministry intelligence layers are being developed as part of the roadmap.
 
 ---
 
 ## SIH Project Information
 
-**Problem Statement:** PS 044
-**Project Name:** SkillBridge
-**Domain:** Education / Skill Development / Employability
-**Platform:** Web-based Integrated Ecosystem
+| Field | Value |
+|---|---|
+| Problem Statement | PS 26044 |
+| Project Name | SkillBridge |
+| Organization | Ministry of Ayush |
+| Domain | AYUSH / Education / Skill Development / Employability |
+| Platform | Web-based Integrated Ecosystem |
 
 ---
 
-## Project Status
-
-This project is being developed as a Smart India Hackathon solution with a focus on building a functional, scalable, and zero-cost prototype using open-source technologies and free-tier infrastructure.
+> **Learn → Assess → Map → Improve → Match → Hire → Collaborate → Innovate**
