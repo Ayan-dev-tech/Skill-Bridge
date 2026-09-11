@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 import type { TestSessionState, TestResult } from "./knowledge-test/types";
+import type { AssessmentQuestion, AssessmentConfig, AssessmentAttempt } from "./assessment/types";
 import type {
   StudentVerificationRecord,
   VerificationDocumentRecord,
@@ -100,6 +101,16 @@ export interface InternshipPosting {
   companyInfo: string;
   applicationSource: string;
   requiredDocumentTypes: string[];
+  // AYUSH extension fields (optional — non-breaking)
+  ayushSystem?: string;           // AyushSystemId from @/lib/ayush/domains
+  ayushRequiredSkillIds?: string[]; // Skill IDs from AYUSH_SKILL_CATALOG
+  eligibilityCriteria?: string;
+  durationWeeks?: number;
+  city?: string;
+  state?: string;
+  verificationStatus?: "unverified" | "institution_verified" | "ministry_verified";
+  completionStatus?: "not_started" | "ongoing" | "completed" | "withdrawn";
+  certificateRef?: string;
 }
 
 export const initialJobs: JobPosting[] = [
@@ -371,6 +382,10 @@ interface DatabaseSchema {
   resumeAnalyses: ResumeAnalysisRecord[];
   industryQuestions: IndustryQuestionRecord[];
   industryHiringPosts: IndustryHiringPostRecord[];
+  // Assessment infrastructure (Prompt 2)
+  assessmentQuestions: AssessmentQuestion[];
+  assessmentConfigs: AssessmentConfig[];
+  assessmentAttempts: AssessmentAttempt[];
 }
 
 const DATA_DIR = path.join(process.cwd(), "data");
@@ -411,6 +426,9 @@ function ensureDbExists(): DatabaseSchema {
       resumeAnalyses: [],
       industryQuestions: [],
       industryHiringPosts: [],
+      assessmentQuestions: [],
+      assessmentConfigs: [],
+      assessmentAttempts: [],
     };
   } else {
     try {
@@ -429,6 +447,9 @@ function ensureDbExists(): DatabaseSchema {
       if (!data.resumeAnalyses) data.resumeAnalyses = [];
       if (!data.industryQuestions) data.industryQuestions = [];
       if (!data.industryHiringPosts) data.industryHiringPosts = [];
+      if (!data.assessmentQuestions) data.assessmentQuestions = [];
+      if (!data.assessmentConfigs) data.assessmentConfigs = [];
+      if (!data.assessmentAttempts) data.assessmentAttempts = [];
       if (!data.educators || data.educators.length === 0) data.educators = [...SAMPLE_EDUCATORS];
       if (!data.educationPrograms || data.educationPrograms.length === 0)
         data.educationPrograms = [...SAMPLE_EDUCATION_PROGRAMS];
@@ -452,6 +473,9 @@ function ensureDbExists(): DatabaseSchema {
         resumeAnalyses: [],
         industryQuestions: [],
         industryHiringPosts: [],
+        assessmentQuestions: [],
+        assessmentConfigs: [],
+        assessmentAttempts: [],
       };
     }
   }
@@ -3954,5 +3978,100 @@ export const db = {
       byIndustry,
       timeline,
     };
+  },
+
+  // ============================================================================
+  // ASSESSMENT INFRASTRUCTURE (Prompt 2)
+  // ============================================================================
+
+  async getAssessmentQuestions(): Promise<AssessmentQuestion[]> {
+    const data = ensureDbExists();
+    return data.assessmentQuestions || [];
+  },
+
+  async getActiveAssessmentQuestions(): Promise<AssessmentQuestion[]> {
+    const data = ensureDbExists();
+    return (data.assessmentQuestions || []).filter((q) => q.isActive);
+  },
+
+  async getAssessmentQuestionById(id: string): Promise<AssessmentQuestion | null> {
+    const data = ensureDbExists();
+    return (data.assessmentQuestions || []).find((q) => q.id === id) || null;
+  },
+
+  async saveAssessmentQuestion(question: AssessmentQuestion): Promise<AssessmentQuestion> {
+    const data = ensureDbExists();
+    const idx = data.assessmentQuestions.findIndex((q) => q.id === question.id);
+    if (idx >= 0) {
+      data.assessmentQuestions[idx] = { ...question, updatedAt: new Date().toISOString() };
+    } else {
+      data.assessmentQuestions.push(question);
+    }
+    saveDb(data);
+    return question;
+  },
+
+  async saveAssessmentQuestions(questions: AssessmentQuestion[]): Promise<void> {
+    const data = ensureDbExists();
+    for (const q of questions) {
+      const idx = data.assessmentQuestions.findIndex((x) => x.id === q.id);
+      if (idx >= 0) {
+        data.assessmentQuestions[idx] = { ...q, updatedAt: new Date().toISOString() };
+      } else {
+        data.assessmentQuestions.push(q);
+      }
+    }
+    saveDb(data);
+  },
+
+  async getAssessmentConfigs(): Promise<AssessmentConfig[]> {
+    const data = ensureDbExists();
+    return (data.assessmentConfigs || []).filter((c) => c.isActive);
+  },
+
+  async getAssessmentConfigById(id: string): Promise<AssessmentConfig | null> {
+    const data = ensureDbExists();
+    return (data.assessmentConfigs || []).find((c) => c.id === id) || null;
+  },
+
+  async saveAssessmentConfig(config: AssessmentConfig): Promise<AssessmentConfig> {
+    const data = ensureDbExists();
+    const idx = data.assessmentConfigs.findIndex((c) => c.id === config.id);
+    if (idx >= 0) {
+      data.assessmentConfigs[idx] = { ...config, updatedAt: new Date().toISOString() };
+    } else {
+      data.assessmentConfigs.push(config);
+    }
+    saveDb(data);
+    return config;
+  },
+
+  async getAssessmentAttemptsByStudent(studentId: string): Promise<AssessmentAttempt[]> {
+    const data = ensureDbExists();
+    return (data.assessmentAttempts || []).filter((a) => a.studentId === studentId);
+  },
+
+  async getAssessmentAttemptById(id: string): Promise<AssessmentAttempt | null> {
+    const data = ensureDbExists();
+    return (data.assessmentAttempts || []).find((a) => a.id === id) || null;
+  },
+
+  async getActiveAssessmentAttempt(studentId: string, configId: string): Promise<AssessmentAttempt | null> {
+    const data = ensureDbExists();
+    return (data.assessmentAttempts || []).find(
+      (a) => a.studentId === studentId && a.configId === configId && a.status === "in_progress"
+    ) || null;
+  },
+
+  async saveAssessmentAttempt(attempt: AssessmentAttempt): Promise<AssessmentAttempt> {
+    const data = ensureDbExists();
+    const idx = data.assessmentAttempts.findIndex((a) => a.id === attempt.id);
+    if (idx >= 0) {
+      data.assessmentAttempts[idx] = { ...attempt, updatedAt: new Date().toISOString() };
+    } else {
+      data.assessmentAttempts.push(attempt);
+    }
+    saveDb(data);
+    return attempt;
   },
 };

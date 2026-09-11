@@ -5618,136 +5618,31 @@
     },
     {
       "studentId": "1ff7662b-94c3-4c76-ac2d-039c6116499b",
-      "sessionId": "session_1788868168553_zvs8l",
-      "phase": 2,
-      "answers": [
-        {
-          "questionId": "p1-q1-anomaly",
-          "questionText": "You notice that a web application produces an unexpected, distorted response whenever a user enters non-standard characters in an input form. What would you be most excited to do?",
-          "selectedOptionId": "p1-q1-opt-b",
-          "selectedOptionText": "Analyze the server's input-handling logic and optimize the parsing function so it executes cleanly and safely without crashing.",
-          "phase": 1,
-          "signalDelta": {
-            "problemSolving": 0.8,
-            "optimization": 0.7,
-            "building": 0.4
-          },
-          "domainDelta": {
-            "software": 0.8,
-            "web": 0.5
-          }
-        },
-        {
-          "questionId": "p1-q2-data-records",
-          "questionText": "You are handed a raw dataset containing millions of event records from an online platform over the past year. Where does your curiosity take you first?",
-          "selectedOptionId": "p1-q2-opt-b",
-          "selectedOptionText": "Inspect timestamps and authentication logs to trace any suspicious access patterns or unauthorized privileges.",
-          "phase": 1,
-          "signalDelta": {
-            "investigation": 0.8,
-            "securityMindset": 0.8,
-            "analysis": 0.7
-          },
-          "domainDelta": {
-            "security": 0.85
-          }
-        },
-        {
-          "questionId": "p1-q3-repetitive-task",
-          "questionText": "A development team manually spends four hours every Friday packaging and deploying software releases to multiple servers. What is your reaction?",
-          "selectedOptionId": "p1-q3-opt-b",
-          "selectedOptionText": "Embed automated vulnerability scanners and integrity checks into the pipeline to block insecure releases.",
-          "phase": 1,
-          "signalDelta": {
-            "securityMindset": 0.9,
-            "automation": 0.6,
-            "investigation": 0.6
-          },
-          "domainDelta": {
-            "security": 0.85
-          }
-        },
-        {
-          "questionId": "p1-q4-system-failure",
-          "questionText": "A critical service begins freezing during peak hours, yet no crash error logs are generated. What approach do you instinctively reach for?",
-          "selectedOptionId": "p1-q4-opt-b",
-          "selectedOptionText": "Audit incoming network packets and connection states to verify whether an external entity is exhausting server connections deliberately.",
-          "phase": 1,
-          "signalDelta": {
-            "investigation": 0.9,
-            "securityMindset": 0.8,
-            "systemsThinking": 0.6
-          },
-          "domainDelta": {
-            "security": 0.85
-          }
-        },
-        {
-          "questionId": "p2-sec-q1-focus",
-          "questionText": "Within Cybersecurity & Defense, which kind of challenge sounds most captivating to you?",
-          "selectedOptionId": "p2-sec-q1-pentest",
-          "selectedOptionText": "Acting as an authorized ethical hacker to test enterprise perimeter defenses, chained vulnerabilities, and privilege escalation pathways.",
-          "phase": 2,
-          "signalDelta": {
-            "securityMindset": 0.9,
-            "problemSolving": 0.8
-          },
-          "domainDelta": {
-            "security": 1
-          }
-        },
-        {
-          "questionId": "p2-sec-q2-scenario",
-          "questionText": "You are tasked with securing an organization against unauthorized access. Which activity would you find most satisfying?",
-          "selectedOptionId": "p2-sec-q2-pentest",
-          "selectedOptionText": "Conducting an offensive black-box assessment against a newly launched service to identify whether sensitive tenant data can be exposed.",
-          "phase": 2,
-          "signalDelta": {
-            "securityMindset": 0.9,
-            "problemSolving": 0.8
-          },
-          "domainDelta": {
-            "security": 1
-          }
-        },
-        {
-          "questionId": "p2-sec-q3-depth",
-          "questionText": "What type of security artifact or project would you be proudest to publish on your engineering portfolio?",
-          "selectedOptionId": "p2-sec-q3-pentest",
-          "selectedOptionText": "A proof-of-concept offensive security tool demonstrating how chained configuration weaknesses can be uncovered before adversaries find them.",
-          "phase": 2,
-          "signalDelta": {
-            "securityMindset": 0.9,
-            "problemSolving": 0.8
-          },
-          "domainDelta": {
-            "security": 1
-          }
-        }
-      ],
+      "sessionId": "session_1789107328077_tk794",
+      "phase": 1,
+      "answers": [],
       "signalScores": {
-        "investigation": 2.3,
-        "problemSolving": 3.2,
-        "building": 0.4,
+        "investigation": 0,
+        "problemSolving": 0,
+        "building": 0,
         "creativity": 0,
-        "analysis": 0.7,
+        "analysis": 0,
         "experimentation": 0,
-        "optimization": 0.7,
-        "systemsThinking": 0.6,
+        "optimization": 0,
+        "systemsThinking": 0,
         "dataOrientation": 0,
-        "automation": 0.6,
-        "securityMindset": 5.2
+        "automation": 0,
+        "securityMindset": 0
       },
       "domainScores": {
-        "ai-ml": 0.19,
-        "cloud": 0.18,
-        "web": 0.12,
-        "security": 1,
-        "software": 0.46
+        "ai-ml": 0,
+        "cloud": 0,
+        "web": 0,
+        "security": 0,
+        "software": 0
       },
-      "status": "confirmed",
-      "updatedAt": "2026-09-08T11:51:05.369Z",
-      "broadDomain": "security"
+      "status": "phase1_in_progress",
+      "updatedAt": "2026-09-11T06:15:28.082Z"
     }
   ],
   "knowledgeTestSessions": [
@@ -47904,5 +47799,8 @@
       "updatedAt": "2026-09-07T19:29:31.418Z",
       "publishedAt": "2026-09-07T19:29:31.418Z"
     }
-  ]
+  ],
+  "assessmentQuestions": [],
+  "assessmentConfigs": [],
+  "assessmentAttempts": []
 }
