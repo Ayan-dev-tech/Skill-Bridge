@@ -16,8 +16,10 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { FacultyReportsData } from "@/lib/faculty/types";
+import { FacultyAyushIntelligenceSection } from "./faculty-ayush-intelligence-section";
 
 export function FacultyReportsView() {
+  const [subTab, setSubTab] = React.useState<"ayush" | "placement">("ayush");
   const [data, setData] = React.useState<FacultyReportsData | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
@@ -96,8 +98,34 @@ export function FacultyReportsView() {
         </Button>
       </div>
 
-      {/* Journey Completion Rates */}
-      <Card className="p-5 bg-card border-border space-y-4">
+      {/* Navigation Subtabs */}
+      <div className="flex items-center gap-2 border-b border-border pb-2">
+        <Button
+          variant={subTab === "ayush" ? "default" : "ghost"}
+          size="sm"
+          onClick={() => setSubTab("ayush")}
+          className="text-xs h-8 gap-1.5"
+        >
+          <BarChart3 className="w-3.5 h-3.5 text-emerald-500" />
+          AYUSH Cohort Intelligence
+        </Button>
+        <Button
+          variant={subTab === "placement" ? "default" : "ghost"}
+          size="sm"
+          onClick={() => setSubTab("placement")}
+          className="text-xs h-8 gap-1.5"
+        >
+          <TrendingUp className="w-3.5 h-3.5" />
+          Placement Funnel & Journey
+        </Button>
+      </div>
+
+      {subTab === "ayush" ? (
+        <FacultyAyushIntelligenceSection />
+      ) : (
+        <>
+          {/* Journey Completion Rates */}
+          <Card className="p-5 bg-card border-border space-y-4">
         <CardTitle className="text-sm font-semibold">Cohort Milestone Completion Rates</CardTitle>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           {[
@@ -215,6 +243,8 @@ export function FacultyReportsView() {
           </div>
         </div>
       </Card>
+        </>
+      )}
     </div>
   );
 }

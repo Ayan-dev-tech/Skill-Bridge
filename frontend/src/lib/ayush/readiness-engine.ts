@@ -32,6 +32,8 @@ export interface CalculateReadinessOptions {
   overrideRatings?: Record<string, number>;
   /** Optional studentId; if null, unauthenticated sandbox calculation with overrides */
   studentId?: string;
+  /** Optional flag to skip querying active interventions (recommended for fast cohort aggregations) */
+  skipInterventions?: boolean;
 }
 
 /**
@@ -225,7 +227,7 @@ export async function calculateAyushRoleReadiness(
     const topGapCompetencies = remainingGaps.slice(0, 3);
     const gapCompIds = topGapCompetencies.map((g) => g.competencyId);
 
-    if (gapCompIds.length > 0) {
+    if (gapCompIds.length > 0 && !options?.skipInterventions) {
       const { data: interventions } = await supabase
         .from("ayush_development_interventions")
         .select("*")

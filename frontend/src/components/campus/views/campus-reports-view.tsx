@@ -14,6 +14,7 @@ import {
   Download,
   Calendar,
   Layers,
+  Sparkles,
 } from "lucide-react";
 import {
   Card,
@@ -27,6 +28,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { PlacementReportData } from "@/lib/campus/types";
+import { CampusAyushIntelligenceSection } from "./campus-ayush-intelligence-section";
 
 export function CampusReportsView() {
   const [reportData, setReportData] = React.useState<PlacementReportData | null>(null);
@@ -36,7 +38,7 @@ export function CampusReportsView() {
   // Filters
   const [selectedDept, setSelectedDept] = React.useState("all");
   const [selectedBatch, setSelectedBatch] = React.useState("all");
-  const [activeTab, setActiveTab] = React.useState<"department" | "batch" | "industry" | "job">("department");
+  const [activeTab, setActiveTab] = React.useState<"ayush" | "department" | "batch" | "industry" | "job">("ayush");
 
   const fetchReports = React.useCallback(async () => {
     try {
@@ -306,9 +308,21 @@ export function CampusReportsView() {
         </CardContent>
       </Card>
 
-      {/* Interactive Breakdown Tabs: Department, Batch, Industry, Job */}
-      <div className="space-y-3">
-        <div className="flex items-center gap-1 border border-border rounded-lg p-1 bg-muted/20 w-fit">
+      {/* Interactive Breakdown Tabs: AYUSH Intelligence, Department, Batch, Industry, Job */}
+      <div className="space-y-4">
+        <div className="flex items-center gap-1 border border-border rounded-lg p-1 bg-muted/20 w-fit flex-wrap">
+          <button
+            type="button"
+            onClick={() => setActiveTab("ayush")}
+            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${
+              activeTab === "ayush"
+                ? "bg-card text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 shadow-sm font-semibold"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
+            AYUSH Institutional Intelligence
+          </button>
           <button
             type="button"
             onClick={() => setActiveTab("department")}
@@ -354,6 +368,9 @@ export function CampusReportsView() {
             By Job / Role ({reportData?.byJob?.length || 0})
           </button>
         </div>
+
+        {/* Tab 0: AYUSH Institutional Intelligence */}
+        {activeTab === "ayush" && <CampusAyushIntelligenceSection />}
 
         {/* Tab 1: Department Breakdown */}
         {activeTab === "department" && (
