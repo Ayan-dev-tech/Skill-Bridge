@@ -127,8 +127,8 @@ export async function POST(request: Request) {
       correctOptionId,
       difficulty: difficulty || "intermediate",
       complexity: complexity || "application",
-      domainId: domainId || "software",
-      conceptTag: conceptTag?.trim() || "general-engineering",
+      domainId: domainId || "ayurveda",
+      conceptTag: conceptTag?.trim() || "ayush-clinical-practice",
       marks: typeof marks === "number" && marks > 0 ? marks : 1,
       explanation: explanation?.trim() || "",
     });

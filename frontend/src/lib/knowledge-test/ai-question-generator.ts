@@ -32,12 +32,12 @@ async function queryGeminiForKnowledgeQuestions(
   const meta = DIFFICULTY_META[request.difficulty];
   const dist = meta.questionDistribution;
 
-  const prompt = `You are the lead psychometric and technical assessment examiner for Skill Bridge.
-Generate a calibrated 10-question multiple-choice technical benchmark for an engineering student.
+  const prompt = `You are the lead psychometric and technical assessment examiner for Skill Bridge AYUSH Healthcare.
+Generate a calibrated 10-question multiple-choice benchmark for an AYUSH healthcare student.
 
 TARGET DOMAIN & NICHE:
-- Domain: ${request.domainName} (${request.domainId})
-- Technical Niche: ${request.specificInterest}
+- System: ${request.domainName} (${request.domainId})
+- Clinical/Therapeutic Niche: ${request.specificInterest}
 - Selected Difficulty: ${request.difficulty.toUpperCase()}
 
 DIFFICULTY GUIDELINES:
@@ -177,10 +177,10 @@ export async function generateQuestionBatch(
   // 2. Deterministic Fallback Bank
   const domainKey = (request.domainId in FALLBACK_QUESTION_BANK)
     ? request.domainId
-    : "software"; // default safe fallback
+    : "ayurveda"; // default safe fallback
 
   const pool = FALLBACK_QUESTION_BANK[domainKey]?.[request.difficulty] ||
-    FALLBACK_QUESTION_BANK.software[request.difficulty];
+    FALLBACK_QUESTION_BANK.ayurveda[request.difficulty];
 
   // Map to 10 questions numbered 1 to 10 with concept uniqueness
   const selected: KnowledgeQuestion[] = [];
@@ -198,9 +198,9 @@ export async function generateQuestionBatch(
     }
   }
 
-  // If we couldn't get 10 unique concepts from this domain, pull from software domain pool
+  // If we couldn't get 10 unique concepts from this domain, pull from ayurveda domain pool
   if (selected.length < 10) {
-    const backupPool = FALLBACK_QUESTION_BANK.software[request.difficulty];
+    const backupPool = FALLBACK_QUESTION_BANK.ayurveda[request.difficulty];
     for (const q of backupPool) {
       if (selected.length >= 10) break;
       const tag = q.conceptTag.toLowerCase();

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Skill-Bridge — AYUSH Foundation Types
  * Data models for:
  *   - AYUSH Skill Taxonomy
@@ -168,10 +168,29 @@ export interface AyushSkillProficiency {
 
 export interface AyushCompetency {
   id: string;
+  name: string;
   title: string;
+  category: string;
   domain: string;
+  targetLevel: number; // 1 to 5
+  description: string;
   demonstratedAt: string | null;
   verifiedBy: string | null;
+}
+
+export interface AyushRoleCompetencyMapping {
+  competencyId: string;
+  targetLevel: number;
+  importance: "essential" | "preferred";
+}
+
+export interface AyushTargetRole {
+  id: string;
+  name: string;
+  ayushSystem: AyushSystemId | string;
+  category: string;
+  description: string;
+  competencies: AyushRoleCompetencyMapping[];
 }
 
 export interface AyushAssessmentResult {

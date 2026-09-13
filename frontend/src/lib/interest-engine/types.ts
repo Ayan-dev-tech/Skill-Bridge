@@ -4,7 +4,7 @@
  * Scoring/Classification, and UI State.
  */
 
-export type DomainId = "ai-ml" | "cloud" | "web" | "security" | "software";
+export type DomainId = "ayurveda" | "yoga-naturopathy" | "unani" | "siddha" | "homoeopathy";
 
 export interface DomainMeta {
   id: DomainId;

@@ -3,7 +3,7 @@ import { AdminLiveService } from "@/lib/admin/admin-service";
 
 export async function GET() {
   try {
-    const liveOverview = AdminLiveService.getLiveOverview();
+    const liveOverview = await AdminLiveService.getLiveOverview();
     return NextResponse.json({
       success: true,
       data: liveOverview,

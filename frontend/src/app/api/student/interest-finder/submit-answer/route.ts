@@ -45,8 +45,8 @@ export async function POST(request: Request) {
         signalDelta = { problemSolving: 0.5, building: 0.5 };
       }
     } else {
-      const domain = (session.broadDomain as DomainId) || "security";
-      const domainQuestions = PHASE_2_DOMAIN_SCENARIOS[domain] || PHASE_2_DOMAIN_SCENARIOS.security;
+      const domain = (session.broadDomain as DomainId) || "ayurveda";
+      const domainQuestions = PHASE_2_DOMAIN_SCENARIOS[domain] || PHASE_2_DOMAIN_SCENARIOS.ayurveda;
       const qMatch = domainQuestions.find((q) => q.id === questionId);
       const optMatch = qMatch?.options.find((o) => o.id === selectedOptionId);
       if (optMatch) {

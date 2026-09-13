@@ -4,6 +4,8 @@ import path from "path";
 import { db } from "@/lib/db";
 import { getAuthenticatedStudent } from "@/lib/student-auth";
 
+import { getSupabaseServerClient } from "@/lib/supabase-server";
+
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ documentId: string }> }
@@ -39,23 +41,42 @@ export async function GET(
       );
     }
 
-    // Serve document from scoped storage
+    // 1. Attempt retrieval from Supabase Storage bucket: verification-documents
     const storageRef = docRecord.document.storagePath;
-    const baseStorageDir = path.join(process.cwd(), "data", "storage", "verification-documents");
-    const safeFilePath = path.resolve(baseStorageDir, storageRef);
+    let fileBuffer: Buffer | null = null;
+    const contentType = docRecord.document.fileType || "application/octet-stream";
 
-    // Prevent directory traversal
-    if (!safeFilePath.startsWith(baseStorageDir) || !fs.existsSync(safeFilePath)) {
+    try {
+      const supabase = getSupabaseServerClient();
+      const { data, error } = await supabase.storage
+        .from("verification-documents")
+        .download(storageRef);
+
+      if (data && !error) {
+        fileBuffer = Buffer.from(await data.arrayBuffer());
+      }
+    } catch (storageErr) {
+      console.warn("Supabase storage download fallback:", storageErr);
+    }
+
+    // 2. Safe Fallback to local storage if not available from Supabase
+    if (!fileBuffer) {
+      const baseStorageDir = path.join(process.cwd(), "data", "storage", "verification-documents");
+      const safeFilePath = path.resolve(baseStorageDir, storageRef);
+
+      if (safeFilePath.startsWith(baseStorageDir) && fs.existsSync(safeFilePath)) {
+        fileBuffer = fs.readFileSync(safeFilePath);
+      }
+    }
+
+    if (!fileBuffer) {
       return NextResponse.json(
         { success: false, error: "File not found in storage." },
         { status: 404 }
       );
     }
 
-    const fileBuffer = fs.readFileSync(safeFilePath);
-    const contentType = docRecord.document.fileType || "application/octet-stream";
-
-    return new NextResponse(fileBuffer, {
+    return new NextResponse(new Uint8Array(fileBuffer), {
       status: 200,
       headers: {
         "Content-Type": contentType,

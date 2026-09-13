@@ -7,6 +7,8 @@ import { getAuthenticatedStudent } from "@/lib/student-auth";
 import { DocumentVerificationService } from "@/lib/verification/service";
 import type { VerificationDocumentRecord } from "@/lib/verification/types";
 
+import { getSupabaseServerClient } from "@/lib/supabase-server";
+
 export async function POST(request: Request) {
   try {
     const { student } = await getAuthenticatedStudent(request);
@@ -59,24 +61,43 @@ export async function POST(request: Request) {
     const safeFileName = `${documentType}_${Date.now()}${fileExt}`;
     const scopedStoragePath = `student/${student.id}/documents/${documentType}/${documentId}/${safeFileName}`;
 
-    // 2. Save file securely to scoped private storage
-    const uploadsDir = path.join(
-      process.cwd(),
-      "data",
-      "storage",
-      "verification-documents",
-      "student",
-      student.id,
-      "documents",
-      documentType,
-      documentId
-    );
-    if (!fs.existsSync(uploadsDir)) {
-      fs.mkdirSync(uploadsDir, { recursive: true });
+    // 2. Upload directly to Supabase Storage (private bucket: verification-documents)
+    try {
+      const supabase = getSupabaseServerClient();
+      const { error: storageError } = await supabase.storage
+        .from("verification-documents")
+        .upload(scopedStoragePath, buffer, {
+          contentType: file.type,
+          upsert: true,
+        });
+
+      if (storageError) {
+        console.warn("Supabase Storage upload warning:", storageError.message);
+      }
+    } catch (storageErr) {
+      console.warn("Supabase Storage upload error:", storageErr);
     }
 
-    const localFilePath = path.join(uploadsDir, safeFileName);
-    fs.writeFileSync(localFilePath, buffer);
+    // Preserve local copy as temporary rollback source
+    try {
+      const uploadsDir = path.join(
+        process.cwd(),
+        "data",
+        "storage",
+        "verification-documents",
+        "student",
+        student.id,
+        "documents",
+        documentType,
+        documentId
+      );
+      if (!fs.existsSync(uploadsDir)) {
+        fs.mkdirSync(uploadsDir, { recursive: true });
+      }
+      fs.writeFileSync(path.join(uploadsDir, safeFileName), buffer);
+    } catch (fsErr) {
+      console.warn("Local storage fallback write error:", fsErr);
+    }
 
     // 3. Save Document Metadata to Database Record (Zero OCR)
     const docRecord: VerificationDocumentRecord = {

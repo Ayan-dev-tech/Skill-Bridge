@@ -1,6 +1,8 @@
 import fs from "fs";
 import path from "path";
 import { db } from "../db";
+import { getSupabaseServerClient, isSupabasePersistenceActive } from "../supabase-server";
+import { supabaseDb } from "../supabase-db";
 import type {
   FacultyProfileData,
   FacultyStudentRecord,
@@ -108,6 +110,111 @@ interface RawDatabase {
   }>;
 }
 
+async function loadFacultyData(): Promise<RawDatabase> {
+  if (isSupabasePersistenceActive()) {
+    try {
+      const supabase = getSupabaseServerClient();
+      const [
+        usersRes,
+        profilesRes,
+        interestRes,
+        ktRes,
+        svRes,
+        sgRes,
+        lrRes,
+        appsRes,
+      ] = await Promise.all([
+        supabase.from("users").select("*"),
+        supabase.from("profiles").select("*"),
+        supabase.from("interest_profiles").select("*"),
+        supabase.from("knowledge_test_results").select("*"),
+        supabase.from("student_verifications").select("*, verification_documents(*)"),
+        supabase.from("skill_gap_analyses").select("*"),
+        supabase.from("learning_resources").select("*"),
+        supabase.from("job_applications").select("*"),
+      ]);
+
+      return {
+        users: (usersRes.data || []).map((u) => ({
+          id: u.id,
+          email: u.email,
+          role: u.role,
+          fullName: u.full_name || u.email,
+          isVerified: Boolean(u.is_verified),
+          isAdmin: Boolean(u.is_admin),
+          createdAt: u.created_at || new Date().toISOString(),
+        })),
+        profiles: (profilesRes.data || []).map((p) => ({
+          userId: p.user_id,
+          role: p.role,
+          metadata: p.metadata || {},
+        })),
+        interestProfiles: (interestRes.data || []).map((ip) => ({
+          id: ip.id,
+          studentId: ip.student_id,
+          confirmedMainDomain: ip.confirmed_main_domain,
+          confirmedSpecificInterest: ip.confirmed_specific_interest,
+          explanation: ip.explanation || "",
+          confidence: Number(ip.confidence || 0),
+          confirmedAt: ip.confirmed_at || new Date().toISOString(),
+        })),
+        knowledgeTestResults: (ktRes.data || []).map((kr) => ({
+          id: kr.id,
+          studentId: kr.student_id,
+          difficulty: kr.difficulty,
+          scorePercent: Number(kr.score_percent || 0),
+          strengths: kr.strengths || [],
+          gaps: kr.weaknesses || [],
+          completedAt: kr.completed_at || kr.created_at,
+          createdAt: kr.created_at,
+        })),
+        studentVerifications: (svRes.data || []).map((sv) => ({
+          studentId: sv.student_id,
+          verificationStatus: sv.verification_status,
+          documents: (sv.verification_documents || []).map((d: any) => ({
+            id: d.id,
+            documentType: d.document_type,
+            fileName: d.file_name,
+            fileType: d.file_type,
+            uploadStatus: d.upload_status || "completed",
+            uploadedAt: d.uploaded_at,
+          })),
+        })),
+        skillGapAnalyses: (sgRes.data || []).map((sg) => ({
+          id: sg.id,
+          studentId: sg.student_id,
+          domain: sg.domain,
+          niche: sg.niche,
+          skillGaps: sg.skill_gaps || [],
+          recommendations: sg.recommendations || [],
+        })),
+        learningResources: (lrRes.data || []).map((lr) => ({
+          id: lr.id,
+          studentId: lr.student_id,
+          title: lr.title,
+          type: lr.type,
+          category: lr.category,
+          progressPercent: Number(lr.progress_percent || 0),
+          completed: Boolean(lr.completed),
+          updatedAt: lr.updated_at,
+        })),
+        jobApplications: (appsRes.data || []).map((a) => ({
+          id: a.id,
+          studentId: a.student_id,
+          companyName: "Industry Partner",
+          status: a.status,
+          screeningStatus: a.screening_status,
+          appliedAt: a.applied_at,
+          finalStatus: a.final_status,
+        })),
+      };
+    } catch (err) {
+      console.warn("Supabase loadFacultyData fallback to JSON:", err);
+    }
+  }
+  return loadDb();
+}
+
 function loadDb(): RawDatabase {
   try {
     const raw = fs.readFileSync(DB_FILE, "utf-8");
@@ -129,7 +236,7 @@ function saveDb(data: RawDatabase): void {
  * Resolves the Faculty member profile and departmental affiliation.
  */
 export async function getFacultyProfileData(facultyUserId: string): Promise<FacultyProfileData> {
-  const data = loadDb();
+  const data = await loadFacultyData();
   const user = data.users.find((u) => u.id === facultyUserId);
   const profile = data.profiles.find((p) => p.userId === facultyUserId);
   const meta = (profile?.metadata || {}) as Record<string, unknown>;
@@ -199,7 +306,7 @@ export async function getAuthorizedStudents(
   facultyUserId: string,
   filters: FacultyStudentFilterParams = {}
 ): Promise<FacultyStudentListResponse> {
-  const data = loadDb();
+  const data = await loadFacultyData();
   const facultyUser = data.users.find((u) => u.id === facultyUserId);
   const facultyProfile = data.profiles.find((p) => p.userId === facultyUserId);
   const fMeta = (facultyProfile?.metadata || {}) as Record<string, unknown>;
@@ -369,7 +476,7 @@ export async function getFacultyStudentDetail(
   const base = listRes.students.find((s) => s.id === studentId);
   if (!base) return null;
 
-  const data = loadDb();
+  const data = await loadFacultyData();
   const studentProfile = data.profiles.find((p) => p.userId === studentId);
   const sMeta = (studentProfile?.metadata || {}) as Record<string, unknown>;
 
@@ -534,7 +641,7 @@ export async function getFacultyDashboardSummary(facultyUserId: string): Promise
   };
 
   // Recent activity feed from real data
-  const data = loadDb();
+  const data = await loadFacultyData();
   const studentIds = new Set(students.map((s) => s.id));
   const recentActivity: FacultyDashboardSummary["recentActivity"] = [];
 
@@ -595,7 +702,7 @@ export async function getFacultyDashboardSummary(facultyUserId: string): Promise
 export async function getFacultySkillGapOverview(facultyUserId: string): Promise<FacultySkillGapOverview> {
   const listRes = await getAuthorizedStudents(facultyUserId, { limit: 1000 });
   const studentIds = new Set(listRes.students.map((s) => s.id));
-  const data = loadDb();
+  const data = await loadFacultyData();
 
   const gapsList: FacultySkillGapItem[] = [];
   const domainCounts: Record<string, number> = {};
@@ -668,7 +775,7 @@ export async function getFacultySkillGapOverview(facultyUserId: string): Promise
 export async function getFacultyLearningOverview(facultyUserId: string): Promise<FacultyLearningOverview> {
   const listRes = await getAuthorizedStudents(facultyUserId, { limit: 1000 });
   const studentIds = new Set(listRes.students.map((s) => s.id));
-  const data = loadDb();
+  const data = await loadFacultyData();
 
   const studentProgressList: FacultyLearningOverview["studentProgressList"] = [];
   let totalCompletion = 0;
@@ -721,7 +828,7 @@ export async function getFacultyLearningOverview(facultyUserId: string): Promise
 export async function getFacultyPlacementOverview(facultyUserId: string): Promise<FacultyPlacementOverview> {
   const listRes = await getAuthorizedStudents(facultyUserId, { limit: 1000 });
   const studentIds = new Set(listRes.students.map((s) => s.id));
-  const data = loadDb();
+  const data = await loadFacultyData();
 
   const eligible = listRes.students.filter((s) => s.verificationStatus === "VERIFIED").length;
   const apps = (data.jobApplications || []).filter((a) => studentIds.has(a.studentId));
@@ -847,7 +954,26 @@ export async function updateFacultyProfile(
   facultyUserId: string,
   updates: Partial<FacultyProfileData>
 ): Promise<FacultyProfileData> {
-  const data = loadDb();
+  if (isSupabasePersistenceActive()) {
+    try {
+      const existing = await supabaseDb.getProfileByUserId(facultyUserId);
+      const metaUpdates: Record<string, any> = {
+        ...(existing?.metadata || {}),
+        ...(updates.phone !== undefined ? { phone: updates.phone } : {}),
+        ...(updates.officeLocation !== undefined ? { officeLocation: updates.officeLocation } : {}),
+        ...(updates.bio !== undefined ? { bio: updates.bio } : {}),
+        ...(updates.subjects !== undefined ? { subjects: updates.subjects } : {}),
+        ...(updates.department !== undefined ? { department: updates.department } : {}),
+        ...(updates.designation !== undefined ? { designation: updates.designation } : {}),
+      };
+      await supabaseDb.updateUserProfile(facultyUserId, metaUpdates);
+      return getFacultyProfileData(facultyUserId);
+    } catch (err) {
+      console.warn("Supabase updateFacultyProfile fallback to JSON:", err);
+    }
+  }
+
+  const data = await loadFacultyData();
   let profile = data.profiles.find((p) => p.userId === facultyUserId);
 
   if (!profile) {

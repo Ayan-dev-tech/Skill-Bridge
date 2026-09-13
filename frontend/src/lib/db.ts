@@ -1,6 +1,8 @@
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
+import { supabaseDb } from "./supabase-db";
+import { isSupabasePersistenceActive } from "./supabase-server";
 import type { TestSessionState, TestResult } from "./knowledge-test/types";
 import type { AssessmentQuestion, AssessmentConfig, AssessmentAttempt } from "./assessment/types";
 import type { AyushSkillPassport } from "./ayush/types";
@@ -116,156 +118,154 @@ export interface InternshipPosting {
 
 export const initialJobs: JobPosting[] = [
   {
-    id: "job-sec-01",
-    roleTitle: "Associate Security Operations Engineer",
-    companyName: "CloudArmor Defense Labs",
-    location: "Bengaluru, India (Hybrid)",
-    workMode: "Hybrid",
+    id: "job-ayu-01",
+    roleTitle: "Ayurvedic Medical Officer (Kayachikitsa)",
+    companyName: "All India Institute of Ayurveda (AIIA)",
+    location: "New Delhi, India (On-site)",
+    workMode: "On-site",
     employmentType: "Full-time",
-    experienceRequirement: "Fresher / 0-1 Years",
-    salaryRange: "₹8,50,000 - ₹12,00,000 / year",
+    experienceRequirement: "BAMS / 0-2 Years",
+    salaryRange: "₹9,00,000 - ₹14,00,000 / year",
     postedDate: "2026-08-20T00:00:00Z",
     deadline: "2026-10-15T00:00:00Z",
-    description: "Triage security events, configure SIEM detection rules, and conduct vulnerability assessment audits across cloud environments.",
+    description: "Manage outpatient and inpatient clinical care, protocolize authentic Panchakarma therapies, and coordinate clinical trials.",
     responsibilities: [
-      "Analyze and triage real-time alerts from SIEM platforms and cloud intrusion telemetry.",
-      "Author customized detection signatures for emerging vulnerabilities (CVEs) and OWASP Top 10 vectors.",
-      "Collaborate with engineering teams during incident post-mortems and root-cause analysis.",
-      "Conduct baseline vulnerability audits on staging microservices and cloud infrastructure.",
+      "Conduct classical Ayurvedic clinical examinations (Ashtavidha Pariksha) and diagnostic evaluations.",
+      "Design personalized Panchakarma therapeutic regimens and dietary counseling (Ahara-Vihara).",
+      "Monitor therapeutic responses and document patient outcomes in hospital management records.",
+      "Collaborate with multidisciplinary research teams on evidence-based AYUSH integrative medicine trials.",
     ],
     requiredQualifications: [
-      "Bachelor's degree in Computer Science, Information Security, or relevant STEM field.",
-      "Hands-on understanding of network protocols, Linux fundamentals, and Python scripting.",
-      "Familiarity with OWASP Top 10 vulnerabilities and modern authentication mechanisms.",
+      "BAMS degree recognized by NCISM with valid state/central registration.",
+      "Thorough command of classical Samhita principles and clinical diagnostic methodology.",
+      "Clinical proficiency in Panchakarma procedures and pharmacovigilance awareness.",
     ],
     preferredQualifications: [
-      "Demonstrated participation in CTF competitions or open-source security tool contributions.",
-      "Relevant security certifications (CompTIA Security+, CEH, or AWS Certified Security).",
+      "Postgraduate qualification (MD/MS Ayurveda) or clinical internship at an apex AYUSH institute.",
+      "Demonstrated research contributions in peer-reviewed AYUSH journals.",
     ],
-    requiredSkills: ["OWASP Top 10", "Network Security", "Linux", "Python", "SIEM"],
-    companyInfo: "CloudArmor Defense Labs is a next-generation cloud security partner safeguarding multi-cloud enterprises across APAC.",
-    applicationSource: "Skill Bridge Campus Placement Drive",
+    requiredSkills: ["Kayachikitsa", "Panchakarma", "Nadi Pariksha", "Samhita Adhyayan", "Clinical Documentation"],
+    companyInfo: "All India Institute of Ayurveda is the apex autonomous institute for tertiary Ayurvedic healthcare and integrative clinical research.",
+    applicationSource: "Skill Bridge AYUSH Institutional Placement Drive",
     requiredDocumentTypes: ["student_id", "post_graduation_marksheet"],
   },
   {
-    id: "job-dev-02",
-    roleTitle: "Junior Full-Stack Cloud Engineer",
-    companyName: "NexusScale Technologies",
-    location: "Hyderabad, India (Hybrid)",
-    workMode: "Hybrid",
+    id: "job-ayu-02",
+    roleTitle: "Quality Control & Phytochemical Analyst",
+    companyName: "Dabur Research & Development Centre",
+    location: "Ghaziabad, Uttar Pradesh (On-site)",
+    workMode: "On-site",
     employmentType: "Full-time",
-    experienceRequirement: "0-2 Years",
-    salaryRange: "₹7,00,000 - ₹10,50,000 / year",
+    experienceRequirement: "B.Pharm (Ayurveda) / M.Sc Botany / 0-2 Years",
+    salaryRange: "₹6,50,000 - ₹9,50,000 / year",
     postedDate: "2026-08-22T00:00:00Z",
     deadline: "2026-10-30T00:00:00Z",
-    description: "Build microservices and modern React applications with automated CI/CD testing and cloud infrastructure automation.",
+    description: "Perform botanical authentication, HPTLC fingerprinting, heavy metal testing, and ASU regulatory compliance for classical herbal formulations.",
     responsibilities: [
-      "Develop responsive frontend features using React, Next.js, and TypeScript.",
-      "Author robust REST APIs and database schema migrations using Node.js and PostgreSQL.",
-      "Containerize microservices using Docker and assist with Kubernetes CI/CD pipeline automation.",
+      "Conduct chromatographic (HPTLC/HPLC) and spectroscopic assays on raw botanical drugs and finished formulations.",
+      "Verify adherence to Ayurvedic Pharmacopoeia of India (API) monograph specifications.",
+      "Maintain GMP compliance records, stability study data, and analytical batch validation files.",
+      "Screen for pesticide residues, aflatoxins, and microbial contamination.",
     ],
     requiredQualifications: [
-      "B.Tech / B.E. in Computer Science or equivalent academic degree.",
-      "Proficiency in TypeScript, React, and Node.js backend development.",
-      "Working knowledge of relational databases and SQL queries.",
+      "Degree in Ayurvedic Pharmacy (B.Pharm Ayu), Phytochemistry, or Pharmaceutical Sciences.",
+      "Hands-on experience with chromatographic analytical instrumentation (HPTLC/HPLC).",
+      "Sound understanding of Schedule T GMP guidelines and API standards.",
     ],
     preferredQualifications: [
-      "Experience with Docker containerization and cloud deployments (AWS or GCP).",
-      "Contributions to open-source developer tooling.",
+      "Familiarity with AYUSH regulatory filings and export quality certification protocols.",
     ],
-    requiredSkills: ["TypeScript", "React", "Node.js", "PostgreSQL", "Docker", "REST API"],
-    companyInfo: "NexusScale Technologies builds high-throughput cloud infrastructure solutions for enterprise fintech platforms.",
+    requiredSkills: ["Dravyaguna", "Phytochemistry", "HPTLC", "Quality Control", "GMP Schedule T"],
+    companyInfo: "Dabur Research & Development Centre is a premier botanical research facility delivering standardized Ayurvedic healthcare solutions globally.",
     applicationSource: "Skill Bridge Corporate Fast-Track",
     requiredDocumentTypes: ["student_id", "post_graduation_marksheet"],
   },
   {
-    id: "job-ai-03",
-    roleTitle: "ML Platform Associate",
-    companyName: "CognitiveMatrix AI",
-    location: "Remote",
-    workMode: "Remote",
+    id: "job-hom-03",
+    roleTitle: "Clinical Homoeopathic Consultant",
+    companyName: "Dr. Willmar Schwabe India",
+    location: "Noida, India (Hybrid)",
+    workMode: "Hybrid",
     employmentType: "Full-time",
-    experienceRequirement: "Fresher / 0-1 Years",
-    salaryRange: "₹9,00,000 - ₹13,00,000 / year",
+    experienceRequirement: "BHMS / 0-2 Years",
+    salaryRange: "₹7,50,000 - ₹11,00,000 / year",
     postedDate: "2026-08-25T00:00:00Z",
     deadline: "2026-11-05T00:00:00Z",
-    description: "Support machine learning pipeline deployment, RAG model evaluation, and dataset feature stores.",
+    description: "Support holistic chronic case repertorization, posology assessment, and patient clinical trials monitoring.",
     responsibilities: [
-      "Evaluate retrieval accuracy and hallucination rates for enterprise RAG pipelines.",
-      "Build model inference wrappers using FastAPI and PyTorch.",
-      "Maintain automated dataset preprocessing scripts and feature engineering pipelines.",
+      "Execute structured Homoeopathic case-taking, miasmatic evaluation, and repertorization (Kent/Boenninghausen).",
+      "Review patient therapeutic outcomes in multicenter clinical validation registries.",
+      "Provide medical advisory support on Homoeopathic Pharmacopoeia of India (HPI) quality standards.",
     ],
     requiredQualifications: [
-      "Degree in Computer Science, Data Science, Artificial Intelligence, or Mathematics.",
-      "Strong Python coding skills and familiarity with PyTorch or TensorFlow.",
-      "Solid foundation in linear algebra, statistics, and machine learning fundamentals.",
+      "BHMS degree recognized by NCH with valid clinical council registration.",
+      "Strong grasp of Organon of Medicine, Materia Medica, and Repertory.",
     ],
     preferredQualifications: [
-      "Experience with vector databases (Pinecone, Qdrant, Chroma) or LangChain.",
-      "Published research or technical blog posts on generative models.",
+      "MD Homoeopathy or certification in modern computerized repertorization systems.",
     ],
-    requiredSkills: ["Python", "Machine Learning", "PyTorch", "FastAPI", "SQL"],
-    companyInfo: "CognitiveMatrix AI pioneers agentic workflow automation for global healthcare and life sciences enterprises.",
-    applicationSource: "Skill Bridge AI Excellence Hiring",
+    requiredSkills: ["Organon of Medicine", "Materia Medica", "Homoeopathic Repertory", "Miasmatic Analysis", "HPI Standards"],
+    companyInfo: "Dr. Willmar Schwabe India is a world-renowned manufacturer and research pioneer in standardized Homoeopathic pharmaceuticals.",
+    applicationSource: "Skill Bridge AYUSH Clinical Network",
     requiredDocumentTypes: ["student_id", "post_graduation_marksheet", "skill_certifications"],
   },
 ];
 
 export const initialInternships: InternshipPosting[] = [
   {
-    id: "intern-sec-01",
-    roleTitle: "Application Security Intern",
-    companyName: "SentinelEdge Security",
-    location: "Pune, India (Remote)",
-    workMode: "Remote",
+    id: "intern-yn-01",
+    roleTitle: "Clinical Yoga & Naturopathy Resident Intern",
+    companyName: "National Institute of Naturopathy (NIN)",
+    location: "Pune, India (On-site)",
+    workMode: "On-site",
     duration: "6 Months",
-    stipendRange: "₹30,000 - ₹45,000 / month",
+    stipendRange: "₹25,000 - ₹35,000 / month",
     postedDate: "2026-08-15T00:00:00Z",
     deadline: "2026-09-30T00:00:00Z",
-    description: "Participate in automated SAST/DAST scanning, code review sessions, and dependency vulnerability audits.",
+    description: "Assist in supervised naturopathic hydrotherapy, mud therapy, fasting therapy regimens, and therapeutic yoga intervention sessions.",
     responsibilities: [
-      "Execute automated SAST scans against test codebases and triage potential findings.",
-      "Assist in drafting security review documentation and remediation advice for developer teams.",
-      "Research recent CVEs and construct proof-of-concept verification scripts in lab environments.",
+      "Administer classical hydrotherapeutic and mud therapeutic treatments under senior medical supervision.",
+      "Guide patients through disease-specific Yoga Chikitsa (asanas, pranayama, and meditative relaxation protocols).",
+      "Monitor vital signs and record daily physiological responses during clinical fasting.",
     ],
     requiredQualifications: [
-      "Enrolled student in Computer Science or related degree program.",
-      "Basic understanding of web security principles and scripting skills in Python or JavaScript.",
+      "Enrolled in 4th/5th year or rotating internship of BNYS (Bachelor of Naturopathy and Yogic Sciences).",
+      "Knowledge of lifestyle pathology, yogic physiology, and clinical naturopathic modalities.",
     ],
     preferredQualifications: [
-      "Familiarity with Burp Suite, OWASP ZAP, or GitHub Advanced Security.",
+      "YCB (Yoga Certification Board) Level 2 or Level 3 certification.",
     ],
-    requiredSkills: ["OWASP", "JavaScript", "Python", "Git", "Security Fundamentals"],
-    companyInfo: "SentinelEdge Security offers managed vulnerability intelligence and red-teaming for cloud startups.",
-    applicationSource: "Skill Bridge Campus Placement Drive",
+    requiredSkills: ["Yoga Chikitsa", "Hydrotherapy", "Mud Therapy", "Fasting Therapy", "Dietetics"],
+    companyInfo: "National Institute of Naturopathy is an apex autonomous institute under the Ministry of Ayush dedicated to holistic natural healing.",
+    applicationSource: "Skill Bridge AYUSH Campus Internship Program",
     requiredDocumentTypes: ["student_id"],
   },
   {
-    id: "intern-cloud-02",
-    roleTitle: "DevOps & Cloud Infrastructure Intern",
-    companyName: "KubeScale Systems",
-    location: "Bengaluru, India (Hybrid)",
-    workMode: "Hybrid",
+    id: "intern-ayu-02",
+    roleTitle: "Botanical Taxonomy & Herbarium Research Intern",
+    companyName: "Central Council for Research in Ayurvedic Sciences (CCRAS)",
+    location: "New Delhi, India (On-site)",
+    workMode: "On-site",
     duration: "6 Months",
-    stipendRange: "₹25,000 - ₹40,000 / month",
+    stipendRange: "₹22,000 - ₹30,000 / month",
     postedDate: "2026-08-18T00:00:00Z",
     deadline: "2026-10-10T00:00:00Z",
-    description: "Assist with Kubernetes cluster configuration, Helm chart authoring, and monitoring telemetry dashboards.",
+    description: "Contribute to botanical surveying, raw drug authentication, digitization of herbarium sheets, and pharmacognostic field data logging.",
     responsibilities: [
-      "Write and validate Dockerfiles for containerized microservice architectures.",
-      "Assist senior DevOps engineers in maintaining Prometheus and Grafana telemetry dashboards.",
-      "Automate repetitive deployment tasks using Bash and GitHub Actions workflows.",
+      "Assist in field collection and botanical identification of medicinal flora used in classical formulations.",
+      "Prepare and catalogue herbarium specimen sheets according to national standards.",
+      "Assist with microscopic and macroscopic pharmacognostic evaluation of botanical samples.",
     ],
     requiredQualifications: [
-      "Enrolled in 3rd or 4th year B.Tech / B.E. degree program.",
-      "Familiarity with Linux terminal commands and basic Docker containers.",
+      "Enrolled in final year BAMS, B.Sc/M.Sc Botany, or Ayurvedic Pharmacy degree.",
+      "Knowledge of classical Dravyaguna Dravyas and medicinal plant taxonomies.",
     ],
     preferredQualifications: [
-      "Experience with Kubernetes basics or self-hosted cloud homelabs.",
+      "Experience with digital botanical keys and herbarium preservation techniques.",
     ],
-    requiredSkills: ["Docker", "Linux", "Kubernetes Basics", "Bash", "CI/CD"],
-    companyInfo: "KubeScale Systems specializes in cloud-native platform engineering and Kubernetes cost optimization.",
-    applicationSource: "Skill Bridge Campus Placement Drive",
+    requiredSkills: ["Dravyaguna", "Plant Taxonomy", "Pharmacognosy", "Herbarium Preservation", "Medicinal Flora"],
+    companyInfo: "CCRAS is the apex national body for the formulation, coordination, and development of scientific research in Ayurveda.",
+    applicationSource: "Skill Bridge Institutional Research Fellowship",
     requiredDocumentTypes: ["student_id"],
   },
 ];
@@ -624,6 +624,13 @@ export const db = {
     email: string,
     role: RoleType
   ): Promise<User | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.findUserByEmailAndRole(email, role);
+      } catch (err) {
+        console.warn("Supabase findUserByEmailAndRole fallback:", err);
+      }
+    }
     const normalized = email.toLowerCase().trim();
     const data = ensureDbExists();
     return (
@@ -634,17 +641,38 @@ export const db = {
   },
 
   async findUsersByEmail(email: string): Promise<User[]> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.findUsersByEmail(email);
+      } catch (err) {
+        console.warn("Supabase findUsersByEmail fallback:", err);
+      }
+    }
     const normalized = email.toLowerCase().trim();
     const data = ensureDbExists();
     return data.users.filter((u) => u.email.toLowerCase() === normalized);
   },
 
   async getUsers(): Promise<User[]> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getUsers();
+      } catch (err) {
+        console.warn("Supabase getUsers fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     return data.users;
   },
 
   async getUserById(id: string): Promise<User | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getUserById(id);
+      } catch (err) {
+        console.warn("Supabase getUserById fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     return data.users.find((u) => u.id === id) || null;
   },
@@ -654,6 +682,13 @@ export const db = {
   },
 
   async getProfileByUserId(userId: string): Promise<Profile | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getProfileByUserId(userId);
+      } catch (err) {
+        console.warn("Supabase getProfileByUserId fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     return data.profiles.find((p) => p.userId === userId) || null;
   },
@@ -671,6 +706,13 @@ export const db = {
     },
     metadata: Record<string, string | number | undefined>
   ): Promise<{ user: User; profile: Profile }> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.createOrUpdatePendingUser(userData, metadata);
+      } catch (err) {
+        console.warn("Supabase createOrUpdatePendingUser fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     const normalized = userData.email.toLowerCase().trim();
 
@@ -734,6 +776,13 @@ export const db = {
     otpCode: string,
     expiryMinutes = 10
   ): Promise<OtpVerification> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.createOrUpdateOtp(email, role, otpCode, expiryMinutes);
+      } catch (err) {
+        console.warn("Supabase createOrUpdateOtp fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     const normalized = email.toLowerCase().trim();
     const now = new Date();
@@ -766,6 +815,13 @@ export const db = {
     email: string,
     role: RoleType
   ): Promise<OtpVerification | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getLatestOtp(email);
+      } catch (err) {
+        console.warn("Supabase getLatestOtp fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     const normalized = email.toLowerCase().trim();
     const matching = data.otps
@@ -788,6 +844,13 @@ export const db = {
     role: RoleType,
     inputOtp: string
   ): Promise<{ success: boolean; error?: string; user?: User }> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.verifyUserAndOtp(email, role, inputOtp);
+      } catch (err) {
+        console.warn("Supabase verifyUserAndOtp fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     const normalized = email.toLowerCase().trim();
     const latestOtp = await this.getLatestOtp(normalized, role);
@@ -846,6 +909,56 @@ export const db = {
   // ================= ADMIN FUNCTIONS =================
 
   async getAdminOverview() {
+    if (isSupabasePersistenceActive()) {
+      try {
+        const overview = await supabaseDb.getAdminOverview();
+        const usersWithProfiles = overview.users.map((u) => {
+          const profile = overview.profiles.find((p) => p.userId === u.id);
+          return {
+            id: u.id,
+            email: u.email,
+            role: u.role,
+            fullName: u.fullName,
+            isVerified: u.isVerified,
+            isAdmin: !!u.isAdmin,
+            createdAt: u.createdAt,
+            metadata: profile?.metadata || {},
+          };
+        });
+
+        const students = usersWithProfiles.filter((u) => u.role === "student" && !u.isAdmin);
+        const faculty = usersWithProfiles.filter((u) => u.role === "faculty");
+        const campus = usersWithProfiles.filter((u) => u.role === "campus");
+        const industry = usersWithProfiles.filter((u) => u.role === "industry");
+
+        const frozenCompaniesCount = overview.hiringRequests.filter((h) => h.isFrozen).length;
+        const frozenCampusesCount = overview.campusRequests.filter((c) => c.isFrozen).length;
+
+        return {
+          stats: {
+            totalUsers: overview.users.filter((u) => !u.isAdmin).length,
+            totalStudents: students.length,
+            totalFaculty: faculty.length,
+            totalCampus: campus.length,
+            totalIndustry: industry.length,
+            totalFrozen: frozenCompaniesCount + frozenCampusesCount,
+          },
+          users: usersWithProfiles,
+          categorized: {
+            students,
+            faculty,
+            campus,
+            industry,
+          },
+          hiringRequests: overview.hiringRequests,
+          campusRequests: overview.campusRequests,
+          industryHiringPosts: overview.industryHiringPosts || [],
+          jobApplications: overview.jobApplications || [],
+        };
+      } catch (err) {
+        console.warn("Supabase getAdminOverview fallback:", err);
+      }
+    }
     const data = ensureDbExists();
 
     const usersWithProfiles = data.users.map((u) => {
@@ -894,6 +1007,15 @@ export const db = {
   },
 
   async toggleCompanyFreeze(requestId: string, reason?: string): Promise<HiringRequest | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        const current = await supabaseDb.getAdminOverview();
+        const item = current.hiringRequests.find((h) => h.id === requestId);
+        return await supabaseDb.toggleCompanyFreeze(requestId, !item?.isFrozen, reason);
+      } catch (err) {
+        console.warn("Supabase toggleCompanyFreeze fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     const item = data.hiringRequests.find((h) => h.id === requestId);
     if (!item) return null;
@@ -908,6 +1030,15 @@ export const db = {
   },
 
   async toggleCampusFreeze(requestId: string, reason?: string): Promise<CampusRequest | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        const current = await supabaseDb.getAdminOverview();
+        const item = current.campusRequests.find((c) => c.id === requestId);
+        return await supabaseDb.toggleCampusFreeze(requestId, !item?.isFrozen, reason);
+      } catch (err) {
+        console.warn("Supabase toggleCampusFreeze fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     const item = data.campusRequests.find((c) => c.id === requestId);
     if (!item) return null;
@@ -925,6 +1056,13 @@ export const db = {
     requestId: string,
     updates: Partial<HiringRequest>
   ): Promise<HiringRequest | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.updateHiringRequest(requestId, updates);
+      } catch (err) {
+        console.warn("Supabase updateHiringRequest fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     const item = data.hiringRequests.find((h) => h.id === requestId);
     if (!item) return null;
@@ -938,6 +1076,13 @@ export const db = {
     requestId: string,
     updates: Partial<CampusRequest>
   ): Promise<CampusRequest | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.updateCampusRequest(requestId, updates);
+      } catch (err) {
+        console.warn("Supabase updateCampusRequest fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     const item = data.campusRequests.find((c) => c.id === requestId);
     if (!item) return null;
@@ -950,6 +1095,15 @@ export const db = {
   // ================= INTEREST FINDER PERSISTENCE =================
 
   async saveInterestProfile(record: InterestProfileRecord): Promise<void> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        await supabaseDb.saveInterestProfile(record);
+        await supabaseDb.invalidateSkillGapAnalysis(record.studentId);
+        return;
+      } catch (err) {
+        console.warn("Supabase saveInterestProfile fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.interestProfiles) data.interestProfiles = [];
 
@@ -977,6 +1131,13 @@ export const db = {
   },
 
   async getInterestProfile(studentId: string): Promise<InterestProfileRecord | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getInterestProfile(studentId);
+      } catch (err) {
+        console.warn("Supabase getInterestProfile fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.interestProfiles) return null;
     return (
@@ -985,6 +1146,14 @@ export const db = {
   },
 
   async saveInterestSession(session: InterestSessionRecord): Promise<void> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        await supabaseDb.saveInterestSession(session);
+        return;
+      } catch (err) {
+        console.warn("Supabase saveInterestSession fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.interestSessions) data.interestSessions = [];
 
@@ -1002,6 +1171,13 @@ export const db = {
   },
 
   async getInterestSession(studentId: string): Promise<InterestSessionRecord | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getInterestSession(studentId);
+      } catch (err) {
+        console.warn("Supabase getInterestSession fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.interestSessions) return null;
     return (
@@ -1010,6 +1186,14 @@ export const db = {
   },
 
   async clearInterestSession(studentId: string): Promise<void> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        await supabaseDb.clearInterestSession(studentId);
+        return;
+      } catch (err) {
+        console.warn("Supabase clearInterestSession fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.interestSessions) return;
     data.interestSessions = data.interestSessions.filter(
@@ -1021,6 +1205,14 @@ export const db = {
   // ================= KNOWLEDGE TEST PERSISTENCE =================
 
   async saveKnowledgeTestSession(session: KnowledgeTestSessionRecord): Promise<void> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        await supabaseDb.saveKnowledgeTestSession(session);
+        return;
+      } catch (err) {
+        console.warn("Supabase saveKnowledgeTestSession fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.knowledgeTestSessions) data.knowledgeTestSessions = [];
 
@@ -1038,6 +1230,13 @@ export const db = {
   },
 
   async getKnowledgeTestSession(sessionId: string): Promise<KnowledgeTestSessionRecord | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getKnowledgeTestSession(sessionId);
+      } catch (err) {
+        console.warn("Supabase getKnowledgeTestSession fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.knowledgeTestSessions) return null;
     return data.knowledgeTestSessions.find((s) => s.sessionId === sessionId) || null;
@@ -1046,6 +1245,13 @@ export const db = {
   async getActiveKnowledgeTestSessionByStudent(
     studentId: string
   ): Promise<KnowledgeTestSessionRecord | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getActiveKnowledgeTestSessionByStudent(studentId);
+      } catch (err) {
+        console.warn("Supabase getActiveKnowledgeTestSessionByStudent fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.knowledgeTestSessions) return null;
     return (
@@ -1056,6 +1262,15 @@ export const db = {
   },
 
   async saveKnowledgeTestResult(result: KnowledgeTestResultRecord): Promise<void> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        await supabaseDb.saveKnowledgeTestResult(result);
+        await supabaseDb.invalidateSkillGapAnalysis(result.studentId);
+        return;
+      } catch (err) {
+        console.warn("Supabase saveKnowledgeTestResult fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.knowledgeTestResults) data.knowledgeTestResults = [];
 
@@ -1085,6 +1300,13 @@ export const db = {
   async getKnowledgeTestResultsByStudent(
     studentId: string
   ): Promise<KnowledgeTestResultRecord[]> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getKnowledgeTestResultsByStudent(studentId);
+      } catch (err) {
+        console.warn("Supabase getKnowledgeTestResultsByStudent fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.knowledgeTestResults) return [];
     return data.knowledgeTestResults
@@ -1095,6 +1317,13 @@ export const db = {
   async getLatestKnowledgeTestResult(
     studentId: string
   ): Promise<KnowledgeTestResultRecord | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getLatestKnowledgeTestResult(studentId);
+      } catch (err) {
+        console.warn("Supabase getLatestKnowledgeTestResult fallback:", err);
+      }
+    }
     const results = await this.getKnowledgeTestResultsByStudent(studentId);
     return results.length > 0 ? results[0] : null;
   },
@@ -1102,6 +1331,13 @@ export const db = {
   async getKnowledgeTestResultById(
     resultId: string
   ): Promise<KnowledgeTestResultRecord | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getKnowledgeTestResultById(resultId);
+      } catch (err) {
+        console.warn("Supabase getKnowledgeTestResultById fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.knowledgeTestResults) return null;
     return data.knowledgeTestResults.find((r) => r.id === resultId) || null;
@@ -1110,6 +1346,14 @@ export const db = {
   // ================= SKILL GAP ANALYSIS OPERATIONS =================
 
   async saveSkillGapAnalysis(record: SkillGapAnalysisRecord): Promise<void> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        await supabaseDb.saveSkillGapAnalysis(record);
+        return;
+      } catch (err) {
+        console.warn("Supabase saveSkillGapAnalysis fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.skillGapAnalyses) data.skillGapAnalyses = [];
 
@@ -1129,6 +1373,13 @@ export const db = {
   async getSkillGapAnalysisByStudent(
     studentId: string
   ): Promise<SkillGapAnalysisRecord | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getSkillGapAnalysisByStudent(studentId);
+      } catch (err) {
+        console.warn("Supabase getSkillGapAnalysisByStudent fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.skillGapAnalyses) return null;
     const records = data.skillGapAnalyses
@@ -1141,6 +1392,14 @@ export const db = {
   },
 
   async invalidateSkillGapAnalysis(studentId: string): Promise<void> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        await supabaseDb.invalidateSkillGapAnalysis(studentId);
+        return;
+      } catch (err) {
+        console.warn("Supabase invalidateSkillGapAnalysis fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.skillGapAnalyses) return;
     for (const a of data.skillGapAnalyses) {
@@ -1153,6 +1412,13 @@ export const db = {
   },
 
   async getEducators(): Promise<Educator[]> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getEducators();
+      } catch (err) {
+        console.warn("Supabase getEducators fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     return data.educators && data.educators.length > 0
       ? data.educators
@@ -1160,6 +1426,13 @@ export const db = {
   },
 
   async getEducationPrograms(): Promise<EducationProgram[]> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getEducationPrograms();
+      } catch (err) {
+        console.warn("Supabase getEducationPrograms fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     return data.educationPrograms && data.educationPrograms.length > 0
       ? data.educationPrograms
@@ -1173,6 +1446,14 @@ export const db = {
     analysisId: string,
     resources: LearningResourceItem[]
   ): Promise<void> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        await supabaseDb.saveLearningResources(studentId, analysisId, resources);
+        return;
+      } catch (err) {
+        console.warn("Supabase saveLearningResources fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.learningResources) data.learningResources = [];
 
@@ -1202,6 +1483,13 @@ export const db = {
     studentId: string,
     analysisId: string
   ): Promise<LearningResourceItem[] | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getLearningResourcesByAnalysis(studentId, analysisId);
+      } catch (err) {
+        console.warn("Supabase getLearningResourcesByAnalysis fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.learningResources) return null;
 
@@ -1213,6 +1501,14 @@ export const db = {
   },
 
   async clearLearningResources(studentId: string): Promise<void> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        await supabaseDb.clearLearningResources(studentId);
+        return;
+      } catch (err) {
+        console.warn("Supabase clearLearningResources fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.learningResources) return;
     data.learningResources = data.learningResources.filter(
@@ -1224,6 +1520,13 @@ export const db = {
   // ================= DOCUMENT VERIFICATION OPERATIONS =================
 
   async getStudentVerification(studentId: string): Promise<StudentVerificationRecord> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getStudentVerification(studentId);
+      } catch (err) {
+        console.warn("Supabase getStudentVerification fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     let existing = data.studentVerifications.find((v) => v.studentId === studentId);
     if (!existing) {
@@ -1273,6 +1576,13 @@ export const db = {
     document: VerificationDocumentRecord,
     replaceDocId?: string
   ): Promise<StudentVerificationRecord> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.saveVerificationDocument(studentId, document, replaceDocId);
+      } catch (err) {
+        console.warn("Supabase saveVerificationDocument fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     let record = data.studentVerifications.find((v) => v.studentId === studentId);
     if (!record) {
@@ -1344,6 +1654,14 @@ export const db = {
     studentId: string,
     documentId: string
   ): Promise<StudentVerificationRecord> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        const res = await supabaseDb.deleteVerificationDocument(studentId, documentId);
+        if (res) return res;
+      } catch (err) {
+        console.warn("Supabase deleteVerificationDocument fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     const record = data.studentVerifications.find((v) => v.studentId === studentId);
     if (record) {
@@ -1376,6 +1694,13 @@ export const db = {
   async findVerificationDocumentById(
     documentId: string
   ): Promise<{ document: VerificationDocumentRecord; studentId: string } | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.findVerificationDocumentById(documentId);
+      } catch (err) {
+        console.warn("Supabase findVerificationDocumentById fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     for (const v of data.studentVerifications || []) {
       const doc = v.documents.find((d) => d.id === documentId);
@@ -1390,6 +1715,13 @@ export const db = {
     studentId: string,
     profiles: ProfessionalProfiles
   ): Promise<StudentVerificationRecord> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.saveProfessionalProfiles(studentId, profiles);
+      } catch (err) {
+        console.warn("Supabase saveProfessionalProfiles fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     let record = data.studentVerifications.find((v) => v.studentId === studentId);
     if (!record) {
@@ -1414,6 +1746,14 @@ export const db = {
   },
 
   async completeStudentVerification(studentId: string): Promise<StudentVerificationRecord> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        const res = await supabaseDb.completeStudentVerification(studentId);
+        if (res) return res;
+      } catch (err) {
+        console.warn("Supabase completeStudentVerification fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     let record = data.studentVerifications.find((v) => v.studentId === studentId);
     if (!record) {
@@ -1677,6 +2017,13 @@ export const db = {
   async getResumeAnalysisByStudent(
     studentId: string
   ): Promise<ResumeAnalysisRecord | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getResumeAnalysisByStudent(studentId);
+      } catch (err) {
+        console.warn("Supabase getResumeAnalysisByStudent fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.resumeAnalyses) return null;
     const records = data.resumeAnalyses
@@ -1692,6 +2039,14 @@ export const db = {
     recordOrStudentId: ResumeAnalysisRecord | string,
     recordParam?: ResumeAnalysisRecord
   ): Promise<void> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        await supabaseDb.saveResumeAnalysis(recordOrStudentId, recordParam);
+        return;
+      } catch (err) {
+        console.warn("Supabase saveResumeAnalysis fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.resumeAnalyses) data.resumeAnalyses = [];
     const record: ResumeAnalysisRecord =
@@ -1715,6 +2070,14 @@ export const db = {
   },
 
   async deleteResumeAnalysis(studentId: string, analysisId?: string): Promise<void> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        await supabaseDb.deleteResumeAnalysis(studentId, analysisId);
+        return;
+      } catch (err) {
+        console.warn("Supabase deleteResumeAnalysis fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.resumeAnalyses) return;
     if (analysisId) {
@@ -1733,6 +2096,13 @@ export const db = {
   async getJobApplicationsByStudent(
     studentId: string
   ): Promise<JobApplicationRecord[]> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getJobApplicationsByStudent(studentId);
+      } catch (err) {
+        console.warn("Supabase getJobApplicationsByStudent fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.jobApplications) return [];
     return data.jobApplications
@@ -1747,6 +2117,13 @@ export const db = {
     paramsOrStudentId: SubmitApplicationParams | JobApplicationRecord | string,
     paramsParam?: Partial<JobApplicationRecord>
   ): Promise<JobApplicationRecord> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.saveJobApplication(paramsOrStudentId, paramsParam);
+      } catch (err) {
+        console.warn("Supabase saveJobApplication fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.jobApplications) data.jobApplications = [];
 
@@ -2237,6 +2614,13 @@ export const db = {
     industryId: string,
     filters: { search?: string; difficulty?: string; domainId?: string; questionType?: string } = {}
   ): Promise<IndustryQuestionRecord[]> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getIndustryQuestions(industryId, filters);
+      } catch (err) {
+        console.warn("Supabase getIndustryQuestions fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.industryQuestions) data.industryQuestions = [];
 
@@ -2268,6 +2652,13 @@ export const db = {
   },
 
   async getIndustryQuestionById(id: string, industryId: string): Promise<IndustryQuestionRecord | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getIndustryQuestionById(id, industryId);
+      } catch (err) {
+        console.warn("Supabase getIndustryQuestionById fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.industryQuestions) data.industryQuestions = [];
     return data.industryQuestions.find((q) => q.id === id && q.industryId === industryId) || null;
@@ -2277,6 +2668,13 @@ export const db = {
     industryId: string,
     input: CreateIndustryQuestionInput
   ): Promise<IndustryQuestionRecord> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.createIndustryQuestion(industryId, input);
+      } catch (err) {
+        console.warn("Supabase createIndustryQuestion fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.industryQuestions) data.industryQuestions = [];
 
@@ -2303,8 +2701,8 @@ export const db = {
       correctOptionId: input.correctOptionId,
       difficulty: input.difficulty || "intermediate",
       complexity: input.complexity || "application",
-      domainId: input.domainId || "software",
-      conceptTag: input.conceptTag?.trim() || "general-engineering",
+      domainId: input.domainId || "ayurveda",
+      conceptTag: input.conceptTag?.trim() || "ayush-clinical-practice",
       marks: typeof input.marks === "number" && input.marks > 0 ? input.marks : 1,
       explanation: input.explanation?.trim() || "",
       createdAt: now,
@@ -2321,6 +2719,14 @@ export const db = {
     industryId: string,
     updates: Partial<IndustryQuestionRecord>
   ): Promise<IndustryQuestionRecord> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        const res = await supabaseDb.updateIndustryQuestion(id, industryId, updates as any);
+        if (res) return res;
+      } catch (err) {
+        console.warn("Supabase updateIndustryQuestion fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.industryQuestions) data.industryQuestions = [];
 
@@ -2346,6 +2752,13 @@ export const db = {
   },
 
   async deleteIndustryQuestion(id: string, industryId: string): Promise<boolean> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.deleteIndustryQuestion(id, industryId);
+      } catch (err) {
+        console.warn("Supabase deleteIndustryQuestion fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.industryQuestions) return false;
 
@@ -2367,6 +2780,17 @@ export const db = {
     industryId: string,
     filterStatus?: string
   ): Promise<IndustryHiringPostRecord[]> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        const posts = await supabaseDb.getIndustryHiringPosts(industryId);
+        if (filterStatus && filterStatus !== "all") {
+          return posts.filter((p) => p.status === filterStatus);
+        }
+        return posts;
+      } catch (err) {
+        console.warn("Supabase getIndustryHiringPosts fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.industryHiringPosts) data.industryHiringPosts = [];
 
@@ -2381,6 +2805,13 @@ export const db = {
     industryId: string,
     postId: string
   ): Promise<IndustryHiringPostRecord | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getIndustryHiringPostById(postId, industryId);
+      } catch (err) {
+        console.warn("Supabase getIndustryHiringPostById fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.industryHiringPosts) return null;
     const post = data.industryHiringPosts.find((p) => p.id === postId && p.industryId === industryId);
@@ -2392,6 +2823,13 @@ export const db = {
     companyName: string,
     input: CreateHiringPostInput
   ): Promise<IndustryHiringPostRecord> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.createIndustryHiringPost(industryId, input);
+      } catch (err) {
+        console.warn("Supabase createIndustryHiringPost fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.industryHiringPosts) data.industryHiringPosts = [];
 
@@ -2484,6 +2922,14 @@ export const db = {
     postId: string,
     updates: UpdateHiringPostInput
   ): Promise<IndustryHiringPostRecord> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        const res = await supabaseDb.updateIndustryHiringPost(industryId, postId, updates);
+        if (res) return res;
+      } catch (err) {
+        console.warn("Supabase updateIndustryHiringPost fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.industryHiringPosts) data.industryHiringPosts = [];
 
@@ -2534,6 +2980,14 @@ export const db = {
     industryId: string,
     postId: string
   ): Promise<IndustryHiringPostRecord> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        const res = await supabaseDb.publishIndustryHiringPost(industryId, postId);
+        if (res) return res;
+      } catch (err) {
+        console.warn("Supabase publishIndustryHiringPost fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.industryHiringPosts) data.industryHiringPosts = [];
 
@@ -2585,6 +3039,13 @@ export const db = {
     industryId: string,
     postId: string
   ): Promise<boolean> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.deleteIndustryHiringPost(industryId, postId);
+      } catch (err) {
+        console.warn("Supabase deleteIndustryHiringPost fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.industryHiringPosts) return false;
 
@@ -2606,6 +3067,14 @@ export const db = {
     postId: string,
     testConfig: Partial<KnowledgeTestConfig>
   ): Promise<IndustryHiringPostRecord> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        const res = await supabaseDb.updateIndustryKnowledgeTestConfig(industryId, postId, testConfig as any);
+        if (res) return res;
+      } catch (err) {
+        console.warn("Supabase updateIndustryKnowledgeTestConfig fallback:", err);
+      }
+    }
     const data = ensureDbExists();
     const index = (data.industryHiringPosts || []).findIndex((p) => p.id === postId && p.industryId === industryId);
     if (index === -1) {
@@ -2887,6 +3356,14 @@ export const db = {
     industryId: string,
     postId?: string
   ): Promise<JobApplicationRecord[]> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getIndustryApplications(industryId, postId);
+      } catch (err) {
+        console.error("Supabase getIndustryApplications failed, falling back to local JSON:", err);
+      }
+    }
+
     const data = ensureDbExists();
     if (!data.jobApplications) data.jobApplications = [];
 
@@ -2922,6 +3399,14 @@ export const db = {
     decision: "shortlisted" | "rejected" | "screened",
     notes?: string
   ): Promise<JobApplicationRecord> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.updateApplicationScreening(industryId, applicationId, decision, notes);
+      } catch (err) {
+        console.error("Supabase updateApplicationScreening failed, falling back to local JSON:", err);
+      }
+    }
+
     const data = ensureDbExists();
     if (!data.jobApplications) data.jobApplications = [];
 
@@ -2981,6 +3466,14 @@ export const db = {
       overallOutcome?: "in_progress" | "completed" | "cancelled";
     }
   ): Promise<JobApplicationRecord> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.updateApplicationInterview(industryId, applicationId, interviewData);
+      } catch (err) {
+        console.error("Supabase updateApplicationInterview failed, falling back to local JSON:", err);
+      }
+    }
+
     const data = ensureDbExists();
     if (!data.jobApplications) data.jobApplications = [];
 
@@ -3060,6 +3553,14 @@ export const db = {
       notes?: string;
     }
   ): Promise<JobApplicationRecord> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.updateFinalHiringDecision(industryId, applicationId, decision, offerDetails);
+      } catch (err) {
+        console.error("Supabase updateFinalHiringDecision failed, falling back to local JSON:", err);
+      }
+    }
+
     const data = ensureDbExists();
     if (!data.jobApplications) data.jobApplications = [];
 
@@ -3154,6 +3655,13 @@ export const db = {
   // ==========================================================================
 
   async getCampusRequests(): Promise<CampusRequest[]> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getCampusRequests();
+      } catch (err) {
+        console.error("Supabase getCampusRequests failed, falling back to local JSON:", err);
+      }
+    }
     const data = ensureDbExists();
     return data.campusRequests || [];
   },
@@ -3991,21 +4499,49 @@ export const db = {
   // ============================================================================
 
   async getAssessmentQuestions(): Promise<AssessmentQuestion[]> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getAssessmentQuestions();
+      } catch (err) {
+        console.error("Supabase getAssessmentQuestions failed, falling back to local JSON:", err);
+      }
+    }
     const data = ensureDbExists();
     return data.assessmentQuestions || [];
   },
 
   async getActiveAssessmentQuestions(): Promise<AssessmentQuestion[]> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getActiveAssessmentQuestions();
+      } catch (err) {
+        console.error("Supabase getActiveAssessmentQuestions failed, falling back to local JSON:", err);
+      }
+    }
     const data = ensureDbExists();
     return (data.assessmentQuestions || []).filter((q) => q.isActive);
   },
 
   async getAssessmentQuestionById(id: string): Promise<AssessmentQuestion | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getAssessmentQuestionById(id);
+      } catch (err) {
+        console.error("Supabase getAssessmentQuestionById failed, falling back to local JSON:", err);
+      }
+    }
     const data = ensureDbExists();
     return (data.assessmentQuestions || []).find((q) => q.id === id) || null;
   },
 
   async saveAssessmentQuestion(question: AssessmentQuestion): Promise<AssessmentQuestion> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.saveAssessmentQuestion(question);
+      } catch (err) {
+        console.error("Supabase saveAssessmentQuestion failed, falling back to local JSON:", err);
+      }
+    }
     const data = ensureDbExists();
     const idx = data.assessmentQuestions.findIndex((q) => q.id === question.id);
     if (idx >= 0) {
@@ -4018,6 +4554,14 @@ export const db = {
   },
 
   async saveAssessmentQuestions(questions: AssessmentQuestion[]): Promise<void> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        await supabaseDb.saveAssessmentQuestions(questions);
+        return;
+      } catch (err) {
+        console.error("Supabase saveAssessmentQuestions failed, falling back to local JSON:", err);
+      }
+    }
     const data = ensureDbExists();
     for (const q of questions) {
       const idx = data.assessmentQuestions.findIndex((x) => x.id === q.id);
@@ -4031,16 +4575,37 @@ export const db = {
   },
 
   async getAssessmentConfigs(): Promise<AssessmentConfig[]> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getAssessmentConfigs();
+      } catch (err) {
+        console.error("Supabase getAssessmentConfigs failed, falling back to local JSON:", err);
+      }
+    }
     const data = ensureDbExists();
     return (data.assessmentConfigs || []).filter((c) => c.isActive);
   },
 
   async getAssessmentConfigById(id: string): Promise<AssessmentConfig | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getAssessmentConfigById(id);
+      } catch (err) {
+        console.error("Supabase getAssessmentConfigById failed, falling back to local JSON:", err);
+      }
+    }
     const data = ensureDbExists();
     return (data.assessmentConfigs || []).find((c) => c.id === id) || null;
   },
 
   async saveAssessmentConfig(config: AssessmentConfig): Promise<AssessmentConfig> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.saveAssessmentConfig(config);
+      } catch (err) {
+        console.error("Supabase saveAssessmentConfig failed, falling back to local JSON:", err);
+      }
+    }
     const data = ensureDbExists();
     const idx = data.assessmentConfigs.findIndex((c) => c.id === config.id);
     if (idx >= 0) {
@@ -4053,16 +4618,37 @@ export const db = {
   },
 
   async getAssessmentAttemptsByStudent(studentId: string): Promise<AssessmentAttempt[]> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getAssessmentAttemptsByStudent(studentId);
+      } catch (err) {
+        console.error("Supabase getAssessmentAttemptsByStudent failed, falling back to local JSON:", err);
+      }
+    }
     const data = ensureDbExists();
     return (data.assessmentAttempts || []).filter((a) => a.studentId === studentId);
   },
 
   async getAssessmentAttemptById(id: string): Promise<AssessmentAttempt | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getAssessmentAttemptById(id);
+      } catch (err) {
+        console.error("Supabase getAssessmentAttemptById failed, falling back to local JSON:", err);
+      }
+    }
     const data = ensureDbExists();
     return (data.assessmentAttempts || []).find((a) => a.id === id) || null;
   },
 
   async getActiveAssessmentAttempt(studentId: string, configId: string): Promise<AssessmentAttempt | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getActiveAssessmentAttempt(studentId, configId);
+      } catch (err) {
+        console.error("Supabase getActiveAssessmentAttempt failed, falling back to local JSON:", err);
+      }
+    }
     const data = ensureDbExists();
     return (data.assessmentAttempts || []).find(
       (a) => a.studentId === studentId && a.configId === configId && a.status === "in_progress"
@@ -4070,6 +4656,13 @@ export const db = {
   },
 
   async saveAssessmentAttempt(attempt: AssessmentAttempt): Promise<AssessmentAttempt> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.saveAssessmentAttempt(attempt);
+      } catch (err) {
+        console.error("Supabase saveAssessmentAttempt failed, falling back to local JSON:", err);
+      }
+    }
     const data = ensureDbExists();
     const idx = data.assessmentAttempts.findIndex((a) => a.id === attempt.id);
     if (idx >= 0) {
@@ -4082,11 +4675,25 @@ export const db = {
   },
 
   async getAyushSkillPassport(studentId: string): Promise<AyushSkillPassport | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getAyushSkillPassport(studentId);
+      } catch (err) {
+        console.error("Supabase getAyushSkillPassport failed, falling back to local JSON:", err);
+      }
+    }
     const data = ensureDbExists();
     return (data.ayushSkillPassports || []).find((p) => p.studentId === studentId) || null;
   },
 
   async saveAyushSkillPassport(passport: AyushSkillPassport): Promise<AyushSkillPassport> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.saveAyushSkillPassport(passport);
+      } catch (err) {
+        console.error("Supabase saveAyushSkillPassport failed, falling back to local JSON:", err);
+      }
+    }
     const data = ensureDbExists();
     if (!data.ayushSkillPassports) data.ayushSkillPassports = [];
     const idx = data.ayushSkillPassports.findIndex((p) => p.studentId === passport.studentId);

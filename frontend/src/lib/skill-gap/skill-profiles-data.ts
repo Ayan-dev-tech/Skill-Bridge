@@ -1,1441 +1,882 @@
 /**
- * Skill Bridge — Comprehensive Target Skill Profiles Catalog
- * Extensible matrix connecting technical domains & niches to required industry competencies
+ * Skill Bridge — Comprehensive Target Skill Profiles Catalog (AYUSH Healthcare)
+ * Extensible matrix connecting AYUSH systems & clinical niches to required competencies
  * and mapped Knowledge Test concept tags.
  */
 
 import { TargetSkillProfile } from "./types";
 
 export const TARGET_SKILL_PROFILES: Record<string, TargetSkillProfile> = {
-  // ==========================================================================
-  // 1. CYBERSECURITY & DEFENSE
-  // ==========================================================================
-  "app-sec": {
-    nicheId: "app-sec",
-    nicheTitle: "Application Security & Vulnerability Research",
-    domainId: "security",
-    domainName: "Cybersecurity & Defense",
-    version: "1.0",
-    description:
-      "Core capabilities required to audit source code, identify input validation weaknesses, and harden production APIs.",
-    requiredSkills: [
+  "ayush-clinical-research": {
+    "nicheId": "ayush-clinical-research",
+    "nicheTitle": "AYUSH Clinical Research",
+    "domainId": "ayurveda",
+    "domainName": "Ayurveda & Integrative Healthcare",
+    "version": "1.0",
+    "description": "Specialized competency profile for conducting and evaluating GCP-compliant clinical trials, pharmacovigilance surveillance, and evidence synthesis in AYUSH medicine.",
+    "requiredSkills": [
       {
-        skillId: "auth-identity",
-        skillName: "Authentication & Identity Management",
-        category: "Identity & Access",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Multi-factor verification, cryptographic session tokens, JWT structure validation, and secure cookie storage.",
-        relatedConceptTags: [
-          "mfa-principles",
-          "jwt-structure",
-          "session-tokens",
-          "oauth2-grant-types",
-          "password-hashing",
-        ],
+        "skillId": "comp-ayush-gcp",
+        "skillName": "AYUSH Good Clinical Practice (GCP) & Ethical Compliance",
+        "category": "Regulatory & Ethics",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Applying ICMR-AYUSH ethical guidelines, CTRI trial registration, informed consent protocols, and GCP auditing.",
+        "relatedConceptTags": ["ayush-gcp", "ctri-registration", "clinical-ethics"]
       },
       {
-        skillId: "web-security",
-        skillName: "Web Security & OWASP Top 10",
-        category: "Threat Mitigation",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Identifying and mitigating injection vulnerabilities (SQLi, NoSQLi), cross-site scripting (XSS), and CSRF.",
-        relatedConceptTags: [
-          "sql-injection",
-          "stored-xss",
-          "csrf-tokens",
-          "same-origin-policy",
-          "content-security-policy",
-        ],
+        "skillId": "comp-ayush-trial-design",
+        "skillName": "Holistic & Adaptive Clinical Trial Design",
+        "category": "Research Methodology",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Designing whole-system clinical trials and randomized controlled trials adapted to traditional AYUSH therapies.",
+        "relatedConceptTags": ["rct-design", "adaptive-trials", "whole-system-research"]
       },
       {
-        skillId: "secure-coding",
-        skillName: "Secure Coding & Input Sanitization",
-        category: "Software Hardening",
-        importance: "essential",
-        targetLevel: "Proficient",
-        description:
-          "Defensive programming, parameterized queries, strict schema validation, and memory safety checks.",
-        relatedConceptTags: [
-          "input-validation",
-          "parameterized-queries",
-          "buffer-overflow",
-          "type-confusion",
-          "deserialization-flaws",
-        ],
+        "skillId": "comp-ayush-pvpi",
+        "skillName": "Pharmacovigilance & Adverse Drug Reaction (ADR) Surveillance",
+        "category": "Pharmacovigilance",
+        "importance": "essential",
+        "targetLevel": "Competent",
+        "description": "Identifying, documenting, causality-assessing, and reporting adverse drug reactions under the NPvP-ASU&H framework.",
+        "relatedConceptTags": ["adr-reporting", "pvpi", "causality-assessment"]
       },
       {
-        skillId: "api-security",
-        skillName: "API Security & Rate Limiting",
-        category: "Architecture",
-        importance: "important",
-        targetLevel: "Proficient",
-        description:
-          "Enforcing broken object-level authorization (BOLA) defenses, token expiry, and gateway throttling.",
-        relatedConceptTags: [
-          "bola-mitigation",
-          "rate-limiting",
-          "cors-configuration",
-          "api-gateway-auth",
-        ],
+        "skillId": "comp-ayush-herb-drug",
+        "skillName": "Herb-Drug Interaction & Safety Profiling",
+        "category": "Pharmacology & Safety",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Evaluating cytochrome P450 interactions, metabolic clearance, and contraindications between ASU and conventional drugs.",
+        "relatedConceptTags": ["herb-drug-interaction", "cyp-inhibition", "pharmacokinetics"]
       },
       {
-        skillId: "vuln-assessment",
-        skillName: "Vulnerability Research & Threat Modeling",
-        category: "Analysis",
-        importance: "important",
-        targetLevel: "Proficient",
-        description:
-          "Deconstructing software attack surfaces, CVSS scoring, and root-cause remediation.",
-        relatedConceptTags: [
-          "threat-modeling",
-          "cvss-metrics",
-          "static-analysis",
-          "dynamic-analysis",
-        ],
+        "skillId": "comp-ayush-bioethics",
+        "skillName": "Institutional Ethics Committee (IEC) Dossier Preparation",
+        "category": "Regulatory & Ethics",
+        "importance": "important",
+        "targetLevel": "Competent",
+        "description": "Drafting patient information sheets, investigator brochures, and submissions for institutional ethics review.",
+        "relatedConceptTags": ["iec-submission", "investigator-brochure", "informed-consent"]
       },
       {
-        skillId: "cryptography-basics",
-        skillName: "Applied Cryptography & TLS",
-        category: "Cryptographic Controls",
-        importance: "recommended",
-        targetLevel: "Strong Foundation",
-        description:
-          "Symmetric vs. asymmetric cipher selection, digital certificates, and transport layer security.",
-        relatedConceptTags: [
-          "symmetric-vs-asymmetric",
-          "tls-handshake",
-          "public-key-infrastructure",
-          "hashing-algorithms",
-        ],
+        "skillId": "comp-ayush-data-mgmt",
+        "skillName": "Electronic Data Capture & Clinical Data Management (CDM)",
+        "category": "Data Science & Informatics",
+        "importance": "important",
+        "targetLevel": "Competent",
+        "description": "Designing electronic Case Report Forms (eCRFs) and managing clinical trial databases compliant with Ayush Grid.",
+        "relatedConceptTags": ["edc-ecrf", "clinical-data-management", "ayush-grid"]
       },
-    ],
+      {
+        "skillId": "comp-ayush-standardization",
+        "skillName": "Investigational Formulation Standardization & Monograph Verification",
+        "category": "Pharmacopoeia & Standardization",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Verifying botanical authentication, phytochemical marker assay (HPTLC), and pharmacopoeial limits per API/UPI.",
+        "relatedConceptTags": ["botanical-authentication", "hptlc-fingerprinting", "api-monograph"]
+      },
+      {
+        "skillId": "comp-ayush-biostats",
+        "skillName": "Biostatistical Analysis & Evidence Synthesis",
+        "category": "Biostatistics",
+        "importance": "important",
+        "targetLevel": "Competent",
+        "description": "Performing parametric/non-parametric statistics, sample size calculation, meta-analyses, and systematic reviews.",
+        "relatedConceptTags": ["biostatistics", "sample-size", "systematic-review"]
+      },
+      {
+        "skillId": "comp-ayush-samhita-epistemology",
+        "skillName": "Classical Epistemological Correlation (Pramana Vijnana)",
+        "category": "Classical Theory",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Correlating classical Aptopadesha, Pratyaksha, and Anumana evidence models with modern evidence hierarchies.",
+        "relatedConceptTags": ["pramana-vijnana", "samhita-adhyayan", "evidence-hierarchy"]
+      }
+    ]
   },
-
-  "soc-threat": {
-    nicheId: "soc-threat",
-    nicheTitle: "Network Defense & Threat Operations (SOC)",
-    domainId: "security",
-    domainName: "Cybersecurity & Defense",
-    version: "1.0",
-    description:
-      "Operational competencies required to monitor intrusion signals, analyze packet captures, and coordinate incident triage.",
-    requiredSkills: [
+  "kayachikitsa": {
+    "nicheId": "kayachikitsa",
+    "nicheTitle": "Clinical Kayachikitsa & Differential Diagnosis",
+    "domainId": "ayurveda",
+    "domainName": "Ayurveda",
+    "version": "1.0",
+    "description": "Core capabilities required for bedside internal medicine, systemic pathology diagnosis (Samprapti Vighatana), and treating complex chronic disorders.",
+    "requiredSkills": [
       {
-        skillId: "network-traffic",
-        skillName: "Network Traffic & Packet Analysis",
-        category: "Network Defense",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Deep packet inspection, protocol disassembly (TCP/IP, DNS, TLS), and anomaly egress detection.",
-        relatedConceptTags: [
-          "tcp-handshake",
-          "dns-tunnels",
-          "firewall-basics",
-          "packet-inspection",
-          "pcap-analysis",
-        ],
+        "skillId": "nadi-pariksha",
+        "skillName": "Nadi Pariksha (Pulse Diagnostics)",
+        "category": "Clinical Diagnostics",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Evaluating classical pulse gati, rhythm, speed, and doshic predominance.",
+        "relatedConceptTags": [
+          "nadi-pariksha-gati",
+          "tridosha-panchamahabhuta",
+          "dosha-sthana-pitta"
+        ]
       },
       {
-        skillId: "siem-telemetry",
-        skillName: "Log Telemetry & SIEM Triage",
-        category: "Operations",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Correlating auth logs, syslog streams, and security event indicators across endpoint agents.",
-        relatedConceptTags: [
-          "siem-correlation",
-          "event-log-analysis",
-          "syslog-parsing",
-          "auditd-telemetry",
-        ],
+        "skillId": "samprapti-vighatana",
+        "skillName": "Samprapti Vighatana (Pathogenesis Deconstruction)",
+        "category": "Clinical Pathology",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Mapping Sthanasamshraya, Dosha-Dushya Sammurchana, and breaking disease etiology.",
+        "relatedConceptTags": [
+          "shat-kriya-kala-stages",
+          "ama-clinical-signs"
+        ]
       },
       {
-        skillId: "incident-response",
-        skillName: "Incident Containment & Response",
-        category: "Incident Management",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Executing containment playbooks, forensic isolation, and root-cause incident documentation.",
-        relatedConceptTags: [
-          "containment-strategies",
-          "evidence-preservation",
-          "incident-lifecycle",
-          "playbook-execution",
-        ],
+        "skillId": "shamana-chikitsa",
+        "skillName": "Shamana Chikitsa & Dosage Formulation",
+        "category": "Therapeutics",
+        "importance": "essential",
+        "targetLevel": "Strong Foundation",
+        "description": "Selecting classical polyherbal formulations, churnas, kwathas, and vehicle adjuvants.",
+        "relatedConceptTags": [
+          "classical-triphala",
+          "shadrasa-actions",
+          "takra-grahani-chikitsa"
+        ]
       },
       {
-        skillId: "intrusion-detection",
-        skillName: "Intrusion Detection & Suricata/Snort Rules",
-        category: "Detection Engineering",
-        importance: "important",
-        targetLevel: "Proficient",
-        description:
-          "Configuring signature-based and anomaly-based IDS/IPS sensors across perimeter ingress.",
-        relatedConceptTags: [
-          "snort-rules",
-          "ids-vs-ips",
-          "signature-matching",
-          "behavioral-heuristics",
-        ],
-      },
-      {
-        skillId: "malware-triage",
-        skillName: "Malware Behavioral Triage",
-        category: "Threat Analysis",
-        importance: "recommended",
-        targetLevel: "Developing",
-        description:
-          "Dynamic sandbox analysis, persistence mechanism identification, and indicator extraction (IoCs).",
-        relatedConceptTags: [
-          "iocs-extraction",
-          "sandbox-analysis",
-          "persistence-mechanisms",
-          "ransomware-indicators",
-        ],
-      },
-    ],
+        "skillId": "abdm-clinical-documentation",
+        "skillName": "Ayush Grid & ABDM Electronic Health Records",
+        "category": "Digital Healthcare",
+        "importance": "essential",
+        "targetLevel": "Strong Foundation",
+        "description": "Standardized clinical documentation conforming to Ayush NAMASTE portal terminology.",
+        "relatedConceptTags": [
+          "ayush-regulatory-api-standards"
+        ]
+      }
+    ]
   },
-
-  "pentest-offensive": {
-    nicheId: "pentest-offensive",
-    nicheTitle: "Penetration Testing & Red Teaming",
-    domainId: "security",
-    domainName: "Cybersecurity & Defense",
-    version: "1.0",
-    description:
-      "Offensive tactics, vulnerability chain exploitation, privilege escalation, and black-box security auditing.",
-    requiredSkills: [
+  "panchakarma": {
+    "nicheId": "panchakarma",
+    "nicheTitle": "Panchakarma & Clinical Detoxification Protocols",
+    "domainId": "ayurveda",
+    "domainName": "Ayurveda",
+    "version": "1.0",
+    "description": "Clinical expertise in administering Purvakarma, Pradhanakarma (five cleansing procedures), and Paschatkarma rehabilitation.",
+    "requiredSkills": [
       {
-        skillId: "web-exploitation",
-        skillName: "Web Application Penetration Testing",
-        category: "Exploitation",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Auditing client/server interfaces, blind SQL injection, server-side template injection (SSTI), and SSRF.",
-        relatedConceptTags: [
-          "blind-sqli",
-          "ssrf-exploitation",
-          "xxe-injection",
-          "ssti-flaws",
-          "jwt-tampering",
-        ],
+        "skillId": "snehana-swedana",
+        "skillName": "Snehana & Swedana Preparatory Protocols",
+        "category": "Purvakarma",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Graduated internal oleation dosing, assessing Samyak Snigdha signs, and steam sudation.",
+        "relatedConceptTags": [
+          "purvakarma-rationale",
+          "samyak-snigdha-lakshanas"
+        ]
       },
       {
-        skillId: "priv-esc",
-        skillName: "Privilege Escalation & OS Security",
-        category: "Post-Exploitation",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Exploiting misconfigured SUID binaries, kernel vulnerabilities, and Windows token impersonation.",
-        relatedConceptTags: [
-          "suid-misconfiguration",
-          "sudo-privileges",
-          "token-impersonation",
-          "service-permissions",
-        ],
+        "skillId": "basti-therapy",
+        "skillName": "Basti Therapy Protocol & Preparation",
+        "category": "Pradhanakarma",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Compounding Niruha and Anuvasana bastis, temperature control, and administering retention enemas.",
+        "relatedConceptTags": [
+          "basti-vata-panchakarma",
+          "subdoshas-vata-apana"
+        ]
       },
       {
-        skillId: "recon-enumeration",
-        skillName: "Reconnaissance & Service Enumeration",
-        category: "Information Gathering",
-        importance: "essential",
-        targetLevel: "Proficient",
-        description:
-          "Active/passive network scanning (Nmap), banner grabbing, sub-domain discovery, and ASN mapping.",
-        relatedConceptTags: [
-          "port-scanning",
-          "nmap-flags",
-          "dns-enumeration",
-          "subdomain-takeover",
-        ],
+        "skillId": "virechana-vamana",
+        "skillName": "Virechana & Vamana Management",
+        "category": "Pradhanakarma",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Managing dosage, monitoring Vega counts (bouts), and preventing complications.",
+        "relatedConceptTags": [
+          "purvakarma-rationale",
+          "shat-kriya-kala-stages"
+        ]
       },
       {
-        skillId: "network-pivoting",
-        skillName: "Network Pivoting & Lateral Movement",
-        category: "Tactics",
-        importance: "important",
-        targetLevel: "Proficient",
-        description:
-          "SSH port forwarding, SOCKS proxy tunneling, and Active Directory Kerberos delegation abuse.",
-        relatedConceptTags: [
-          "ssh-tunneling",
-          "socks-proxies",
-          "kerberoasting",
-          "pass-the-hash",
-        ],
-      },
-      {
-        skillId: "exploit-dev",
-        skillName: "Exploit Modification & Scripting",
-        category: "Development",
-        importance: "recommended",
-        targetLevel: "Developing",
-        description:
-          "Customizing proof-of-concept scripts in Python/Bash to bypass defensive filters.",
-        relatedConceptTags: [
-          "buffer-overflow",
-          "shellcode-execution",
-          "waf-evasion",
-          "poc-scripting",
-        ],
-      },
-    ],
+        "skillId": "samsarjana-krama",
+        "skillName": "Samsarjana Krama Dietetic Rehabilitation",
+        "category": "Paschatkarma",
+        "importance": "essential",
+        "targetLevel": "Strong Foundation",
+        "description": "Sequential administration of Peya, Vilepi, and Yusha to rekindle digestive Agni.",
+        "relatedConceptTags": [
+          "samsarjana-krama-sequence",
+          "agni-metabolism"
+        ]
+      }
+    ]
   },
-
-  "cloud-iam": {
-    nicheId: "cloud-iam",
-    nicheTitle: "Cloud Security Architecture & Zero-Trust IAM",
-    domainId: "security",
-    domainName: "Cybersecurity & Defense",
-    version: "1.0",
-    description:
-      "Enterprise cloud posture governance, least-privilege identity access management, and infrastructure zero-trust controls.",
-    requiredSkills: [
+  "dravyaguna-pharma": {
+    "nicheId": "dravyaguna-pharma",
+    "nicheTitle": "Dravyaguna & Botanical Pharmacognosy",
+    "domainId": "ayurveda",
+    "domainName": "Ayurveda",
+    "version": "1.0",
+    "description": "Botanical pharmacognosy, organoleptic authentication, Rasa-Panchaka evaluation, and herbal monographs.",
+    "requiredSkills": [
       {
-        skillId: "iam-least-privilege",
-        skillName: "IAM Policy Design & Least Privilege",
-        category: "Identity Governance",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Constructing restrictive JSON IAM policies, role assumption boundaries, and service principal isolation.",
-        relatedConceptTags: [
-          "iam-role-assumption",
-          "least-privilege",
-          "permission-boundaries",
-          "service-accounts",
-        ],
+        "skillId": "botanical-authentication",
+        "skillName": "Raw Drug Botanical Authentication",
+        "category": "Pharmacognosy",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Microscopic, macro-morphological, and macroscopic evaluation of raw medicinal plants.",
+        "relatedConceptTags": [
+          "classical-triphala",
+          "medhya-rasayana-brahmi"
+        ]
       },
       {
-        skillId: "zero-trust-arch",
-        skillName: "Zero-Trust Architecture",
-        category: "Cloud Architecture",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Continuous verification, device posture gating, micro-segmentation, and ephemeral credentials.",
-        relatedConceptTags: [
-          "continuous-verification",
-          "micro-segmentation",
-          "ephemeral-tokens",
-          "mutual-tls",
-        ],
+        "skillId": "rasa-panchaka-analysis",
+        "skillName": "Rasa Panchaka Pharmacodynamic Profiling",
+        "category": "Pharmacology",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Evaluating taste (Rasa), attributes (Guna), potency (Veerya), and post-digestive effect (Vipaka).",
+        "relatedConceptTags": [
+          "shadrasa-actions",
+          "prabhava-pharmacology"
+        ]
       },
       {
-        skillId: "cloud-storage-security",
-        skillName: "Cloud Storage & Database Encryption",
-        category: "Data Security",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Enforcing envelope encryption with KMS, preventing public bucket exposure, and database at-rest encryption.",
-        relatedConceptTags: [
-          "kms-envelope-encryption",
-          "bucket-policies",
-          "data-at-rest-encryption",
-          "key-rotation",
-        ],
-      },
-      {
-        skillId: "cloud-compliance",
-        skillName: "Cloud Security Posture & Compliance",
-        category: "Governance",
-        importance: "important",
-        targetLevel: "Proficient",
-        description:
-          "Automated audit compliance (SOC2, ISO27001), drift detection, and cloud trail monitoring.",
-        relatedConceptTags: [
-          "cloudtrail-auditing",
-          "drift-detection",
-          "security-benchmarks",
-          "compliance-rules",
-        ],
-      },
-    ],
+        "skillId": "phytochemistry-hplc",
+        "skillName": "Phytochemical Assay & TLC/HPLC Fingerprinting",
+        "category": "Laboratory Standardization",
+        "importance": "essential",
+        "targetLevel": "Strong Foundation",
+        "description": "High performance thin-layer chromatography and quantification of active marker compounds.",
+        "relatedConceptTags": [
+          "ayush-regulatory-api-standards"
+        ]
+      }
+    ]
   },
-
-  // ==========================================================================
-  // 2. AI / MACHINE LEARNING
-  // ==========================================================================
-  "cv-deeplearning": {
-    nicheId: "cv-deeplearning",
-    nicheTitle: "Computer Vision & Deep Learning Engineering",
-    domainId: "ai-ml",
-    domainName: "AI / Machine Learning",
-    version: "1.0",
-    description:
-      "Designing convolutional and attention backbones for visual recognition, image segmentation, and edge model inference.",
-    requiredSkills: [
+  "rasashastra-formulation": {
+    "nicheId": "rasashastra-formulation",
+    "nicheTitle": "Rasa Shastra & Classical Formulation Standards",
+    "domainId": "ayurveda",
+    "domainName": "Ayurveda",
+    "version": "1.0",
+    "description": "Metallic mineral processing, classical calcinations (Marana), Bhasma quality testing, and GMP compliance.",
+    "requiredSkills": [
       {
-        skillId: "neural-architectures",
-        skillName: "Neural Architecture Design (CNNs & ViTs)",
-        category: "Deep Learning",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Building multi-layer convolutional networks, residual skip connections, and vision transformer tokenization.",
-        relatedConceptTags: [
-          "convolution-kernel",
-          "residual-connections",
-          "vision-transformer",
-          "pooling-layers",
-        ],
+        "skillId": "mineral-shodhana",
+        "skillName": "Mineral & Heavy Metal Shodhana",
+        "category": "Processing",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Classical purification of mercury (Parada), sulfur (Gandhaka), and mineral ores.",
+        "relatedConceptTags": [
+          "rasashastra-marana-nanotech"
+        ]
       },
       {
-        skillId: "image-preprocessing",
-        skillName: "Image Preprocessing & Augmentation",
-        category: "Data Engineering",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Geometric transforms, photometric normalizations, cutout augmentation, and tensor batch pipelines.",
-        relatedConceptTags: [
-          "image-normalization",
-          "affine-transforms",
-          "tensor-broadcasting",
-          "batch-augmentation",
-        ],
+        "skillId": "bhasma-pariksha",
+        "skillName": "Bhasma Standardized Quality Testing",
+        "category": "Quality Control",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Classical Varitara, Rekhapurnatva, and Apunarbhava verification alongside modern XRD/SEM assays.",
+        "relatedConceptTags": [
+          "bhasma-pariksha-varitara",
+          "rasashastra-marana-nanotech"
+        ]
       },
       {
-        skillId: "model-optimization",
-        skillName: "Model Training & Optimization",
-        category: "Model Engineering",
-        importance: "essential",
-        targetLevel: "Proficient",
-        description:
-          "Adaptive optimizers (AdamW), learning rate schedules, gradient clipping, and regularization (Dropout).",
-        relatedConceptTags: [
-          "adamw-optimizer",
-          "learning-rate-decay",
-          "dropout-regularization",
-          "gradient-clipping",
-        ],
-      },
-      {
-        skillId: "loss-functions",
-        skillName: "Loss Functions & Evaluation Metrics",
-        category: "Evaluation",
-        importance: "important",
-        targetLevel: "Proficient",
-        description:
-          "Cross-entropy vs focal loss, IoU calculation, precision-recall curves, and mAP evaluation.",
-        relatedConceptTags: [
-          "focal-loss",
-          "iou-calculation",
-          "map-evaluation",
-          "confusion-matrix",
-        ],
-      },
-      {
-        skillId: "edge-inference",
-        skillName: "Edge Model Deployment & Quantization",
-        category: "Deployment",
-        importance: "recommended",
-        targetLevel: "Developing",
-        description:
-          "ONNX export, INT8 post-training quantization, and low-latency inference runtimes (TensorRT).",
-        relatedConceptTags: [
-          "int8-quantization",
-          "onnx-runtime",
-          "tensorrt-optimization",
-          "edge-compilation",
-        ],
-      },
-    ],
+        "skillId": "gmp-ayush-manufacturing",
+        "skillName": "Schedule T / WHO-GMP Formulation Standards",
+        "category": "Industrial Standards",
+        "importance": "essential",
+        "targetLevel": "Strong Foundation",
+        "description": "Manufacturing standards, batch records, heavy metal testing, and microbial load limits.",
+        "relatedConceptTags": [
+          "ayush-regulatory-api-standards"
+        ]
+      }
+    ]
   },
-
-  "nlp-llm": {
-    nicheId: "nlp-llm",
-    nicheTitle: "Language Models & Applied NLP Systems",
-    domainId: "ai-ml",
-    domainName: "AI / Machine Learning",
-    version: "1.0",
-    description:
-      "Core competencies in tokenization, dense semantic embeddings, transformer self-attention, and RAG pipelines.",
-    requiredSkills: [
+  "clinical-yoga-therapy": {
+    "nicheId": "clinical-yoga-therapy",
+    "nicheTitle": "Clinical Yoga Therapy & Stress Physiology",
+    "domainId": "yoga-naturopathy",
+    "domainName": "Yoga & Naturopathy",
+    "version": "1.0",
+    "description": "Therapeutic yoga prescriptions, autonomic nervous system modulation, and psychosomatic rehabilitation.",
+    "requiredSkills": [
       {
-        skillId: "tokenization-embeddings",
-        skillName: "Tokenization & Word Embeddings",
-        category: "NLP Foundations",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Byte-Pair Encoding (BPE), SentencePiece, dense vector embeddings, and cosine similarity calculations.",
-        relatedConceptTags: [
-          "bpe-tokenization",
-          "vector-embeddings",
-          "cosine-similarity",
-          "vocab-size-tradeoffs",
-        ],
+        "skillId": "pranayama-physiology",
+        "skillName": "Therapeutic Pranayama & Breathwork",
+        "category": "Respiratory Physiology",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Slow paced diaphragmatic breathing, Nadishodhana, and vagal autonomic modulation.",
+        "relatedConceptTags": [
+          "sheetali-cooling-pranayama",
+          "vagal-activation-pranayama",
+          "ida-pingala-autonomic"
+        ]
       },
       {
-        skillId: "transformer-attention",
-        skillName: "Transformer Attention Mechanisms",
-        category: "Architecture",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Scaled dot-product attention, multi-head projections, positional encoding, and decoder autoregression.",
-        relatedConceptTags: [
-          "scaled-dot-product",
-          "multi-head-attention",
-          "positional-encoding",
-          "kv-caching",
-        ],
+        "skillId": "restorative-asana",
+        "skillName": "Restorative Postural Therapeutics",
+        "category": "Biomechanics",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Supported asanas, pelvic alignment, spinal decompression, and cardiovascular relief.",
+        "relatedConceptTags": [
+          "viparita-karani-cardiovascular",
+          "yoga-therapy-hpa-axis"
+        ]
       },
       {
-        skillId: "rag-pipelines",
-        skillName: "Retrieval-Augmented Generation (RAG)",
-        category: "Applied Systems",
-        importance: "essential",
-        targetLevel: "Proficient",
-        description:
-          "Semantic chunking, dense vector retrieval, hybrid BM25 search, cross-encoder re-ranking, and hallucination reduction.",
-        relatedConceptTags: [
-          "semantic-chunking",
-          "vector-indexing",
-          "hybrid-search",
-          "cross-encoder-reranking",
-        ],
-      },
-      {
-        skillId: "prompt-finetuning",
-        skillName: "Prompt Engineering & LoRA Fine-Tuning",
-        category: "Tuning & Adaptation",
-        importance: "important",
-        targetLevel: "Proficient",
-        description:
-          "Structured output generation, few-shot prompting, parameter-efficient fine-tuning (LoRA), and dataset curation.",
-        relatedConceptTags: [
-          "structured-json-prompting",
-          "lora-adapters",
-          "instruction-tuning",
-          "system-prompts",
-        ],
-      },
-      {
-        skillId: "llm-evaluation",
-        skillName: "LLM Evaluation & Guardrails",
-        category: "Safety & Reliability",
-        importance: "recommended",
-        targetLevel: "Developing",
-        description:
-          "BLEU/ROUGE metrics, LLM-as-a-judge benchmarking, prompt injection defenses, and moderation filters.",
-        relatedConceptTags: [
-          "prompt-injection-defense",
-          "llm-judge-benchmarking",
-          "hallucination-detection",
-          "safety-guardrails",
-        ],
-      },
-    ],
+        "skillId": "yoga-nidra-mindfulness",
+        "skillName": "Clinical Yoga Nidra & Psychosomatic Relaxation",
+        "category": "Mind-Body Medicine",
+        "importance": "essential",
+        "targetLevel": "Strong Foundation",
+        "description": "Guided alpha/theta brainwave entrainment, body scanning, and cortisol reduction.",
+        "relatedConceptTags": [
+          "patanjali-definition-yoga",
+          "yoga-therapy-hpa-axis"
+        ]
+      }
+    ]
   },
-
-  "mlops": {
-    nicheId: "mlops",
-    nicheTitle: "MLOps & Production ML Infrastructure",
-    domainId: "ai-ml",
-    domainName: "AI / Machine Learning",
-    version: "1.0",
-    description:
-      "Bridging machine learning models with reliable production pipelines, automated retraining, and low-latency inference.",
-    requiredSkills: [
+  "nature-cure-hydrotherapy": {
+    "nicheId": "nature-cure-hydrotherapy",
+    "nicheTitle": "Hydrotherapy & Naturopathic Modalities",
+    "domainId": "yoga-naturopathy",
+    "domainName": "Yoga & Naturopathy",
+    "version": "1.0",
+    "description": "Hydro-thermal vascular therapies, compresses, mud packs, and natural elimination stimulation.",
+    "requiredSkills": [
       {
-        skillId: "model-versioning",
-        skillName: "Model Registry & Artifact Versioning",
-        category: "ML Governance",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Tracking training hyper-parameters, data lineage, and model artifacts with MLflow or DVC.",
-        relatedConceptTags: [
-          "mlflow-tracking",
-          "data-lineage",
-          "model-registry",
-          "reproducible-training",
-        ],
+        "skillId": "hydrotherapy-techniques",
+        "skillName": "Clinical Hydrotherapy & Contrast Applications",
+        "category": "Physical Modalities",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Spinal sprays, neutral baths, contrast foot baths, and vascular flush protocols.",
+        "relatedConceptTags": [
+          "hydrotherapy-cold-reaction",
+          "neutral-bath-temperature",
+          "contrast-hydrotherapy-flush"
+        ]
       },
       {
-        skillId: "pipeline-orchestration",
-        skillName: "ML Pipeline Orchestration",
-        category: "Pipelines",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Authoring DAGs, step caching, and dependency management with Airflow, Kubeflow, or Prefect.",
-        relatedConceptTags: [
-          "airflow-dags",
-          "kubeflow-pipelines",
-          "step-caching",
-          "distributed-runs",
-        ],
+        "skillId": "pelotherapy-mud",
+        "skillName": "Pelotherapy & Therapeutic Mud Packaging",
+        "category": "Physical Modalities",
+        "importance": "essential",
+        "targetLevel": "Strong Foundation",
+        "description": "Formulating abdominal packs, facial packs, and spinal mud applications for heat reduction.",
+        "relatedConceptTags": [
+          "mud-pack-abdomen-naturopathy"
+        ]
       },
       {
-        skillId: "model-serving",
-        skillName: "Low-Latency Model Serving",
-        category: "Infrastructure",
-        importance: "essential",
-        targetLevel: "Proficient",
-        description:
-          "Containerized model servers (Triton, TorchServe), dynamic batching, and gRPC streaming inference.",
-        relatedConceptTags: [
-          "triton-inference",
-          "dynamic-batching",
-          "grpc-streaming",
-          "gpu-concurrency",
-        ],
-      },
-      {
-        skillId: "drift-monitoring",
-        skillName: "Data Drift & Performance Monitoring",
-        category: "Observability",
-        importance: "important",
-        targetLevel: "Proficient",
-        description:
-          "Statistical distribution checks (KS-test, PSI), prediction latency tracking, and automated retraining triggers.",
-        relatedConceptTags: [
-          "ks-test-drift",
-          "population-stability-index",
-          "retraining-triggers",
-          "prediction-latency",
-        ],
-      },
-    ],
+        "skillId": "heliotherapy-chromotherapy",
+        "skillName": "Heliotherapy & Solar Radiation Regulation",
+        "category": "Environmental Medicine",
+        "importance": "essential",
+        "targetLevel": "Strong Foundation",
+        "description": "Graduated sunbaths, ultraviolet modulation, and chromatic visual relaxation.",
+        "relatedConceptTags": [
+          "naturopathy-toxin-accumulation"
+        ]
+      }
+    ]
   },
-
-  "data-eng": {
-    nicheId: "data-eng",
-    nicheTitle: "Large-Scale Data Engineering & Analytics",
-    domainId: "ai-ml",
-    domainName: "AI / Machine Learning",
-    version: "1.0",
-    description:
-      "Architecting distributed ETL transformations, lakehouse storage formats, and real-time streaming telemetry.",
-    requiredSkills: [
+  "dietetics-fasting": {
+    "nicheId": "dietetics-fasting",
+    "nicheTitle": "Clinical Dietetics & Fasting Therapy",
+    "domainId": "yoga-naturopathy",
+    "domainName": "Yoga & Naturopathy",
+    "version": "1.0",
+    "description": "Therapeutic intermittent and water fasting, alkaline dietetics, and gut microbiome restoration.",
+    "requiredSkills": [
       {
-        skillId: "distributed-processing",
-        skillName: "Distributed Data Processing (Apache Spark)",
-        category: "Big Data",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "RDD vs DataFrame APIs, lazy evaluation, partition shuffles, and broadcast joins.",
-        relatedConceptTags: [
-          "spark-dataframes",
-          "lazy-evaluation",
-          "shuffle-partitions",
-          "broadcast-joins",
-        ],
+        "skillId": "fasting-supervision",
+        "skillName": "Clinical Fasting Protocol & Vital Sign Monitoring",
+        "category": "Therapeutic Fasting",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Supervising water/juice fasts, monitoring electrolytes, and safely breaking the fast.",
+        "relatedConceptTags": [
+          "breaking-fast-naturopathy",
+          "autophagy-fasting-physiology"
+        ]
       },
       {
-        skillId: "streaming-pipelines",
-        skillName: "Real-Time Streaming (Apache Kafka)",
-        category: "Event Streaming",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Partition offsets, consumer groups, exactly-once processing semantics, and schema registries.",
-        relatedConceptTags: [
-          "kafka-partitions",
-          "consumer-groups",
-          "exactly-once-semantics",
-          "avro-schema-registry",
-        ],
-      },
-      {
-        skillId: "lakehouse-architecture",
-        skillName: "Data Lakehouse & Storage (Parquet / Iceberg)",
-        category: "Storage Architecture",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Columnar storage layouts, predicate pushdown, ACID table transactions, and time-travel querying.",
-        relatedConceptTags: [
-          "parquet-compression",
-          "predicate-pushdown",
-          "iceberg-acid-tables",
-          "time-travel-queries",
-        ],
-      },
-      {
-        skillId: "sql-data-modeling",
-        skillName: "Advanced SQL & Dimensional Modeling",
-        category: "Data Modeling",
-        importance: "important",
-        targetLevel: "Proficient",
-        description:
-          "Star/snowflake schemas, window functions, slow changing dimensions (SCD), and query plan execution trees.",
-        relatedConceptTags: [
-          "window-functions",
-          "star-schema-design",
-          "scd-type-2",
-          "query-plan-profiling",
-        ],
-      },
-    ],
+        "skillId": "alkaline-nutrition",
+        "skillName": "Alkaline-Acid Nutrition & Raw Food Therapy",
+        "category": "Clinical Nutrition",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Designing living-food, high-chlorophyll, unprocessed nutritional tables for metabolic disease.",
+        "relatedConceptTags": [
+          "naturopathy-alkaline-nutrition",
+          "lindlahr-three-causes"
+        ]
+      }
+    ]
   },
-
-  // ==========================================================================
-  // 3. CLOUD & INFRASTRUCTURE
-  // ==========================================================================
-  "sre-reliability": {
-    nicheId: "sre-reliability",
-    nicheTitle: "Site Reliability Engineering (SRE)",
-    domainId: "cloud",
-    domainName: "Cloud & Infrastructure",
-    version: "1.0",
-    description:
-      "Principles of high availability, error budgeting, distributed observability, and resilient failover automation.",
-    requiredSkills: [
+  "acupuncture-energy": {
+    "nicheId": "acupuncture-energy",
+    "nicheTitle": "Acupuncture & Reflexology Balance",
+    "domainId": "yoga-naturopathy",
+    "domainName": "Yoga & Naturopathy",
+    "version": "1.0",
+    "description": "Meridian energy balancing, point stimulation, and reflexology neuromodulation.",
+    "requiredSkills": [
       {
-        skillId: "observability-metrics",
-        skillName: "Distributed Observability (Prometheus & OpenTelemetry)",
-        category: "Monitoring",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Metric collection, distributed trace propagation, Prometheus PromQL queries, and alerting thresholds.",
-        relatedConceptTags: [
-          "promql-queries",
-          "trace-propagation",
-          "opentelemetry-collector",
-          "alertmanager-routing",
-        ],
+        "skillId": "meridian-point-mapping",
+        "skillName": "Meridian Acupoint Location & Needling Technique",
+        "category": "Neuromodulation",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Locating distal and local points, sterile needling depth, and De-Qi sensation elicitation.",
+        "relatedConceptTags": [
+          "acupuncture-pain-gate-control"
+        ]
       },
       {
-        skillId: "slos-error-budgets",
-        skillName: "SLIs, SLOs & Error Budgets",
-        category: "Reliability Engineering",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Defining user-centric service level objectives, burn rate alerts, and error budget governance.",
-        relatedConceptTags: [
-          "sli-slo-definition",
-          "error-budget-burn",
-          "burn-rate-alerts",
-          "availability-math",
-        ],
-      },
-      {
-        skillId: "incident-postmortems",
-        skillName: "Incident Management & Blameless Postmortems",
-        category: "Operations",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Conducting blameless root cause analyses, timeline reconstruction, and automated mitigation playbooks.",
-        relatedConceptTags: [
-          "blameless-postmortems",
-          "timeline-reconstruction",
-          "action-items-tracking",
-          "oncall-escalations",
-        ],
-      },
-      {
-        skillId: "chaos-engineering",
-        skillName: "Chaos Engineering & Failover Testing",
-        category: "Resilience",
-        importance: "important",
-        targetLevel: "Proficient",
-        description:
-          "Simulating pod terminations, network partitions, degraded dependencies, and circuit breaking validation.",
-        relatedConceptTags: [
-          "chaos-injection",
-          "circuit-breaking",
-          "canary-deployments",
-          "graceful-degradation",
-        ],
-      },
-    ],
+        "skillId": "zone-reflexology",
+        "skillName": "Zone Reflexology & Somatotopic Stimulation",
+        "category": "Reflexology",
+        "importance": "essential",
+        "targetLevel": "Strong Foundation",
+        "description": "Foot and hand reflex zone compression to stimulate autonomic visceral reflexes.",
+        "relatedConceptTags": [
+          "acupuncture-pain-gate-control"
+        ]
+      }
+    ]
   },
-
-  "devops-cicd": {
-    nicheId: "devops-cicd",
-    nicheTitle: "DevOps & Infrastructure Automation",
-    domainId: "cloud",
-    domainName: "Cloud & Infrastructure",
-    version: "1.0",
-    description:
-      "Declarative infrastructure as code, container orchestration, automated build/test pipelines, and GitOps workflows.",
-    requiredSkills: [
+  "moalajat-clinical": {
+    "nicheId": "moalajat-clinical",
+    "nicheTitle": "Moalajat & Bedside Therapeutics",
+    "domainId": "unani",
+    "domainName": "Unani Medicine",
+    "version": "1.0",
+    "description": "Clinical general medicine, humoral pathology (Akhlat), and systemic therapeutics in Unani Tibb.",
+    "requiredSkills": [
       {
-        skillId: "iac-terraform",
-        skillName: "Infrastructure as Code (Terraform)",
-        category: "Automation",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "HCL syntax, state file locking, modular resource composition, and drift reconciliation.",
-        relatedConceptTags: [
-          "terraform-state-locking",
-          "hcl-modules",
-          "resource-dependencies",
-          "drift-reconciliation",
-        ],
+        "skillId": "nuzj-tanqiya-clinical",
+        "skillName": "Nuzj wa Tanqiya Clinical Formulation",
+        "category": "Internal Therapeutics",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Formulating concoctive Munzij decoctions and administering Mushil purgation.",
+        "relatedConceptTags": [
+          "nuzj-tanqiya-protocol",
+          "safrawi-hepatitis-pathology"
+        ]
       },
       {
-        skillId: "containers-k8s",
-        skillName: "Containerization & Kubernetes Architecture",
-        category: "Orchestration",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Pod lifecycles, Ingress controllers, ConfigMaps/Secrets, ReplicaSets, and resource quota limits.",
-        relatedConceptTags: [
-          "pod-lifecycle",
-          "ingress-routing",
-          "configmap-secrets",
-          "resource-limits-requests",
-        ],
-      },
-      {
-        skillId: "cicd-automation",
-        skillName: "CI/CD Pipeline Automation (GitHub Actions / GitLab)",
-        category: "Continuous Integration",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Multi-stage build pipelines, matrix testing, artifact publishing, and automated deployment approvals.",
-        relatedConceptTags: [
-          "github-actions-syntax",
-          "matrix-builds",
-          "artifact-caching",
-          "pipeline-security",
-        ],
-      },
-      {
-        skillId: "gitops-argo",
-        skillName: "GitOps & Declarative Sync (ArgoCD)",
-        category: "Deployment Strategy",
-        importance: "important",
-        targetLevel: "Proficient",
-        description:
-          "Automated Git-to-cluster synchronization, rollout strategies, and declarative configuration governance.",
-        relatedConceptTags: [
-          "argocd-sync-hooks",
-          "git-single-source-of-truth",
-          "blue-green-rollouts",
-          "helm-charts",
-        ],
-      },
-    ],
+        "skillId": "baul-examination",
+        "skillName": "Baul (Urine) Clinical Uroscopy",
+        "category": "Diagnostics",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Evaluating color, sediment, odor, and foam patterns to diagnose systemic humoral states.",
+        "relatedConceptTags": [
+          "baul-safra-indicators",
+          "baul-hematuria-vs-safra"
+        ]
+      }
+    ]
   },
-
-  "cloud-arch": {
-    nicheId: "cloud-arch",
-    nicheTitle: "Cloud Solutions Architecture",
-    domainId: "cloud",
-    domainName: "Cloud & Infrastructure",
-    version: "1.0",
-    description:
-      "High-level distributed cloud primitives, multi-region database replication, VPC routing, and cost optimization.",
-    requiredSkills: [
+  "ilaj-bit-tadbeer": {
+    "nicheId": "ilaj-bit-tadbeer",
+    "nicheTitle": "Ilaj-bit-Tadbeer (Regimenal Therapies)",
+    "domainId": "unani",
+    "domainName": "Unani Medicine",
+    "version": "1.0",
+    "description": "Physical detoxification interventions: Hijama (cupping), Taleeq (leeching), Fasd, and Dalk.",
+    "requiredSkills": [
       {
-        skillId: "ha-topology",
-        skillName: "High-Availability & Multi-Region Topology",
-        category: "Architecture",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Active-active vs active-passive architectures, global load balancing, and DNS failover policies.",
-        relatedConceptTags: [
-          "active-active-failover",
-          "global-load-balancing",
-          "rpo-rto-targets",
-          "multi-az-resilience",
-        ],
+        "skillId": "hijama-cupping-skills",
+        "skillName": "Sterile Hijama (Dry & Wet Cupping) Technique",
+        "category": "Regimenal Procedures",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Anatomical landmarking, negative suction pressure calibration, and aseptic scarification.",
+        "relatedConceptTags": [
+          "hijama-cupping-unani",
+          "irq-un-nasa-unani-protocol"
+        ]
       },
       {
-        skillId: "cloud-networking",
-        skillName: "Cloud VPC Networking & Routing",
-        category: "Networking",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Subnet CIDR blocks, VPC peering, NAT gateways, route tables, and Transit Gateways.",
-        relatedConceptTags: [
-          "vpc-peering",
-          "nat-gateway-routing",
-          "cidr-subnet-design",
-          "transit-gateway",
-        ],
-      },
-      {
-        skillId: "cloud-cost-optimization",
-        skillName: "Cloud Cost Optimization & FinOps",
-        category: "Financial Engineering",
-        importance: "important",
-        targetLevel: "Proficient",
-        description:
-          "Reserved instances, spot fleet management, storage lifecycle tiers, and resource rightsizing.",
-        relatedConceptTags: [
-          "spot-instances",
-          "lifecycle-policies",
-          "compute-rightsizing",
-          "finops-tagging",
-        ],
-      },
-    ],
+        "skillId": "taleeq-leech-skills",
+        "skillName": "Medicinal Leeching (Taleeq) Management",
+        "category": "Regimenal Procedures",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Hirudo medicinalis application, localized venous engorgement relief, and post-bite care.",
+        "relatedConceptTags": [
+          "taleeq-leech-therapy-indications"
+        ]
+      }
+    ]
   },
-
-  "serverless-edge": {
-    nicheId: "serverless-edge",
-    nicheTitle: "Serverless & Distributed Edge Systems",
-    domainId: "cloud",
-    domainName: "Cloud & Infrastructure",
-    version: "1.0",
-    description:
-      "Event-driven micro-functions, edge computing, global caching fabrics, and asynchronous event streaming.",
-    requiredSkills: [
+  "ilaj-bil-advia": {
+    "nicheId": "ilaj-bil-advia",
+    "nicheTitle": "Ilaj-bil-Advia & Single Drug Pharmacognosy",
+    "domainId": "unani",
+    "domainName": "Unani Medicine",
+    "version": "1.0",
+    "description": "Single drug pharmacology (Mufradat), compound formulation (Murakkabat), and toxicity correctives (Musleh).",
+    "requiredSkills": [
       {
-        skillId: "serverless-functions",
-        skillName: "Event-Driven Serverless Compute (Lambda/Cloud Functions)",
-        category: "Serverless",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Stateless function lifecycles, cold-start mitigation, concurrency limits, and event trigger bindings.",
-        relatedConceptTags: [
-          "cold-start-mitigation",
-          "event-triggers",
-          "concurrency-limits",
-          "idempotency-handling",
-        ],
+        "skillId": "mufradat-materia",
+        "skillName": "Mufradat Single Drug Temperament Grading",
+        "category": "Pharmacognosy",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Evaluating Darajat-e-Advia (1st to 4th degree) and pairing with appropriate Musleh.",
+        "relatedConceptTags": [
+          "darajat-e-advia-fourth-degree",
+          "suranjan-waja-ul-mafasil",
+          "musleh-corrective-unani"
+        ]
       },
       {
-        skillId: "edge-cdn-routing",
-        skillName: "Edge Computing & Global CDN Fabrics",
-        category: "Edge Routing",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Edge workers, geo-distributed cache headers, TLS termination, and origin request rewriting.",
-        relatedConceptTags: [
-          "edge-workers",
-          "cache-control-headers",
-          "tls-termination",
-          "geo-routing",
-        ],
-      },
-      {
-        skillId: "event-queues",
-        skillName: "Message Queues & Event Streaming",
-        category: "Asynchronous Design",
-        importance: "important",
-        targetLevel: "Proficient",
-        description:
-          "Decoupling workloads with SQS, EventBridge, dead-letter queues (DLQ), and fan-out notifications.",
-        relatedConceptTags: [
-          "dead-letter-queues",
-          "event-bridge-routing",
-          "sqs-polling",
-          "fifo-queue-dedup",
-        ],
-      },
-    ],
+        "skillId": "murakkabat-compounding",
+        "skillName": "Murakkabat (Khamira, Majun, Itrifal) Compounding",
+        "category": "Pharmacy",
+        "importance": "essential",
+        "targetLevel": "Strong Foundation",
+        "description": "Preparing standard Qiwam consistency, incorporation of powders, and floral distillation.",
+        "relatedConceptTags": [
+          "majun-unani-pharmacy",
+          "khamira-cardiac-exhilarant",
+          "itrifal-unani-compound"
+        ]
+      }
+    ]
   },
-
-  // ==========================================================================
-  // 4. WEB & FULL-STACK SYSTEMS
-  // ==========================================================================
-  "frontend-arch": {
-    nicheId: "frontend-arch",
-    nicheTitle: "Frontend Architecture & Interactive UX Engineering",
-    domainId: "web",
-    domainName: "Web & Full-Stack Systems",
-    version: "1.0",
-    description:
-      "Modern reactive web applications, component lifecycle design, accessible design systems, and client performance.",
-    requiredSkills: [
+  "mizaj-nabz": {
+    "nicheId": "mizaj-nabz",
+    "nicheTitle": "Mizaj & Nabz Diagnostics",
+    "domainId": "unani",
+    "domainName": "Unani Medicine",
+    "version": "1.0",
+    "description": "Ten pulse parameters (Ajnas-e-Nabz) and individual humoral temperament assessment.",
+    "requiredSkills": [
       {
-        skillId: "react-state-lifecycle",
-        skillName: "React Component Lifecycle & State Management",
-        category: "Frontend Architecture",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Hooks mechanics, memoization (useMemo/useCallback), context performance, and reconciliation rules.",
-        relatedConceptTags: [
-          "react-hooks-rules",
-          "usememo-usecallback",
-          "virtual-dom-reconciliation",
-          "state-immutability",
-        ],
+        "skillId": "ajnas-e-nabz-palpation",
+        "skillName": "Ajnas-e-Nabz Ten-Parameter Palpation",
+        "category": "Diagnostics",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Assessing pulse quantity, force, speed, consistency, fullness, temperature, and rhythm.",
+        "relatedConceptTags": [
+          "nabz-pulse-unani-definition",
+          "ajnas-e-nabz-ten-parameters",
+          "nabz-e-ghazali-characteristics"
+        ]
       },
       {
-        skillId: "typescript-strict",
-        skillName: "Strict TypeScript & Type Safety",
-        category: "Language Core",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Generics, utility types, discriminating unions, type guards, and compile-time contract enforcement.",
-        relatedConceptTags: [
-          "discriminating-unions",
-          "typescript-generics",
-          "type-guards",
-          "interface-vs-type",
-        ],
-      },
-      {
-        skillId: "design-systems-a11y",
-        skillName: "Design Systems & Web Accessibility (WCAG)",
-        category: "UI & Accessibility",
-        importance: "important",
-        targetLevel: "Proficient",
-        description:
-          "ARIA attributes, keyboard navigation focus traps, color contrast, and tokenized CSS systems.",
-        relatedConceptTags: [
-          "aria-semantics",
-          "focus-management",
-          "contrast-ratios",
-          "tokenized-styling",
-        ],
-      },
-      {
-        skillId: "browser-dom-perf",
-        skillName: "DOM Rendering & Client Performance",
-        category: "Performance",
-        importance: "important",
-        targetLevel: "Proficient",
-        description:
-          "Reflows/repaints, virtualized lists, debounced user inputs, and code-splitting lazy bundles.",
-        relatedConceptTags: [
-          "reflow-repaint-triggers",
-          "virtualized-scrolling",
-          "debounce-throttle",
-          "code-splitting-lazy",
-        ],
-      },
-    ],
+        "skillId": "mizaj-differentiation",
+        "skillName": "Mizaj (Four Temperaments) Clinical Profiling",
+        "category": "Diagnostics",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Differential assessment of Damawi, Balghami, Safrawi, and Saudawi constitutions.",
+        "relatedConceptTags": [
+          "damawi-mizaj-qualities",
+          "arba-akhlat-humors"
+        ]
+      }
+    ]
   },
-
-  "backend-api": {
-    nicheId: "backend-api",
-    nicheTitle: "High-Throughput Backend & API Engineering",
-    domainId: "web",
-    domainName: "Web & Full-Stack Systems",
-    version: "1.0",
-    description:
-      "Low-latency REST and gRPC endpoints, database connection pooling, concurrency, and caching architectures.",
-    requiredSkills: [
+  "maruthuvam-clinical": {
+    "nicheId": "maruthuvam-clinical",
+    "nicheTitle": "Maruthuvam & Classical Internal Medicine",
+    "domainId": "siddha",
+    "domainName": "Siddha Medicine",
+    "version": "1.0",
+    "description": "Mukkuttram balance, 8-fold examination (Envagai Thervu), and chronic disease management.",
+    "requiredSkills": [
       {
-        skillId: "api-protocol-design",
-        skillName: "RESTful & gRPC Protocol Architecture",
-        category: "API Design",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "HTTP semantic status codes, idempotent methods, protobuf contracts, and bidirectional streaming.",
-        relatedConceptTags: [
-          "http-idempotency",
-          "status-code-semantics",
-          "protobuf-grpc",
-          "content-negotiation",
-        ],
+        "skillId": "envagai-thervu-skills",
+        "skillName": "Envagai Thervu (Eight-Fold Examination)",
+        "category": "Diagnostics",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Clinical evaluation of Naadi, Sparisam, Naa, Niram, Mozhi, Vizhi, Malam, and Moothiram.",
+        "relatedConceptTags": [
+          "envagai-thervu-diagnosis",
+          "naadi-proportions-siddha"
+        ]
       },
       {
-        skillId: "database-query-optimization",
-        skillName: "Database Indexing & Query Optimization",
-        category: "Databases",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "B-tree index usage, composite index order, N+1 query elimination, and SQL transaction isolation.",
-        relatedConceptTags: [
-          "composite-indexing",
-          "n-plus-one-mitigation",
-          "transaction-isolation-levels",
-          "explain-analyze-plans",
-        ],
-      },
-      {
-        skillId: "caching-redis",
-        skillName: "Distributed Caching (Redis)",
-        category: "Architecture",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Cache-aside vs write-through patterns, TTL expiration, cache stampede prevention, and Redis data structures.",
-        relatedConceptTags: [
-          "cache-aside-pattern",
-          "cache-stampede-defense",
-          "redis-data-structures",
-          "ttl-strategies",
-        ],
-      },
-      {
-        skillId: "concurrency-async",
-        skillName: "Concurrency & Asynchronous Worker Pools",
-        category: "Backend Core",
-        importance: "important",
-        targetLevel: "Proficient",
-        description:
-          "Event loop execution, thread pools, job queues, and connection pool starvation mitigation.",
-        relatedConceptTags: [
-          "event-loop-microtasks",
-          "connection-pooling",
-          "worker-threads",
-          "backpressure-handling",
-        ],
-      },
-    ],
+        "skillId": "neykkuri-uroscopy",
+        "skillName": "Neykkuri (Oil Spread Uroscopy)",
+        "category": "Diagnostics",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Performing and interpreting early morning sesame oil drop spreads on patient urine.",
+        "relatedConceptTags": [
+          "neykkuri-urine-test",
+          "neykkuri-azhal-ring",
+          "neykkuri-mutthu-iyyam"
+        ]
+      }
+    ]
   },
-
-  "fullstack-product": {
-    nicheId: "fullstack-product",
-    nicheTitle: "Full-Stack Product Engineering",
-    domainId: "web",
-    domainName: "Web & Full-Stack Systems",
-    version: "1.0",
-    description:
-      "Connecting database schemas, business logic, and UI into cohesive, resilient end-user web applications.",
-    requiredSkills: [
+  "varmam-therapy": {
+    "nicheId": "varmam-therapy",
+    "nicheTitle": "Varmam Science & Physical Manipulation",
+    "domainId": "siddha",
+    "domainName": "Siddha Medicine",
+    "version": "1.0",
+    "description": "108 vital energy points, trauma resuscitation, Adangal release methods, and Thokkanam.",
+    "requiredSkills": [
       {
-        skillId: "end-to-end-architecture",
-        skillName: "End-to-End System Architecture",
-        category: "Full-Stack Design",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Server-side rendering (SSR), client-server data synchronization, and optimistic UI updates.",
-        relatedConceptTags: [
-          "ssr-vs-csr",
-          "optimistic-ui-updates",
-          "hydration-lifecycle",
-          "api-route-contracts",
-        ],
+        "skillId": "varmam-stimulation",
+        "skillName": "Varmam Node Location & Therapeutic Stimulation",
+        "category": "Energy Medicine",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Locating Paduvarmam and Thoduvarmam points, applying controlled finger pressures.",
+        "relatedConceptTags": [
+          "varmam-108-points-classification",
+          "pidari-kaalam-varmam-node",
+          "adappa-kaalam-trauma-window"
+        ]
       },
       {
-        skillId: "auth-session-security",
-        skillName: "Authentication & Session Management",
-        category: "Security",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Secure cookie transmission (HttpOnly/SameSite), session invalidation, and role-based access control (RBAC).",
-        relatedConceptTags: [
-          "httponly-samesite-cookies",
-          "session-revocation",
-          "rbac-authorization",
-          "csrf-protection",
-        ],
-      },
-      {
-        skillId: "fullstack-testing",
-        skillName: "Full-Stack Testing (Unit, Integration & E2E)",
-        category: "Quality Assurance",
-        importance: "important",
-        targetLevel: "Proficient",
-        description:
-          "Automated test suites with Vitest/Jest and Playwright, mock servers, and regression protection.",
-        relatedConceptTags: [
-          "e2e-playwright",
-          "unit-test-assertions",
-          "mock-service-workers",
-          "test-coverage-metrics",
-        ],
-      },
-    ],
+        "skillId": "adangal-resuscitation",
+        "skillName": "Adangal Retrieval & Emergency Resuscitation",
+        "category": "Emergency Medicine",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Performing counter-manipulations and percussion release vectors for trauma revival.",
+        "relatedConceptTags": [
+          "adangal-varmam-retrieval"
+        ]
+      }
+    ]
   },
-
-  "web-perf": {
-    nicheId: "web-perf",
-    nicheTitle: "Web Performance & Core Vitals Engineering",
-    domainId: "web",
-    domainName: "Web & Full-Stack Systems",
-    version: "1.0",
-    description:
-      "Optimizing browser rendering pipelines, JavaScript heap profiling, network caching, and Core Web Vitals.",
-    requiredSkills: [
+  "gunapadam-materia": {
+    "nicheId": "gunapadam-materia",
+    "nicheTitle": "Gunapadam & Botanical Materia Medica",
+    "domainId": "siddha",
+    "domainName": "Siddha Medicine",
+    "version": "1.0",
+    "description": "Tamil Materia Medica, taste-potency bio-actions (Suvai/Veeriyam), and traditional detox.",
+    "requiredSkills": [
       {
-        skillId: "core-web-vitals",
-        skillName: "Core Web Vitals Optimization (LCP, INP, CLS)",
-        category: "Performance Metrics",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Diagnosing slow Largest Contentful Paint, Interaction to Next Paint delays, and Cumulative Layout Shift causes.",
-        relatedConceptTags: [
-          "lcp-critical-path",
-          "inp-main-thread-delays",
-          "cls-layout-shifts",
-          "fetch-priority",
-        ],
+        "skillId": "siddha-botany-suddhi",
+        "skillName": "Raw Plant Suddhi (Purification) Techniques",
+        "category": "Pharmacognosy",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Detoxifying potent seeds, roots, and latexes using traditional cow milk boiling.",
+        "relatedConceptTags": [
+          "siddha-shodhana-etti-vidhai",
+          "siddha-materia-medica-triad"
+        ]
       },
       {
-        skillId: "bundle-asset-optimization",
-        skillName: "Asset Optimization & Tree-Shaking",
-        category: "Build & Bundling",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Tree-shaking dead code, modern image compression (WebP/AVIF), font subsetting, and critical CSS inlining.",
-        relatedConceptTags: [
-          "tree-shaking-bundlers",
-          "webp-avif-formats",
-          "font-display-swap",
-          "critical-css-inlining",
-        ],
-      },
-      {
-        skillId: "browser-memory-profiling",
-        skillName: "Memory Leak Profiling & DevTools Analysis",
-        category: "Runtime Profiling",
-        importance: "important",
-        targetLevel: "Proficient",
-        description:
-          "Heap snapshot comparison, detached DOM tree detection, and event listener lifecycle cleanup.",
-        relatedConceptTags: [
-          "detached-dom-nodes",
-          "heap-snapshot-allocation",
-          "event-listener-leaks",
-          "garbage-collection-cycles",
-        ],
-      },
-    ],
+        "skillId": "kudineer-decoctions",
+        "skillName": "Kudineer Poly-Herbal Standardized Brewing",
+        "category": "Formulation",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Preparation of Nilavembu, Kaba Sura, and specific antiviral decoctions.",
+        "relatedConceptTags": [
+          "nilavembu-kudineer-viral",
+          "kaba-sura-kudineer-action"
+        ]
+      }
+    ]
   },
-
-  // ==========================================================================
-  // 5. SOFTWARE & CORE SYSTEMS
-  // ==========================================================================
-  "systems-cpp-rust": {
-    nicheId: "systems-cpp-rust",
-    nicheTitle: "Low-Level Systems & Concurrency Engineering",
-    domainId: "software",
-    domainName: "Software & Core Systems",
-    version: "1.0",
-    description:
-      "Hardware-level execution, deterministic memory allocation, concurrency primitives, and zero-cost abstractions.",
-    requiredSkills: [
+  "parpam-chendooram": {
+    "nicheId": "parpam-chendooram",
+    "nicheTitle": "Parpam, Chendooram & High-Order Alchemy",
+    "domainId": "siddha",
+    "domainName": "Siddha Medicine",
+    "version": "1.0",
+    "description": "Mineral calcinations (Parpam), red oxides (Chendooram), and Muppu catalytic chemistry.",
+    "requiredSkills": [
       {
-        skillId: "memory-management",
-        skillName: "Manual Memory Management & Pointer Arithmetic",
-        category: "Systems Fundamentals",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Heap vs stack allocations, pointer arithmetic, RAII semantics, and avoiding memory fragmentation.",
-        relatedConceptTags: [
-          "stack-vs-heap",
-          "raii-idiom",
-          "pointer-arithmetic",
-          "valgrind-memory-leaks",
-        ],
+        "skillId": "pudam-calcination-siddha",
+        "skillName": "Pudam Furnace Thermal Calibration",
+        "category": "Alchemy",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Calibrating Varaga, Kukkuda, and Gaja Pudam fuel loads for inorganic mineral synthesis.",
+        "relatedConceptTags": [
+          "parpam-dosage-form",
+          "pudam-heat-calibration-siddha",
+          "chendooram-red-oxide"
+        ]
       },
       {
-        skillId: "concurrency-primitives",
-        skillName: "Concurrency Primitives & Lock-Free Design",
-        category: "Concurrency",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Mutexes, condition variables, deadlocks, atomic operations, and memory ordering barriers.",
-        relatedConceptTags: [
-          "mutex-locks",
-          "atomic-primitives",
-          "deadlock-prevention",
-          "memory-order-barriers",
-        ],
-      },
-      {
-        skillId: "cpu-cache-optimization",
-        skillName: "CPU Cache Optimization & Data Layout",
-        category: "Hardware Optimization",
-        importance: "important",
-        targetLevel: "Proficient",
-        description:
-          "Cache line alignment, false sharing, branch prediction, and struct memory packing.",
-        relatedConceptTags: [
-          "cache-line-alignment",
-          "false-sharing",
-          "branch-prediction",
-          "struct-padding",
-        ],
-      },
-    ],
+        "skillId": "muppu-chemistry",
+        "skillName": "Muppu Salt Catalysis & Kayakalpa Compounding",
+        "category": "Alchemy",
+        "importance": "essential",
+        "targetLevel": "Strong Foundation",
+        "description": "Esoteric salt compounding for accelerating metal oxide transformation.",
+        "relatedConceptTags": [
+          "muppu-alchemical-catalyst",
+          "siddha-nanotechnology-validation"
+        ]
+      }
+    ]
   },
-
-  "embedded-iot": {
-    nicheId: "embedded-iot",
-    nicheTitle: "Embedded Systems & Firmware Engineering",
-    domainId: "software",
-    domainName: "Software & Core Systems",
-    version: "1.0",
-    description:
-      "Microcontroller architectures, interrupt service routines, serial bus communication, and real-time execution.",
-    requiredSkills: [
+  "repertory-casataking": {
+    "nicheId": "repertory-casataking",
+    "nicheTitle": "Classical Case Taking & Repertorization",
+    "domainId": "homoeopathy",
+    "domainName": "Homoeopathy",
+    "version": "1.0",
+    "description": "Totality of symptoms, Kentian evaluation hierarchy, computer-aided repertorial analysis.",
+    "requiredSkills": [
       {
-        skillId: "embedded-peripherals",
-        skillName: "Hardware Interfaces & Serial Protocols (I2C/SPI/UART)",
-        category: "Protocols",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Master/slave topologies, baud rate clock synchronization, bit-banging, and framing error handling.",
-        relatedConceptTags: [
-          "i2c-bus-arbitration",
-          "spi-clock-modes",
-          "uart-framing",
-          "gpio-interrupts",
-        ],
+        "skillId": "classical-case-taking",
+        "skillName": "Holistic Unbiased Case Taking (Organon §83–104)",
+        "category": "Clinical Case Taking",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Eliciting voluntary patient narratives, modalities, mental generals, and strange, rare, peculiar symptoms.",
+        "relatedConceptTags": [
+          "boenninghausen-complete-symptom",
+          "kentian-symptom-hierarchy"
+        ]
       },
       {
-        skillId: "rtos-scheduling",
-        skillName: "Real-Time Operating Systems (RTOS)",
-        category: "Operating Systems",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Preemptive priority scheduling, task context switching, priority inversion, and semaphore sync.",
-        relatedConceptTags: [
-          "priority-inversion",
-          "freertos-task-states",
-          "context-switching",
-          "semaphore-synchronization",
-        ],
-      },
-      {
-        skillId: "power-management",
-        skillName: "Ultra-Low Power & Sleep State Management",
-        category: "Hardware",
-        importance: "important",
-        targetLevel: "Proficient",
-        description:
-          "Deep sleep modes, watchdogs, brown-out detectors, and peripheral clock gating.",
-        relatedConceptTags: [
-          "deep-sleep-states",
-          "watchdog-timers",
-          "clock-gating",
-          "brownout-detection",
-        ],
-      },
-    ],
+        "skillId": "repertorial-analysis",
+        "skillName": "Systematic Rubric Selection & Repertorization",
+        "category": "Repertorization",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Translating patient symptoms into precise repertory rubrics and cross-referencing remedies.",
+        "relatedConceptTags": [
+          "repertory-definition",
+          "kentian-symptom-hierarchy"
+        ]
+      }
+    ]
   },
-
-  "database-storage": {
-    nicheId: "database-storage",
-    nicheTitle: "Database Internals & Distributed Storage",
-    domainId: "software",
-    domainName: "Software & Core Systems",
-    version: "1.0",
-    description:
-      "Storage engine internals, write-ahead logging (WAL), B-trees vs LSM-trees, and distributed consensus algorithms.",
-    requiredSkills: [
+  "materia-medica": {
+    "nicheId": "materia-medica",
+    "nicheTitle": "Comparative Materia Medica & Keynote Prescribing",
+    "domainId": "homoeopathy",
+    "domainName": "Homoeopathy",
+    "version": "1.0",
+    "description": "Remedy portraits, keynote symptoms, pathogenetic provings, and differentiating Polychrests.",
+    "requiredSkills": [
       {
-        skillId: "storage-structures",
-        skillName: "Storage Engine Data Structures (B-Trees & LSM-Trees)",
-        category: "Storage Engines",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "B-tree node splits, LSM-tree memtables and SSTables, compaction strategies, and bloom filter lookups.",
-        relatedConceptTags: [
-          "btree-splits",
-          "lsm-memtables-sstables",
-          "bloom-filters",
-          "compaction-strategies",
-        ],
+        "skillId": "keynote-differentiation",
+        "skillName": "Keynote Symptom Differentiation",
+        "category": "Materia Medica",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Distinguishing subtle modality differences across major Polychrest remedies.",
+        "relatedConceptTags": [
+          "bryonia-alba-modalities",
+          "arsenicum-album-keynotes",
+          "pulsatilla-mental-portrait"
+        ]
       },
       {
-        skillId: "wal-acid-recovery",
-        skillName: "Write-Ahead Logging (WAL) & Crash Recovery",
-        category: "Durability",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "ARIES recovery protocol, checkpointing, fuzzy checkpoints, and dirty page flushing.",
-        relatedConceptTags: [
-          "wal-durability",
-          "aries-recovery",
-          "checkpointing-protocols",
-          "dirty-page-flushing",
-        ],
-      },
-      {
-        skillId: "distributed-consensus",
-        skillName: "Distributed Consensus Protocols (Raft & Paxos)",
-        category: "Distributed Systems",
-        importance: "important",
-        targetLevel: "Proficient",
-        description:
-          "Leader election, log replication, split-brain resolution, and quorum heartbeats.",
-        relatedConceptTags: [
-          "raft-leader-election",
-          "log-replication-consensus",
-          "split-brain-prevention",
-          "quorum-read-writes",
-        ],
-      },
-    ],
+        "skillId": "remedy-relationships",
+        "skillName": "Materia Medica Remedy Relationships",
+        "category": "Materia Medica",
+        "importance": "essential",
+        "targetLevel": "Strong Foundation",
+        "description": "Navigating complementary, inimical, antidotal, and sequential remedy pairs.",
+        "relatedConceptTags": [
+          "inimical-remedy-relationship"
+        ]
+      }
+    ]
   },
-
-  "algo-sdk": {
-    nicheId: "algo-sdk",
-    nicheTitle: "Core Algorithms & Developer SDK Engineering",
-    domainId: "software",
-    domainName: "Software & Core Systems",
-    version: "1.0",
-    description:
-      "Algorithmic problem solving, asymptotic optimization, compiler toolchains, and developer-facing library design.",
-    requiredSkills: [
+  "organon-philosophy": {
+    "nicheId": "organon-philosophy",
+    "nicheTitle": "Organon of Medicine & Miasmatic Philosophy",
+    "domainId": "homoeopathy",
+    "domainName": "Homoeopathy",
+    "version": "1.0",
+    "description": "Hahnemannian principles, chronic miasmatic analysis, vital force dynamics, and posology.",
+    "requiredSkills": [
       {
-        skillId: "advanced-algorithms",
-        skillName: "Graph Algorithms & Asymptotic Complexity",
-        category: "Algorithms",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Dijkstra/A* pathfinding, strongly connected components, dynamic programming, and amortized complexity.",
-        relatedConceptTags: [
-          "dijkstra-shortest-path",
-          "dynamic-programming-memo",
-          "asymptotic-complexity",
-          "tarjan-scc",
-        ],
+        "skillId": "miasmatic-diagnosis",
+        "skillName": "Chronic Miasmatic Diagnosis (Psora, Sycosis, Syphilis)",
+        "category": "Philosophy",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Identifying dominant miasmatic blocks and selecting appropriate anti-miasmatic remedies.",
+        "relatedConceptTags": [
+          "three-chronic-miasms",
+          "anti-sycotic-thuja-medorrhinum",
+          "syphilitic-miasm-indicators"
+        ]
       },
       {
-        skillId: "sdk-api-ergonomics",
-        skillName: "Developer SDK Design & Ergonomics",
-        category: "Software Engineering",
-        importance: "essential",
-        targetLevel: "Strong Foundation",
-        description:
-          "Semantic versioning, backward compatibility, builder patterns, ergonomic error types, and documentation.",
-        relatedConceptTags: [
-          "semantic-versioning",
-          "builder-pattern",
-          "custom-error-hierarchy",
-          "backward-compatibility",
-        ],
-      },
-      {
-        skillId: "benchmarking-profiling",
-        skillName: "Automated Benchmarking & Profiling",
-        category: "Testing",
-        importance: "important",
-        targetLevel: "Proficient",
-        description:
-          "Criterion benchmark harnesses, flamegraph call tree analysis, and regression prevention in CI.",
-        relatedConceptTags: [
-          "benchmark-harnesses",
-          "flamegraph-profiling",
-          "throughput-vs-latency",
-          "regression-benchmarking",
-        ],
-      },
-    ],
+        "skillId": "kents-observations",
+        "skillName": "Post-Prescription Prognosis & Kent's 12 Observations",
+        "category": "Philosophy",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Interpreting aggravation vs. amelioration and applying Hering's Law of Direction of Cure.",
+        "relatedConceptTags": [
+          "herings-law-cure",
+          "kents-twelve-observations-3",
+          "kents-fourth-observation"
+        ]
+      }
+    ]
   },
+  "homoeopathic-pharmacy": {
+    "nicheId": "homoeopathic-pharmacy",
+    "nicheTitle": "Homoeopathic Pharmacy & Potentization Standards",
+    "domainId": "homoeopathy",
+    "domainName": "Homoeopathy",
+    "version": "1.0",
+    "description": "Decimal/Centesimal/LM scales, mother tincture extraction, trituration, and HPI compliance.",
+    "requiredSkills": [
+      {
+        "skillId": "potentization-methodology",
+        "skillName": "Potentization & Succussion / Trituration Methodology",
+        "category": "Pharmacy",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Executing serial dilutions across X, C, and LM scales with verified succussion strokes.",
+        "relatedConceptTags": [
+          "potentization-dynamization",
+          "centesimal-scale-ratio",
+          "lm-potency-advantages",
+          "trituration-vs-succussion-pharmacy"
+        ]
+      },
+      {
+        "skillId": "hpi-pharmacopoeial-compliance",
+        "skillName": "Homoeopathic Pharmacopoeia of India (HPI) Standards",
+        "category": "Quality Assurance",
+        "importance": "essential",
+        "targetLevel": "Strong Foundation",
+        "description": "Testing alcohol proofing, vehicle purity of sugar globules, and mother tincture maceration.",
+        "relatedConceptTags": [
+          "hpi-globule-specifications"
+        ]
+      }
+    ]
+  }
 };
 
 /**
@@ -1457,6 +898,6 @@ export function getTargetSkillProfile(
     return byDomain;
   }
 
-  // Default ultimate fallback: Application Security
-  return TARGET_SKILL_PROFILES["app-sec"];
+  // Default ultimate fallback: Clinical Kayachikitsa
+  return TARGET_SKILL_PROFILES["kayachikitsa"];
 }

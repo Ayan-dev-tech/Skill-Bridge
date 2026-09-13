@@ -20,10 +20,10 @@ import {
   RefreshCw,
   ExternalLink,
   Shield,
-  Cpu,
-  Cloud,
-  Globe,
-  Code2,
+  HeartPulse,
+  Sun,
+  Activity,
+  FlaskConical,
   BookOpen,
   Compass,
   ClipboardCheck,
@@ -43,11 +43,11 @@ import {
 
 // Domain icon map
 const DOMAIN_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
-  security: Shield,
-  "ai-ml": Cpu,
-  cloud: Cloud,
-  web: Globe,
-  software: Code2,
+  ayurveda: HeartPulse,
+  "yoga-naturopathy": Sun,
+  unani: Activity,
+  siddha: Shield,
+  homoeopathy: FlaskConical,
 };
 
 export function SkillGapContainer() {

@@ -152,12 +152,12 @@ export function StudentDataAccessView() {
                 onChange={(e) => setSelectedDomain(e.target.value)}
                 className="h-9 px-3 rounded-md border border-border bg-background text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
               >
-                <option value="all">All Technical Domains</option>
-                <option value="software">Software Engineering</option>
-                <option value="ai-ml">AI / Machine Learning</option>
-                <option value="cloud">Cloud & Infrastructure</option>
-                <option value="web">Web & Full-Stack</option>
-                <option value="security">Cybersecurity & Defense</option>
+                <option value="all">All AYUSH Domains</option>
+                <option value="ayurveda">Ayurveda</option>
+                <option value="yoga-naturopathy">Yoga &amp; Naturopathy</option>
+                <option value="unani">Unani</option>
+                <option value="siddha">Siddha</option>
+                <option value="homoeopathy">Homoeopathy</option>
               </select>
 
               <select

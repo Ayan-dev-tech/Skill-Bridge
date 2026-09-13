@@ -35,18 +35,15 @@ export const ATS_WEIGHTS_GENERAL = {
   skillsKeywordCoverage: 0.20,
 };
 
-// Common technical vocabulary list for extraction & cross-referencing
+// Common AYUSH clinical, botanical, pharmacological & regulatory vocabulary list
 const KNOWN_TECH_KEYWORDS = [
-  "javascript", "typescript", "python", "java", "c++", "c", "c#", "golang", "go", "rust", "php", "ruby", "sql", "html", "css",
-  "react", "next.js", "nextjs", "vue", "angular", "node.js", "nodejs", "express", "fastapi", "django", "flask", "spring", "spring boot",
-  "postgresql", "postgres", "mysql", "mongodb", "redis", "supabase", "sqlite", "dynamodb", "elasticsearch", "cassandra",
-  "aws", "azure", "gcp", "google cloud", "docker", "kubernetes", "k8s", "terraform", "ansible", "ci/cd", "github actions", "gitlab", "jenkins",
-  "git", "linux", "rest", "rest api", "graphql", "grpc", "microservices", "serverless", "kafka", "rabbitmq",
-  "cybersecurity", "owasp", "penetration testing", "vulnerability assessment", "siem", "soc", "cryptography", "jwt", "oauth",
-  "machine learning", "deep learning", "ai", "artificial intelligence", "nlp", "computer vision", "tensorflow", "pytorch", "pandas", "numpy", "scikit-learn",
-  "unit testing", "jest", "pytest", "cypress", "playwright", "agile", "scrum", "jira",
-  "figma", "canva", "photoshop", "illustrator", "ui/ux", "web design", "responsive design", "bootstrap", "tailwind",
-  "designing", "web technologies", "programming"
+  "ayurveda", "bams", "kayachikitsa", "panchakarma", "dravyaguna", "rasa shastra", "bhaishajya kalpana", "nadi pariksha", "prakriti", "tridosha",
+  "vata", "pitta", "kapha", "agni", "ama", "srotas", "dhatu", "ojas", "snehana", "swedana", "virechana", "vamana", "basti", "nasya",
+  "yoga", "bnys", "naturopathy", "asana", "pranayama", "shatkriyas", "hydrotherapy", "mud therapy", "fasting therapy", "reflexology", "acupuncture",
+  "unani", "bums", "tibb", "moalajat", "ilaj-bit-tadbeer", "ilaj-bil-advia", "mizaj", "nabz", "akhlat", "hijama", "taleeq", "fasd", "khamira", "majun",
+  "siddha", "bsms", "maruthuvam", "varmam", "gunapadam", "parpam", "chendooram", "muppu", "thokkanam", "envagai thervu", "neykkuri", "kudineer",
+  "homoeopathy", "bhms", "materia medica", "organon of medicine", "repertory", "repertorization", "similia", "potentization", "miasm", "psora", "sycosis", "syphilis",
+  "pharmacovigilance", "ayush pharmacopoeia", "api standards", "abdm", "ayush grid", "namaste portal", "nabh ayush", "gmp", "who-gmp", "clinical trials", "ctri"
 ];
 
 const STRONG_ACTION_VERBS = [

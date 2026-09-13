@@ -138,20 +138,20 @@ export function OverviewView({
   ];
 
   const skillGaps = [
-    { skill: "Cloud Architecture (AWS / Azure)", demand: 92, studentProficiency: 34, gap: 58 },
-    { skill: "DevOps & CI/CD Pipelines", demand: 86, studentProficiency: 28, gap: 58 },
-    { skill: "Cybersecurity & Cryptography", demand: 78, studentProficiency: 32, gap: 46 },
-    { skill: "PostgreSQL & Vector Indexing", demand: 75, studentProficiency: 48, gap: 27 },
-    { skill: "Production ML Systems (MLOps)", demand: 88, studentProficiency: 30, gap: 58 },
+    { skill: "HPTLC & Pharmacopoeial Monograph Standardization", demand: 92, studentProficiency: 34, gap: 58 },
+    { skill: "Classical Panchakarma Protocol Execution", demand: 88, studentProficiency: 30, gap: 58 },
+    { skill: "Nadi Pariksha & Pulse Diagnostics", demand: 86, studentProficiency: 28, gap: 58 },
+    { skill: "ASU GMP Schedule T & Export Regulatory Filings", demand: 78, studentProficiency: 32, gap: 46 },
+    { skill: "Integrative Oncology & Clinical Evidence Trials", demand: 75, studentProficiency: 48, gap: 27 },
   ];
 
   const skillDistribution = [
-    { skill: "Python", percentage: 84, studentsCount: 198 },
-    { skill: "SQL & Databases", percentage: 72, studentsCount: 170 },
-    { skill: "React & Modern Web", percentage: 65, studentsCount: 152 },
-    { skill: "C++ / Systems", percentage: 46, studentsCount: 108 },
-    { skill: "Docker / Cloud", percentage: 38, studentsCount: 89 },
-    { skill: "Machine Learning", percentage: 35, studentsCount: 82 },
+    { skill: "Samhita Adhyayan & Sanskrit Terminology", percentage: 86, studentsCount: 202 },
+    { skill: "Dravyaguna & Botanical Authentication", percentage: 76, studentsCount: 178 },
+    { skill: "Panchakarma & Clinical Therapies", percentage: 68, studentsCount: 160 },
+    { skill: "Rasa Shastra & Bhasma Preparation", percentage: 52, studentsCount: 122 },
+    { skill: "Yoga Chikitsa & Pranayama Protocols", percentage: 44, studentsCount: 104 },
+    { skill: "Homoeopathic Repertorization & Posology", percentage: 38, studentsCount: 89 },
   ];
 
   const isRealtimeConnected = liveOverview?.realtimeStatus.status === "connected";

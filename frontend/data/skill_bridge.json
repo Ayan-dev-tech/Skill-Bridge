@@ -58001,11 +58001,103 @@
       },
       "competencies": [
         {
-          "id": "comp_preclinical_foundations",
-          "title": "AYUSH Pre-Clinical & Epistemological Fundamentals",
-          "domain": "Padartha Vijnana & Basic Principles",
-          "demonstratedAt": "2026-09-12T17:57:23.025Z",
-          "verifiedBy": "Academic Evaluation Cell"
+          "id": "comp-ayush-gcp",
+          "name": "AYUSH Good Clinical Practice (GCP) & Ethical Compliance",
+          "title": "AYUSH Good Clinical Practice (GCP) & Ethical Compliance",
+          "category": "Regulatory & Ethics",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 4,
+          "description": "Applying ICMR-AYUSH ethical guidelines, CTRI trial registration, informed consent protocols, and GCP auditing in human clinical research.",
+          "demonstratedAt": "2026-09-13T12:17:19.962Z",
+          "verifiedBy": "Central Ethics Committee for AYUSH"
+        },
+        {
+          "id": "comp-ayush-trial-design",
+          "name": "Holistic & Adaptive Clinical Trial Design",
+          "title": "Holistic & Adaptive Clinical Trial Design",
+          "category": "Research Methodology",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 4,
+          "description": "Protocol design adapting classical whole-system AYUSH interventions to pragmatic and randomized clinical trial (RCT) designs.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Clinical Research Directorate"
+        },
+        {
+          "id": "comp-ayush-pvpi",
+          "name": "Pharmacovigilance & Adverse Drug Reaction (ADR) Surveillance",
+          "title": "Pharmacovigilance & Adverse Drug Reaction (ADR) Surveillance",
+          "category": "Pharmacovigilance",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 3,
+          "description": "Identifying, documenting, causality-assessing, and reporting adverse drug reactions under the National Pharmacovigilance Programme for ASU&H Drugs.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Pharmacovigilance Intermediary Centre"
+        },
+        {
+          "id": "comp-ayush-herb-drug",
+          "name": "Herb-Drug Interaction & Safety Profiling",
+          "title": "Herb-Drug Interaction & Safety Profiling",
+          "category": "Pharmacology & Safety",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 4,
+          "description": "Evaluating cytochrome P450 interactions, metabolic clearance pathways, and contraindications between classical formulations and conventional drugs.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Drug Safety & Toxicology Board"
+        },
+        {
+          "id": "comp-ayush-bioethics",
+          "name": "Institutional Ethics Committee (IEC) Dossier Preparation",
+          "title": "Institutional Ethics Committee (IEC) Dossier Preparation",
+          "category": "Regulatory & Ethics",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 3,
+          "description": "Drafting patient information sheets, investigator brochures, vulnerability safeguards, and regulatory submissions for institutional review boards.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Institutional Ethics Committee"
+        },
+        {
+          "id": "comp-ayush-data-mgmt",
+          "name": "Electronic Data Capture & Clinical Data Management (CDM)",
+          "title": "Electronic Data Capture & Clinical Data Management (CDM)",
+          "category": "Data Science & Informatics",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 3,
+          "description": "Designing electronic Case Report Forms (eCRFs), conducting source data verification, and managing clinical databases aligned with Ayush Grid standards.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Ayush Grid Health Informatics Cell"
+        },
+        {
+          "id": "comp-ayush-standardization",
+          "name": "Investigational Formulation Standardization & Monograph Verification",
+          "title": "Investigational Formulation Standardization & Monograph Verification",
+          "category": "Pharmacopoeia & Standardization",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 4,
+          "description": "Verifying botanical authentication, phytochemical marker assay (HPTLC/HPLC), and heavy metal/microbial limits per Ayurvedic Pharmacopoeia of India (API) standards.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Pharmacopoeia Commission for Indian Medicine & Homoeopathy"
+        },
+        {
+          "id": "comp-ayush-biostats",
+          "name": "Biostatistical Analysis & Evidence Synthesis",
+          "title": "Biostatistical Analysis & Evidence Synthesis",
+          "category": "Biostatistics",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 3,
+          "description": "Performing parametric/non-parametric medical statistics, sample size calculation, meta-analyses, and systematic Cochrane-style reviews for AYUSH evidence.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Epidemiology & Biostatistics Department"
+        },
+        {
+          "id": "comp-ayush-samhita-epistemology",
+          "name": "Classical Epistemological Correlation (Pramana Vijnana)",
+          "title": "Classical Epistemological Correlation (Pramana Vijnana)",
+          "category": "Classical Theory",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 4,
+          "description": "Correlating classical Aptopadesha, Pratyaksha, and Anumana epistemological evidence models with modern hierarchy of clinical evidence.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Academic Council of Samhita & Siddhanta"
         }
       ],
       "assessmentResults": [
@@ -58149,11 +58241,103 @@
       },
       "competencies": [
         {
-          "id": "comp_preclinical_foundations",
-          "title": "AYUSH Pre-Clinical & Epistemological Fundamentals",
-          "domain": "Padartha Vijnana & Basic Principles",
-          "demonstratedAt": "2026-09-12T17:57:48.331Z",
-          "verifiedBy": "Academic Evaluation Cell"
+          "id": "comp-ayush-gcp",
+          "name": "AYUSH Good Clinical Practice (GCP) & Ethical Compliance",
+          "title": "AYUSH Good Clinical Practice (GCP) & Ethical Compliance",
+          "category": "Regulatory & Ethics",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 4,
+          "description": "Applying ICMR-AYUSH ethical guidelines, CTRI trial registration, informed consent protocols, and GCP auditing in human clinical research.",
+          "demonstratedAt": "2026-09-13T12:17:19.962Z",
+          "verifiedBy": "Central Ethics Committee for AYUSH"
+        },
+        {
+          "id": "comp-ayush-trial-design",
+          "name": "Holistic & Adaptive Clinical Trial Design",
+          "title": "Holistic & Adaptive Clinical Trial Design",
+          "category": "Research Methodology",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 4,
+          "description": "Protocol design adapting classical whole-system AYUSH interventions to pragmatic and randomized clinical trial (RCT) designs.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Clinical Research Directorate"
+        },
+        {
+          "id": "comp-ayush-pvpi",
+          "name": "Pharmacovigilance & Adverse Drug Reaction (ADR) Surveillance",
+          "title": "Pharmacovigilance & Adverse Drug Reaction (ADR) Surveillance",
+          "category": "Pharmacovigilance",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 3,
+          "description": "Identifying, documenting, causality-assessing, and reporting adverse drug reactions under the National Pharmacovigilance Programme for ASU&H Drugs.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Pharmacovigilance Intermediary Centre"
+        },
+        {
+          "id": "comp-ayush-herb-drug",
+          "name": "Herb-Drug Interaction & Safety Profiling",
+          "title": "Herb-Drug Interaction & Safety Profiling",
+          "category": "Pharmacology & Safety",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 4,
+          "description": "Evaluating cytochrome P450 interactions, metabolic clearance pathways, and contraindications between classical formulations and conventional drugs.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Drug Safety & Toxicology Board"
+        },
+        {
+          "id": "comp-ayush-bioethics",
+          "name": "Institutional Ethics Committee (IEC) Dossier Preparation",
+          "title": "Institutional Ethics Committee (IEC) Dossier Preparation",
+          "category": "Regulatory & Ethics",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 3,
+          "description": "Drafting patient information sheets, investigator brochures, vulnerability safeguards, and regulatory submissions for institutional review boards.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Institutional Ethics Committee"
+        },
+        {
+          "id": "comp-ayush-data-mgmt",
+          "name": "Electronic Data Capture & Clinical Data Management (CDM)",
+          "title": "Electronic Data Capture & Clinical Data Management (CDM)",
+          "category": "Data Science & Informatics",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 3,
+          "description": "Designing electronic Case Report Forms (eCRFs), conducting source data verification, and managing clinical databases aligned with Ayush Grid standards.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Ayush Grid Health Informatics Cell"
+        },
+        {
+          "id": "comp-ayush-standardization",
+          "name": "Investigational Formulation Standardization & Monograph Verification",
+          "title": "Investigational Formulation Standardization & Monograph Verification",
+          "category": "Pharmacopoeia & Standardization",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 4,
+          "description": "Verifying botanical authentication, phytochemical marker assay (HPTLC/HPLC), and heavy metal/microbial limits per Ayurvedic Pharmacopoeia of India (API) standards.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Pharmacopoeia Commission for Indian Medicine & Homoeopathy"
+        },
+        {
+          "id": "comp-ayush-biostats",
+          "name": "Biostatistical Analysis & Evidence Synthesis",
+          "title": "Biostatistical Analysis & Evidence Synthesis",
+          "category": "Biostatistics",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 3,
+          "description": "Performing parametric/non-parametric medical statistics, sample size calculation, meta-analyses, and systematic Cochrane-style reviews for AYUSH evidence.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Epidemiology & Biostatistics Department"
+        },
+        {
+          "id": "comp-ayush-samhita-epistemology",
+          "name": "Classical Epistemological Correlation (Pramana Vijnana)",
+          "title": "Classical Epistemological Correlation (Pramana Vijnana)",
+          "category": "Classical Theory",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 4,
+          "description": "Correlating classical Aptopadesha, Pratyaksha, and Anumana epistemological evidence models with modern hierarchy of clinical evidence.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Academic Council of Samhita & Siddhanta"
         }
       ],
       "assessmentResults": [
@@ -58449,11 +58633,103 @@
       },
       "competencies": [
         {
-          "id": "comp_preclinical_foundations",
-          "title": "AYUSH Pre-Clinical & Epistemological Fundamentals",
-          "domain": "Padartha Vijnana & Basic Principles",
-          "demonstratedAt": "2026-09-12T18:14:15.234Z",
-          "verifiedBy": "Academic Evaluation Cell"
+          "id": "comp-ayush-gcp",
+          "name": "AYUSH Good Clinical Practice (GCP) & Ethical Compliance",
+          "title": "AYUSH Good Clinical Practice (GCP) & Ethical Compliance",
+          "category": "Regulatory & Ethics",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 4,
+          "description": "Applying ICMR-AYUSH ethical guidelines, CTRI trial registration, informed consent protocols, and GCP auditing in human clinical research.",
+          "demonstratedAt": "2026-09-13T12:17:19.962Z",
+          "verifiedBy": "Central Ethics Committee for AYUSH"
+        },
+        {
+          "id": "comp-ayush-trial-design",
+          "name": "Holistic & Adaptive Clinical Trial Design",
+          "title": "Holistic & Adaptive Clinical Trial Design",
+          "category": "Research Methodology",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 4,
+          "description": "Protocol design adapting classical whole-system AYUSH interventions to pragmatic and randomized clinical trial (RCT) designs.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Clinical Research Directorate"
+        },
+        {
+          "id": "comp-ayush-pvpi",
+          "name": "Pharmacovigilance & Adverse Drug Reaction (ADR) Surveillance",
+          "title": "Pharmacovigilance & Adverse Drug Reaction (ADR) Surveillance",
+          "category": "Pharmacovigilance",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 3,
+          "description": "Identifying, documenting, causality-assessing, and reporting adverse drug reactions under the National Pharmacovigilance Programme for ASU&H Drugs.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Pharmacovigilance Intermediary Centre"
+        },
+        {
+          "id": "comp-ayush-herb-drug",
+          "name": "Herb-Drug Interaction & Safety Profiling",
+          "title": "Herb-Drug Interaction & Safety Profiling",
+          "category": "Pharmacology & Safety",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 4,
+          "description": "Evaluating cytochrome P450 interactions, metabolic clearance pathways, and contraindications between classical formulations and conventional drugs.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Drug Safety & Toxicology Board"
+        },
+        {
+          "id": "comp-ayush-bioethics",
+          "name": "Institutional Ethics Committee (IEC) Dossier Preparation",
+          "title": "Institutional Ethics Committee (IEC) Dossier Preparation",
+          "category": "Regulatory & Ethics",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 3,
+          "description": "Drafting patient information sheets, investigator brochures, vulnerability safeguards, and regulatory submissions for institutional review boards.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Institutional Ethics Committee"
+        },
+        {
+          "id": "comp-ayush-data-mgmt",
+          "name": "Electronic Data Capture & Clinical Data Management (CDM)",
+          "title": "Electronic Data Capture & Clinical Data Management (CDM)",
+          "category": "Data Science & Informatics",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 3,
+          "description": "Designing electronic Case Report Forms (eCRFs), conducting source data verification, and managing clinical databases aligned with Ayush Grid standards.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Ayush Grid Health Informatics Cell"
+        },
+        {
+          "id": "comp-ayush-standardization",
+          "name": "Investigational Formulation Standardization & Monograph Verification",
+          "title": "Investigational Formulation Standardization & Monograph Verification",
+          "category": "Pharmacopoeia & Standardization",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 4,
+          "description": "Verifying botanical authentication, phytochemical marker assay (HPTLC/HPLC), and heavy metal/microbial limits per Ayurvedic Pharmacopoeia of India (API) standards.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Pharmacopoeia Commission for Indian Medicine & Homoeopathy"
+        },
+        {
+          "id": "comp-ayush-biostats",
+          "name": "Biostatistical Analysis & Evidence Synthesis",
+          "title": "Biostatistical Analysis & Evidence Synthesis",
+          "category": "Biostatistics",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 3,
+          "description": "Performing parametric/non-parametric medical statistics, sample size calculation, meta-analyses, and systematic Cochrane-style reviews for AYUSH evidence.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Epidemiology & Biostatistics Department"
+        },
+        {
+          "id": "comp-ayush-samhita-epistemology",
+          "name": "Classical Epistemological Correlation (Pramana Vijnana)",
+          "title": "Classical Epistemological Correlation (Pramana Vijnana)",
+          "category": "Classical Theory",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 4,
+          "description": "Correlating classical Aptopadesha, Pratyaksha, and Anumana epistemological evidence models with modern hierarchy of clinical evidence.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Academic Council of Samhita & Siddhanta"
         }
       ],
       "assessmentResults": [
@@ -58632,11 +58908,103 @@
       },
       "competencies": [
         {
-          "id": "comp_preclinical_foundations",
-          "title": "AYUSH Pre-Clinical & Epistemological Fundamentals",
-          "domain": "Padartha Vijnana & Basic Principles",
-          "demonstratedAt": "2026-09-12T18:18:22.513Z",
-          "verifiedBy": "Academic Evaluation Cell"
+          "id": "comp-ayush-gcp",
+          "name": "AYUSH Good Clinical Practice (GCP) & Ethical Compliance",
+          "title": "AYUSH Good Clinical Practice (GCP) & Ethical Compliance",
+          "category": "Regulatory & Ethics",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 4,
+          "description": "Applying ICMR-AYUSH ethical guidelines, CTRI trial registration, informed consent protocols, and GCP auditing in human clinical research.",
+          "demonstratedAt": "2026-09-13T12:17:19.962Z",
+          "verifiedBy": "Central Ethics Committee for AYUSH"
+        },
+        {
+          "id": "comp-ayush-trial-design",
+          "name": "Holistic & Adaptive Clinical Trial Design",
+          "title": "Holistic & Adaptive Clinical Trial Design",
+          "category": "Research Methodology",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 4,
+          "description": "Protocol design adapting classical whole-system AYUSH interventions to pragmatic and randomized clinical trial (RCT) designs.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Clinical Research Directorate"
+        },
+        {
+          "id": "comp-ayush-pvpi",
+          "name": "Pharmacovigilance & Adverse Drug Reaction (ADR) Surveillance",
+          "title": "Pharmacovigilance & Adverse Drug Reaction (ADR) Surveillance",
+          "category": "Pharmacovigilance",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 3,
+          "description": "Identifying, documenting, causality-assessing, and reporting adverse drug reactions under the National Pharmacovigilance Programme for ASU&H Drugs.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Pharmacovigilance Intermediary Centre"
+        },
+        {
+          "id": "comp-ayush-herb-drug",
+          "name": "Herb-Drug Interaction & Safety Profiling",
+          "title": "Herb-Drug Interaction & Safety Profiling",
+          "category": "Pharmacology & Safety",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 4,
+          "description": "Evaluating cytochrome P450 interactions, metabolic clearance pathways, and contraindications between classical formulations and conventional drugs.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Drug Safety & Toxicology Board"
+        },
+        {
+          "id": "comp-ayush-bioethics",
+          "name": "Institutional Ethics Committee (IEC) Dossier Preparation",
+          "title": "Institutional Ethics Committee (IEC) Dossier Preparation",
+          "category": "Regulatory & Ethics",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 3,
+          "description": "Drafting patient information sheets, investigator brochures, vulnerability safeguards, and regulatory submissions for institutional review boards.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Institutional Ethics Committee"
+        },
+        {
+          "id": "comp-ayush-data-mgmt",
+          "name": "Electronic Data Capture & Clinical Data Management (CDM)",
+          "title": "Electronic Data Capture & Clinical Data Management (CDM)",
+          "category": "Data Science & Informatics",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 3,
+          "description": "Designing electronic Case Report Forms (eCRFs), conducting source data verification, and managing clinical databases aligned with Ayush Grid standards.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Ayush Grid Health Informatics Cell"
+        },
+        {
+          "id": "comp-ayush-standardization",
+          "name": "Investigational Formulation Standardization & Monograph Verification",
+          "title": "Investigational Formulation Standardization & Monograph Verification",
+          "category": "Pharmacopoeia & Standardization",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 4,
+          "description": "Verifying botanical authentication, phytochemical marker assay (HPTLC/HPLC), and heavy metal/microbial limits per Ayurvedic Pharmacopoeia of India (API) standards.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Pharmacopoeia Commission for Indian Medicine & Homoeopathy"
+        },
+        {
+          "id": "comp-ayush-biostats",
+          "name": "Biostatistical Analysis & Evidence Synthesis",
+          "title": "Biostatistical Analysis & Evidence Synthesis",
+          "category": "Biostatistics",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 3,
+          "description": "Performing parametric/non-parametric medical statistics, sample size calculation, meta-analyses, and systematic Cochrane-style reviews for AYUSH evidence.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Epidemiology & Biostatistics Department"
+        },
+        {
+          "id": "comp-ayush-samhita-epistemology",
+          "name": "Classical Epistemological Correlation (Pramana Vijnana)",
+          "title": "Classical Epistemological Correlation (Pramana Vijnana)",
+          "category": "Classical Theory",
+          "domain": "Ayurveda & Integrative Healthcare",
+          "targetLevel": 4,
+          "description": "Correlating classical Aptopadesha, Pratyaksha, and Anumana epistemological evidence models with modern hierarchy of clinical evidence.",
+          "demonstratedAt": "2026-09-13T12:17:19.972Z",
+          "verifiedBy": "Academic Council of Samhita & Siddhanta"
         }
       ],
       "assessmentResults": [

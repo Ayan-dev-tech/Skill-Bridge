@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     }
 
     // Student accepted broad domain -> proceed to Phase 2
-    const targetDomain = (domainId || session.broadDomain || "security") as DomainId;
+    const targetDomain = (domainId || session.broadDomain || "ayurveda") as DomainId;
     session.phase = 2;
     session.broadDomain = targetDomain;
     session.status = "phase2_in_progress";

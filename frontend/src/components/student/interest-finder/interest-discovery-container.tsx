@@ -19,11 +19,11 @@ import {
   Check,
   AlertCircle,
   Loader2,
-  Cpu,
-  Cloud,
-  Globe,
+  HeartPulse,
+  Sun,
+  Activity,
   Shield,
-  Code2,
+  FlaskConical,
 } from "lucide-react";
 
 interface OptionItem {
@@ -79,11 +79,11 @@ type ViewState =
   | "confirmed_view";
 
 const domainIcons: Record<string, React.ComponentType<{ className?: string }>> = {
-  "ai-ml": Cpu,
-  cloud: Cloud,
-  web: Globe,
-  security: Shield,
-  software: Code2,
+  ayurveda: HeartPulse,
+  "yoga-naturopathy": Sun,
+  unani: Activity,
+  siddha: Shield,
+  homoeopathy: FlaskConical,
 };
 
 export function InterestDiscoveryContainer() {
@@ -521,25 +521,25 @@ export function InterestDiscoveryContainer() {
         <div className="p-3.5 rounded-lg border border-border bg-muted/15 space-y-2 text-xs">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">
-              Explores 5 Broad Engineering Disciplines
+              Explores 5 Classical AYUSH Systems
             </span>
             <span className="text-[10px] font-mono text-muted-foreground">Stage 1 Discovery</span>
           </div>
           <div className="flex flex-wrap gap-1.5">
             <span className="px-2.5 py-1 rounded-md border border-border bg-card text-foreground font-medium text-[11px]">
-              AI / Machine Learning
+              Ayurveda
             </span>
             <span className="px-2.5 py-1 rounded-md border border-border bg-card text-foreground font-medium text-[11px]">
-              Cloud &amp; Infrastructure
+              Yoga &amp; Naturopathy
             </span>
             <span className="px-2.5 py-1 rounded-md border border-border bg-card text-foreground font-medium text-[11px]">
-              Web &amp; Full-Stack Systems
+              Unani
             </span>
             <span className="px-2.5 py-1 rounded-md border border-border bg-card text-foreground font-medium text-[11px]">
-              Cybersecurity &amp; Defense
+              Siddha
             </span>
             <span className="px-2.5 py-1 rounded-md border border-border bg-card text-foreground font-medium text-[11px]">
-              Software &amp; Core Systems
+              Homoeopathy
             </span>
           </div>
         </div>

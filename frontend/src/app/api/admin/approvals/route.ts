@@ -20,7 +20,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const result = AdminLiveService.handleApprovalDecision(
+    const result = await AdminLiveService.handleApprovalDecision(
       id,
       entityId,
       rawType,

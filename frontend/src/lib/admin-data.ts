@@ -1,6 +1,8 @@
 /**
- * Skill-Bridge Production Admin Panel Data Store
- * Structured data types and realistic mock store for all 16 administrative views.
+ * Skill Bridge — Admin Console Data Architecture (AYUSH Healthcare)
+ * Static demo data and system state models for Admin dashboard testing.
+ * Strictly scoped to the 5 canonical AYUSH systems:
+ * Ayurveda, Yoga & Naturopathy, Unani, Siddha, Homoeopathy.
  */
 
 export interface StudentProfile {
@@ -11,15 +13,16 @@ export interface StudentProfile {
   course: string;
   semester: number;
   rollNumber: string;
-  status: "active" | "inactive" | "pending";
+  status: "active" | "placed" | "internship" | "inactive";
   skills: { name: string; proficiency: "Beginner" | "Intermediate" | "Advanced" }[];
   skillGaps: { skill: string; requiredLevel: string; currentLevel: string; priority: "High" | "Medium" | "Low" }[];
   certifications: { title: string; issuer: string; date: string; verified: boolean }[];
   projects: { title: string; tech: string; description: string }[];
   careerInterests: string[];
-  applications: { role: string; company: string; status: "Applied" | "Shortlisted" | "Offered" | "Rejected"; date: string }[];
+  applications: { role: string; company: string; status: "Applied" | "Shortlisted" | "Interviewing" | "Offered" | "Rejected"; date: string }[];
   joinedDate: string;
 }
+export type StudentRecord = StudentProfile;
 
 export interface FacultyMember {
   id: string;
@@ -30,9 +33,10 @@ export interface FacultyMember {
   subjects: string[];
   coursesHandled: number;
   assessmentsCreated: number;
-  status: "verified" | "pending" | "deactivated";
+  status: "verified" | "pending" | "suspended" | "deactivated";
   joinedDate: string;
 }
+export type FacultyRecord = FacultyMember;
 
 export interface IndustryPartner {
   id: string;
@@ -50,19 +54,35 @@ export interface IndustryPartner {
   joinedDate: string;
 }
 
+export interface InstitutionRecord {
+  id: string;
+  name: string;
+  type: "Autonomous Apex Institute" | "National Institute" | "Government Medical College" | "Deemed University";
+  location: string;
+  dean: string;
+  contactEmail: string;
+  totalStudents: number;
+  totalFaculty: number;
+  placementRate: number;
+  status: "verified" | "pending" | "suspended";
+  isSuspended: boolean;
+  joinedDate: string;
+}
+
 export interface SkillItem {
   id: string;
   name: string;
   category:
-    | "Programming"
-    | "Web Development"
-    | "Mobile Development"
-    | "Cloud"
-    | "Cybersecurity"
-    | "Data Science"
-    | "AI / ML"
-    | "DevOps"
-    | "Database"
+    | "Ayurveda"
+    | "Yoga & Naturopathy"
+    | "Unani"
+    | "Siddha"
+    | "Homoeopathy"
+    | "Clinical Diagnostics"
+    | "Classical Formulations"
+    | "Pharmacopoeia & Standardization"
+    | "Digital Health & ABDM"
+    | "Integrative Medicine"
     | "Soft Skills"
     | "Other";
   description: string;
@@ -74,7 +94,7 @@ export interface SkillItem {
 export interface SkillGapMetric {
   skill: string;
   category: string;
-  industryDemand: "Very High" | "High" | "Medium" | "Low";
+  industryDemand: "Very High" | "High" | "Medium";
   studentProficiency: "Advanced" | "Intermediate" | "Low" | "Beginner";
   affectedStudents: number;
   departments: string[];
@@ -156,153 +176,120 @@ export interface AuditLogItem {
   action: string;
   resource: string;
   timestamp: string;
-  status: "Success" | "Flagged" | "Rejected";
+  status: "Success" | "Flagged" | "Blocked";
 }
 
 export interface AdminUser {
   id: string;
   name: string;
   email: string;
-  role: "Super Admin" | "College Admin" | "Placement Admin" | "Faculty Coordinator" | "Industry Coordinator";
+  role: "Super Admin" | "College Admin" | "Placement Admin";
   status: "active" | "suspended";
   lastLogin: string;
 }
 
-// Initial Realistic Dataset
-export const initialStudents: StudentProfile[] = [
+export const initialStudents: StudentRecord[] = [
   {
     id: "stu-1",
-    name: "Alex Rivera",
-    email: "alex.rivera@nit.edu",
-    department: "Computer Science",
-    course: "B.Tech CSE",
+    name: "Ananya Sharma",
+    email: "ananya.sharma@aiia.ac.in",
+    department: "Department of Kayachikitsa & Panchakarma",
+    course: "BAMS (Bachelor of Ayurvedic Medicine & Surgery)",
     semester: 6,
-    rollNumber: "NIT-CSE-2022-042",
+    rollNumber: "AIIA-BAMS-2022-042",
     status: "active",
     skills: [
-      { name: "Python", proficiency: "Advanced" },
-      { name: "React", proficiency: "Intermediate" },
-      { name: "SQL", proficiency: "Intermediate" },
-      { name: "Docker", proficiency: "Beginner" },
+      { name: "Nadi Pariksha Diagnostics", proficiency: "Advanced" },
+      { name: "Classical Panchakarma Protocols", proficiency: "Intermediate" },
+      { name: "Dravyaguna Pharmacology", proficiency: "Advanced" },
     ],
     skillGaps: [
-      { skill: "DevOps & CI/CD", requiredLevel: "Intermediate", currentLevel: "Beginner", priority: "High" },
-      { skill: "Cloud Architecture (AWS)", requiredLevel: "Intermediate", currentLevel: "Beginner", priority: "High" },
+      { skill: "Schedule T & WHO-GMP Standards", requiredLevel: "Intermediate", currentLevel: "Beginner", priority: "High" },
+      { skill: "Ayush Grid EHR Documentation", requiredLevel: "Intermediate", currentLevel: "Beginner", priority: "Medium" },
     ],
     certifications: [
-      { title: "AWS Certified Cloud Practitioner", issuer: "Amazon Web Services", date: "2024-03-15", verified: true },
-      { title: "Meta Front-End Developer", issuer: "Coursera", date: "2023-11-20", verified: true },
+      { title: "Clinical Fellowship in Panchakarma", issuer: "AIIA New Delhi", date: "2024-03-15", verified: true },
     ],
     projects: [
-      { title: "Distributed Job Scheduler", tech: "Python, Redis, Docker", description: "Asynchronous task queue with real-time worker monitoring" },
-      { title: "Campus Skill Matrix", tech: "Next.js, Tailwind, PostgreSQL", description: "Role-based student competency evaluation tool" },
+      { title: "Standardized Herbal Management in Metabolic Syndrome", tech: "Ayurvedic Clinical Trials, CTRI", description: "Evaluated clinical outcomes in 50 patients using classical formulations" },
     ],
-    careerInterests: ["Cloud Solutions Architect", "Full Stack Systems Engineer"],
+    careerInterests: ["Ayurvedic Medical Officer", "Clinical Research Scientist"],
     applications: [
-      { role: "Junior Cloud Engineer", company: "Apex Dynamics", status: "Offered", date: "2024-08-10" },
-      { role: "Backend Developer Intern", company: "Infosys", status: "Shortlisted", date: "2024-08-01" },
+      { role: "Ayurvedic Medical Officer", company: "All India Institute of Ayurveda", status: "Offered", date: "2024-08-10" },
+      { role: "Clinical Research Intern", company: "Dabur Research Foundation", status: "Shortlisted", date: "2024-08-01" },
     ],
     joinedDate: "2022-08-15",
   },
   {
     id: "stu-2",
-    name: "Priya Sharma",
-    email: "priya.sharma@dtu.ac.in",
-    department: "Information Technology",
-    course: "B.Tech IT",
+    name: "Priya Nair",
+    email: "priya.nair@ninpune.edu",
+    department: "Department of Clinical Naturopathy & Yoga Therapy",
+    course: "BNYS (Bachelor of Naturopathy & Yogic Sciences)",
     semester: 5,
-    rollNumber: "DTU-IT-2023-109",
+    rollNumber: "NIN-BNYS-2023-109",
     status: "active",
     skills: [
-      { name: "Python", proficiency: "Intermediate" },
-      { name: "PostgreSQL", proficiency: "Intermediate" },
-      { name: "Pandas/NumPy", proficiency: "Advanced" },
+      { name: "Clinical Yoga Therapy", proficiency: "Advanced" },
+      { name: "Hydrotherapy & Balneotherapy", proficiency: "Intermediate" },
+      { name: "Therapeutic Dietetics & Fasting", proficiency: "Advanced" },
     ],
     skillGaps: [
-      { skill: "Cybersecurity Basics", requiredLevel: "Intermediate", currentLevel: "Beginner", priority: "Medium" },
-      { skill: "Kubernetes", requiredLevel: "Intermediate", currentLevel: "Beginner", priority: "High" },
+      { skill: "Heart Rate Variability (HRV) Biofeedback", requiredLevel: "Intermediate", currentLevel: "Beginner", priority: "High" },
+      { skill: "Acupuncture Meridian Balancing", requiredLevel: "Intermediate", currentLevel: "Beginner", priority: "Medium" },
     ],
     certifications: [
-      { title: "DeepLearning.AI Machine Learning Specialization", issuer: "DeepLearning.AI", date: "2024-05-12", verified: true },
+      { title: "Post Graduate Diploma in Yoga Therapy", issuer: "MDNIY New Delhi", date: "2024-05-12", verified: true },
     ],
     projects: [
-      { title: "Predictive Placement Analytics", tech: "Python, Scikit-Learn, Streamlit", description: "ML model predicting internship offer conversion" },
+      { title: "Vagal Nerve Stimulation via Resonant Pranayama", tech: "HRV Telemetry, Clinical Protocol", description: "Demonstrated blood pressure lowering in mild essential hypertension" },
     ],
-    careerInterests: ["Data Scientist", "ML Operations Engineer"],
+    careerInterests: ["Senior Naturopathic Physician", "Integrative Wellness Director"],
     applications: [
-      { role: "Data Science Intern", company: "Zenith Solutions", status: "Applied", date: "2024-08-20" },
+      { role: "Yoga & Naturopathy Consultant", company: "National Institute of Naturopathy", status: "Applied", date: "2024-08-20" },
     ],
     joinedDate: "2023-08-10",
   },
   {
     id: "stu-3",
-    name: "Ayan Parmar",
-    email: "ayanparmar54@gmail.com",
-    department: "Computer Applications",
-    course: "BCA",
-    semester: 4,
-    rollNumber: "CC-BCA-2024-019",
+    name: "Mohammed Zaid",
+    email: "zaid.m@nium.ac.in",
+    department: "Department of Moalajat & Ilaj-bit-Tadbeer",
+    course: "BUMS (Bachelor of Unani Medicine & Surgery)",
+    semester: 6,
+    rollNumber: "NIUM-BUMS-2022-019",
     status: "active",
     skills: [
-      { name: "JavaScript", proficiency: "Intermediate" },
-      { name: "HTML/CSS", proficiency: "Advanced" },
-      { name: "Node.js", proficiency: "Beginner" },
+      { name: "Ajnas-e-Nabz Pulse Palpation", proficiency: "Advanced" },
+      { name: "Sterile Hijama (Cupping) Technique", proficiency: "Advanced" },
+      { name: "Mufradat Single Drug Temperament", proficiency: "Intermediate" },
     ],
     skillGaps: [
-      { skill: "System Design", requiredLevel: "Intermediate", currentLevel: "Beginner", priority: "High" },
-      { skill: "Automated Testing", requiredLevel: "Intermediate", currentLevel: "Beginner", priority: "Medium" },
+      { skill: "Laser Doppler Perfusion Imaging in Hijama", requiredLevel: "Intermediate", currentLevel: "Beginner", priority: "High" },
+      { skill: "Murakkabat Industrial Formulation", requiredLevel: "Intermediate", currentLevel: "Beginner", priority: "Medium" },
     ],
     certifications: [
-      { title: "JavaScript Algorithms & Data Structures", issuer: "freeCodeCamp", date: "2024-02-18", verified: true },
+      { title: "Advanced Regimenal Fellowship", issuer: "NIUM Bengaluru", date: "2024-02-18", verified: true },
     ],
     projects: [
-      { title: "Real-time Chat Portal", tech: "React, Socket.io, Node.js", description: "Multi-room chat app with message persistence" },
+      { title: "Clinical Efficacy of Taleeq in Ischemic Micro-angiopathy", tech: "Leech Therapy, Clinical Trials", description: "Documented acceleration in venous ulcer granulation tissue" },
     ],
-    careerInterests: ["Frontend Engineer", "Full Stack Developer"],
+    careerInterests: ["Unani Medical Consultant", "Regimenal Surgical Specialist"],
     applications: [
-      { role: "Web Developer Intern", company: "TCS iON", status: "Applied", date: "2024-08-25" },
+      { role: "Unani Clinical Officer", company: "National Institute of Unani Medicine", status: "Interviewing", date: "2024-08-15" },
     ],
-    joinedDate: "2024-01-12",
-  },
-  {
-    id: "stu-4",
-    name: "Rohan Verma",
-    email: "rohan.verma@bits.edu",
-    department: "Computer Science",
-    course: "B.Tech CSE",
-    semester: 7,
-    rollNumber: "BITS-CSE-2021-088",
-    status: "active",
-    skills: [
-      { name: "C++", proficiency: "Advanced" },
-      { name: "Linux Systems", proficiency: "Advanced" },
-      { name: "Networking", proficiency: "Intermediate" },
-    ],
-    skillGaps: [
-      { skill: "Cloud Native Deployments", requiredLevel: "Advanced", currentLevel: "Intermediate", priority: "Low" },
-    ],
-    certifications: [
-      { title: "Certified Kubernetes Administrator (CKA)", issuer: "Linux Foundation", date: "2024-04-10", verified: true },
-    ],
-    projects: [
-      { title: "Custom Memory Allocator", tech: "C++, Valgrind", description: "High-performance slab allocator for game loops" },
-    ],
-    careerInterests: ["Systems Engineer", "Infrastructure Architect"],
-    applications: [
-      { role: "Core Systems Engineer", company: "Microsoft", status: "Shortlisted", date: "2024-08-14" },
-    ],
-    joinedDate: "2021-08-20",
+    joinedDate: "2022-08-10",
   },
 ];
 
-export const initialFaculty: FacultyMember[] = [
+export const initialFaculty: FacultyRecord[] = [
   {
     id: "fac-1",
-    name: "Dr. K. S. Raghavan",
-    email: "raghavan.ks@nit.edu",
-    department: "Computer Science",
-    designation: "Professor & HOD",
-    subjects: ["Distributed Systems", "Cloud Computing", "Advanced Operating Systems"],
+    name: "Prof. Dr. Rajeshwari Varma",
+    email: "r.varma@aiia.gov.in",
+    department: "Kayachikitsa & Panchakarma",
+    designation: "Head of Department",
+    subjects: ["Kayachikitsa", "Panchakarma", "Samhita Siddhanta"],
     coursesHandled: 4,
     assessmentsCreated: 12,
     status: "verified",
@@ -310,11 +297,11 @@ export const initialFaculty: FacultyMember[] = [
   },
   {
     id: "fac-2",
-    name: "Dr. Ananya Sen",
-    email: "ananya.sen@dtu.ac.in",
-    department: "Information Technology",
+    name: "Dr. K. S. Raghavan",
+    email: "ks.raghavan@nischennai.org",
+    department: "Varmam Science & Maruthuvam",
     designation: "Associate Professor",
-    subjects: ["Database Systems", "Big Data Analytics", "Data Mining"],
+    subjects: ["Varmam Science", "Gunapadam", "Envagai Thervu"],
     coursesHandled: 3,
     assessmentsCreated: 8,
     status: "verified",
@@ -322,256 +309,318 @@ export const initialFaculty: FacultyMember[] = [
   },
   {
     id: "fac-3",
-    name: "Prof. Vikram Malhotra",
-    email: "v.malhotra@bits.edu",
-    department: "Computer Science",
-    designation: "Assistant Professor",
-    subjects: ["Computer Networks", "Cybersecurity", "Cryptography"],
-    coursesHandled: 2,
-    assessmentsCreated: 6,
+    name: "Dr. Hakim Arshad Siddiqui",
+    email: "a.siddiqui@nium.in",
+    department: "Moalajat & Regimenal Therapies",
+    designation: "Professor & Hospital Director",
+    subjects: ["Moalajat", "Ilaj-bit-Tadbeer", "Kulliyat"],
+    coursesHandled: 3,
+    assessmentsCreated: 10,
     status: "verified",
-    joinedDate: "2021-07-01",
+    joinedDate: "2019-07-01",
   },
   {
     id: "fac-4",
-    name: "Dr. Meenakshi Joshi",
-    email: "m.joshi@iitb.ac.in",
-    department: "Artificial Intelligence",
-    designation: "Research Director",
-    subjects: ["Neural Networks", "Natural Language Processing", "Reinforcement Learning"],
-    coursesHandled: 3,
-    assessmentsCreated: 9,
-    status: "pending",
-    joinedDate: "2024-07-20",
+    name: "Dr. Suman Sengupta",
+    email: "s.sengupta@nih.nic.in",
+    department: "Organon of Medicine & Repertory",
+    designation: "Senior Research Director",
+    subjects: ["Organon of Medicine", "Repertory", "Chronic Miasms"],
+    coursesHandled: 4,
+    assessmentsCreated: 14,
+    status: "verified",
+    joinedDate: "2021-07-20",
   },
 ];
 
 export const initialIndustry: IndustryPartner[] = [
   {
     id: "ind-1",
-    companyName: "Infosys Technologies",
-    industry: "IT & Enterprise Consulting",
-    contactPerson: "Rajesh Kumar",
-    contactEmail: "rajesh.k@infosys.com",
-    website: "https://www.infosys.com",
-    demandedSkills: ["Java", "Spring Boot", "Cloud Migration", "PostgreSQL"],
-    openJobs: 45,
-    activeInternships: 80,
+    companyName: "Dabur Research Foundation",
+    industry: "Ayurvedic Pharmaceuticals & Clinical Trials",
+    contactPerson: "Dr. Ashok Sharma",
+    contactEmail: "ashok.s@dabur.com",
+    website: "https://www.dabur.com",
+    demandedSkills: ["Dravyaguna Pharmacology", "HPTLC Assay", "Pharmacovigilance", "Schedule T GMP"],
+    openJobs: 25,
+    activeInternships: 40,
     status: "verified",
     isFrozen: false,
     joinedDate: "2023-01-10",
   },
   {
     id: "ind-2",
-    companyName: "Apex Dynamics Corp",
-    industry: "AI & Autonomous Systems",
-    contactPerson: "Elena Vance",
-    contactEmail: "evance@apexdynamics.ai",
-    website: "https://apexdynamics.ai",
-    demandedSkills: ["Python", "PyTorch", "CUDA", "Linux", "Docker"],
-    openJobs: 8,
-    activeInternships: 15,
+    companyName: "Patanjali Research Institute",
+    industry: "Integrative Medicine & Classical Herbals",
+    contactPerson: "Dr. Anurag Varshney",
+    contactEmail: "anurag.v@patanjali.org",
+    website: "https://patanjali.org",
+    demandedSkills: ["Clinical Research", "Classical Formulations", "Toxicity Assays", "Ayush Grid"],
+    openJobs: 18,
+    activeInternships: 30,
     status: "verified",
     isFrozen: false,
     joinedDate: "2023-09-18",
   },
   {
     id: "ind-3",
-    companyName: "Zenith Financial Solutions",
-    industry: "FinTech & Banking Infrastructure",
-    contactPerson: "Arjun Nambiar",
-    contactEmail: "a.nambiar@zenithfin.in",
-    website: "https://zenithfin.in",
-    demandedSkills: ["Go", "Kafka", "PostgreSQL", "Cybersecurity", "Kubernetes"],
+    companyName: "Kottakkal Arya Vaidya Sala",
+    industry: "Classical Panchakarma & Hospital Healthcare",
+    contactPerson: "Dr. K. Muraleedharan",
+    contactEmail: "muraleedharan@aryavaidyasala.com",
+    website: "https://aryavaidyasala.com",
+    demandedSkills: ["Panchakarma Protocols", "Snehana-Swedana", "Nadi Pariksha", "NABH Standards"],
     openJobs: 12,
-    activeInternships: 20,
+    activeInternships: 25,
     status: "verified",
     isFrozen: false,
     joinedDate: "2023-11-05",
   },
   {
     id: "ind-4",
-    companyName: "NovaCloud Networks",
-    industry: "Cloud Infrastructure",
-    contactPerson: "Siddharth Roy",
-    contactEmail: "s.roy@novacloud.io",
-    website: "https://novacloud.io",
-    demandedSkills: ["Terraform", "AWS", "DevOps", "Prometheus"],
-    openJobs: 6,
-    activeInternships: 10,
-    status: "pending",
+    companyName: "Himalaya Wellness Company",
+    industry: "Phyto-Pharmaceuticals & Herbal Healthcare",
+    contactPerson: "Dr. Priya Sundaram",
+    contactEmail: "priya.s@himalayawellness.com",
+    website: "https://himalayawellness.com",
+    demandedSkills: ["Botanical Pharmacognosy", "WHO-GMP", "Clinical Documentation", "Quality Control"],
+    openJobs: 15,
+    activeInternships: 20,
+    status: "verified",
     isFrozen: false,
-    joinedDate: "2024-06-15",
+    joinedDate: "2024-02-15",
+  },
+];
+
+export const initialInstitutions: InstitutionRecord[] = [
+  {
+    id: "inst-1",
+    name: "All India Institute of Ayurveda (AIIA), New Delhi",
+    type: "Autonomous Apex Institute",
+    location: "New Delhi, Delhi",
+    dean: "Prof. Dr. Tanuja Nesari",
+    contactEmail: "director@aiia.gov.in",
+    totalStudents: 680,
+    totalFaculty: 85,
+    placementRate: 94.2,
+    status: "verified",
+    isSuspended: false,
+    joinedDate: "2022-01-15",
+  },
+  {
+    id: "inst-2",
+    name: "National Institute of Naturopathy (NIN), Pune",
+    type: "National Institute",
+    location: "Pune, Maharashtra",
+    dean: "Prof. Dr. Satya Lakshmi",
+    contactEmail: "director@punenin.org",
+    totalStudents: 420,
+    totalFaculty: 45,
+    placementRate: 88.5,
+    status: "verified",
+    isSuspended: false,
+    joinedDate: "2022-03-20",
+  },
+  {
+    id: "inst-3",
+    name: "National Institute of Unani Medicine (NIUM), Bengaluru",
+    type: "National Institute",
+    location: "Bengaluru, Karnataka",
+    dean: "Prof. Dr. Abdul Wadud",
+    contactEmail: "director@nium.in",
+    totalStudents: 380,
+    totalFaculty: 50,
+    placementRate: 91.0,
+    status: "verified",
+    isSuspended: false,
+    joinedDate: "2022-05-10",
+  },
+  {
+    id: "inst-4",
+    name: "National Institute of Siddha (NIS), Chennai",
+    type: "National Institute",
+    location: "Chennai, Tamil Nadu",
+    dean: "Prof. Dr. R. Meenakumari",
+    contactEmail: "director@nischennai.org",
+    totalStudents: 350,
+    totalFaculty: 40,
+    placementRate: 89.4,
+    status: "verified",
+    isSuspended: false,
+    joinedDate: "2022-06-12",
   },
 ];
 
 export const initialSkills: SkillItem[] = [
   {
     id: "sk-1",
-    name: "Python",
-    category: "Programming",
-    description: "Core general-purpose language used extensively in data science, automation, backend APIs, and machine learning.",
-    proficiencyLevels: ["Basic Syntax & OOP", "Data Structures & Libraries", "Async Architectures & Frameworks"],
+    name: "Nadi Pariksha (Pulse Diagnostics)",
+    category: "Clinical Diagnostics",
+    description: "Classical evaluation of pulse gati (swan, frog, serpent), rhythm, volume, and doshic predominance.",
+    proficiencyLevels: ["Fundamental Gati Recognition", "Sthanika Dosha Localization", "Advanced Multi-Layer Palpation"],
     industryDemand: "Very High",
-    relatedCourses: ["Advanced Python for Systems", "Python Data Analytics"],
+    relatedCourses: ["Advanced Classical Diagnostic Methods", "Nadi Pariksha Mastery"],
   },
   {
     id: "sk-2",
-    name: "Cloud Computing (AWS / Azure)",
-    category: "Cloud",
-    description: "Designing, provisioning, and securing multi-tier cloud infrastructure, VPC networking, and managed databases.",
-    proficiencyLevels: ["Cloud Foundations", "Architecting Scalable Services", "Enterprise DevOps Infrastructure"],
+    name: "Clinical Panchakarma Protocols",
+    category: "Ayurveda",
+    description: "Execution of Snehapana dosage escalation, Snehana, Swedana, Vamana, Virechana, and Basti therapy.",
+    proficiencyLevels: ["Purvakarma Management", "Vega Monitoring in Pradhana Karma", "Paschatkarma Samsarjana Krama"],
     industryDemand: "Very High",
-    relatedCourses: ["AWS Solutions Architecture Mastery", "Cloud Fundamentals"],
+    relatedCourses: ["Clinical Fellowship in Advanced Panchakarma"],
   },
   {
     id: "sk-3",
-    name: "Docker & Kubernetes",
-    category: "DevOps",
-    description: "Containerization, pod lifecycle management, declarative ingress controllers, and automated continuous delivery.",
-    proficiencyLevels: ["Containerization Basics", "Compose & Service Mesh", "Production Cluster Management"],
+    name: "Clinical Yoga Therapy & Autonomic Regulation",
+    category: "Yoga & Naturopathy",
+    description: "Prescribing targeted restorative asanas, resonant pranayama, and Yoga Nidra for psychosomatic illness.",
+    proficiencyLevels: ["Therapeutic Postural Prescription", "Autonomic HRV Monitoring", "Clinical Yoga Rehabilitation"],
     industryDemand: "Very High",
-    relatedCourses: ["Production Kubernetes Engineering"],
+    relatedCourses: ["Clinical Yoga Therapy for Psychosomatic Disorders"],
   },
   {
     id: "sk-4",
-    name: "Cybersecurity & Network Defense",
-    category: "Cybersecurity",
-    description: "Threat vector modeling, IAM least-privilege enforcement, penetration vulnerability assessment, and cryptosystems.",
-    proficiencyLevels: ["Security Fundamentals", "Defensive Engineering", "Ethical Pen-Testing & Auditing"],
+    name: "Ilaj-bit-Tadbeer (Regimenal Therapies & Hijama)",
+    category: "Unani",
+    description: "Aseptic operative execution of dry/wet cupping (Hijama), leech therapy (Taleeq), and venesection.",
+    proficiencyLevels: ["Aseptic Landmarking & Suction", "Hijama-bil-Shart Scarification", "Clinical Microvascular Rheology"],
     industryDemand: "High",
-    relatedCourses: ["Applied Cyber Defense", "Web Security Foundations"],
+    relatedCourses: ["Regimenal Therapy Clinical Fellowship"],
   },
   {
     id: "sk-5",
-    name: "React & Next.js",
-    category: "Web Development",
-    description: "Component architecture, Server-Side Rendering, State Management, and high-performance frontend interfaces.",
-    proficiencyLevels: ["Component Building", "Full-Stack Next.js SSR", "Large Scale State & Microfrontends"],
+    name: "Varmam Science & Musculoskeletal Traumatology",
+    category: "Siddha",
+    description: "Locating and stimulating 108 vital energy points, Adangal emergency retrieval, and Thokkanam manipulation.",
+    proficiencyLevels: ["Varmam Point Identification", "Adangal Counter-Manipulation", "Trauma Emergency Resuscitation"],
     industryDemand: "High",
-    relatedCourses: ["Modern Next.js Production Applications"],
+    relatedCourses: ["Varmam Science & Adangal Resuscitation"],
   },
   {
     id: "sk-6",
-    name: "PostgreSQL & Vector Search",
-    category: "Database",
-    description: "Relational modeling, indexing strategies, query execution plans, and pgvector embeddings for semantic discovery.",
-    proficiencyLevels: ["SQL Queries & Relational Design", "Performance Indexing", "Vector Search & Distributed Clusters"],
-    industryDemand: "High",
-    relatedCourses: ["Database Engineering at Scale"],
+    name: "Homoeopathic Repertorization & Miasmatic Analysis",
+    category: "Homoeopathy",
+    description: "Hahnemannian case taking (Organon §83–104), Kentian rubric hierarchy, and chronic miasmatic diagnosis.",
+    proficiencyLevels: ["Rubric Extraction & Totality", "Comparative Materia Medica", "Miasmatic Obstacle Resolution"],
+    industryDemand: "Very High",
+    relatedCourses: ["Advanced Case Taking, Repertorization & Miasmatic Analysis"],
   },
   {
     id: "sk-7",
-    name: "Machine Learning & PyTorch",
-    category: "AI / ML",
-    description: "Supervised and unsupervised learning, deep neural representations, PyTorch model training and deployment.",
-    proficiencyLevels: ["Statistical Foundations", "Model Building with PyTorch", "LLM Fine-tuning & Production Serving"],
-    industryDemand: "Very High",
-    relatedCourses: ["Deep Learning Systems"],
+    name: "Schedule T / WHO-GMP Formulation Standards",
+    category: "Pharmacopoeia & Standardization",
+    description: "Ayurvedic, Siddha, and Unani Pharmacopoeia compliance, heavy metal testing, and batch manufacturing records.",
+    proficiencyLevels: ["Pharmacopoeial Monograph Verification", "Heavy Metal & Aflatoxin Assay", "Schedule T Auditing"],
+    industryDemand: "High",
+    relatedCourses: ["Ayurvedic Pharmacopoeia Standards & HPTLC Assay"],
   },
   {
     id: "sk-8",
-    name: "Flutter & React Native",
-    category: "Mobile Development",
-    description: "Cross-platform mobile application development with native bridge integration and offline caching.",
-    proficiencyLevels: ["UI Widgets & State", "Native Hardware Integrations", "Cross-Platform Optimization"],
-    industryDemand: "Medium",
-    relatedCourses: ["Modern Mobile Engineering"],
-  },
-  {
-    id: "sk-9",
-    name: "Technical Communication & Team Leadership",
-    category: "Soft Skills",
-    description: "Writing clear technical documentation, sprint retrospectives, presentation of engineering tradeoffs, and cross-functional leadership.",
-    proficiencyLevels: ["Engineering Documentation", "Cross-Functional Collaboration", "Team Mentorship"],
-    industryDemand: "High",
-    relatedCourses: ["Executive Engineering Communication"],
+    name: "Ayush Grid & ABDM Digital Health Records",
+    category: "Digital Health & ABDM",
+    description: "Integration of AYUSH clinical documentation with Ayush Grid, NAMASTE portal, and FHIR standard EHR.",
+    proficiencyLevels: ["NAMASTE Terminology Mapping", "Ayush Hospital EHR Entry", "FHIR Tele-Consultation Systems"],
+    industryDemand: "Very High",
+    relatedCourses: ["Digital Health & Ayush Grid Integration"],
   },
 ];
 
 export const initialSkillGaps: SkillGapMetric[] = [
   {
-    skill: "Cloud Computing (AWS / Azure)",
-    category: "Cloud",
-    industryDemand: "Very High",
-    studentProficiency: "Low",
-    affectedStudents: 218,
-    departments: ["Computer Science", "Information Technology", "Computer Applications"],
-    recommendedAction: "Organize 4-week AWS Solutions Architecture Hands-on Boot Camp with subsidized certification vouchers.",
-  },
-  {
-    skill: "DevOps & CI/CD (Docker, Kubernetes)",
-    category: "DevOps",
+    skill: "Nadi Pariksha & Pulse Diagnostics",
+    category: "Clinical Diagnostics",
     industryDemand: "Very High",
     studentProficiency: "Beginner",
+    affectedStudents: 210,
+    departments: ["Kayachikitsa & Panchakarma", "Swasthavritta"],
+    recommendedAction: "Host 4-week bedside Nadi Pariksha clinical workshops with senior Vaidyas.",
+  },
+  {
+    skill: "Clinical Panchakarma Protocols",
+    category: "Ayurveda",
+    industryDemand: "Very High",
+    studentProficiency: "Intermediate",
     affectedStudents: 184,
-    departments: ["Computer Science", "Information Technology"],
-    recommendedAction: "Integrate containerization lab modules into 5th semester Distributed Systems curriculum.",
+    departments: ["Kayachikitsa & Panchakarma"],
+    recommendedAction: "Integrate high-volume Snehapana and Virechana inpatient clinical rotations.",
   },
   {
-    skill: "Cybersecurity Defense & Pen-testing",
-    category: "Cybersecurity",
+    skill: "Sterile Hijama & Regimenal Therapies",
+    category: "Unani",
     industryDemand: "High",
-    studentProficiency: "Low",
+    studentProficiency: "Beginner",
     affectedStudents: 142,
-    departments: ["Information Technology", "Computer Applications"],
-    recommendedAction: "Host collegiate Capture-The-Flag (CTF) tournament and initiate defensive security workshops.",
+    departments: ["Moalajat & Ilaj-bit-Tadbeer"],
+    recommendedAction: "Establish hospital operative sterile cupping theater training modules.",
   },
   {
-    skill: "PostgreSQL Optimization & Vector Indexing",
-    category: "Database",
+    skill: "Schedule T / WHO-GMP Quality Standards",
+    category: "Pharmacopoeia & Standardization",
     industryDemand: "High",
     studentProficiency: "Intermediate",
     affectedStudents: 96,
-    departments: ["Computer Science", "Data Science"],
-    recommendedAction: "Conduct query tuning masterclass and pgvector semantic retrieval workshop.",
+    departments: ["Dravyaguna", "Rasa Shastra"],
+    recommendedAction: "Conduct HPLC botanical assay masterclass and Schedule T GMP audit certifications.",
   },
   {
-    skill: "Production Machine Learning (MLOps)",
-    category: "AI / ML",
+    skill: "Ayush Grid & ABDM Digital Documentation",
+    category: "Digital Health & ABDM",
     industryDemand: "Very High",
     studentProficiency: "Beginner",
     affectedStudents: 165,
-    departments: ["Computer Science", "Artificial Intelligence"],
-    recommendedAction: "Collaborate with Apex Dynamics for 6-week industry-mentored ML pipeline project.",
+    departments: ["All AYUSH Departments"],
+    recommendedAction: "Deploy sandbox training for Ayush Hospital Management Information System (A-HMIS).",
   },
 ];
 
 export const initialJobs: JobListing[] = [
   {
     id: "job-1",
-    company: "Infosys Technologies",
-    position: "Systems Engineer (Fresher 2025/2026)",
-    requiredSkills: ["Java", "SQL", "Problem Solving", "Cloud Basics"],
-    eligibility: "B.Tech / MCA (Min. 6.5 CGPA)",
-    location: "Bengaluru / Pune (Hybrid)",
-    salary: "₹4.5 - ₹6.5 LPA",
+    company: "All India Institute of Ayurveda (AIIA)",
+    position: "Ayurvedic Medical Officer (Clinical Inpatient Services)",
+    requiredSkills: ["Nadi Pariksha", "Panchakarma", "Clinical Kayachikitsa", "ABDM"],
+    eligibility: "BAMS (Min. 60% aggregate, Completed Internship)",
+    location: "New Delhi (On-site)",
+    salary: "₹9.5 - ₹13.0 LPA",
     deadline: "2024-10-15",
     applicationsCount: 142,
     status: "active",
   },
   {
     id: "job-2",
-    company: "Apex Dynamics Corp",
-    position: "Junior Machine Learning Engineer",
-    requiredSkills: ["Python", "PyTorch", "Docker", "Linux"],
-    eligibility: "B.Tech CSE / IT / AI (Min. 7.5 CGPA)",
-    location: "Hyderabad (On-site)",
-    salary: "₹10.0 - ₹14.0 LPA",
+    company: "Dabur Research Foundation",
+    position: "Clinical Pharmacovigilance & Formulations Associate",
+    requiredSkills: ["Dravyaguna Pharmacology", "HPTLC", "WHO-GMP", "Clinical Documentation"],
+    eligibility: "BAMS / M.D. Dravyaguna or Rasa Shastra",
+    location: "Ghaziabad / Delhi NCR (Hybrid)",
+    salary: "₹8.0 - ₹11.5 LPA",
     deadline: "2024-09-30",
     applicationsCount: 48,
     status: "active",
   },
   {
     id: "job-3",
-    company: "Zenith Financial Solutions",
-    position: "Backend Infrastructure Developer",
-    requiredSkills: ["Go", "PostgreSQL", "Kafka", "Kubernetes"],
-    eligibility: "B.Tech / M.Tech (Min. 7.0 CGPA)",
-    location: "Mumbai (Hybrid)",
-    salary: "₹8.0 - ₹12.0 LPA",
+    company: "Kottakkal Arya Vaidya Sala",
+    position: "Panchakarma Resident Physician",
+    requiredSkills: ["Panchakarma Protocols", "Snehana-Swedana", "Basti Administration"],
+    eligibility: "BAMS (Completed Clinical Internship)",
+    location: "Kottakkal, Kerala (On-site)",
+    salary: "₹7.5 - ₹10.5 LPA",
     deadline: "2024-10-05",
     applicationsCount: 65,
+    status: "active",
+  },
+  {
+    id: "job-4",
+    company: "National Institute of Naturopathy",
+    position: "Clinical Naturopath & Yoga Consultant",
+    requiredSkills: ["Clinical Yoga Therapy", "Hydrotherapy", "Fasting Supervision"],
+    eligibility: "BNYS (Registered Practitioner)",
+    location: "Pune, Maharashtra (On-site)",
+    salary: "₹8.5 - ₹12.0 LPA",
+    deadline: "2024-10-20",
+    applicationsCount: 52,
     status: "active",
   },
 ];
@@ -579,10 +628,10 @@ export const initialJobs: JobListing[] = [
 export const initialInternships: InternshipListing[] = [
   {
     id: "intern-1",
-    company: "Apex Dynamics Corp",
-    role: "Computer Vision & AI Intern",
+    company: "All India Institute of Ayurveda (AIIA)",
+    role: "Clinical Panchakarma & Kayachikitsa Intern",
     duration: "6 Months",
-    requiredSkills: ["Python", "OpenCV", "PyTorch"],
+    requiredSkills: ["Snehana-Swedana", "Vega Monitoring", "Samsarjana Krama"],
     stipend: "₹35,000 / month",
     deadline: "2024-09-20",
     applicationsCount: 78,
@@ -590,24 +639,24 @@ export const initialInternships: InternshipListing[] = [
   },
   {
     id: "intern-2",
-    company: "Infosys Springboard",
-    role: "Full Stack Cloud Intern",
-    duration: "3 Months",
-    requiredSkills: ["React", "Node.js", "Docker"],
-    stipend: "₹20,000 / month",
+    company: "Dabur Research Foundation",
+    role: "Ayurvedic Phytochemistry & HPTLC Intern",
+    duration: "6 Months",
+    requiredSkills: ["Botanical Authentication", "TLC Fingerprinting", "Laboratory Protocols"],
+    stipend: "₹28,000 / month",
     deadline: "2024-10-01",
-    applicationsCount: 195,
+    applicationsCount: 95,
     status: "active",
   },
   {
     id: "intern-3",
-    company: "Zenith Financial Solutions",
-    role: "FinTech Security Intern",
+    company: "National Institute of Siddha",
+    role: "Varmam Science & Traumatology Intern",
     duration: "6 Months",
-    requiredSkills: ["Network Security", "Python", "Linux"],
+    requiredSkills: ["Varmam Points", "Adangal Retrieval", "Thokkanam"],
     stipend: "₹30,000 / month",
     deadline: "2024-09-28",
-    applicationsCount: 36,
+    applicationsCount: 42,
     status: "active",
   },
 ];
@@ -615,34 +664,34 @@ export const initialInternships: InternshipListing[] = [
 export const initialCourses: CourseData[] = [
   {
     id: "crs-1",
-    courseName: "Cloud Infrastructure Architecture",
-    description: "Master multi-tier VPC networking, compute clusters, IAM access controls, and automated deployments.",
-    skillsTaught: ["Cloud Computing", "AWS", "Networking", "IAM Security"],
-    difficulty: "Intermediate",
-    duration: "8 Weeks",
-    instructor: "Dr. K. S. Raghavan",
+    courseName: "Clinical Fellowship in Advanced Panchakarma Protocols",
+    description: "Comprehensive inpatient hospital training covering Snehapana escalation, Basti compounding, and Samsarjana Krama.",
+    skillsTaught: ["Panchakarma Protocols", "Snehana-Swedana", "Basti Administration", "Samsarjana Krama"],
+    difficulty: "Advanced",
+    duration: "12 Weeks",
+    instructor: "Prof. Dr. Rajeshwari Varma",
     enrolledStudents: 240,
     certification: true,
   },
   {
     id: "crs-2",
-    courseName: "Containerization & Microservices with Docker",
-    description: "Hands-on container packaging, multi-stage builds, orchestration fundamentals, and local testing.",
-    skillsTaught: ["Docker", "Linux Systems", "DevOps Basics"],
-    difficulty: "Beginner",
-    duration: "4 Weeks",
-    instructor: "Prof. Vikram Malhotra",
+    courseName: "Ayurvedic Pharmacopoeia Standards & HPTLC Botanical Assay",
+    description: "Laboratory training on raw drug authentication, Ayurvedic Pharmacopoeia monograph testing, and chemical markers.",
+    skillsTaught: ["Botanical Authentication", "HPTLC Assay", "Schedule T Standards"],
+    difficulty: "Intermediate",
+    duration: "8 Weeks",
+    instructor: "Dr. Ashok Sharma",
     enrolledStudents: 310,
     certification: true,
   },
   {
     id: "crs-3",
-    courseName: "Database Engineering at Scale",
-    description: "Deep dive into relational storage engines, WAL logs, index selection, and pgvector semantic embeddings.",
-    skillsTaught: ["PostgreSQL", "Query Optimization", "Vector Search"],
-    difficulty: "Advanced",
-    duration: "6 Weeks",
-    instructor: "Dr. Ananya Sen",
+    courseName: "Clinical Yoga Therapy for Psychosomatic & Metabolic Disorders",
+    description: "Evidence-based therapeutic yoga prescriptions for hypertension, diabetes, and autonomic nervous dysfunction.",
+    skillsTaught: ["Clinical Yoga Therapy", "Autonomic HRV Monitoring", "Restorative Asana"],
+    difficulty: "Intermediate",
+    duration: "10 Weeks",
+    instructor: "Dr. K. S. Raghavan",
     enrolledStudents: 185,
     certification: true,
   },
@@ -651,32 +700,32 @@ export const initialCourses: CourseData[] = [
 export const initialAssessments: AssessmentData[] = [
   {
     id: "asm-1",
-    title: "AWS Foundations & Cloud Architecture Diagnostic",
+    title: "AIAPGET Ayurveda Clinical Diagnostics & Samhita Benchmark",
     type: "MCQ",
-    mappedSkills: ["Cloud Computing", "Networking", "Security"],
-    durationMinutes: 45,
+    mappedSkills: ["Nadi Pariksha", "Clinical Kayachikitsa", "Panchakarma"],
+    durationMinutes: 60,
     totalAttempts: 184,
-    averageScore: 71.4,
+    averageScore: 74.2,
     status: "published",
   },
   {
     id: "asm-2",
-    title: "Advanced Data Structures & Algorithmic Problem Solving",
-    type: "Coding",
-    mappedSkills: ["Python", "C++", "Algorithms"],
-    durationMinutes: 90,
+    title: "AYUSH NABH Hospital Standards & Clinical Protocol Evaluation",
+    type: "Technical",
+    mappedSkills: ["Schedule T Standards", "NABH AYUSH", "ABDM Digital Documentation"],
+    durationMinutes: 45,
     totalAttempts: 240,
-    averageScore: 64.2,
+    averageScore: 68.5,
     status: "published",
   },
   {
     id: "asm-3",
-    title: "Linux Kernel & System Administration Practicum",
-    type: "Technical",
-    mappedSkills: ["Linux Systems", "DevOps", "Shell Scripting"],
+    title: "Classical Homoeopathic Repertorization & Miasmatic Analysis",
+    type: "MCQ",
+    mappedSkills: ["Repertorization", "Materia Medica", "Miasmatic Diagnosis"],
     durationMinutes: 60,
     totalAttempts: 122,
-    averageScore: 78.5,
+    averageScore: 76.8,
     status: "published",
   },
 ];
@@ -684,33 +733,33 @@ export const initialAssessments: AssessmentData[] = [
 export const initialCertifications: CertificationRecord[] = [
   {
     id: "cert-1",
-    studentName: "Alex Rivera",
-    department: "Computer Science",
-    certificationName: "AWS Certified Cloud Practitioner",
-    issuer: "Amazon Web Services",
+    studentName: "Ananya Sharma",
+    department: "Department of Kayachikitsa & Panchakarma",
+    certificationName: "Fellowship in Clinical Panchakarma",
+    issuer: "All India Institute of Ayurveda",
     dateEarned: "2024-03-15",
-    skills: ["Cloud Computing", "AWS", "IAM"],
+    skills: ["Panchakarma Protocols", "Snehana-Swedana", "Nadi Pariksha"],
     verified: true,
   },
   {
     id: "cert-2",
-    studentName: "Rohan Verma",
-    department: "Computer Science",
-    certificationName: "Certified Kubernetes Administrator (CKA)",
-    issuer: "Cloud Native Computing Foundation",
+    studentName: "Priya Nair",
+    department: "Clinical Naturopathy & Yoga Therapy",
+    certificationName: "Certified Clinical Yoga Therapy Practitioner",
+    issuer: "Morarji Desai National Institute of Yoga",
     dateEarned: "2024-04-10",
-    skills: ["Docker", "Kubernetes", "DevOps"],
+    skills: ["Clinical Yoga Therapy", "Autonomic Regulation", "Restorative Postures"],
     verified: true,
   },
   {
     id: "cert-3",
-    studentName: "Priya Sharma",
-    department: "Information Technology",
-    certificationName: "TensorFlow Developer Certificate",
-    issuer: "Google",
+    studentName: "Mohammed Zaid",
+    department: "Moalajat & Ilaj-bit-Tadbeer",
+    certificationName: "Certified Sterile Regimenal Specialist",
+    issuer: "National Institute of Unani Medicine",
     dateEarned: "2024-06-01",
-    skills: ["Python", "TensorFlow", "Deep Learning"],
-    verified: false,
+    skills: ["Sterile Hijama", "Taleeq Leech Therapy", "Baul Examination"],
+    verified: true,
   },
 ];
 
@@ -718,37 +767,37 @@ export const initialApprovals: ApprovalQueueItem[] = [
   {
     id: "appr-1",
     type: "Industry Partner",
-    title: "NovaCloud Networks Partner Verification",
-    submittedBy: "Siddharth Roy (s.roy@novacloud.io)",
+    title: "Baidyanath Research & Manufacturing Partner Verification",
+    submittedBy: "Dr. Alok Nath (a.nath@baidyanath.co.in)",
     submissionDate: "2024-08-28",
-    details: "New cloud consultancy requesting campus placement partnership and intern recruitment rights.",
+    details: "Ayurvedic formulation manufacturer requesting campus placement and clinical intern recruitment accreditation.",
     status: "pending",
   },
   {
     id: "appr-2",
     type: "Job",
-    title: "Backend Infrastructure Developer (Zenith Solutions)",
-    submittedBy: "Arjun Nambiar",
+    title: "Ayurvedic Medical Officer (AIIA New Delhi)",
+    submittedBy: "Dr. Rajeshwari Varma",
     submissionDate: "2024-08-29",
-    details: "Posting 12 openings for fresh graduates with Go and Kafka background (₹8.0 - ₹12.0 LPA).",
+    details: "Posting 15 openings for BAMS graduates with Panchakarma experience (₹9.5 - ₹13.0 LPA).",
     status: "pending",
   },
   {
     id: "appr-3",
     type: "Faculty",
-    title: "Dr. Meenakshi Joshi Institutional Account Verification",
-    submittedBy: "m.joshi@iitb.ac.in",
+    title: "Dr. Suman Sengupta Institutional Account Verification",
+    submittedBy: "s.sengupta@nih.nic.in",
     submissionDate: "2024-08-27",
-    details: "New faculty onboarding in Artificial Intelligence department.",
+    details: "New faculty onboarding in Organon of Medicine & Repertory department.",
     status: "pending",
   },
   {
     id: "appr-4",
     type: "Course",
-    title: "Modern Next.js Production Applications",
+    title: "Classical Ayush Grid & ABDM Electronic Health Records",
     submittedBy: "Dr. K. S. Raghavan",
     submissionDate: "2024-08-26",
-    details: "Proposed elective module for 6th semester Web Engineering curriculum.",
+    details: "Proposed clinical elective module for 6th semester BAMS/BHMS curriculum.",
     status: "pending",
   },
 ];
@@ -758,7 +807,7 @@ export const initialAuditLogs: AuditLogItem[] = [
     id: "log-1",
     actor: "Admin (admin@gmail.com)",
     action: "Company Hiring Frozen",
-    resource: "Infosys Technologies (ID: hire-req-1)",
+    resource: "Unverified Herbal Exporter (ID: hire-req-1)",
     timestamp: "2024-09-05 23:29:05",
     status: "Flagged",
   },
@@ -766,7 +815,7 @@ export const initialAuditLogs: AuditLogItem[] = [
     id: "log-2",
     actor: "Admin (admin@gmail.com)",
     action: "Campus Activities Suspended",
-    resource: "Delhi Technological University (ID: campus-req-1)",
+    resource: "Unaccredited Private College (ID: campus-req-1)",
     timestamp: "2024-09-05 23:29:10",
     status: "Flagged",
   },
@@ -774,7 +823,7 @@ export const initialAuditLogs: AuditLogItem[] = [
     id: "log-3",
     actor: "Admin (admin@gmail.com)",
     action: "Approved Student Registration",
-    resource: "Jordan Lee (multi_role_1788629974479@university.edu)",
+    resource: "Ananya Sharma (ananya.sharma@aiia.ac.in)",
     timestamp: "2024-09-05 22:58:30",
     status: "Success",
   },
@@ -782,7 +831,7 @@ export const initialAuditLogs: AuditLogItem[] = [
     id: "log-4",
     actor: "Admin (admin@gmail.com)",
     action: "Published Diagnostic Assessment",
-    resource: "AWS Foundations Assessment (ID: asm-1)",
+    resource: "AIAPGET Ayurveda Benchmark (ID: asm-1)",
     timestamp: "2024-09-04 14:15:00",
     status: "Success",
   },
@@ -791,7 +840,7 @@ export const initialAuditLogs: AuditLogItem[] = [
 export const initialAdmins: AdminUser[] = [
   {
     id: "adm-1",
-    name: "System Administrator",
+    name: "Ayush System Administrator",
     email: "admin@gmail.com",
     role: "Super Admin",
     status: "active",
@@ -800,7 +849,7 @@ export const initialAdmins: AdminUser[] = [
   {
     id: "adm-2",
     name: "Dr. Ramesh Nair",
-    email: "ramesh.nair@campus.edu",
+    email: "ramesh.nair@aiia.ac.in",
     role: "College Admin",
     status: "active",
     lastLogin: "2 hours ago",
@@ -808,7 +857,7 @@ export const initialAdmins: AdminUser[] = [
   {
     id: "adm-3",
     name: "Sunita Deshmukh",
-    email: "sunita.d@placement.org",
+    email: "sunita.d@ayushplacement.org",
     role: "Placement Admin",
     status: "active",
     lastLogin: "Yesterday",

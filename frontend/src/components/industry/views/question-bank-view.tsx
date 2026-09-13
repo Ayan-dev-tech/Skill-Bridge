@@ -61,7 +61,7 @@ export function QuestionBankView() {
 
   // Form Fields
   const [questionText, setQuestionText] = React.useState("");
-  const [domainId, setDomainId] = React.useState("software");
+  const [domainId, setDomainId] = React.useState("ayurveda");
   const [difficulty, setDifficulty] = React.useState<"beginner" | "intermediate" | "advanced">("intermediate");
   const [conceptTag, setConceptTag] = React.useState("");
   const [marks, setMarks] = React.useState<number>(1);
@@ -104,7 +104,7 @@ export function QuestionBankView() {
   const resetForm = () => {
     setEditingQuestion(null);
     setQuestionText("");
-    setDomainId("software");
+    setDomainId("ayurveda");
     setDifficulty("intermediate");
     setConceptTag("");
     setMarks(1);
@@ -277,11 +277,11 @@ export function QuestionBankView() {
               className="h-9 px-3 rounded-md border border-border bg-background text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
             >
               <option value="all">All Domains</option>
-              <option value="software">Software Engineering</option>
-              <option value="ai-ml">AI / Machine Learning</option>
-              <option value="cloud">Cloud & Infrastructure</option>
-              <option value="web">Web & Full-Stack</option>
-              <option value="security">Cybersecurity</option>
+              <option value="ayurveda">Ayurveda</option>
+              <option value="yoga-naturopathy">Yoga &amp; Naturopathy</option>
+              <option value="unani">Unani</option>
+              <option value="siddha">Siddha</option>
+              <option value="homoeopathy">Homoeopathy</option>
             </select>
 
             <select
@@ -500,11 +500,11 @@ export function QuestionBankView() {
                     onChange={(e) => setDomainId(e.target.value)}
                     className="w-full h-9 px-2.5 rounded-md border border-border bg-background text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
                   >
-                    <option value="software">Software Eng</option>
-                    <option value="ai-ml">AI / ML</option>
-                    <option value="cloud">Cloud & Infra</option>
-                    <option value="web">Web Systems</option>
-                    <option value="security">Cybersecurity</option>
+                    <option value="ayurveda">Ayurveda</option>
+                    <option value="yoga-naturopathy">Yoga &amp; Naturopathy</option>
+                    <option value="unani">Unani</option>
+                    <option value="siddha">Siddha</option>
+                    <option value="homoeopathy">Homoeopathy</option>
                   </select>
                 </div>
 

@@ -1,0 +1,2661 @@
+[
+  {
+    "table_name": "academia_industry_collaborations",
+    "cols": [
+      {
+        "column": "ayush_systems",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "start_date",
+        "type": "date",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "end_date",
+        "type": "date",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "rd_problem_ids",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "ip_asset_ids",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "industry_id",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "institution_id",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "description",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "title",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      },
+      {
+        "column": "type",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "status",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'proposed'::text"
+      }
+    ]
+  },
+  {
+    "table_name": "assessment_attempts",
+    "cols": [
+      {
+        "column": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "student_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "config_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "exam_type",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "ayush_system",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "status",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'in_progress'::text"
+      },
+      {
+        "column": "question_ids",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      },
+      {
+        "column": "responses",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'{}'::jsonb"
+      },
+      {
+        "column": "started_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "ended_at",
+        "type": "timestamp with time zone",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "score",
+        "type": "numeric",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "max_score",
+        "type": "numeric",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "score_percent",
+        "type": "numeric",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "correct_count",
+        "type": "integer",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "incorrect_count",
+        "type": "integer",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "unattempted_count",
+        "type": "integer",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "total_questions",
+        "type": "integer",
+        "nullable": "NO",
+        "default": "0"
+      },
+      {
+        "column": "skill_performance",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'{}'::jsonb"
+      },
+      {
+        "column": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      }
+    ]
+  },
+  {
+    "table_name": "assessment_configs",
+    "cols": [
+      {
+        "column": "topic_filters",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "name",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "question_count",
+        "type": "integer",
+        "nullable": "NO",
+        "default": "10"
+      },
+      {
+        "column": "time_limit_minutes",
+        "type": "integer",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "passing_score_percent",
+        "type": "numeric",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "is_active",
+        "type": "boolean",
+        "nullable": "NO",
+        "default": "true"
+      },
+      {
+        "column": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "difficulty",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "subject_filters",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "ayush_system",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "mode",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'Practice'::text"
+      },
+      {
+        "column": "exam_type",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "description",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      }
+    ]
+  },
+  {
+    "table_name": "assessment_questions",
+    "cols": [
+      {
+        "column": "source_ref",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "subject",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "topic",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "ayush_skill_ids",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "skill_category",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "explanation",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "reference_year",
+        "type": "integer",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "is_active",
+        "type": "boolean",
+        "nullable": "NO",
+        "default": "false"
+      },
+      {
+        "column": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "difficulty",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "options",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "question_text",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "concept_tag",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "cognitive_level",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "ayush_system",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "scenario_context",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "correct_option_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "exam_type",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "question_type",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'MCQ'::text"
+      }
+    ]
+  },
+  {
+    "table_name": "ayush_internship_extensions",
+    "cols": [
+      {
+        "column": "state",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "verification_status",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'unverified'::text"
+      },
+      {
+        "column": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "duration_weeks",
+        "type": "integer",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "eligibility_criteria",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "required_skill_ids",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "ayush_system",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "internship_posting_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      },
+      {
+        "column": "completion_status",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'not_started'::text"
+      },
+      {
+        "column": "certificate_ref",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "city",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "verification_doc_ref",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      }
+    ]
+  },
+  {
+    "table_name": "ayush_skill_passports",
+    "cols": [
+      {
+        "column": "internship_ids",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "industry_readiness_band",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "course",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "industry_readiness_score",
+        "type": "numeric",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "verified_experiences",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'[]'::jsonb"
+      },
+      {
+        "column": "certifications",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'[]'::jsonb"
+      },
+      {
+        "column": "batch_year",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "institution",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "academic_level",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "student_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "skill_gaps",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'[]'::jsonb"
+      },
+      {
+        "column": "assessment_results",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'[]'::jsonb"
+      },
+      {
+        "column": "competencies",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'[]'::jsonb"
+      },
+      {
+        "column": "ayush_system",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      },
+      {
+        "column": "skills",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'{}'::jsonb"
+      },
+      {
+        "column": "research_interests",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      }
+    ]
+  },
+  {
+    "table_name": "campus_requests",
+    "cols": [
+      {
+        "column": "rejection_reason",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "students_enrolled",
+        "type": "integer",
+        "nullable": "NO",
+        "default": "0"
+      },
+      {
+        "column": "is_frozen",
+        "type": "boolean",
+        "nullable": "NO",
+        "default": "false"
+      },
+      {
+        "column": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "contact_person",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "contact_email",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "location",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "domain",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "freeze_reason",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "status",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'active'::text"
+      },
+      {
+        "column": "request_type",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "code",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "campus_name",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      }
+    ]
+  },
+  {
+    "table_name": "education_programs",
+    "cols": [
+      {
+        "column": "educator_name",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "certification",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "difficulty",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'all_levels'::text"
+      },
+      {
+        "column": "skill_ids",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "niches",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "active",
+        "type": "boolean",
+        "nullable": "NO",
+        "default": "true"
+      },
+      {
+        "column": "domains",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "program_url",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "description",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "title",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "educator_id",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "verified_status",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'sample_provider'::text"
+      },
+      {
+        "column": "duration",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "delivery_type",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      }
+    ]
+  },
+  {
+    "table_name": "educators",
+    "cols": [
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "name",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "slug",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "logo_url",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "active",
+        "type": "boolean",
+        "nullable": "NO",
+        "default": "true"
+      },
+      {
+        "column": "status_label",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'Sample Learning Provider'::text"
+      },
+      {
+        "column": "verified_status",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'sample_provider'::text"
+      },
+      {
+        "column": "website",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "description",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      }
+    ]
+  },
+  {
+    "table_name": "hiring_requests",
+    "cols": [
+      {
+        "column": "is_frozen",
+        "type": "boolean",
+        "nullable": "NO",
+        "default": "false"
+      },
+      {
+        "column": "industry_domain",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "company_name",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      },
+      {
+        "column": "applicants",
+        "type": "integer",
+        "nullable": "NO",
+        "default": "0"
+      },
+      {
+        "column": "positions",
+        "type": "integer",
+        "nullable": "NO",
+        "default": "1"
+      },
+      {
+        "column": "status",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'active'::text"
+      },
+      {
+        "column": "freeze_reason",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "contact_email",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "contact_person",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "rejection_reason",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "job_title",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      }
+    ]
+  },
+  {
+    "table_name": "industry_hiring_posts",
+    "cols": [
+      {
+        "column": "preferred_qualifications",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      },
+      {
+        "column": "industry_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "company_name",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "role_title",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "hiring_type",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'Full-time'::text"
+      },
+      {
+        "column": "industry_domain",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "location",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "required_skills",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "work_mode",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'Hybrid'::text"
+      },
+      {
+        "column": "preferred_skills",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "salary_range",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "required_qualifications",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "required_document_types",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "status",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'draft'::text"
+      },
+      {
+        "column": "experience_requirement",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "description",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "responsibilities",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "openings",
+        "type": "integer",
+        "nullable": "NO",
+        "default": "1"
+      },
+      {
+        "column": "deadline",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "knowledge_test_config",
+        "type": "jsonb",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "interview_config",
+        "type": "jsonb",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "published_at",
+        "type": "timestamp with time zone",
+        "nullable": "YES",
+        "default": null
+      }
+    ]
+  },
+  {
+    "table_name": "industry_questions",
+    "cols": [
+      {
+        "column": "industry_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "question_text",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "concept_tag",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "domain_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "question_type",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'mcq'::text"
+      },
+      {
+        "column": "options",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'[]'::jsonb"
+      },
+      {
+        "column": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "explanation",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "marks",
+        "type": "integer",
+        "nullable": "NO",
+        "default": "1"
+      },
+      {
+        "column": "correct_option_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "difficulty",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'intermediate'::text"
+      },
+      {
+        "column": "complexity",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'application'::text"
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      }
+    ]
+  },
+  {
+    "table_name": "industry_skill_demands",
+    "cols": [
+      {
+        "column": "required_skill_ids",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "company_name",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "industry_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      },
+      {
+        "column": "experience_requirement_years",
+        "type": "integer",
+        "nullable": "NO",
+        "default": "0"
+      },
+      {
+        "column": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "emerging_skill_ids",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "research_requirements",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "internship_roles",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "job_roles",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "preferred_skill_ids",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "ayush_systems",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      }
+    ]
+  },
+  {
+    "table_name": "interest_profiles",
+    "cols": [
+      {
+        "column": "interest_signals",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'{}'::jsonb"
+      },
+      {
+        "column": "confidence",
+        "type": "numeric",
+        "nullable": "NO",
+        "default": "0"
+      },
+      {
+        "column": "candidate_domain_scores",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'{}'::jsonb"
+      },
+      {
+        "column": "phase1_answer_count",
+        "type": "integer",
+        "nullable": "NO",
+        "default": "0"
+      },
+      {
+        "column": "phase2_answer_count",
+        "type": "integer",
+        "nullable": "NO",
+        "default": "0"
+      },
+      {
+        "column": "confirmed_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      },
+      {
+        "column": "student_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "session_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "confirmed_main_domain",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "confirmed_main_domain_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "confirmed_specific_interest",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "explanation",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      }
+    ]
+  },
+  {
+    "table_name": "interest_sessions",
+    "cols": [
+      {
+        "column": "domain_scores",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'{}'::jsonb"
+      },
+      {
+        "column": "phase",
+        "type": "integer",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "status",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'intro'::text"
+      },
+      {
+        "column": "broad_domain",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "answers",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'[]'::jsonb"
+      },
+      {
+        "column": "student_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "session_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      },
+      {
+        "column": "signal_scores",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'{}'::jsonb"
+      }
+    ]
+  },
+  {
+    "table_name": "ip_assets",
+    "cols": [
+      {
+        "column": "filing_date",
+        "type": "date",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "status",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'draft'::text"
+      },
+      {
+        "column": "ayush_systems",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "title",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "originator_type",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "description",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "originator_id",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      },
+      {
+        "column": "reference_number",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "type",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "publication_date",
+        "type": "date",
+        "nullable": "YES",
+        "default": null
+      }
+    ]
+  },
+  {
+    "table_name": "job_applications",
+    "cols": [
+      {
+        "column": "linkedin_url",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "github_url",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "portfolio_url",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "cover_letter",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "offer_details",
+        "type": "jsonb",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "resume_file_name",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "student_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      },
+      {
+        "column": "applicant_phone",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "applicant_email",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "applicant_full_name",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "interview_status",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'not_scheduled'::text"
+      },
+      {
+        "column": "interview_feedback",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "applied_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "submitted_document_types",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "final_decision_date",
+        "type": "timestamp with time zone",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "interview_rounds",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'[]'::jsonb"
+      },
+      {
+        "column": "knowledge_test_passed",
+        "type": "boolean",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "knowledge_test_score",
+        "type": "numeric",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "document_validation_results",
+        "type": "jsonb",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "timeline",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'[]'::jsonb"
+      },
+      {
+        "column": "match_score_at_application",
+        "type": "numeric",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "status_updated_at",
+        "type": "timestamp with time zone",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "job_id",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "status",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'applied'::text"
+      },
+      {
+        "column": "company_name",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "role_title",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "salary_range",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "position",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "location",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "type",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "employment_type",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "final_status",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'pending'::text"
+      },
+      {
+        "column": "eligibility_status",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "screening_notes",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "screening_status",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'pending'::text"
+      }
+    ]
+  },
+  {
+    "table_name": "knowledge_test_results",
+    "cols": [
+      {
+        "column": "time_taken_seconds",
+        "type": "integer",
+        "nullable": "NO",
+        "default": "0"
+      },
+      {
+        "column": "weaknesses",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "strengths",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "knowledge_level",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "difficulty",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "domain_name",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "domain_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "student_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "session_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      },
+      {
+        "column": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "completed_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "answers",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'[]'::jsonb"
+      },
+      {
+        "column": "score_percent",
+        "type": "numeric",
+        "nullable": "NO",
+        "default": "0"
+      },
+      {
+        "column": "max_score",
+        "type": "numeric",
+        "nullable": "NO",
+        "default": "0"
+      },
+      {
+        "column": "score",
+        "type": "numeric",
+        "nullable": "NO",
+        "default": "0"
+      }
+    ]
+  },
+  {
+    "table_name": "knowledge_test_sessions",
+    "cols": [
+      {
+        "column": "started_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "completed_at",
+        "type": "timestamp with time zone",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "expires_at",
+        "type": "timestamp with time zone",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "status",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'in_progress'::text"
+      },
+      {
+        "column": "student_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "domain_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "domain_name",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "difficulty",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "session_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "questions",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'[]'::jsonb"
+      },
+      {
+        "column": "current_question_index",
+        "type": "integer",
+        "nullable": "NO",
+        "default": "0"
+      },
+      {
+        "column": "answers",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'{}'::jsonb"
+      },
+      {
+        "column": "time_remaining_seconds",
+        "type": "integer",
+        "nullable": "NO",
+        "default": "0"
+      }
+    ]
+  },
+  {
+    "table_name": "learning_resources",
+    "cols": [
+      {
+        "column": "student_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "resource_type",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'youtube_video'::text"
+      },
+      {
+        "column": "cached_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "resources",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'[]'::jsonb"
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      },
+      {
+        "column": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "analysis_id",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      }
+    ]
+  },
+  {
+    "table_name": "ministry_intelligence_snapshots",
+    "cols": [
+      {
+        "column": "snapshot_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "by_ayush_system",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'{}'::jsonb"
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      },
+      {
+        "column": "totals",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'{}'::jsonb"
+      },
+      {
+        "column": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      }
+    ]
+  },
+  {
+    "table_name": "otp_verifications",
+    "cols": [
+      {
+        "column": "role",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "otp_code",
+        "type": "character varying",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "verified",
+        "type": "boolean",
+        "nullable": "YES",
+        "default": "false"
+      },
+      {
+        "column": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "expires_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "attempts",
+        "type": "integer",
+        "nullable": "YES",
+        "default": "0"
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      },
+      {
+        "column": "email",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      }
+    ]
+  },
+  {
+    "table_name": "profiles",
+    "cols": [
+      {
+        "column": "role",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      },
+      {
+        "column": "user_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "metadata",
+        "type": "jsonb",
+        "nullable": "YES",
+        "default": "'{}'::jsonb"
+      }
+    ]
+  },
+  {
+    "table_name": "rd_problem_statements",
+    "cols": [
+      {
+        "column": "description",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "industry_id",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      },
+      {
+        "column": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "expected_outcome",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "ayush_systems",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "company_name",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "title",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "status",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'open'::text"
+      },
+      {
+        "column": "required_skill_ids",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "research_domain",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "requirements",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      }
+    ]
+  },
+  {
+    "table_name": "resume_analyses",
+    "cols": [
+      {
+        "column": "student_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "resume_file_name",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "job_title",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "target_role",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "strength_tier",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'Needs Improvement'::text"
+      },
+      {
+        "column": "summary",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "matched_keywords",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "missing_keywords",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "detected_sections",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "missing_sections",
+        "type": "ARRAY",
+        "nullable": "NO",
+        "default": "'{}'::text[]"
+      },
+      {
+        "column": "disclaimer",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "analyzed_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "recommendations",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'[]'::jsonb"
+      },
+      {
+        "column": "issues",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'[]'::jsonb"
+      },
+      {
+        "column": "category_scores",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'{}'::jsonb"
+      },
+      {
+        "column": "job_match_score",
+        "type": "numeric",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "overall_score",
+        "type": "numeric",
+        "nullable": "NO",
+        "default": "0"
+      },
+      {
+        "column": "has_job_description",
+        "type": "boolean",
+        "nullable": "NO",
+        "default": "false"
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      }
+    ]
+  },
+  {
+    "table_name": "skill_gap_analyses",
+    "cols": [
+      {
+        "column": "test_max_score",
+        "type": "numeric",
+        "nullable": "NO",
+        "default": "0"
+      },
+      {
+        "column": "test_score_percent",
+        "type": "numeric",
+        "nullable": "NO",
+        "default": "0"
+      },
+      {
+        "column": "skill_gaps",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'[]'::jsonb"
+      },
+      {
+        "column": "recommendations",
+        "type": "jsonb",
+        "nullable": "NO",
+        "default": "'[]'::jsonb"
+      },
+      {
+        "column": "ai_generated",
+        "type": "boolean",
+        "nullable": "NO",
+        "default": "false"
+      },
+      {
+        "column": "is_stale",
+        "type": "boolean",
+        "nullable": "NO",
+        "default": "false"
+      },
+      {
+        "column": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      },
+      {
+        "column": "student_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "executive_summary",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "skill_profile_version",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'1.0'::text"
+      },
+      {
+        "column": "knowledge_level",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "difficulty",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "niche_title",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "niche_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "test_score",
+        "type": "numeric",
+        "nullable": "NO",
+        "default": "0"
+      },
+      {
+        "column": "domain_name",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "domain_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "knowledge_test_result_id",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "interest_profile_id",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      }
+    ]
+  },
+  {
+    "table_name": "student_verifications",
+    "cols": [
+      {
+        "column": "verification_status",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'NOT_STARTED'::text"
+      },
+      {
+        "column": "completed_at",
+        "type": "timestamp with time zone",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "rejection_reason",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "student_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      },
+      {
+        "column": "professional_profiles",
+        "type": "jsonb",
+        "nullable": "YES",
+        "default": "'{}'::jsonb"
+      },
+      {
+        "column": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      }
+    ]
+  },
+  {
+    "table_name": "users",
+    "cols": [
+      {
+        "column": "is_verified",
+        "type": "boolean",
+        "nullable": "YES",
+        "default": "false"
+      },
+      {
+        "column": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "is_admin",
+        "type": "boolean",
+        "nullable": "YES",
+        "default": "false"
+      },
+      {
+        "column": "full_name",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "password_hash",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "role",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "email",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      }
+    ]
+  },
+  {
+    "table_name": "verification_documents",
+    "cols": [
+      {
+        "column": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO",
+        "default": "timezone('utc'::text, now())"
+      },
+      {
+        "column": "file_size_bytes",
+        "type": "bigint",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "upload_status",
+        "type": "text",
+        "nullable": "NO",
+        "default": "'completed'::text"
+      },
+      {
+        "column": "storage_path",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "file_type",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "file_name",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "group_id",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "document_type",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "student_id",
+        "type": "text",
+        "nullable": "NO",
+        "default": null
+      },
+      {
+        "column": "verification_id",
+        "type": "text",
+        "nullable": "YES",
+        "default": null
+      },
+      {
+        "column": "id",
+        "type": "text",
+        "nullable": "NO",
+        "default": "(gen_random_uuid())::text"
+      }
+    ]
+  }
+]

@@ -17,48 +17,48 @@ import { SIGNAL_DESCRIPTIONS } from "./signals";
 import { DOMAIN_TAXONOMY } from "./subdomains";
 
 export const INITIAL_DOMAIN_SCORES: DomainScores = {
-  "ai-ml": 0,
-  cloud: 0,
-  web: 0,
-  security: 0,
-  software: 0,
+  ayurveda: 0,
+  "yoga-naturopathy": 0,
+  unani: 0,
+  siddha: 0,
+  homoeopathy: 0,
 };
 
 /**
  * Calculates normalized candidate domain scores (0.0 to 1.0) from the 11 interest signals.
  */
 export function calculateDomainScores(signals: SignalScores): DomainScores {
-  // Domain weight mappings
+  // Domain weight mappings tailored to the 5 AYUSH healthcare paradigms
   const rawScores: DomainScores = {
-    security:
-      (signals.securityMindset || 0) * 0.40 +
-      (signals.investigation || 0) * 0.25 +
-      (signals.systemsThinking || 0) * 0.20 +
-      (signals.problemSolving || 0) * 0.15,
-
-    software:
-      (signals.problemSolving || 0) * 0.35 +
-      (signals.optimization || 0) * 0.25 +
-      (signals.building || 0) * 0.20 +
-      (signals.systemsThinking || 0) * 0.20,
-
-    "ai-ml":
-      (signals.dataOrientation || 0) * 0.35 +
-      (signals.experimentation || 0) * 0.30 +
+    ayurveda:
+      (signals.investigation || 0) * 0.35 +
+      (signals.systemsThinking || 0) * 0.30 +
       (signals.analysis || 0) * 0.20 +
       (signals.problemSolving || 0) * 0.15,
 
-    cloud:
-      (signals.systemsThinking || 0) * 0.35 +
-      (signals.automation || 0) * 0.30 +
-      (signals.optimization || 0) * 0.20 +
-      (signals.building || 0) * 0.15,
-
-    web:
-      (signals.building || 0) * 0.35 +
-      (signals.creativity || 0) * 0.25 +
+    "yoga-naturopathy":
+      (signals.optimization || 0) * 0.35 +
+      (signals.building || 0) * 0.25 +
       (signals.systemsThinking || 0) * 0.20 +
-      (signals.automation || 0) * 0.20,
+      (signals.creativity || 0) * 0.20,
+
+    unani:
+      (signals.analysis || 0) * 0.35 +
+      (signals.investigation || 0) * 0.25 +
+      (signals.problemSolving || 0) * 0.25 +
+      (signals.systemsThinking || 0) * 0.15,
+
+    siddha:
+      (signals.experimentation || 0) * 0.35 +
+      (signals.investigation || 0) * 0.25 +
+      (signals.systemsThinking || 0) * 0.25 +
+      (signals.optimization || 0) * 0.15,
+
+    homoeopathy:
+      (signals.investigation || 0) * 0.35 +
+      (signals.analysis || 0) * 0.30 +
+      (signals.problemSolving || 0) * 0.20 +
+      (signals.creativity || 0) * 0.15,
   };
 
   // Find max score to normalize to a realistic curve
@@ -66,11 +66,11 @@ export function calculateDomainScores(signals: SignalScores): DomainScores {
   const max = Math.max(...values, 1);
 
   const normalized: DomainScores = {
-    "ai-ml": Math.min(1, Math.round((rawScores["ai-ml"] / max) * 100) / 100),
-    cloud: Math.min(1, Math.round((rawScores.cloud / max) * 100) / 100),
-    web: Math.min(1, Math.round((rawScores.web / max) * 100) / 100),
-    security: Math.min(1, Math.round((rawScores.security / max) * 100) / 100),
-    software: Math.min(1, Math.round((rawScores.software / max) * 100) / 100),
+    ayurveda: Math.min(1, Math.round((rawScores.ayurveda / max) * 100) / 100),
+    "yoga-naturopathy": Math.min(1, Math.round((rawScores["yoga-naturopathy"] / max) * 100) / 100),
+    unani: Math.min(1, Math.round((rawScores.unani / max) * 100) / 100),
+    siddha: Math.min(1, Math.round((rawScores.siddha / max) * 100) / 100),
+    homoeopathy: Math.min(1, Math.round((rawScores.homoeopathy / max) * 100) / 100),
   };
 
   return normalized;
@@ -165,7 +165,7 @@ export function evaluatePhase2Result(
   domainId: DomainId,
   phase2Answers: AnswerRecord[]
 ): Phase2Evaluation {
-  const taxonomy = DOMAIN_TAXONOMY[domainId] || DOMAIN_TAXONOMY.security;
+  const taxonomy = DOMAIN_TAXONOMY[domainId] || DOMAIN_TAXONOMY.ayurveda;
   const subDomains = taxonomy.subDomains;
 
   // Score each sub-domain based on answers

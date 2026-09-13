@@ -1,0 +1,218 @@
+{
+  "report": [
+    {
+      "source": "users",
+      "target": "public.users",
+      "sourceCount": 197,
+      "inserted": 197,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "source": "profiles",
+      "target": "public.profiles",
+      "sourceCount": 183,
+      "inserted": 181,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 2
+    },
+    {
+      "source": "otps",
+      "target": "public.otp_verifications",
+      "sourceCount": 98,
+      "inserted": 98,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "source": "studentVerifications",
+      "target": "public.student_verifications",
+      "sourceCount": 180,
+      "inserted": 153,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 27
+    },
+    {
+      "source": "verificationDocuments",
+      "target": "public.verification_documents",
+      "sourceCount": 570,
+      "inserted": 528,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 42
+    },
+    {
+      "source": "interestSessions",
+      "target": "public.interest_sessions",
+      "sourceCount": 6,
+      "inserted": 5,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 1
+    },
+    {
+      "source": "interestProfiles",
+      "target": "public.interest_profiles",
+      "sourceCount": 75,
+      "inserted": 66,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 9
+    },
+    {
+      "source": "knowledgeTestSessions",
+      "target": "public.knowledge_test_sessions",
+      "sourceCount": 44,
+      "inserted": 24,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 20
+    },
+    {
+      "source": "knowledgeTestResults",
+      "target": "public.knowledge_test_results",
+      "sourceCount": 81,
+      "inserted": 61,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 20
+    },
+    {
+      "source": "educators",
+      "target": "public.educators",
+      "sourceCount": 6,
+      "inserted": 6,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "source": "educationPrograms",
+      "target": "public.education_programs",
+      "sourceCount": 18,
+      "inserted": 18,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "source": "skillGapAnalyses",
+      "target": "public.skill_gap_analyses",
+      "sourceCount": 40,
+      "inserted": 33,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 7
+    },
+    {
+      "source": "learningResources",
+      "target": "public.learning_resources",
+      "sourceCount": 13,
+      "inserted": 13,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "source": "resumeAnalyses",
+      "target": "public.resume_analyses",
+      "sourceCount": 54,
+      "inserted": 52,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 2
+    },
+    {
+      "source": "hiringRequests",
+      "target": "public.hiring_requests",
+      "sourceCount": 3,
+      "inserted": 3,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "source": "campusRequests",
+      "target": "public.campus_requests",
+      "sourceCount": 3,
+      "inserted": 3,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "source": "industryQuestions",
+      "target": "public.industry_questions",
+      "sourceCount": 4,
+      "inserted": 4,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "source": "industryHiringPosts",
+      "target": "public.industry_hiring_posts",
+      "sourceCount": 10,
+      "inserted": 4,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 6
+    },
+    {
+      "source": "jobApplications",
+      "target": "public.job_applications",
+      "sourceCount": 22,
+      "inserted": 17,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 5
+    },
+    {
+      "source": "assessmentQuestions",
+      "target": "public.assessment_questions",
+      "sourceCount": 185,
+      "inserted": 184,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 1
+    },
+    {
+      "source": "assessmentConfigs",
+      "target": "public.assessment_configs",
+      "sourceCount": 3,
+      "inserted": 3,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "source": "assessmentAttempts",
+      "target": "public.assessment_attempts",
+      "sourceCount": 14,
+      "inserted": 12,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 2
+    },
+    {
+      "source": "ayushSkillPassports",
+      "target": "public.ayush_skill_passports",
+      "sourceCount": 4,
+      "inserted": 2,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 2
+    }
+  ],
+  "allErrors": [
+    {
+      "entity": "assessmentQuestions",
+      "error": "new row for relation \"assessment_questions\" violates check constraint \"assessment_questions_cognitive_level_check\"",
+      "sqlSnippet": "INSERT INTO public.assessment_questions (id, question_text, options, correct_option_id, explanation,..."
+    }
+  ]
+}

@@ -35,7 +35,10 @@ import {
   Cpu,
   Cloud,
   Globe,
-  Code2,
+  HeartPulse,
+  Sun,
+  Activity,
+  FlaskConical,
   FileCheck,
 } from "lucide-react";
 import confetti from "canvas-confetti";
@@ -50,11 +53,11 @@ import {
 
 // Domain icon map
 const DOMAIN_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
-  security: Shield,
-  "ai-ml": Cpu,
-  cloud: Cloud,
-  web: Globe,
-  software: Code2,
+  ayurveda: HeartPulse,
+  "yoga-naturopathy": Sun,
+  unani: Activity,
+  siddha: Shield,
+  homoeopathy: FlaskConical,
 };
 
 interface TestHistoryItem {
@@ -396,10 +399,10 @@ export function KnowledgeTestContainer() {
                 Interest Finder Profile Required
               </AlertTitle>
               <AlertDescription className="text-sm leading-relaxed mt-1">
-                Before we can evaluate your technical strengths and identify skill gaps, you must
+                Before we can evaluate your clinical strengths and identify skill gaps, you must
                 first complete the <strong>Interest Finder</strong> exploration (Stage 2).
-                This identifies whether your assessment should test Cybersecurity, Cloud &
-                DevOps, AI & Machine Learning, Web Systems, or Core Software Engineering.
+                This identifies whether your assessment should test Ayurveda, Yoga & Naturopathy,
+                Unani, Siddha, or Homoeopathy.
               </AlertDescription>
             </div>
 

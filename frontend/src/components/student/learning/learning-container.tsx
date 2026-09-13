@@ -18,10 +18,10 @@ import {
   RefreshCw,
   ExternalLink,
   Shield,
-  Cpu,
-  Cloud,
-  Globe,
-  Code2,
+  HeartPulse,
+  Sun,
+  Activity,
+  FlaskConical,
   Lock,
   ArrowRight,
   Compass,
@@ -42,11 +42,11 @@ import type {
 } from "@/lib/learning/types";
 
 const DOMAIN_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
-  security: Shield,
-  "ai-ml": Cpu,
-  cloud: Cloud,
-  web: Globe,
-  software: Code2,
+  ayurveda: HeartPulse,
+  "yoga-naturopathy": Sun,
+  unani: Activity,
+  siddha: Shield,
+  homoeopathy: FlaskConical,
 };
 
 export function LearningContainer() {
@@ -518,13 +518,13 @@ export function LearningContainer() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="p-4 rounded-lg border border-border/70 bg-muted/20 space-y-2">
               <div className="w-8 h-8 rounded-md bg-muted flex items-center justify-center text-foreground font-semibold">
-                <Code2 className="w-4 h-4" />
+                <HeartPulse className="w-4 h-4" />
               </div>
               <h4 className="text-xs font-semibold text-foreground">
-                Technical Portfolio & Code Reviews
+                Clinical Case & Protocol Reviews
               </h4>
               <p className="text-[11px] text-muted-foreground leading-relaxed">
-                Receive direct feedback on code quality, architecture, and project implementations from practicing engineers.
+                Receive direct feedback on clinical case documentation, therapeutic protocols, and diagnostic accuracy from experienced practitioners.
               </p>
             </div>
 

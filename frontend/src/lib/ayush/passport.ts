@@ -13,6 +13,7 @@ import {
   AyushPassportSkillGap,
   AYUSH_SKILL_CATALOG,
 } from "./types";
+import { AYUSH_CLINICAL_RESEARCH_COMPETENCIES } from "./competencies";
 import { AssessmentAttempt, AssessmentScoringResult } from "@/lib/assessment/types";
 
 export function createDefaultSkillPassport(studentId: string, studentName?: string): AyushSkillPassport {
@@ -39,15 +40,11 @@ export function createDefaultSkillPassport(studentId: string, studentName?: stri
     institution: "National Institute of Ayurveda (NIA), Jaipur",
     batchYear: "2024 - 2029",
     skills,
-    competencies: [
-      {
-        id: "comp_preclinical_foundations",
-        title: "AYUSH Pre-Clinical & Epistemological Fundamentals",
-        domain: "Padartha Vijnana & Basic Principles",
-        demonstratedAt: now,
-        verifiedBy: "Academic Evaluation Cell",
-      },
-    ],
+    competencies: AYUSH_CLINICAL_RESEARCH_COMPETENCIES.map((c) => ({
+      ...c,
+      demonstratedAt: now,
+      verifiedBy: c.verifiedBy || "Academic Evaluation Cell",
+    })),
     assessmentResults: [],
     skillGaps: [],
     certifications: [],

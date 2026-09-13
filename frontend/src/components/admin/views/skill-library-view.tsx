@@ -20,15 +20,16 @@ interface SkillLibraryViewProps {
 
 const allCategories = [
   "All",
-  "Programming",
-  "Web Development",
-  "Mobile Development",
-  "Cloud",
-  "Cybersecurity",
-  "Data Science",
-  "AI / ML",
-  "DevOps",
-  "Database",
+  "Ayurveda",
+  "Yoga & Naturopathy",
+  "Unani",
+  "Siddha",
+  "Homoeopathy",
+  "Clinical Diagnostics",
+  "Classical Formulations",
+  "Pharmacopoeia & Standardization",
+  "Digital Health & ABDM",
+  "Integrative Medicine",
   "Soft Skills",
   "Other",
 ] as const;
@@ -40,7 +41,7 @@ export function SkillLibraryView({ skills, onAddSkill }: SkillLibraryViewProps) 
 
   // New Skill Form State
   const [name, setName] = React.useState("");
-  const [category, setCategory] = React.useState<SkillItem["category"]>("Programming");
+  const [category, setCategory] = React.useState<SkillItem["category"]>("Ayurveda");
   const [description, setDescription] = React.useState("");
   const [demand, setDemand] = React.useState<SkillItem["industryDemand"]>("High");
 

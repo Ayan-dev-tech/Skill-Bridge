@@ -94,10 +94,10 @@ export async function POST(request: Request) {
     }
 
     // 3. Generate 10 difficulty-calibrated questions
-    const domainId = interestProfile.confirmedMainDomainId || "security";
-    const domainName = interestProfile.confirmedMainDomain || "Cybersecurity";
+    const domainId = interestProfile.confirmedMainDomainId || "ayurveda";
+    const domainName = interestProfile.confirmedMainDomain || "Ayurveda";
     const specificInterest =
-      interestProfile.confirmedSpecificInterest || "Core Engineering";
+      interestProfile.confirmedSpecificInterest || "Kayachikitsa & Clinical Panchakarma";
 
     const questions = await generateQuestionBatch({
       domainId,

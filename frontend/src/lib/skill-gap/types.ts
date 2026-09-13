@@ -90,7 +90,7 @@ export interface EducationProgram {
   title: string;
   description: string;
   programUrl: string;
-  domains: string[]; // e.g. ["security"]
+  domains: string[]; // e.g. ["ayurveda"]
   niches: string[]; // e.g. ["app-sec", "soc-threat"]
   skillIds: string[]; // Normalized skill IDs covered, e.g. ["auth-identity", "web-security"]
   difficulty: "beginner" | "intermediate" | "advanced" | "all_levels";
