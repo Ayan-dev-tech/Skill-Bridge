@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { CanonicalWorkflowState } from "@/lib/workflow/canonical-workflow";
+import { AyushAssistantWidget } from "@/components/student/ayush-assistant-widget";
 
 export default function StudentRootLayout({
   children,
@@ -151,6 +152,9 @@ export default function StudentRootLayout({
           </ScrollArea>
         </SidebarInset>
       </div>
+
+      {/* Grounded AYUSH AI Assistant Widget */}
+      <AyushAssistantWidget />
     </SidebarProvider>
   );
 }
