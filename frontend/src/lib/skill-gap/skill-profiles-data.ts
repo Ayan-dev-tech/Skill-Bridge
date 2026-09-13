@@ -98,6 +98,253 @@ export const TARGET_SKILL_PROFILES: Record<string, TargetSkillProfile> = {
       }
     ]
   },
+  "ayush-clinical-practice": {
+    "nicheId": "ayush-clinical-practice",
+    "nicheTitle": "AYUSH Clinical Practice (Medical Officer)",
+    "domainId": "ayurveda",
+    "domainName": "Ayurveda & Integrative Healthcare",
+    "version": "1.0",
+    "description": "Primary bedside patient care, comprehensive diagnostic examination, authentic Panchakarma, and chronic disease protocolization.",
+    "requiredSkills": [
+      {
+        "skillId": "comp-ayush-bedside-diagnostics",
+        "skillName": "Bedside Clinical Examination & Nadi Pariksha",
+        "category": "Clinical Diagnostics",
+        "importance": "essential",
+        "targetLevel": "Competent",
+        "description": "Systematic Rogi-Roga Pariksha, eight-fold clinical pulse palpation (Ashtavidha Pariksha), and doshic differential diagnosis.",
+        "relatedConceptTags": ["nadi-pariksha-gati", "tridosha-panchamahabhuta", "ashtavidha-pariksha"]
+      },
+      {
+        "skillId": "comp-ayush-panchakarma-chikitsa",
+        "skillName": "Panchakarma & Shamana Therapeutic Management",
+        "category": "Clinical Practice",
+        "importance": "essential",
+        "targetLevel": "Competent",
+        "description": "Administering classical Panchakarma procedures, Snehana-Swedana preparatory lines, and Samsarjana Krama dietary recovery.",
+        "relatedConceptTags": ["snehana-swedana", "basti-therapy", "samsarjana-krama"]
+      },
+      {
+        "skillId": "comp-ayush-chronic-case-mgmt",
+        "skillName": "Chronic Disease & Integrative Clinical Protocols",
+        "category": "Clinical Practice",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Managing complex lifestyle, autoimmune, and non-communicable disorders through integrative AYUSH care guidelines.",
+        "relatedConceptTags": ["chronic-disease-ayush", "integrative-medicine", "pathology-reversal"]
+      },
+      {
+        "skillId": "comp-ayush-herb-drug",
+        "skillName": "Herb-Drug Interaction & Safety Profiling",
+        "category": "Pharmacology & Safety",
+        "importance": "essential",
+        "targetLevel": "Competent",
+        "description": "Evaluating cytochrome P450 interactions, metabolic clearance pathways, and contraindications between ASU and conventional drugs.",
+        "relatedConceptTags": ["herb-drug-interaction", "cyp-inhibition", "contraindications"]
+      },
+      {
+        "skillId": "comp-ayush-data-mgmt",
+        "skillName": "Electronic Data Capture & Clinical Data Management (CDM)",
+        "category": "Data Science & Informatics",
+        "importance": "important",
+        "targetLevel": "Strong Foundation",
+        "description": "Designing electronic Case Report Forms (eCRFs) and managing clinical trial databases compliant with Ayush Grid.",
+        "relatedConceptTags": ["edc-ecrf", "clinical-data-management", "ayush-grid"]
+      },
+      {
+        "skillId": "comp-ayush-pvpi",
+        "skillName": "Pharmacovigilance & Adverse Drug Reaction (ADR) Surveillance",
+        "category": "Pharmacovigilance",
+        "importance": "important",
+        "targetLevel": "Strong Foundation",
+        "description": "Identifying, documenting, causality-assessing, and reporting adverse drug reactions under the NPvP-ASU&H framework.",
+        "relatedConceptTags": ["adr-reporting", "pvpi", "causality-assessment"]
+      },
+      {
+        "skillId": "comp-ayush-samhita-epistemology",
+        "skillName": "Classical Epistemological Correlation (Pramana Vijnana)",
+        "category": "Classical Theory",
+        "importance": "essential",
+        "targetLevel": "Competent",
+        "description": "Correlating classical Aptopadesha, Pratyaksha, and Anumana evidence models with modern clinical practice.",
+        "relatedConceptTags": ["pramana-vijnana", "samhita-adhyayan", "evidence-hierarchy"]
+      }
+    ]
+  },
+  "ayush-research-assistant": {
+    "nicheId": "ayush-research-assistant",
+    "nicheTitle": "AYUSH Clinical Research Assistant",
+    "domainId": "ayurveda",
+    "domainName": "Ayurveda & Integrative Healthcare",
+    "version": "1.0",
+    "description": "Entry-level research support for clinical trials, participant screening, electronic Case Report Form (eCRF) logging, and scientific literature curation.",
+    "requiredSkills": [
+      {
+        "skillId": "comp-ayush-gcp",
+        "skillName": "AYUSH Good Clinical Practice (GCP) & Ethical Compliance",
+        "category": "Regulatory & Ethics",
+        "importance": "essential",
+        "targetLevel": "Strong Foundation",
+        "description": "Understanding basic GCP principles, subject confidentiality, and trial documentation.",
+        "relatedConceptTags": ["ayush-gcp", "ctri-registration", "clinical-ethics"]
+      },
+      {
+        "skillId": "comp-ayush-data-mgmt",
+        "skillName": "Electronic Data Capture & Clinical Data Management (CDM)",
+        "category": "Data Science & Informatics",
+        "importance": "essential",
+        "targetLevel": "Strong Foundation",
+        "description": "Data entry into electronic CRFs, query resolution, and source verification.",
+        "relatedConceptTags": ["edc-ecrf", "clinical-data-management", "ayush-grid"]
+      },
+      {
+        "skillId": "comp-ayush-literature-evidence",
+        "skillName": "AYUSH Scientific Literature & DHARA Indexing",
+        "category": "Research Methodology",
+        "importance": "essential",
+        "targetLevel": "Strong Foundation",
+        "description": "Structured literature retrieval from DHARA, PubMed, and AYUSH Research Portal.",
+        "relatedConceptTags": ["dhara-portal", "literature-review", "ayush-research"]
+      },
+      {
+        "skillId": "comp-ayush-bioethics",
+        "skillName": "Institutional Ethics Committee (IEC) Dossier Preparation",
+        "category": "Regulatory & Ethics",
+        "importance": "important",
+        "targetLevel": "Strong Foundation",
+        "description": "Informed consent administration and participant info pack distribution.",
+        "relatedConceptTags": ["iec-submission", "investigator-brochure", "informed-consent"]
+      },
+      {
+        "skillId": "comp-ayush-biostats",
+        "skillName": "Biostatistical Analysis & Evidence Synthesis",
+        "category": "Biostatistics",
+        "importance": "important",
+        "targetLevel": "Strong Foundation",
+        "description": "Basic data tabulation, cohort demographic summaries, and descriptive statistics.",
+        "relatedConceptTags": ["biostatistics", "sample-size", "systematic-review"]
+      },
+      {
+        "skillId": "comp-ayush-pvpi",
+        "skillName": "Pharmacovigilance & Adverse Drug Reaction (ADR) Surveillance",
+        "category": "Pharmacovigilance",
+        "importance": "important",
+        "targetLevel": "Strong Foundation",
+        "description": "Initial logging and forwarding of reported adverse drug events.",
+        "relatedConceptTags": ["adr-reporting", "pvpi", "causality-assessment"]
+      }
+    ]
+  },
+  "ayush-pharma-quality-regulatory": {
+    "nicheId": "ayush-pharma-quality-regulatory",
+    "nicheTitle": "AYUSH Quality Control & Regulatory Associate",
+    "domainId": "ayurveda",
+    "domainName": "Ayurveda & Integrative Healthcare",
+    "version": "1.0",
+    "description": "ASU&H formulation quality verification, HPTLC phytochemical fingerprinting, Schedule T GMP batch inspection, and statutory drug regulatory filings.",
+    "requiredSkills": [
+      {
+        "skillId": "comp-ayush-standardization",
+        "skillName": "Investigational Formulation Standardization & Monograph Verification",
+        "category": "Pharmacopoeia & Standardization",
+        "importance": "essential",
+        "targetLevel": "Competent",
+        "description": "Verifying botanical authentication, phytochemical marker assay (HPTLC), and pharmacopoeial limits per API/UPI.",
+        "relatedConceptTags": ["botanical-authentication", "hptlc-fingerprinting", "api-monograph"]
+      },
+      {
+        "skillId": "comp-ayush-gmp-schedulet",
+        "skillName": "Schedule T Good Manufacturing Practice (GMP) Compliance",
+        "category": "Quality Control & Manufacturing",
+        "importance": "essential",
+        "targetLevel": "Competent",
+        "description": "Authoring and verifying Batch Manufacturing Records (BMR), in-process QA controls, and Schedule T plant hygiene compliance.",
+        "relatedConceptTags": ["schedule-t-gmp", "bmr-verification", "plant-hygiene"]
+      },
+      {
+        "skillId": "comp-ayush-regulatory-filing",
+        "skillName": "AYUSH Drug Licensing, CoPP & Export Regulatory Dossiers",
+        "category": "Regulatory & Quality",
+        "importance": "essential",
+        "targetLevel": "Proficient",
+        "description": "Preparing AYUSH Form 25/26D licensing dossiers, Certificate of Pharmaceutical Product (CoPP) documentation, and export submissions.",
+        "relatedConceptTags": ["copp-certification", "drug-licensing-ayush", "export-dossiers"]
+      },
+      {
+        "skillId": "comp-ayush-herb-drug",
+        "skillName": "Herb-Drug Interaction & Safety Profiling",
+        "category": "Pharmacology & Safety",
+        "importance": "important",
+        "targetLevel": "Competent",
+        "description": "Evaluating cytochrome P450 interactions, metabolic clearance pathways, and contraindications.",
+        "relatedConceptTags": ["herb-drug-interaction", "cyp-inhibition", "pharmacokinetics"]
+      },
+      {
+        "skillId": "comp-ayush-pvpi",
+        "skillName": "Pharmacovigilance & Adverse Drug Reaction (ADR) Surveillance",
+        "category": "Pharmacovigilance",
+        "importance": "essential",
+        "targetLevel": "Competent",
+        "description": "Post-market surveillance, customer pharmacovigilance complaints, and signal detection.",
+        "relatedConceptTags": ["adr-reporting", "pvpi", "causality-assessment"]
+      }
+    ]
+  },
+  "ayush-wellness-yoga-therapy": {
+    "nicheId": "ayush-wellness-yoga-therapy",
+    "nicheTitle": "AYUSH Wellness & Therapeutic Yoga Specialist",
+    "domainId": "yoga-naturopathy",
+    "domainName": "Yoga & Naturopathy",
+    "version": "1.0",
+    "description": "Designing personalized therapeutic Yoga interventions, autonomic stress recovery protocols, and lifestyle counseling for preventive healthcare.",
+    "requiredSkills": [
+      {
+        "skillId": "comp-ayush-yoga-chikitsa",
+        "skillName": "Therapeutic Yoga Chikitsa & Biomechanics",
+        "category": "Wellness & Yoga Therapy",
+        "importance": "essential",
+        "targetLevel": "Competent",
+        "description": "Prescribing disease-specific therapeutic asana alignments, breath-sound modulation, and therapeutic pranayama protocols aligned with YCB guidelines.",
+        "relatedConceptTags": ["yoga-chikitsa", "therapeutic-pranayama", "ycb-protocols"]
+      },
+      {
+        "skillId": "comp-ayush-stress-autonomic-regulation",
+        "skillName": "Stress Autonomic Stabilization & Shatkarma",
+        "category": "Wellness & Yoga Therapy",
+        "importance": "essential",
+        "targetLevel": "Competent",
+        "description": "Guiding clinical relaxation (Yoga Nidra), Heart Rate Variability (HRV) stabilization, and classical Shatkarma visceral cleansing.",
+        "relatedConceptTags": ["stress-reduction", "shatkarma", "hrv-stabilization"]
+      },
+      {
+        "skillId": "comp-ayush-bedside-diagnostics",
+        "skillName": "Bedside Clinical Examination & Nadi Pariksha",
+        "category": "Clinical Diagnostics",
+        "importance": "important",
+        "targetLevel": "Strong Foundation",
+        "description": "Basic pulse rhythms, doshic temperament assessment, and vitality examination.",
+        "relatedConceptTags": ["nadi-pariksha-gati", "vitality-assessment", "temperament-typing"]
+      },
+      {
+        "skillId": "comp-ayush-data-mgmt",
+        "skillName": "Electronic Data Capture & Clinical Data Management (CDM)",
+        "category": "Data Science & Informatics",
+        "importance": "important",
+        "targetLevel": "Strong Foundation",
+        "description": "Logging client wellness progress, biometric improvements, and lifestyle adherence.",
+        "relatedConceptTags": ["wellness-logging", "digital-health", "client-tracking"]
+      },
+      {
+        "skillId": "comp-ayush-samhita-epistemology",
+        "skillName": "Classical Epistemological Correlation (Pramana Vijnana)",
+        "category": "Classical Theory",
+        "importance": "important",
+        "targetLevel": "Competent",
+        "description": "Mind-body philosophical correlation of traditional wellness texts with modern preventive science.",
+        "relatedConceptTags": ["pramana-vijnana", "samhita-adhyayan", "evidence-hierarchy"]
+      }
+    ]
+  },
   "kayachikitsa": {
     "nicheId": "kayachikitsa",
     "nicheTitle": "Clinical Kayachikitsa & Differential Diagnosis",

@@ -61,7 +61,12 @@ import type {
   PlacementReportData,
 } from "./campus/types";
 import type { AssessmentQuestion, AssessmentConfig, AssessmentAttempt } from "./assessment/types";
-import type { AyushSkillPassport } from "./ayush/types";
+import type {
+  AyushSkillPassport,
+  AyushDevelopmentIntervention,
+  AyushStudentDevelopmentPlan,
+  DevelopmentPlanStatus,
+} from "./ayush/types";
 
 export function hashPassword(password: string): string {
   return crypto.createHash("sha256").update(password).digest("hex");
@@ -501,6 +506,59 @@ function mapAyushSkillPassport(row: any): AyushSkillPassport {
     researchInterests: row.research_interests || [],
     industryReadinessScore: row.industry_readiness_score != null ? Number(row.industry_readiness_score) : null,
     industryReadinessBand: row.industry_readiness_band || null,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at || row.created_at,
+  };
+}
+
+function mapDevelopmentIntervention(row: any): AyushDevelopmentIntervention {
+  return {
+    id: row.id,
+    title: row.title,
+    description: row.description || "",
+    type: row.type,
+    competencyId: row.competency_id,
+    targetMaturity: row.target_maturity,
+    estimatedDuration: row.estimated_duration,
+    difficulty: row.difficulty,
+    provider: row.provider,
+    evidenceRequired: row.evidence_required,
+    supportingResources: row.supporting_resources || [],
+    active: Boolean(row.active),
+    createdAt: row.created_at,
+    updatedAt: row.updated_at || row.created_at,
+  };
+}
+
+function mapStudentDevelopmentPlan(row: any): AyushStudentDevelopmentPlan {
+  return {
+    id: row.id,
+    studentId: row.student_id,
+    roleId: row.role_id,
+    competencyId: row.competency_id,
+    baselineLevel: Number(row.baseline_level || 0),
+    targetLevel: Number(row.target_level || 1),
+    interventionId: row.intervention_id,
+    status: row.status,
+    startedAt: row.started_at || null,
+    completedAt: row.completed_at || null,
+    evidenceStatus: row.evidence_status || null,
+    evidenceSubmission: row.evidence_submission || null,
+    evidenceFilePath: row.evidence_file_path || null,
+    evidenceFileName: row.evidence_file_name || null,
+    evidenceFileSize: row.evidence_file_size || null,
+    evidenceMimeType: row.evidence_mime_type || null,
+    extractedText: row.extracted_text || null,
+    extractionStatus: row.extraction_status || null,
+    evidenceQuality: row.evidence_quality || null,
+    aiExpectedRating: row.ai_expected_rating != null ? Number(row.ai_expected_rating) : null,
+    aiConfidence: row.ai_confidence != null ? Number(row.ai_confidence) : null,
+    aiEvaluation: row.ai_evaluation || null,
+    facultyFinalRating: row.faculty_final_rating != null ? Number(row.faculty_final_rating) : null,
+    facultyFeedback: row.faculty_feedback || null,
+    facultyId: row.faculty_id || null,
+    verifiedAt: row.verified_at || null,
+    intervention: row.ayush_development_interventions ? mapDevelopmentIntervention(row.ayush_development_interventions) : undefined,
     createdAt: row.created_at,
     updatedAt: row.updated_at || row.created_at,
   };
@@ -2512,5 +2570,110 @@ export const supabaseDb = {
 
     if (error || !data) return null;
     return mapCampusRequest(data);
+  },
+
+  // 17. AYUSH Development Interventions & Plans (Step 8)
+  async getDevelopmentInterventions(activeOnly = true): Promise<AyushDevelopmentIntervention[]> {
+    const supabase = getSupabaseServerClient();
+    let query = supabase.from("ayush_development_interventions").select("*");
+    if (activeOnly) {
+      query = query.eq("active", true);
+    }
+    const { data, error } = await query.order("title", { ascending: true });
+    if (error || !data) return [];
+    return data.map(mapDevelopmentIntervention);
+  },
+
+  async getDevelopmentInterventionById(id: string): Promise<AyushDevelopmentIntervention | null> {
+    const supabase = getSupabaseServerClient();
+    const { data, error } = await supabase
+      .from("ayush_development_interventions")
+      .select("*")
+      .eq("id", id)
+      .maybeSingle();
+    if (error || !data) return null;
+    return mapDevelopmentIntervention(data);
+  },
+
+  async getStudentDevelopmentPlans(studentId: string, roleId?: string): Promise<AyushStudentDevelopmentPlan[]> {
+    const supabase = getSupabaseServerClient();
+    let query = supabase
+      .from("ayush_student_development_plans")
+      .select("*, ayush_development_interventions(*)")
+      .eq("student_id", studentId);
+    if (roleId) {
+      query = query.eq("role_id", roleId);
+    }
+    const { data, error } = await query.order("created_at", { ascending: false });
+    if (error || !data) return [];
+    return data.map(mapStudentDevelopmentPlan);
+  },
+
+  async createOrUpdateDevelopmentPlan(
+    plan: Partial<AyushStudentDevelopmentPlan> & {
+      studentId: string;
+      roleId: string;
+      competencyId: string;
+      interventionId: string;
+    }
+  ): Promise<AyushStudentDevelopmentPlan> {
+    const supabase = getSupabaseServerClient();
+    const now = new Date().toISOString();
+    const id = plan.id || `plan_${plan.studentId.replace(/[^a-zA-Z0-9]/g, "").slice(0, 10)}_${plan.interventionId}`;
+    const payload: any = {
+      id,
+      student_id: plan.studentId,
+      role_id: plan.roleId,
+      competency_id: plan.competencyId,
+      baseline_level: plan.baselineLevel ?? 1,
+      target_level: plan.targetLevel ?? 3,
+      intervention_id: plan.interventionId,
+      status: plan.status || "RECOMMENDED",
+      started_at: plan.startedAt || null,
+      completed_at: plan.completedAt || null,
+      evidence_status: plan.evidenceStatus || null,
+      evidence_submission: plan.evidenceSubmission || null,
+      updated_at: now,
+    };
+    if (!plan.id) {
+      payload.created_at = plan.createdAt || now;
+    }
+    const { data, error } = await supabase
+      .from("ayush_student_development_plans")
+      .upsert(payload, { onConflict: "student_id,role_id,competency_id,intervention_id" })
+      .select("*, ayush_development_interventions(*)")
+      .single();
+    if (error) throw error;
+    return mapStudentDevelopmentPlan(data);
+  },
+
+  async updateDevelopmentPlanStatus(
+    planId: string,
+    status: DevelopmentPlanStatus,
+    evidenceSubmission?: Record<string, any>
+  ): Promise<AyushStudentDevelopmentPlan | null> {
+    const supabase = getSupabaseServerClient();
+    const now = new Date().toISOString();
+    const payload: Record<string, any> = {
+      status,
+      updated_at: now,
+    };
+    if (status === "IN_PROGRESS") {
+      payload.started_at = now;
+    } else if (status === "COMPLETED" || status === "EVIDENCE_PENDING" || status === "VERIFIED") {
+      payload.completed_at = now;
+    }
+    if (evidenceSubmission) {
+      payload.evidence_submission = evidenceSubmission;
+      payload.evidence_status = status === "VERIFIED" ? "VERIFIED" : "SUBMITTED";
+    }
+    const { data, error } = await supabase
+      .from("ayush_student_development_plans")
+      .update(payload)
+      .eq("id", planId)
+      .select("*, ayush_development_interventions(*)")
+      .maybeSingle();
+    if (error || !data) return null;
+    return mapStudentDevelopmentPlan(data);
   },
 };

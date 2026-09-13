@@ -166,6 +166,14 @@ export interface AyushSkillProficiency {
   lastAssessedAt: string | null;
 }
 
+export type CompetencyMaturityLevel = "Foundation" | "Applied" | "Advanced";
+
+export function getMaturityFromLevel(level: number): CompetencyMaturityLevel {
+  if (level <= 2) return "Foundation";
+  if (level === 3) return "Applied";
+  return "Advanced";
+}
+
 export interface AyushCompetency {
   id: string;
   name: string;
@@ -173,6 +181,7 @@ export interface AyushCompetency {
   category: string;
   domain: string;
   targetLevel: number; // 1 to 5
+  maturityLevel?: CompetencyMaturityLevel;
   description: string;
   demonstratedAt: string | null;
   verifiedBy: string | null;
@@ -181,6 +190,7 @@ export interface AyushCompetency {
 export interface AyushRoleCompetencyMapping {
   competencyId: string;
   targetLevel: number;
+  maturityLevel?: CompetencyMaturityLevel;
   importance: "essential" | "preferred";
 }
 
@@ -190,7 +200,146 @@ export interface AyushTargetRole {
   ayushSystem: AyushSystemId | string;
   category: string;
   description: string;
+  targetMaturity?: CompetencyMaturityLevel;
   competencies: AyushRoleCompetencyMapping[];
+}
+
+// ============================================================================
+// DEVELOPMENT INTERVENTIONS & STUDENT DEVELOPMENT PLANS (Step 8)
+// ============================================================================
+
+export type InterventionType =
+  | "Course"
+  | "Workshop"
+  | "Mentor Session"
+  | "Practical Task"
+  | "Research Challenge"
+  | "Industry Project"
+  | "Assessment";
+
+export type DevelopmentPlanStatus =
+  | "RECOMMENDED"
+  | "IN_PROGRESS"
+  | "COMPLETED"
+  | "EVIDENCE_PENDING"
+  | "VERIFIED"
+  | "REJECTED";
+
+export type EvidenceStatus =
+  | "PENDING"
+  | "SUBMITTED"
+  | "AI_REVIEWED"
+  | "FACULTY_REVIEW"
+  | "VERIFIED"
+  | "REJECTED";
+
+export interface SupportingResource {
+  title: string;
+  url: string;
+  type: "video" | "reading" | "document" | "tool";
+}
+
+export interface AyushDevelopmentIntervention {
+  id: string;
+  title: string;
+  description: string;
+  type: InterventionType;
+  competencyId: string;
+  targetMaturity: CompetencyMaturityLevel;
+  estimatedDuration: string;
+  difficulty: "Beginner" | "Intermediate" | "Advanced";
+  provider: string;
+  evidenceRequired: string;
+  evaluationRubric?: InterventionEvaluationRubric;
+  supportingResources?: SupportingResource[];
+  active: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export type EvaluationStatus = "PASS" | "NEEDS_REVIEW" | "INSUFFICIENT";
+
+export interface InterventionEvaluationRubricItem {
+  name: string;
+  weight: number;
+  description: string;
+}
+
+export interface InterventionEvaluationRubric {
+  criteria: InterventionEvaluationRubricItem[];
+}
+
+export interface AiEvidenceEvaluation {
+  expectedRating: number; // 1.0 - 5.0
+  confidence: number; // 0 - 100
+  relevanceScore: number; // 0 - 100
+  completenessScore: number; // 0 - 100
+  qualityScore: number; // 0 - 100
+  strengths: string[];
+  weakAreas: string[];
+  feedback: string;
+  recommendedRange: string; // e.g. "3.0 - 3.5"
+  evaluationStatus: EvaluationStatus;
+  evaluatedAt?: string;
+}
+
+export interface AyushStudentDevelopmentPlan {
+  id: string;
+  studentId: string;
+  roleId: string;
+  competencyId: string;
+  baselineLevel: number;
+  targetLevel: number;
+  interventionId: string;
+  status: DevelopmentPlanStatus;
+  startedAt: string | null;
+  completedAt: string | null;
+  evidenceStatus: EvidenceStatus | string | null;
+  evidenceSubmission?: {
+    evidenceText?: string;
+    documentUrl?: string;
+    submittedAt?: string;
+    reviewerNotes?: string;
+    [key: string]: any;
+  } | null;
+  evidenceFilePath?: string | null;
+  evidenceFileName?: string | null;
+  evidenceFileSize?: number | null;
+  evidenceMimeType?: string | null;
+  extractedText?: string | null;
+  extractionStatus?: "SUCCESS" | "SCANNED_OCR" | "SCAN_FAILED" | "FAILED" | string | null;
+  evidenceQuality?: "DIRECT_TEXT" | "SCANNED_OCR" | "SCAN_FAILED" | string | null;
+  signedEvidenceUrl?: string | null;
+  aiExpectedRating?: number | null;
+  aiConfidence?: number | null;
+  aiEvaluation?: AiEvidenceEvaluation | null;
+  facultyFinalRating?: number | null;
+  facultyFeedback?: string | null;
+  facultyId?: string | null;
+  verifiedAt?: string | null;
+  intervention?: AyushDevelopmentIntervention;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface AyushCompetencyHistoryRecord {
+  id: string;
+  studentId: string;
+  competencyId: string;
+  roleId?: string;
+  planId?: string;
+  interventionId?: string;
+  previousRating: number;
+  aiExpectedRating?: number | null;
+  facultyFinalRating: number;
+  improvementDelta: number;
+  decision?: "VERIFIED" | "REJECTED" | string;
+  evidenceQuality?: "DIRECT_TEXT" | "SCANNED_OCR" | "SCAN_FAILED" | string | null;
+  evaluatorId?: string | null;
+  evaluatorFeedback?: string | null;
+  evidenceFilePath?: string | null;
+  verifiedAt: string;
+  createdAt?: string;
 }
 
 export interface AyushAssessmentResult {

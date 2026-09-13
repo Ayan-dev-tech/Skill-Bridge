@@ -5,7 +5,12 @@ import { supabaseDb } from "./supabase-db";
 import { isSupabasePersistenceActive } from "./supabase-server";
 import type { TestSessionState, TestResult } from "./knowledge-test/types";
 import type { AssessmentQuestion, AssessmentConfig, AssessmentAttempt } from "./assessment/types";
-import type { AyushSkillPassport } from "./ayush/types";
+import type {
+  AyushSkillPassport,
+  AyushDevelopmentIntervention,
+  AyushStudentDevelopmentPlan,
+  DevelopmentPlanStatus,
+} from "./ayush/types";
 import type {
   StudentVerificationRecord,
   VerificationDocumentRecord,
@@ -4704,5 +4709,63 @@ export const db = {
     }
     saveDb(data);
     return passport;
+  },
+
+  async getDevelopmentInterventions(activeOnly = true): Promise<AyushDevelopmentIntervention[]> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getDevelopmentInterventions(activeOnly);
+      } catch (err) {
+        console.error("Supabase getDevelopmentInterventions failed:", err);
+      }
+    }
+    return [];
+  },
+
+  async getDevelopmentInterventionById(id: string): Promise<AyushDevelopmentIntervention | null> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getDevelopmentInterventionById(id);
+      } catch (err) {
+        console.error("Supabase getDevelopmentInterventionById failed:", err);
+      }
+    }
+    return null;
+  },
+
+  async getStudentDevelopmentPlans(studentId: string, roleId?: string): Promise<AyushStudentDevelopmentPlan[]> {
+    if (isSupabasePersistenceActive()) {
+      try {
+        return await supabaseDb.getStudentDevelopmentPlans(studentId, roleId);
+      } catch (err) {
+        console.error("Supabase getStudentDevelopmentPlans failed:", err);
+      }
+    }
+    return [];
+  },
+
+  async createOrUpdateDevelopmentPlan(
+    plan: Partial<AyushStudentDevelopmentPlan> & {
+      studentId: string;
+      roleId: string;
+      competencyId: string;
+      interventionId: string;
+    }
+  ): Promise<AyushStudentDevelopmentPlan> {
+    if (isSupabasePersistenceActive()) {
+      return await supabaseDb.createOrUpdateDevelopmentPlan(plan);
+    }
+    throw new Error("Supabase persistence required for development plans");
+  },
+
+  async updateDevelopmentPlanStatus(
+    planId: string,
+    status: DevelopmentPlanStatus,
+    evidenceSubmission?: Record<string, any>
+  ): Promise<AyushStudentDevelopmentPlan | null> {
+    if (isSupabasePersistenceActive()) {
+      return await supabaseDb.updateDevelopmentPlanStatus(planId, status, evidenceSubmission);
+    }
+    return null;
   },
 };
