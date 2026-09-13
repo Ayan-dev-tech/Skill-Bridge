@@ -23,7 +23,29 @@ export async function GET(request: Request) {
     }
 
     // 1. Fetch Opportunity Details
-    const job = await db.getJobOrInternshipById(jobId);
+    let job: any = await db.getJobOrInternshipById(jobId);
+    if (!job) {
+      const { getSupabaseServerClient } = await import("@/lib/supabase-server");
+      const supabase = getSupabaseServerClient();
+      if (supabase) {
+        const { data: ayushOpp } = await supabase
+          .from("ayush_discovered_opportunities")
+          .select("*")
+          .eq("id", jobId)
+          .single();
+        if (ayushOpp) {
+          job = {
+            id: ayushOpp.id,
+            companyName: ayushOpp.organization,
+            roleTitle: ayushOpp.title,
+            description: ayushOpp.description,
+            requiredSkills: ayushOpp.competency_ids || [],
+            requiredDocumentTypes: ["student_id"],
+          };
+        }
+      }
+    }
+
     if (!job) {
       return NextResponse.json(
         { success: false, error: "Opportunity not found." },
@@ -59,7 +81,7 @@ export async function GET(request: Request) {
     const uploadedDocTypes = new Set(
       (verificationRecord?.documents || []).map((d) => d.documentType)
     );
-    const missingDocumentTypes = requiredDocumentTypes.filter((t) => !uploadedDocTypes.has(t));
+    const missingDocumentTypes = requiredDocumentTypes.filter((t: string) => !uploadedDocTypes.has(t));
     const allDocumentsPresent = missingDocumentTypes.length === 0;
 
     // 7. Calculate Strengths & Gaps (Actual student data + resume vs job required skills)

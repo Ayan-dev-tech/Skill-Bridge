@@ -40,6 +40,8 @@ import {
   Info,
 } from "lucide-react";
 import { JobPosting, InternshipPosting } from "@/lib/db";
+import { AyushOpportunitiesSection } from "@/components/student/opportunities/ayush-opportunities-section";
+import type { AyushDiscoveredOpportunity } from "@/lib/ayush/types";
 
 interface ReadinessData {
   success: boolean;
@@ -84,7 +86,12 @@ export default function OpportunitiesPage() {
   const [jobs, setJobs] = React.useState<JobPosting[]>([]);
   const [internships, setInternships] = React.useState<InternshipPosting[]>([]);
   const [appliedJobIds, setAppliedJobIds] = React.useState<Set<string>>(new Set());
-  const [activeTab, setActiveTab] = React.useState<"all" | "jobs" | "internships">("all");
+  const [activeTab, setActiveTab] = React.useState<"all" | "jobs" | "internships" | "ayush">("all");
+
+  // AYUSH Discovered Opportunities state
+  const [ayushOpps, setAyushOpps] = React.useState<AyushDiscoveredOpportunity[]>([]);
+  const [loadingAyush, setLoadingAyush] = React.useState(false);
+  const [refreshingAyush, setRefreshingAyush] = React.useState(false);
 
   // Modal / Application Flow state
   const [selectedItem, setSelectedItem] = React.useState<JobPosting | InternshipPosting | null>(null);
@@ -143,9 +150,75 @@ export default function OpportunitiesPage() {
     }
   }, []);
 
+  const fetchAyushOpps = React.useCallback(async () => {
+    try {
+      setLoadingAyush(true);
+      const res = await fetch("/api/student/ayush-opportunities");
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && Array.isArray(json.opportunities)) {
+          setAyushOpps(json.opportunities);
+        }
+      }
+    } catch (err) {
+      console.error("Failed to load AYUSH opportunities:", err);
+    } finally {
+      setLoadingAyush(false);
+    }
+  }, []);
+
+  const handleRefreshAyush = async () => {
+    try {
+      setRefreshingAyush(true);
+      const res = await fetch("/api/student/ayush-opportunities", { method: "POST" });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && Array.isArray(json.opportunities)) {
+          setAyushOpps(json.opportunities);
+        }
+      }
+    } catch (err) {
+      console.error("Failed to refresh AYUSH opportunities:", err);
+    } finally {
+      setRefreshingAyush(false);
+    }
+  };
+
+  const handleApplyAyush = (opp: AyushDiscoveredOpportunity) => {
+    const oppAsJob: JobPosting = {
+      id: opp.id,
+      roleTitle: opp.title,
+      companyName: opp.organization,
+      location: opp.location,
+      workMode: "On-site",
+      employmentType: opp.opportunityType === "Internship" ? "Contract" : "Full-time",
+      experienceRequirement: "As per AYUSH Notification",
+      salaryRange: "As per Notification",
+      postedDate: opp.postedDate || opp.discoveredAt,
+      deadline: opp.deadline || new Date(Date.now() + 30 * 86400000).toISOString(),
+      description: `${opp.description}\n\n[Official Source: ${opp.sourceUrl}]`,
+      responsibilities: [
+        "Fulfill duties according to statutory AYUSH standards and institutional guidelines.",
+        "Maintain ethical practice and accurate clinical/laboratory documentation.",
+      ],
+      requiredQualifications: [
+        "Relevant academic degree/diploma in AYUSH discipline or allied healthcare field.",
+      ],
+      preferredQualifications: [
+        "Good understanding of classical protocols, regulatory standards, or research methodologies.",
+      ],
+      requiredSkills: opp.competencyIds || [],
+      companyInfo: `${opp.organization} is actively recruiting for AYUSH healthcare, research, and industry development.`,
+      applicationSource: "AYUSH Live Discovery Portal",
+      requiredDocumentTypes: ["student_id"],
+    };
+    handleOpenItem(oppAsJob, "details");
+  };
+
   React.useEffect(() => {
     fetchData();
-  }, [fetchData]);
+    fetchAyushOpps();
+  }, [fetchData, fetchAyushOpps]);
 
   // Open item modal and fetch readiness
   const handleOpenItem = async (item: JobPosting | InternshipPosting, initialStep: "details" | "readiness" = "details") => {
@@ -318,14 +391,23 @@ export default function OpportunitiesPage() {
       )}
 
       {/* 3. Filter Tabs */}
-      <div className="flex items-center gap-2 border-b border-border pb-2">
+      <div className="flex items-center gap-2 border-b border-border pb-2 overflow-x-auto">
         <Button
           variant={activeTab === "all" ? "default" : "ghost"}
           size="sm"
           onClick={() => setActiveTab("all")}
           className="text-xs h-8"
         >
-          All Opportunities ({jobs.length + internships.length})
+          All Opportunities ({jobs.length + internships.length + ayushOpps.length})
+        </Button>
+        <Button
+          variant={activeTab === "ayush" ? "default" : "ghost"}
+          size="sm"
+          onClick={() => setActiveTab("ayush")}
+          className="text-xs h-8 gap-1.5 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10"
+        >
+          <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
+          AYUSH Opportunities ({ayushOpps.length})
         </Button>
         <Button
           variant={activeTab === "jobs" ? "default" : "ghost"}
@@ -346,7 +428,17 @@ export default function OpportunitiesPage() {
       </div>
 
       {/* 4. Listings Cards */}
-      <div className="space-y-4">
+      <div className="space-y-6">
+        {/* AYUSH Discovered Opportunities Section */}
+        {(activeTab === "all" || activeTab === "ayush") && (
+          <AyushOpportunitiesSection
+            opportunities={ayushOpps}
+            loading={loadingAyush}
+            refreshing={refreshingAyush}
+            onRefresh={handleRefreshAyush}
+            onApply={handleApplyAyush}
+          />
+        )}
         {/* Full-Time Jobs */}
         {(activeTab === "all" || activeTab === "jobs") &&
           jobs.map((job) => {
@@ -560,9 +652,10 @@ export default function OpportunitiesPage() {
               </Card>
             );
           })}
-        {((activeTab === "all" && jobs.length === 0 && internships.length === 0) ||
+        {((activeTab === "all" && jobs.length === 0 && internships.length === 0 && ayushOpps.length === 0) ||
           (activeTab === "jobs" && jobs.length === 0) ||
-          (activeTab === "internships" && internships.length === 0)) && (
+          (activeTab === "internships" && internships.length === 0) ||
+          (activeTab === "ayush" && ayushOpps.length === 0 && !loadingAyush)) && (
           <Card className="border-border p-8 text-center bg-card">
             <Briefcase className="w-8 h-8 text-muted-foreground mx-auto mb-2 opacity-50" />
             <h3 className="text-sm font-semibold text-foreground">No opportunities currently available</h3>

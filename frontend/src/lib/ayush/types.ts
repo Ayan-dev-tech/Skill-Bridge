@@ -355,6 +355,53 @@ export interface IndustryRoleMatchResult {
 }
 
 // ============================================================================
+// AYUSH OPPORTUNITY DISCOVERY TYPES (Step 13)
+// ============================================================================
+
+export type AyushOpportunityType =
+  | "Job"
+  | "Internship"
+  | "Fellowship"
+  | "Research Project"
+  | "Program";
+
+export type AyushSourceStatus =
+  | "OFFICIAL"
+  | "VERIFIED_SOURCE"
+  | "WEB_DISCOVERED"
+  | "UNVERIFIED";
+
+export interface AyushDiscoveredOpportunity {
+  id: string;
+  title: string;
+  organization: string;
+  opportunityType: AyushOpportunityType;
+  description: string;
+  ayushSystem: string;
+  roleId?: string | null;
+  competencyIds: string[];
+  location: string;
+  applicationUrl: string;
+  sourceUrl: string;
+  sourceDomain: string;
+  postedDate?: string | null;
+  deadline?: string | null;
+  sourceStatus: AyushSourceStatus;
+  discoveredAt: string;
+  active: boolean;
+  studentMatch?: {
+    matchScore: number;
+    matchLevel: string;
+    matchedCompetenciesCount: number;
+    totalRequirementsCount: number;
+    isCriticalMissing: boolean;
+    roleReadinessScore: number;
+    keyMatchedCompetencies: string[];
+    remainingGaps: string[];
+  } | null;
+}
+
+// ============================================================================
 // DEVELOPMENT INTERVENTIONS & STUDENT DEVELOPMENT PLANS (Step 8)
 // ============================================================================
 
