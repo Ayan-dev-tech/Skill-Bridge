@@ -23,6 +23,11 @@ export async function GET(request: Request) {
     const interestProfile = await db.getInterestProfile(student.id);
     const activeKnowledgeSession = await db.getActiveKnowledgeTestSessionByStudent(student.id);
     const latestKnowledgeResult = await db.getLatestKnowledgeTestResult(student.id);
+    const ayushPassport = await db.getAyushSkillPassport(student.id);
+    const assessmentAttempts = await db.getAssessmentAttemptsByStudent(student.id);
+    const latestAssessmentAttempt = assessmentAttempts
+      .filter((a) => a.status === "completed")
+      .sort((a, b) => new Date(b.endedAt || b.createdAt).getTime() - new Date(a.endedAt || a.createdAt).getTime())[0] || null;
 
     // Current Focus derived directly from canonical workflow state
     let currentFocus: DashboardCurrentFocus = {
@@ -37,32 +42,22 @@ export async function GET(request: Request) {
 
     const skillGapAnalysis = await db.getSkillGapAnalysisByStudent(student.id);
 
-    if (canonicalWorkflow.currentStageId === 2) {
+    if (canonicalWorkflow.currentStageId === 2 || canonicalWorkflow.currentStageId === 3) {
       currentFocus = {
         stage: 2,
-        title: "Interest Finder",
+        title: "AYUSH Assessment Center",
         subtitle:
-          "Discover what engineering problems you genuinely enjoy solving through realistic technical scenarios.",
-        actionText: canonicalWorkflow.stages[1].status === "in_progress" ? "Resume Exploration" : "Start Interest Finder",
-        actionHref: "/student/interest-finder",
-        status: canonicalWorkflow.stages[1].status,
-      };
-    } else if (canonicalWorkflow.currentStageId === 3) {
-      currentFocus = {
-        stage: 3,
-        title: "Knowledge Testing",
-        subtitle:
-          "Measure what you already know in your chosen technical area with a calibrated 10-question evaluation.",
-        actionText: activeKnowledgeSession ? "Resume Assessment" : "Begin Technical Benchmark",
+          "Benchmark your clinical competencies, medical knowledge, and practical safety across authentic NEET UG, AIAPGET PG, and Practical Scenarios.",
+        actionText: latestAssessmentAttempt ? "Review Assessment" : "Begin Assessment",
         actionHref: "/student/knowledge-testing",
-        status: canonicalWorkflow.stages[2].status,
+        status: canonicalWorkflow.stages[1].status,
       };
     } else if (canonicalWorkflow.currentStageId === 4) {
       currentFocus = {
         stage: 4,
-        title: "Skill Gap & Suggestions",
+        title: "AYUSH Skill Gap & Matrix",
         subtitle:
-          "Analyze your knowledge benchmark against corporate recruitment criteria to identify focus areas.",
+          "Analyze your diagnostic and clinical benchmark against healthcare industry standards and institutional placement criteria.",
         actionText: "View Skill Gap Matrix",
         actionHref: "/student/skill-gap",
         status: canonicalWorkflow.stages[3].status,
@@ -118,19 +113,24 @@ export async function GET(request: Request) {
 
     // Real Statistics (strictly real account data)
     const stats = {
-      knowledgeTestScore: scoreVal,
-      knowledgeTestMaxScore: 40,
-      knowledgeTestPercent: latestKnowledgeResult ? latestKnowledgeResult.scorePercent : null,
-      knowledgeLevel: latestKnowledgeResult ? latestKnowledgeResult.knowledgeLevel : null,
+      knowledgeTestScore: latestAssessmentAttempt?.score ?? scoreVal,
+      knowledgeTestMaxScore: latestAssessmentAttempt?.maxScore ?? 40,
+      knowledgeTestPercent: latestAssessmentAttempt?.scorePercent ?? (latestKnowledgeResult ? latestKnowledgeResult.scorePercent : null),
+      knowledgeLevel: latestAssessmentAttempt ? (latestAssessmentAttempt.scorePercent && latestAssessmentAttempt.scorePercent >= 75 ? "Advanced" : latestAssessmentAttempt.scorePercent && latestAssessmentAttempt.scorePercent >= 50 ? "Intermediate" : "Foundational") : (latestKnowledgeResult ? latestKnowledgeResult.knowledgeLevel : null),
       verifiedDocumentsCount: verification.verificationStatus === "VERIFIED" ? verification.documents.length : 0,
       totalDocumentsCount: verification.documents.length,
       skillGapsIdentified:
-        skillGapAnalysis && !skillGapAnalysis.isStale
+        ayushPassport && ayushPassport.skillGaps.length > 0
+          ? ayushPassport.skillGaps.length
+          : skillGapAnalysis && !skillGapAnalysis.isStale
           ? skillGapAnalysis.skillGaps.length
           : latestKnowledgeResult
           ? latestKnowledgeResult.weaknesses.length
           : 0,
       activeApplicationsCount: jobApplications.length,
+      ayushReadinessScore: ayushPassport?.industryReadinessScore ?? null,
+      ayushReadinessBand: ayushPassport?.industryReadinessBand ?? null,
+      latestAssessmentExamType: latestAssessmentAttempt?.examType ?? null,
     };
 
     // Confirmed Interest Profile Summary

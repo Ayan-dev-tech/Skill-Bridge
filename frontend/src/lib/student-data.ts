@@ -62,7 +62,7 @@ export interface InterestDomain {
   keyQuestionsExamined: string[];
 }
 
-// 8-Stage Complete Student Workflow Journey
+// 8-Stage Complete Student Workflow Journey — AYUSH Healthcare & Classical Systems
 export const studentWorkflowStages: WorkflowStage[] = [
   {
     id: 1,
@@ -75,24 +75,24 @@ export const studentWorkflowStages: WorkflowStage[] = [
   {
     id: 2,
     slug: "interest-finder",
-    name: "Interest Finder",
-    shortDescription: "Discover your technical niche within broad engineering domains",
+    name: "AYUSH Assessment Center",
+    shortDescription: "Benchmark competencies across NEET UG, AIAPGET PG, and Practical Scenarios",
     status: "upcoming",
-    route: "/student/interest-finder",
+    route: "/student/knowledge-testing",
   },
   {
     id: 3,
     slug: "knowledge-testing",
-    name: "Knowledge Testing",
-    shortDescription: "Benchmark foundational and practical technical proficiency",
+    name: "AYUSH Benchmarking",
+    shortDescription: "Evaluate performance across authentic AYUSH PYQs and clinical scenarios",
     status: "upcoming",
     route: "/student/knowledge-testing",
   },
   {
     id: 4,
     slug: "skill-gap",
-    name: "Skill Gap & Suggestions",
-    shortDescription: "Identify curriculum deficits vs. corporate recruitment criteria",
+    name: "AYUSH Skill Gap & Matrix",
+    shortDescription: "Identify clinical and taxonomy gaps vs. healthcare and industry criteria",
     status: "upcoming",
     route: "/student/skill-gap",
   },
@@ -100,7 +100,7 @@ export const studentWorkflowStages: WorkflowStage[] = [
     id: 5,
     slug: "learning",
     name: "Learning / Mentoring",
-    shortDescription: "Access curated curriculum tracks and faculty mentorship",
+    shortDescription: "Access curated AYUSH curriculum tracks and faculty mentorship",
     status: "upcoming",
     route: "/student/learning",
   },
@@ -108,7 +108,7 @@ export const studentWorkflowStages: WorkflowStage[] = [
     id: 6,
     slug: "resume",
     name: "Resume Checker",
-    shortDescription: "Analyze your resume with ATS-style diagnostics, parseability checks, and keyword matching",
+    shortDescription: "Analyze your medical/clinical profile with diagnostics and verification",
     status: "available",
     route: "/student/resume-checker",
   },
@@ -116,7 +116,7 @@ export const studentWorkflowStages: WorkflowStage[] = [
     id: 7,
     slug: "opportunities",
     name: "Jobs & Internships",
-    shortDescription: "Explore curated institutional campus drives and internships",
+    shortDescription: "Explore verified institutional hospital postings, clinical trials, and internships",
     status: "upcoming",
     route: "/student/opportunities",
   },
@@ -124,7 +124,7 @@ export const studentWorkflowStages: WorkflowStage[] = [
     id: 8,
     slug: "applications",
     name: "Track Applications",
-    shortDescription: "Monitor interview schedules, shortlists, and offer status",
+    shortDescription: "Monitor interview schedules, hospital shortlists, and placement status",
     status: "upcoming",
     route: "/student/applications",
   },

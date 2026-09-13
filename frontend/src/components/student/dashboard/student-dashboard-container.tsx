@@ -73,6 +73,9 @@ interface DashboardStatistics {
   totalDocumentsCount: number;
   skillGapsIdentified: number;
   activeApplicationsCount: number;
+  ayushReadinessScore?: number | null;
+  ayushReadinessBand?: string | null;
+  latestAssessmentExamType?: string | null;
 }
 
 interface SectionItem {
@@ -224,14 +227,12 @@ export function StudentDashboardContainer() {
         </div>
 
         <div className="flex items-center gap-2.5 shrink-0">
-          {sections.find((s) => s.id === "interest-finder")?.status !== "locked" && (
-            <Button variant="outline" size="sm" asChild className="rounded-full shadow-2xs">
-              <Link href="/student/interest-finder" className="text-xs">
-                <Compass className="w-3.5 h-3.5 mr-1.5" />
-                Interest Explorer
-              </Link>
-            </Button>
-          )}
+          <Button variant="outline" size="sm" asChild className="rounded-full shadow-2xs">
+            <Link href="/student/knowledge-testing" className="text-xs">
+              <ClipboardCheck className="w-3.5 h-3.5 mr-1.5" />
+              AYUSH Assessment Center
+            </Link>
+          </Button>
           <Button size="sm" asChild className="rounded-full shadow-xs">
             <Link href={currentFocus.actionHref} className="text-xs">
               {currentFocus.actionText} <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
@@ -343,7 +344,7 @@ export function StudentDashboardContainer() {
           <CardContent className="p-4 space-y-2">
             <div className="flex items-center justify-between text-muted-foreground">
               <span className="text-[10px] font-mono font-medium uppercase tracking-wider">
-                Technical Benchmark
+                {statistics.latestAssessmentExamType ? `${statistics.latestAssessmentExamType.replace("_", " ")} Benchmark` : "Assessment Benchmark"}
               </span>
               <ClipboardCheck className="w-4 h-4 text-foreground/70" />
             </div>
@@ -357,7 +358,7 @@ export function StudentDashboardContainer() {
                     / {statistics.knowledgeTestMaxScore} Pts
                   </span>
                   <Badge variant="outline" className="ml-auto text-[10px] capitalize rounded-full">
-                    {statistics.knowledgeLevel || "Calibrated"}
+                    {statistics.ayushReadinessBand || statistics.knowledgeLevel || "Calibrated"}
                   </Badge>
                 </div>
               ) : (
@@ -373,8 +374,8 @@ export function StudentDashboardContainer() {
             </div>
             <p className="text-[11px] text-muted-foreground leading-tight">
               {statistics.knowledgeTestPercent !== null
-                ? `${statistics.knowledgeTestPercent}% diagnostic accuracy across 10 calibrated questions.`
-                : "Complete Stage 2 to establish your baseline technical score."}
+                ? `${statistics.knowledgeTestPercent}% benchmark score across evaluated AYUSH/technical syllabus.`
+                : "Complete Stage 2 to establish your baseline score."}
             </p>
           </CardContent>
         </Card>
@@ -501,83 +502,79 @@ export function StudentDashboardContainer() {
           </CardContent>
         </Card>
 
-        {/* Confirmed Interest Profile Card */}
+        {/* AYUSH Competency & Benchmark Card */}
         <Card className="border border-border/80 bg-card shadow-xs rounded-xl flex flex-col justify-between">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <Badge variant="outline" className="text-[10px] font-mono rounded-full">
-                Stage 01 Foundation
+                AYUSH Skill Passport
               </Badge>
-              {interestProfile && (
+              {statistics.knowledgeTestPercent !== null ? (
                 <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1 font-mono">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> Confirmed
+                  <CheckCircle2 className="w-3.5 h-3.5" /> Assessed ({statistics.knowledgeTestPercent}%)
+                </span>
+              ) : (
+                <span className="text-xs text-amber-600 dark:text-amber-400 font-medium flex items-center gap-1 font-mono">
+                  <Clock className="w-3.5 h-3.5" /> Pending Benchmark
                 </span>
               )}
             </div>
             <CardTitle className="text-lg font-heading font-bold text-foreground mt-2">
-              {interestProfile ? interestProfile.specificInterest : "Interest Profile Not Calibrated"}
+              {statistics.latestAssessmentExamType
+                ? `${statistics.latestAssessmentExamType} Benchmark`
+                : interestProfile
+                ? interestProfile.specificInterest
+                : "AYUSH Competency Evaluation"}
             </CardTitle>
             <CardDescription className="text-xs text-muted-foreground">
-              {interestProfile
-                ? `Core Domain: ${interestProfile.domainName}`
-                : "Discover your engineering strengths and establish your target specialization."}
+              {statistics.ayushReadinessBand
+                ? `Readiness: ${statistics.ayushReadinessBand} (${statistics.ayushReadinessScore ?? 0}%)`
+                : "Benchmark competencies across NEET UG, AIAPGET PG, and Clinical Scenarios."}
             </CardDescription>
           </CardHeader>
 
           <CardContent className="pt-0">
-            {interestProfile ? (
+            {statistics.knowledgeTestPercent !== null ? (
               <div className="space-y-3">
                 <div className="p-3 rounded-xl border border-border/80 bg-muted/20 text-xs space-y-1">
                   <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground">Specialization Alignment:</span>
+                    <span className="text-muted-foreground">Performance Level:</span>
                     <span className="font-semibold text-foreground">
-                      {interestProfile.confidenceLevel} Confidence
+                      {statistics.knowledgeLevel || "Competent"}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground">Calibrated On:</span>
+                    <span className="text-muted-foreground">Benchmark Score:</span>
                     <span className="font-mono text-muted-foreground text-[11px]">
-                      {new Date(interestProfile.confirmedAt).toLocaleDateString()}
+                      {statistics.knowledgeTestScore} / {statistics.knowledgeTestMaxScore} ({statistics.knowledgeTestPercent}%)
                     </span>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between pt-1">
                   <Button variant="outline" size="sm" asChild className="text-xs rounded-full shadow-2xs">
-                    <Link href="/student/interest-finder">
-                      <Compass className="w-3.5 h-3.5 mr-1.5" />
-                      Retake Discovery Engine
+                    <Link href="/student/knowledge-testing">
+                      <ClipboardCheck className="w-3.5 h-3.5 mr-1.5" />
+                      Retake / New Test
                     </Link>
                   </Button>
-                  {sections.find((s) => s.id === "knowledge-testing")?.status !== "locked" ? (
-                    <Button size="sm" variant="ghost" asChild className="text-xs rounded-full">
-                      <Link href="/student/knowledge-testing">
-                        Proceed to Technical Benchmark <ChevronRight className="w-3.5 h-3.5 ml-1" />
-                      </Link>
-                    </Button>
-                  ) : (
-                    <Button size="sm" variant="ghost" disabled className="text-xs opacity-60 rounded-full">
-                      <Lock className="w-3.5 h-3.5 mr-1" /> Benchmark Locked
-                    </Button>
-                  )}
+                  <Button size="sm" variant="ghost" asChild className="text-xs rounded-full">
+                    <Link href="/student/skill-gap">
+                      View Skill Gap Matrix <ChevronRight className="w-3.5 h-3.5 ml-1" />
+                    </Link>
+                  </Button>
                 </div>
               </div>
             ) : (
               <div className="p-4 rounded-xl border border-dashed border-border/80 text-center space-y-2">
                 <p className="text-xs text-muted-foreground">
-                  You haven&apos;t confirmed your engineering interest profile yet. Complete the Interest Finder to unlock your personalized curriculum.
+                  Complete an assessment in the AYUSH Assessment Center to evaluate your diagnostic readiness and unlock your Skill Gap Matrix.
                 </p>
-                {sections.find((s) => s.id === "interest-finder")?.status !== "locked" ? (
-                  <Button size="sm" asChild className="rounded-full shadow-xs">
-                    <Link href="/student/interest-finder">
-                      Start Interest Discovery <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
-                    </Link>
-                  </Button>
-                ) : (
-                  <Button size="sm" disabled className="opacity-60 rounded-full">
-                    <Lock className="w-3.5 h-3.5 mr-1.5" /> Discovery Locked
-                  </Button>
-                )}
+                <Button size="sm" asChild className="rounded-full shadow-xs">
+                  <Link href="/student/knowledge-testing">
+                    Launch AYUSH Assessment <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+                  </Link>
+                </Button>
               </div>
             )}
           </CardContent>

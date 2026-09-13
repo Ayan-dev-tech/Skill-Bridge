@@ -3,6 +3,7 @@ import path from "path";
 import crypto from "crypto";
 import type { TestSessionState, TestResult } from "./knowledge-test/types";
 import type { AssessmentQuestion, AssessmentConfig, AssessmentAttempt } from "./assessment/types";
+import type { AyushSkillPassport } from "./ayush/types";
 import type {
   StudentVerificationRecord,
   VerificationDocumentRecord,
@@ -386,6 +387,8 @@ interface DatabaseSchema {
   assessmentQuestions: AssessmentQuestion[];
   assessmentConfigs: AssessmentConfig[];
   assessmentAttempts: AssessmentAttempt[];
+  // AYUSH Skill Passport (Prompt 4)
+  ayushSkillPassports: AyushSkillPassport[];
 }
 
 const DATA_DIR = path.join(process.cwd(), "data");
@@ -429,6 +432,7 @@ function ensureDbExists(): DatabaseSchema {
       assessmentQuestions: [],
       assessmentConfigs: [],
       assessmentAttempts: [],
+      ayushSkillPassports: [],
     };
   } else {
     try {
@@ -450,6 +454,7 @@ function ensureDbExists(): DatabaseSchema {
       if (!data.assessmentQuestions) data.assessmentQuestions = [];
       if (!data.assessmentConfigs) data.assessmentConfigs = [];
       if (!data.assessmentAttempts) data.assessmentAttempts = [];
+      if (!data.ayushSkillPassports) data.ayushSkillPassports = [];
       if (!data.educators || data.educators.length === 0) data.educators = [...SAMPLE_EDUCATORS];
       if (!data.educationPrograms || data.educationPrograms.length === 0)
         data.educationPrograms = [...SAMPLE_EDUCATION_PROGRAMS];
@@ -476,6 +481,7 @@ function ensureDbExists(): DatabaseSchema {
         assessmentQuestions: [],
         assessmentConfigs: [],
         assessmentAttempts: [],
+        ayushSkillPassports: [],
       };
     }
   }
@@ -4073,5 +4079,23 @@ export const db = {
     }
     saveDb(data);
     return attempt;
+  },
+
+  async getAyushSkillPassport(studentId: string): Promise<AyushSkillPassport | null> {
+    const data = ensureDbExists();
+    return (data.ayushSkillPassports || []).find((p) => p.studentId === studentId) || null;
+  },
+
+  async saveAyushSkillPassport(passport: AyushSkillPassport): Promise<AyushSkillPassport> {
+    const data = ensureDbExists();
+    if (!data.ayushSkillPassports) data.ayushSkillPassports = [];
+    const idx = data.ayushSkillPassports.findIndex((p) => p.studentId === passport.studentId);
+    if (idx >= 0) {
+      data.ayushSkillPassports[idx] = { ...passport, updatedAt: new Date().toISOString() };
+    } else {
+      data.ayushSkillPassports.push(passport);
+    }
+    saveDb(data);
+    return passport;
   },
 };

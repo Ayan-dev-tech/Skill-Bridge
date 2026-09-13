@@ -85,12 +85,7 @@ export function StudentSidebar({
           icon: FileCheck,
         },
         {
-          name: "Interest Finder",
-          href: "/student/interest-finder",
-          icon: Compass,
-        },
-        {
-          name: "Knowledge Testing",
+          name: "AYUSH Assessment Center",
           href: "/student/knowledge-testing",
           icon: ClipboardCheck,
         },

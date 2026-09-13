@@ -1,4 +1,4 @@
-﻿/**
+/**
  * POST /api/student/assessment/complete
  * Completes an attempt: scores it, persists result.
  * Body: { attemptId }
@@ -50,10 +50,17 @@ export async function POST(request: Request) {
 
     await db.saveAssessmentAttempt(attempt);
 
+    // Update the student's AYUSH Skill Passport
+    const config = await db.getAssessmentConfigById(attempt.configId);
+    const configName = config?.name || attempt.configId;
+    const { updatePassportWithAssessment } = await import("@/lib/ayush/passport");
+    const passport = await updatePassportWithAssessment(attempt, scoring, configName);
+
     return NextResponse.json({
       success: true,
       attemptId,
       scoring,
+      passport,
     });
   } catch (error) {
     console.error("Complete assessment error:", error);

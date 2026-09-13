@@ -1,4 +1,4 @@
-﻿/**
+/**
  * POST /api/student/assessment/submit-answer
  * Records a student's answer for one question in an attempt.
  * Server-side correctness check — correct answers never sent to client.
@@ -59,7 +59,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      isCorrect,
       answeredCount,
       totalQuestions: attempt.totalQuestions,
       isComplete: answeredCount >= attempt.totalQuestions,

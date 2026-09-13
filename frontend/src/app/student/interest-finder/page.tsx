@@ -1,7 +1,9 @@
 "use client";
 
-import { InterestDiscoveryContainer } from "@/components/student/interest-finder/interest-discovery-container";
+import * as React from "react";
+import { AyushAssessmentContainer } from "@/components/student/knowledge-test/ayush-assessment-container";
 
 export default function InterestFinderPage() {
-  return <InterestDiscoveryContainer />;
+  return <AyushAssessmentContainer />;
 }
+

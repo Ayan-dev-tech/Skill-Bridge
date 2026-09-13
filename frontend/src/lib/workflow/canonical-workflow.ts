@@ -39,22 +39,22 @@ export const CANONICAL_STAGE_DEFINITIONS = [
   {
     id: 2,
     slug: "interest-finder",
-    name: "Interest Finder",
-    shortDescription: "Discover your technical niche within broad engineering domains",
-    route: "/student/interest-finder",
+    name: "AYUSH Assessment Center",
+    shortDescription: "Benchmark competencies across NEET UG, AIAPGET PG, and Practical Scenarios",
+    route: "/student/knowledge-testing",
   },
   {
     id: 3,
     slug: "knowledge-testing",
-    name: "Knowledge Testing",
-    shortDescription: "Benchmark foundational and practical technical proficiency",
+    name: "AYUSH Benchmarking",
+    shortDescription: "Evaluate performance across authentic AYUSH PYQs and clinical scenarios",
     route: "/student/knowledge-testing",
   },
   {
     id: 4,
     slug: "skill-gap",
-    name: "Skill Gap & Suggestions",
-    shortDescription: "Identify curriculum deficits vs. corporate recruitment criteria",
+    name: "AYUSH Skill Gap & Matrix",
+    shortDescription: "Identify clinical and taxonomy gaps vs. healthcare and industry criteria",
     route: "/student/skill-gap",
   },
   {
@@ -119,25 +119,31 @@ export async function getCanonicalWorkflowState(
     (verification.documents.length > 0 ||
       verification.verificationStatus === "DOCUMENTS_PENDING");
 
-  const isInterestFinderCompleted = isVerificationCompleted && Boolean(interestProfile);
+  // In the AYUSH workflow, Stage 2/3 is the AYUSH Assessment Center
+  const assessmentAttempts = await db.getAssessmentAttemptsByStudent(studentId);
+  const completedAssessment = assessmentAttempts.find((a) => a.status === "completed");
+  const inProgressAssessment = assessmentAttempts.find((a) => a.status === "in_progress");
+
+  const isInterestFinderCompleted = isVerificationCompleted && (Boolean(interestProfile) || Boolean(completedAssessment));
   const isInterestFinderInProgress =
     isVerificationCompleted &&
     !isInterestFinderCompleted &&
-    Boolean(activeInterestSession && activeInterestSession.status !== "confirmed");
+    (Boolean(activeInterestSession && activeInterestSession.status !== "confirmed") || Boolean(inProgressAssessment));
 
-  const isKnowledgeTestCompleted = isInterestFinderCompleted && Boolean(latestKnowledgeResult);
+  const isKnowledgeTestCompleted = isVerificationCompleted && (Boolean(completedAssessment) || Boolean(latestKnowledgeResult));
   const isKnowledgeTestInProgress =
-    isInterestFinderCompleted &&
+    isVerificationCompleted &&
     !isKnowledgeTestCompleted &&
-    Boolean(activeKnowledgeSession);
+    (Boolean(inProgressAssessment) || Boolean(activeKnowledgeSession));
 
   const isAdvancedVerified = await db.isStudentAdvancedVerified(studentId);
 
-  // Skill Gap completed when non-stale analysis exists
+  // Skill Gap completed when non-stale analysis exists or AyushSkillPassport has gaps
   const skillGapAnalysis = await db.getSkillGapAnalysisByStudent(studentId);
+  const ayushPassport = await db.getAyushSkillPassport(studentId);
   const isSkillGapCompleted =
     isKnowledgeTestCompleted &&
-    Boolean(skillGapAnalysis && !skillGapAnalysis.isStale);
+    (Boolean(skillGapAnalysis && !skillGapAnalysis.isStale) || Boolean(ayushPassport && ayushPassport.assessmentResults.length > 0));
 
   const isLearningCompleted = false;
   const isOpportunitiesCompleted = false;
@@ -155,10 +161,8 @@ export async function getCanonicalWorkflowState(
   let currentStageId = 1;
   if (!isVerificationCompleted) {
     currentStageId = 1;
-  } else if (!isInterestFinderCompleted) {
-    currentStageId = 2;
   } else if (!isKnowledgeTestCompleted) {
-    currentStageId = 3;
+    currentStageId = 2;
   } else if (!isSkillGapCompleted) {
     currentStageId = 4;
   } else if (!isLearningCompleted) {
@@ -178,6 +182,9 @@ export async function getCanonicalWorkflowState(
     "/student/settings",
     "/student/about",
     "/student/document-verification", // Stage 1 is always accessible
+    "/student/knowledge-testing", // Stage 2/3 Assessment Center accessible after verification
+    "/student/interest-finder", // Route alias to Assessment Center
+    "/student/skill-gap", // Skill Gap
     "/student/resume-checker", // Available from the beginning
     "/student/resume", // Route alias
     "/student/applications", // Track Applications visible and accessible from the beginning
@@ -214,74 +221,72 @@ export async function getCanonicalWorkflowState(
     {
       id: 2,
       slug: "interest-finder",
-      name: "Interest Finder",
-      shortDescription: "Discover your technical niche within broad engineering domains",
-      route: "/student/interest-finder",
-      status: isInterestFinderCompleted
-        ? "completed"
-        : isInterestFinderInProgress
-        ? "in_progress"
-        : isVerificationCompleted
-        ? "available"
-        : "locked",
-      statusLabel: isInterestFinderCompleted
-        ? "Completed"
-        : isInterestFinderInProgress
-        ? "In Progress"
-        : isVerificationCompleted
-        ? "Available"
-        : "Locked",
-      isLocked: !isVerificationCompleted,
-      lockedReason: !isVerificationCompleted
-        ? "Complete Document Submission to unlock Interest Finder."
-        : undefined,
-      actionText: isInterestFinderCompleted
-        ? "Review Profile"
-        : isInterestFinderInProgress
-        ? "Resume Exploration"
-        : isVerificationCompleted
-        ? "Start Exploration"
-        : "Locked",
-    },
-    {
-      id: 3,
-      slug: "knowledge-testing",
-      name: "Knowledge Testing",
-      shortDescription: "Benchmark foundational and practical technical proficiency",
+      name: "AYUSH Assessment Center",
+      shortDescription: "Benchmark competencies across NEET UG, AIAPGET PG, and Practical Scenarios",
       route: "/student/knowledge-testing",
       status: isKnowledgeTestCompleted
         ? "completed"
         : isKnowledgeTestInProgress
         ? "in_progress"
-        : isInterestFinderCompleted
+        : isVerificationCompleted
         ? "available"
         : "locked",
       statusLabel: isKnowledgeTestCompleted
         ? "Completed"
         : isKnowledgeTestInProgress
         ? "In Progress"
-        : isInterestFinderCompleted
+        : isVerificationCompleted
         ? "Available"
         : "Locked",
-      isLocked: !isInterestFinderCompleted,
+      isLocked: !isVerificationCompleted,
       lockedReason: !isVerificationCompleted
-        ? "Complete Document Submission first."
-        : !isInterestFinderCompleted
-        ? "Complete Interest Finder to unlock Knowledge Testing."
+        ? "Complete Document Submission to unlock Assessment Center."
         : undefined,
       actionText: isKnowledgeTestCompleted
-        ? "View Report"
+        ? "Review Assessment"
         : isKnowledgeTestInProgress
-        ? "Resume Test"
-        : isInterestFinderCompleted
-        ? "Begin Assessment"
+        ? "Resume Assessment"
+        : isVerificationCompleted
+        ? "Start Assessment"
+        : "Locked",
+    },
+    {
+      id: 3,
+      slug: "knowledge-testing",
+      name: "AYUSH Benchmarking",
+      shortDescription: "Evaluate performance across authentic AYUSH PYQs and clinical scenarios",
+      route: "/student/knowledge-testing",
+      status: isKnowledgeTestCompleted
+        ? "completed"
+        : isKnowledgeTestInProgress
+        ? "in_progress"
+        : isVerificationCompleted
+        ? "available"
+        : "locked",
+      statusLabel: isKnowledgeTestCompleted
+        ? "Completed"
+        : isKnowledgeTestInProgress
+        ? "In Progress"
+        : isVerificationCompleted
+        ? "Available"
+        : "Locked",
+      isLocked: !isVerificationCompleted,
+      lockedReason: !isVerificationCompleted
+        ? "Complete Document Submission first."
+        : undefined,
+      actionText: isKnowledgeTestCompleted
+        ? "View Results"
+        : isKnowledgeTestInProgress
+        ? "Resume Assessment"
+        : isVerificationCompleted
+        ? "Begin Benchmark"
         : "Locked",
     },
     {
       id: 4,
       slug: "skill-gap",
-      name: "Skill Gap & Suggestions",
-      shortDescription: "Identify curriculum deficits vs. corporate recruitment criteria",
+      name: "AYUSH Skill Gap & Matrix",
+      shortDescription: "Identify clinical and taxonomy gaps vs. healthcare and industry criteria",
       route: "/student/skill-gap",
       status: isSkillGapCompleted
         ? "completed"
@@ -460,26 +465,19 @@ export async function checkRouteAccess(
     return { allowed: true };
   }
 
-  // Stage 3: Knowledge Testing requires Stage 1 & Stage 2 COMPLETED
+  // Stage 2 & 3: AYUSH Assessment Center requires Stage 1 (Document Submission) COMPLETED
   if (pathname.startsWith("/student/knowledge-testing")) {
     if (!workflow.isVerificationCompleted) {
       return {
         allowed: false,
         redirectUrl: "/student/document-verification",
-        reason: "Complete Document Submission before accessing Knowledge Testing.",
-      };
-    }
-    if (!workflow.isInterestFinderCompleted) {
-      return {
-        allowed: false,
-        redirectUrl: "/student/interest-finder",
-        reason: "Complete Interest Finder before accessing Knowledge Testing.",
+        reason: "Complete Document Submission before accessing AYUSH Assessment Center.",
       };
     }
     return { allowed: true };
   }
 
-  // Stage 4: Skill Gap requires Stage 3 COMPLETED
+  // Stage 4: AYUSH Skill Gap requires Stage 1 & Assessment COMPLETED
   if (pathname.startsWith("/student/skill-gap")) {
     if (!workflow.isVerificationCompleted) {
       return {
@@ -488,18 +486,11 @@ export async function checkRouteAccess(
         reason: "Complete Document Submission first.",
       };
     }
-    if (!workflow.isInterestFinderCompleted) {
-      return {
-        allowed: false,
-        redirectUrl: "/student/interest-finder",
-        reason: "Complete Interest Finder first.",
-      };
-    }
     if (!workflow.isKnowledgeTestCompleted) {
       return {
         allowed: false,
         redirectUrl: "/student/knowledge-testing",
-        reason: "Complete Knowledge Testing before accessing Skill Gap.",
+        reason: "Complete an assessment in the AYUSH Assessment Center before accessing Skill Gap.",
       };
     }
     return { allowed: true };
@@ -514,18 +505,11 @@ export async function checkRouteAccess(
         reason: "Complete Document Submission first.",
       };
     }
-    if (!workflow.isInterestFinderCompleted) {
-      return {
-        allowed: false,
-        redirectUrl: "/student/interest-finder",
-        reason: "Complete Interest Finder first.",
-      };
-    }
     if (!workflow.isKnowledgeTestCompleted) {
       return {
         allowed: false,
         redirectUrl: "/student/knowledge-testing",
-        reason: "Complete Knowledge Testing first.",
+        reason: "Complete an assessment in the AYUSH Assessment Center first.",
       };
     }
     if (!workflow.isSkillGapCompleted) {

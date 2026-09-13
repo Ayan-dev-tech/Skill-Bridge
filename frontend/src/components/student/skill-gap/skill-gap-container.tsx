@@ -174,11 +174,10 @@ export function SkillGapContainer() {
                 Required Progression Path:
               </p>
               <ol className="list-decimal list-inside space-y-1 pl-1">
-                <li>Document Submission (ID, Photo, Academic Marksheet, ABC ID)</li>
-                <li>Interest Finder (Confirmed engineering domain & niche)</li>
-                <li>Knowledge Testing (Calibrated technical benchmark)</li>
+                <li>Document Submission (Academic & Identity Verification)</li>
+                <li>AYUSH Assessment Center (NEET UG, AIAPGET PG, or Clinical Scenarios)</li>
                 <li className="font-medium text-foreground">
-                  Skill Gap & Suggestions (Current Stage)
+                  AYUSH Skill Gap & Matrix (Current Stage)
                 </li>
               </ol>
             </div>
