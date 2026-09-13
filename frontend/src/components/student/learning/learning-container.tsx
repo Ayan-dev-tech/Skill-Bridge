@@ -49,9 +49,11 @@ import type {
   AyushCompetencyHistoryRecord,
   DevelopmentPlanStatus,
   AyushRoleReadiness,
+  IndustryRoleMatchResult,
 } from "@/lib/ayush/types";
 import type { RecommendedInterventionItem } from "@/lib/ayush/interventions";
 import { RoleReadinessCard } from "./role-readiness-card";
+import { IndustryMatchesSection } from "./industry-matches-section";
 
 // Canonical 5 AYUSH Career Roles for the Intervention Selector
 const AYUSH_ROLE_OPTIONS = [
@@ -102,6 +104,10 @@ export function LearningContainer() {
   const [readiness, setReadiness] = React.useState<AyushRoleReadiness | null>(null);
   const [readinessLoading, setReadinessLoading] = React.useState(false);
 
+  // Industry Role Matches state (Step 12)
+  const [industryMatches, setIndustryMatches] = React.useState<IndustryRoleMatchResult[]>([]);
+  const [matchesLoading, setMatchesLoading] = React.useState(false);
+
   // Evidence submission modal state
   const [activeEvidencePlan, setActiveEvidencePlan] = React.useState<AyushStudentDevelopmentPlan | null>(null);
   const [selectedPdfFile, setSelectedPdfFile] = React.useState<File | null>(null);
@@ -114,7 +120,7 @@ export function LearningContainer() {
   const [facultyFeedbackInput, setFacultyFeedbackInput] = React.useState<string>("");
   const [isSubmittingFacultyReview, setIsSubmittingFacultyReview] = React.useState(false);
 
-  // Fetch recommendations, active plans, role readiness, and competency history
+  // Fetch recommendations, active plans, role readiness, industry matches, and competency history
   const fetchInterventionsData = React.useCallback(async (roleId: string, isRefresh = false) => {
     try {
       if (isRefresh) {
@@ -148,7 +154,21 @@ export function LearningContainer() {
         setReadinessLoading(false);
       }
 
-      // 3. Fetch competency progression history
+      // 3. Fetch industry role matches (Step 12)
+      try {
+        setMatchesLoading(true);
+        const matchRes = await fetch(`/api/student/industry-matches?roleId=${encodeURIComponent(roleId)}`);
+        if (matchRes.ok) {
+          const matchJson = await matchRes.json();
+          setIndustryMatches(matchJson.matches || []);
+        }
+      } catch (mErr) {
+        console.warn("Could not load industry matches:", mErr);
+      } finally {
+        setMatchesLoading(false);
+      }
+
+      // 4. Fetch competency progression history
       try {
         const histRes = await fetch("/api/student/interventions/competency-history");
         if (histRes.ok) {
@@ -575,6 +595,25 @@ export function LearningContainer() {
       <RoleReadinessCard
         readiness={readiness}
         loading={readinessLoading}
+        onStartIntervention={(interventionId) => {
+          const rec = recommendations.find((r) => r.intervention.id === interventionId);
+          if (rec) {
+            handleStartIntervention(rec);
+          } else {
+            const el = document.getElementById("available-interventions-section");
+            if (el) {
+              el.scrollIntoView({ behavior: "smooth" });
+            }
+          }
+        }}
+      />
+
+      {/* ------------------------------------------------------------------ */}
+      {/* 2.6. INDUSTRY ROLE MATCHES (Step 12) */}
+      {/* ------------------------------------------------------------------ */}
+      <IndustryMatchesSection
+        matches={industryMatches}
+        loading={matchesLoading}
         onStartIntervention={(interventionId) => {
           const rec = recommendations.find((r) => r.intervention.id === interventionId);
           if (rec) {

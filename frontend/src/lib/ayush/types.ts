@@ -273,6 +273,88 @@ export interface AyushRoleReadiness {
 }
 
 // ============================================================================
+// INDUSTRY ROLE MATCHING ENGINE TYPES (Step 12)
+// ============================================================================
+
+export type IndustryMatchLevel = "LOW MATCH" | "PARTIAL MATCH" | "STRONG MATCH" | "HIGH MATCH";
+
+export interface IndustryCompetencyRequirement {
+  competencyId: string;
+  competencyName: string;
+  category: string;
+  requiredRating: number; // 1.0 - 5.0
+  weight: number;         // 0.0 - 1.0 (normalized relative weight)
+  isCritical: boolean;
+  importance: "essential" | "preferred";
+}
+
+export interface IndustryRoleDemand {
+  id: string;
+  industryId?: string;
+  organization: string;
+  roleId: string;
+  roleTitle: string;
+  ayushSystem: string;
+  demandStatus: "ACTIVE" | "URGENT" | "OPEN";
+  experienceRequirementYears: number;
+  opportunityId?: string;
+  requiredCompetencies: IndustryCompetencyRequirement[];
+  description?: string;
+  location?: string;
+}
+
+export interface IndustryCompetencyMatch {
+  competencyId: string;
+  competencyName: string;
+  category: string;
+  verifiedRating: number; // Faculty-verified rating
+  requiredRating: number; // Required by employer
+  attainment: number;     // min(1.0, verifiedRating / requiredRating)
+  weight: number;         // Weight for this demand
+  matchContribution: number; // attainment * weight * 100
+  gap: number;            // max(0, requiredRating - verifiedRating)
+  isCritical: boolean;
+  isMatched: boolean;     // gap <= 0.2 or attainment >= 0.9
+  criticalMissing: boolean; // isCritical && verifiedRating < (requiredRating - 0.5)
+}
+
+export interface FacultyIndustryExportRecord {
+  roleId: string;
+  studentId: string;
+  competencyId: string;
+  verifiedRating: number;
+  targetRating: number;
+  gap: number;
+  matchContribution: number;
+  isCritical: boolean;
+}
+
+export interface IndustryRoleMatchResult {
+  demandId: string;
+  organization: string;
+  roleId: string;
+  roleTitle: string;
+  ayushSystem: string;
+  demandStatus: "ACTIVE" | "URGENT" | "OPEN";
+  experienceRequirementYears: number;
+  matchScore: number;     // 0 - 100%
+  matchLevel: IndustryMatchLevel;
+  isCriticalMissing: boolean;
+  criticalRequirementsTotal: number;
+  criticalRequirementsMet: number;
+  matchedCompetencies: IndustryCompetencyMatch[];
+  missingCompetencies: IndustryCompetencyMatch[];
+  criticalMissingRequirements: IndustryCompetencyMatch[];
+  allCompetencyMatches: IndustryCompetencyMatch[];
+  roleReadinessScore: number; // Step 11 canonical readiness score
+  roleReadinessLevel: AyushReadinessLevel;
+  nextBestAction?: RecommendedInterventionAction;
+  opportunityId?: string;
+  applicationActionAvailable: boolean;
+  calculatedAt: string;
+}
+
+// ============================================================================
 // DEVELOPMENT INTERVENTIONS & STUDENT DEVELOPMENT PLANS (Step 8)
 // ============================================================================
 
