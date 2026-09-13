@@ -251,35 +251,94 @@ export const CANONICAL_INDUSTRY_DEMANDS: IndustryRoleDemand[] = [
 ];
 
 /**
- * Fetch all active industry role demands, syncing employer data from Supabase industry_skill_demands.
+ * Fetch all active industry role demands from Supabase industry_role_skill_demands table.
+ * Groups child competency requirements by employer and role.
  */
 export async function getActiveIndustryRoleDemands(): Promise<IndustryRoleDemand[]> {
   try {
     const supabase = getSupabaseServerClient();
-    const { data: dbDemands, error } = await supabase
-      .from("industry_skill_demands")
-      .select("*");
 
-    if (error || !dbDemands || dbDemands.length === 0) {
+    // 1. Query child role demands with parent employer records from Supabase
+    const { data: roleSkillRows, error: roleError } = await supabase
+      .from("industry_role_skill_demands")
+      .select(`
+        id,
+        industry_demand_id,
+        role_id,
+        competency_id,
+        required_rating,
+        weight,
+        is_critical,
+        active,
+        industry_skill_demands:industry_demand_id (
+          id,
+          industry_id,
+          company_name,
+          ayush_systems,
+          experience_requirement_years
+        )
+      `)
+      .eq("active", true);
+
+    if (roleError || !roleSkillRows || roleSkillRows.length === 0) {
+      console.warn("Fallback to CANONICAL_INDUSTRY_DEMANDS (no Supabase rows returned):", roleError?.message);
       return CANONICAL_INDUSTRY_DEMANDS;
     }
 
-    // Merge Supabase employer company names and details into canonical demands
-    return CANONICAL_INDUSTRY_DEMANDS.map((demand) => {
-      if (demand.industryId) {
-        const matched = dbDemands.find((d) => d.industry_id === demand.industryId);
-        if (matched && matched.company_name) {
-          return {
-            ...demand,
-            organization: matched.company_name,
-            experienceRequirementYears: matched.experience_requirement_years ?? demand.experienceRequirementYears,
-          };
-        }
+    // 2. Group by industry_demand_id + role_id
+    const grouped = new Map<string, IndustryRoleDemand>();
+
+    const ROLE_TITLES: Record<string, string> = {
+      "ayush-clinical-research": "AYUSH Clinical Research Associate",
+      "ayush-pharma-quality-regulatory": "ASU Quality & Regulatory Associate",
+      "ayush-clinical-practice": "AYUSH Medical Officer (Clinical Practice)",
+      "ayush-research-assistant": "Junior Clinical Research Fellow",
+      "ayush-wellness-yoga-therapy": "Therapeutic Yoga & Wellness Specialist",
+    };
+
+    const ROLE_SYSTEMS: Record<string, string> = {
+      "ayush-wellness-yoga-therapy": "yoga-naturopathy",
+    };
+
+    for (const row of roleSkillRows) {
+      const parent = (row as any).industry_skill_demands;
+      const key = `${row.industry_demand_id}::${row.role_id}`;
+      if (!grouped.has(key)) {
+        const roleTitle = ROLE_TITLES[row.role_id] || "AYUSH Healthcare Associate";
+        const ayushSystem = (parent?.ayush_systems && parent.ayush_systems[0]) || ROLE_SYSTEMS[row.role_id] || "ayurveda";
+        const companyName = parent?.company_name || "AYUSH Industry Partner";
+        const isUrgent = row.role_id === "ayush-pharma-quality-regulatory";
+        const isOpen = row.role_id === "ayush-research-assistant";
+
+        grouped.set(key, {
+          id: row.industry_demand_id,
+          industryId: parent?.industry_id,
+          organization: companyName,
+          roleId: row.role_id,
+          roleTitle,
+          ayushSystem,
+          demandStatus: isUrgent ? "URGENT" : isOpen ? "OPEN" : "ACTIVE",
+          experienceRequirementYears: parent?.experience_requirement_years ?? 0,
+          requiredCompetencies: [],
+        });
       }
-      return demand;
-    });
+
+      const demandObj = grouped.get(key)!;
+      const meta = getCompMeta(row.competency_id);
+      demandObj.requiredCompetencies.push({
+        competencyId: row.competency_id,
+        competencyName: meta.competencyName,
+        category: meta.category,
+        requiredRating: Number(row.required_rating),
+        weight: Number(row.weight),
+        isCritical: Boolean(row.is_critical),
+        importance: row.is_critical ? "essential" : "preferred",
+      });
+    }
+
+    return Array.from(grouped.values());
   } catch (err) {
-    console.warn("Could not query Supabase industry_skill_demands, using canonical fallback:", err);
+    console.warn("Could not query Supabase industry_role_skill_demands, using canonical fallback:", err);
     return CANONICAL_INDUSTRY_DEMANDS;
   }
 }

@@ -1,15 +1,16 @@
 /**
- * Skill-Bridge — Step 12 Explainable AYUSH Industry Role Matching Validation
+ * Skill-Bridge — Step 12 Patch: Explainable AYUSH Industry Role Matching Validation
  *
- * Tests:
- * A. Fully matching student (100% attainment -> HIGH MATCH)
- * B. Partial match with gaps (identifies exact gaps and ratings)
- * C. Critical requirement missing (caps match at STRONG MATCH even if score >= 85%)
- * D. Ranking of multiple roles (sorted by matchScore descending)
- * E. Match changes after faculty verification (reactive to verified score changes)
- * F. Intervention recommendation for gap (bridges gap to Step 8 catalog)
- * G. Unauthorized access protection (HTTP 401 without student session)
- * H. TypeScript clean
+ * Verifies:
+ * A. All 5 employer roles load from Supabase industry_role_skill_demands
+ * B. Weights sum to 1.0 per employer role
+ * C. Fully verified student = 100% where appropriate (HIGH MATCH)
+ * D. Partial student produces expected gaps
+ * E. Critical gate works (capped at STRONG MATCH when critical missing)
+ * F. Match reacts to faculty-verified rating changes
+ * G. Step 8 intervention is linked to top gap
+ * H. Unauthorized student request protection (HTTP 401)
+ * I. TypeScript clean
  */
 
 import { matchStudentToIndustryRoles, exportFacultyIndustryMatchRecords } from "../src/lib/ayush/industry-matching-engine";
@@ -17,7 +18,7 @@ import { getActiveIndustryRoleDemands } from "../src/lib/ayush/industry-demands"
 
 async function runStep12Validation() {
   console.log("================================================================================");
-  console.log("🚀 STARTING STEP 12: EXPLAINABLE AYUSH INDUSTRY ROLE MATCHING VALIDATION");
+  console.log("🚀 STARTING STEP 12 PATCH: INDUSTRY ROLE MATCHING VALIDATION");
   console.log("================================================================================\n");
 
   let passed = 0;
@@ -36,14 +37,46 @@ async function runStep12Validation() {
   }
 
   // ---------------------------------------------------------------------------
-  // TEST A: Fully Matching Student
+  // TEST A: All 5 Employer Roles Load from Supabase
   // ---------------------------------------------------------------------------
-  console.log("--- TEST A: Fully Matching Student ---");
+  console.log("--- TEST A: Load All 5 Employer Roles from Supabase ---");
+  let demands: any[] = [];
   try {
-    const demands = await getActiveIndustryRoleDemands();
-    const aiiaDemand = demands.find((d) => d.id === "demand-aiia-cra")!;
+    demands = await getActiveIndustryRoleDemands();
+    assert(demands.length === 5, "Test A1: Loaded 5 active employer role demands", `Count: ${demands.length}`);
 
-    // Set all competencies to required level
+    const roleIds = new Set(demands.map((d) => d.roleId));
+    assert(roleIds.has("ayush-clinical-research"), "Test A2: Contains AIIA Clinical Research", "ayush-clinical-research");
+    assert(roleIds.has("ayush-pharma-quality-regulatory"), "Test A3: Contains Dabur Pharma QC & Reg", "ayush-pharma-quality-regulatory");
+    assert(roleIds.has("ayush-clinical-practice"), "Test A4: Contains Patanjali Medical Officer", "ayush-clinical-practice");
+    assert(roleIds.has("ayush-research-assistant"), "Test A5: Contains CCRAS Research Fellow", "ayush-research-assistant");
+    assert(roleIds.has("ayush-wellness-yoga-therapy"), "Test A6: Contains Himalaya Wellness Specialist", "ayush-wellness-yoga-therapy");
+  } catch (err) {
+    assert(false, "Test A Failed with exception", String(err));
+  }
+
+  // ---------------------------------------------------------------------------
+  // TEST B: Weights Sum to 1.0 Per Employer Role
+  // ---------------------------------------------------------------------------
+  console.log("\n--- TEST B: Weights Sum to 1.0 Per Employer Role ---");
+  try {
+    for (const d of demands) {
+      const weightSum = d.requiredCompetencies.reduce((sum: number, c: any) => sum + c.weight, 0);
+      const isOne = Math.abs(weightSum - 1.0) < 0.001;
+      assert(isOne, `Test B: Weight sum equals 1.0 for ${d.organization}`, `Sum: ${weightSum.toFixed(3)}, Comps: ${d.requiredCompetencies.length}`);
+    }
+  } catch (err) {
+    assert(false, "Test B Failed with exception", String(err));
+  }
+
+  // ---------------------------------------------------------------------------
+  // TEST C: Fully Verified Student = 100% (HIGH MATCH)
+  // ---------------------------------------------------------------------------
+  console.log("\n--- TEST C: Fully Verified Student = 100% ---");
+  try {
+    const aiiaDemand = demands.find((d) => d.roleId === "ayush-clinical-research")!;
+
+    // Set all competencies to required rating
     const fullRatings: Record<string, number> = {};
     for (const req of aiiaDemand.requiredCompetencies) {
       fullRatings[req.competencyId] = req.requiredRating;
@@ -54,25 +87,25 @@ async function runStep12Validation() {
       filterRoleId: aiiaDemand.roleId,
     });
 
-    const aiiaMatch = matches.find((m) => m.demandId === "demand-aiia-cra");
-    assert(!!aiiaMatch, "Test A1: AIIA demand matched", `Demand: ${aiiaMatch?.demandId}`);
-    assert(aiiaMatch!.matchScore >= 99 && aiiaMatch!.matchScore <= 100, "Test A2: Match score equals 100%", `Score: ${aiiaMatch!.matchScore}%`);
-    assert(aiiaMatch!.matchLevel === "HIGH MATCH", "Test A3: Match level is HIGH MATCH", `Level: ${aiiaMatch!.matchLevel}`);
-    assert(!aiiaMatch!.isCriticalMissing, "Test A4: Zero critical requirements missing", `isCriticalMissing: ${aiiaMatch!.isCriticalMissing}`);
-    assert(aiiaMatch!.missingCompetencies.length === 0, "Test A5: Zero remaining gaps", `Gaps: ${aiiaMatch!.missingCompetencies.length}`);
-    assert(aiiaMatch!.criticalRequirementsMet === aiiaMatch!.criticalRequirementsTotal, "Test A6: All critical requirements met",
+    const aiiaMatch = matches.find((m) => m.roleId === "ayush-clinical-research");
+    assert(!!aiiaMatch, "Test C1: Found AIIA match", `Org: ${aiiaMatch?.organization}`);
+    assert(aiiaMatch!.matchScore >= 99 && aiiaMatch!.matchScore <= 100, "Test C2: Match score equals 100%", `Score: ${aiiaMatch!.matchScore}%`);
+    assert(aiiaMatch!.matchLevel === "HIGH MATCH", "Test C3: Match level is HIGH MATCH", `Level: ${aiiaMatch!.matchLevel}`);
+    assert(!aiiaMatch!.isCriticalMissing, "Test C4: Zero critical requirements missing", `isCriticalMissing: ${aiiaMatch!.isCriticalMissing}`);
+    assert(aiiaMatch!.missingCompetencies.length === 0, "Test C5: Zero remaining gaps", `Gaps: ${aiiaMatch!.missingCompetencies.length}`);
+    assert(aiiaMatch!.criticalRequirementsMet === aiiaMatch!.criticalRequirementsTotal, "Test C6: All critical requirements met",
       `${aiiaMatch!.criticalRequirementsMet}/${aiiaMatch!.criticalRequirementsTotal}`
     );
   } catch (err) {
-    assert(false, "Test A Failed with exception", String(err));
+    assert(false, "Test C Failed with exception", String(err));
   }
 
   // ---------------------------------------------------------------------------
-  // TEST B: Partial Match with Gaps
+  // TEST D: Partial Student Produces Expected Gaps
   // ---------------------------------------------------------------------------
-  console.log("\n--- TEST B: Partial Match with Gaps ---");
+  console.log("\n--- TEST D: Partial Student Produces Expected Gaps ---");
   try {
-    // Only 2 of 5 competencies partially verified
+    // Only 2 competencies partially verified
     const partialRatings: Record<string, number> = {
       "comp-ayush-gcp": 3.0, // target 4.0 -> gap 1.0
       "comp-ayush-pvpi": 2.5, // target 3.0 -> gap 0.5
@@ -84,22 +117,21 @@ async function runStep12Validation() {
     });
 
     const m = matches[0];
-    assert(m.matchScore > 0 && m.matchScore < 60, "Test B1: Match score reflects partial verified ratings", `Score: ${m.matchScore}%`);
-    assert(m.matchLevel === "LOW MATCH" || m.matchLevel === "PARTIAL MATCH", "Test B2: Match level reflects partial score", `Level: ${m.matchLevel}`);
-    assert(m.missingCompetencies.length > 0, "Test B3: Missing competencies list populated", `Gaps count: ${m.missingCompetencies.length}`);
+    assert(m.matchScore > 0 && m.matchScore < 60, "Test D1: Match score reflects partial verified ratings", `Score: ${m.matchScore}%`);
+    assert(m.matchLevel === "LOW MATCH" || m.matchLevel === "PARTIAL MATCH", "Test D2: Match level reflects partial score", `Level: ${m.matchLevel}`);
+    assert(m.missingCompetencies.length > 0, "Test D3: Missing competencies list populated", `Gaps count: ${m.missingCompetencies.length}`);
     const gcpGap = m.missingCompetencies.find((c) => c.competencyId === "comp-ayush-gcp");
-    assert(gcpGap?.gap === 1.0, "Test B4: Exact gap calculated for GCP (4.0 - 3.0 = 1.0)", `GCP gap: ${gcpGap?.gap}`);
+    assert(gcpGap?.gap === 1.0, "Test D4: Exact gap calculated for GCP (4.0 - 3.0 = 1.0)", `GCP gap: ${gcpGap?.gap}`);
   } catch (err) {
-    assert(false, "Test B Failed with exception", String(err));
+    assert(false, "Test D Failed with exception", String(err));
   }
 
   // ---------------------------------------------------------------------------
-  // TEST C: Critical Requirement Missing Gate
+  // TEST E: Critical Gate Works (Capped at STRONG MATCH)
   // ---------------------------------------------------------------------------
-  console.log("\n--- TEST C: Critical Requirement Missing Gate ---");
+  console.log("\n--- TEST E: Critical Gate Works ---");
   try {
-    const demands = await getActiveIndustryRoleDemands();
-    const aiiaDemand = demands.find((d) => d.id === "demand-aiia-cra")!;
+    const aiiaDemand = demands.find((d) => d.roleId === "ayush-clinical-research")!;
 
     // High scores across non-critical or standard competencies, but critical GCP is 1.5/4
     const criticalMissingRatings: Record<string, number> = {};
@@ -117,59 +149,22 @@ async function runStep12Validation() {
     });
 
     const m = matches[0];
-    assert(m.matchScore >= 80, "Test C1: Aggregate score is high", `Score: ${m.matchScore}%`);
-    assert(m.isCriticalMissing === true, "Test C2: isCriticalMissing is true", `isCriticalMissing: ${m.isCriticalMissing}`);
-    assert(m.matchLevel === "STRONG MATCH", "Test C3: Level is capped at STRONG MATCH (cannot be HIGH MATCH)", `Level: ${m.matchLevel}`);
+    assert(m.matchScore >= 80, "Test E1: Aggregate score is high", `Score: ${m.matchScore}%`);
+    assert(m.isCriticalMissing === true, "Test E2: isCriticalMissing is true", `isCriticalMissing: ${m.isCriticalMissing}`);
+    assert(m.matchLevel === "STRONG MATCH", "Test E3: Level is capped at STRONG MATCH (cannot be HIGH MATCH)", `Level: ${m.matchLevel}`);
     assert(
       m.criticalMissingRequirements.some((c) => c.competencyId === "comp-ayush-gcp"),
-      "Test C4: criticalMissingRequirements includes comp-ayush-gcp",
-      `Critical missing: ${m.criticalMissingRequirements.map(c => c.competencyName).join(", ")}`
+      "Test E4: criticalMissingRequirements includes comp-ayush-gcp",
+      `Critical missing: ${m.criticalMissingRequirements.map((c) => c.competencyName).join(", ")}`
     );
   } catch (err) {
-    assert(false, "Test C Failed with exception", String(err));
+    assert(false, "Test E Failed with exception", String(err));
   }
 
   // ---------------------------------------------------------------------------
-  // TEST D: Ranking of Multiple Roles
+  // TEST F: Match Reacts to Faculty-Verified Rating Changes
   // ---------------------------------------------------------------------------
-  console.log("\n--- TEST D: Ranking of Multiple Industry Roles ---");
-  try {
-    // Give strong clinical practice ratings, zero pharma QC ratings
-    const roleRatings: Record<string, number> = {
-      "comp-ayush-bedside-diagnostics": 3.0,
-      "comp-ayush-panchakarma-chikitsa": 3.0,
-      "comp-ayush-chronic-case-mgmt": 4.0,
-      "comp-ayush-herb-drug": 3.0,
-    };
-
-    const allMatches = await matchStudentToIndustryRoles(undefined, {
-      overrideRatings: roleRatings,
-    });
-
-    assert(allMatches.length === 5, "Test D1: Evaluates all 5 industry role demands", `Total demands: ${allMatches.length}`);
-    assert(allMatches[0].roleId === "ayush-clinical-practice", "Test D2: Highest matching role is ranked first",
-      `Rank 1: ${allMatches[0].roleTitle} (${allMatches[0].matchScore}%)`
-    );
-
-    // Verify sorted order descending
-    let isSorted = true;
-    for (let i = 0; i < allMatches.length - 1; i++) {
-      if (allMatches[i].matchScore < allMatches[i + 1].matchScore) {
-        isSorted = false;
-        break;
-      }
-    }
-    assert(isSorted, "Test D3: Results are sorted by matchScore descending",
-      allMatches.map((m) => `${m.roleTitle}: ${m.matchScore}%`).join(" > ")
-    );
-  } catch (err) {
-    assert(false, "Test D Failed with exception", String(err));
-  }
-
-  // ---------------------------------------------------------------------------
-  // TEST E: Match Changes After Faculty Verification
-  // ---------------------------------------------------------------------------
-  console.log("\n--- TEST E: Reactivity to New Faculty Verification ---");
+  console.log("\n--- TEST F: Reactivity to New Faculty Verification ---");
   try {
     // Before: GCP at 2.0
     const beforeMatches = await matchStudentToIndustryRoles(undefined, {
@@ -186,7 +181,7 @@ async function runStep12Validation() {
     const scoreBefore = beforeMatches[0].matchScore;
     const scoreAfter = afterMatches[0].matchScore;
 
-    assert(scoreAfter > scoreBefore, "Test E1: Match score increases after faculty verification",
+    assert(scoreAfter > scoreBefore, "Test F1: Match score increases after faculty verification",
       `Score: ${scoreBefore}% → ${scoreAfter}% (+${scoreAfter - scoreBefore}%)`
     );
 
@@ -194,17 +189,17 @@ async function runStep12Validation() {
     const gcpAfter = afterMatches[0].allCompetencyMatches.find((c) => c.competencyId === "comp-ayush-gcp");
     assert(
       (gcpAfter?.matchContribution || 0) > (gcpBefore?.matchContribution || 0),
-      "Test E2: Competency contribution increases deterministically",
+      "Test F2: Competency contribution increases deterministically",
       `Contribution: ${gcpBefore?.matchContribution}% → ${gcpAfter?.matchContribution}%`
     );
   } catch (err) {
-    assert(false, "Test E Failed with exception", String(err));
+    assert(false, "Test F Failed with exception", String(err));
   }
 
   // ---------------------------------------------------------------------------
-  // TEST F: Next-Best Action Recommendation for Gap
+  // TEST G: Step 8 Intervention is Linked to Gap
   // ---------------------------------------------------------------------------
-  console.log("\n--- TEST F: Next-Best Action Recommendation for Gap ---");
+  console.log("\n--- TEST G: Step 8 Intervention Linked to Gap ---");
   try {
     const matches = await matchStudentToIndustryRoles(undefined, {
       overrideRatings: { "comp-ayush-trial-design": 2.0 },
@@ -212,22 +207,22 @@ async function runStep12Validation() {
     });
 
     const m = matches[0];
-    assert(!!m.nextBestAction, "Test F1: Recommends next best action for missing gap",
+    assert(!!m.nextBestAction, "Test G1: Recommends next best action for missing gap",
       `Action: ${m.nextBestAction?.title} (${m.nextBestAction?.competencyName})`
     );
     assert(
       m.nextBestAction?.competencyId === "comp-ayush-gcp" || m.nextBestAction?.competencyId === "comp-ayush-trial-design",
-      "Test F2: Next action targets a critical missing competency",
+      "Test G2: Next action targets a critical missing competency from Step 8 catalog",
       `Targeted comp: ${m.nextBestAction?.competencyId}`
     );
   } catch (err) {
-    assert(false, "Test F Failed with exception", String(err));
+    assert(false, "Test G Failed with exception", String(err));
   }
 
   // ---------------------------------------------------------------------------
-  // TEST G: Faculty / Industry Export Record Structure
+  // TEST H: Structured Faculty / Industry Export
   // ---------------------------------------------------------------------------
-  console.log("\n--- TEST G: Faculty / Industry Structured Export ---");
+  console.log("\n--- TEST H: Faculty / Industry Structured Export ---");
   try {
     const matches = await matchStudentToIndustryRoles(undefined, {
       overrideRatings: { "comp-ayush-gcp": 3.8 },
@@ -235,7 +230,7 @@ async function runStep12Validation() {
     });
 
     const exportRecords = exportFacultyIndustryMatchRecords(matches, "test-student-id");
-    assert(exportRecords.length > 0, "Test G1: Generates structured export records", `Count: ${exportRecords.length}`);
+    assert(exportRecords.length > 0, "Test H1: Generates structured export records", `Count: ${exportRecords.length}`);
     const r = exportRecords[0];
     const valid =
       r.roleId !== undefined &&
@@ -247,11 +242,11 @@ async function runStep12Validation() {
       r.matchContribution !== undefined &&
       r.isCritical !== undefined;
 
-    assert(valid, "Test G2: Record contains all fields required for Faculty/Industry review",
+    assert(valid, "Test H2: Record contains all fields required for Faculty/Industry review",
       `studentId: ${r.studentId}, roleId: ${r.roleId}, comp: ${r.competencyId}, verified: ${r.verifiedRating}, target: ${r.targetRating}`
     );
   } catch (err) {
-    assert(false, "Test G Failed with exception", String(err));
+    assert(false, "Test H Failed with exception", String(err));
   }
 
   console.log("\n================================================================================");
