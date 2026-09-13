@@ -192,6 +192,8 @@ export interface AyushRoleCompetencyMapping {
   targetLevel: number;
   maturityLevel?: CompetencyMaturityLevel;
   importance: "essential" | "preferred";
+  isCritical?: boolean;
+  weight?: number; // 0.0 - 1.0 (normalized relative weight)
 }
 
 export interface AyushTargetRole {
@@ -202,6 +204,72 @@ export interface AyushTargetRole {
   description: string;
   targetMaturity?: CompetencyMaturityLevel;
   competencies: AyushRoleCompetencyMapping[];
+}
+
+// ============================================================================
+// ROLE READINESS ENGINE TYPES (Step 11 & Step 12 Alignment)
+// ============================================================================
+
+export type AyushReadinessLevel = "NOT READY" | "DEVELOPING" | "NEAR READY" | "READY";
+
+export interface CompetencyReadinessContribution {
+  roleId: string;
+  competencyId: string;
+  competencyName: string;
+  category: string;
+  verifiedRating: number; // Faculty-verified rating (0.0 - 5.0)
+  targetRating: number;   // Target level for role (1.0 - 5.0)
+  normalizedAttainment: number; // 0.0 - 1.0 (verifiedRating / targetRating)
+  weight: number;         // 0.0 - 1.0
+  readinessContribution: number; // normalizedAttainment * weight * 100
+  gap: number;            // max(0, targetRating - verifiedRating)
+  isCritical: boolean;
+  criticalBlocked: boolean; // isCritical && verifiedRating < (targetRating - 0.5)
+  reason?: string;
+}
+
+export interface LatestVerifiedImprovement {
+  competencyId: string;
+  competencyName: string;
+  previousRating: number;
+  facultyFinalRating: number;
+  improvementDelta: number;
+  verifiedAt: string;
+}
+
+export interface RecommendedInterventionAction {
+  interventionId: string;
+  title: string;
+  type: string;
+  competencyId: string;
+  competencyName: string;
+  gap: number;
+  isCritical: boolean;
+  estimatedDuration: string;
+}
+
+export interface AyushRoleReadiness {
+  roleId: string;
+  roleName: string;
+  ayushSystem: string;
+  overallScore: number; // 0 - 100%
+  readinessLevel: AyushReadinessLevel;
+  isCriticalBlocked: boolean;
+  blockingCompetencies: {
+    competencyId: string;
+    competencyName: string;
+    verifiedRating: number;
+    targetRating: number;
+    reason: string;
+  }[];
+  matchedCompetencies: CompetencyReadinessContribution[];
+  remainingGaps: CompetencyReadinessContribution[];
+  strongestCompetencies: CompetencyReadinessContribution[];
+  allCompetencies: CompetencyReadinessContribution[];
+  completedInterventionsCount: number;
+  latestImprovement: LatestVerifiedImprovement | null;
+  nextBestInterventions: RecommendedInterventionAction[];
+  calculatedAt: string;
 }
 
 // ============================================================================

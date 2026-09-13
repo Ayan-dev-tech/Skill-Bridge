@@ -48,8 +48,10 @@ import type {
   AyushStudentDevelopmentPlan,
   AyushCompetencyHistoryRecord,
   DevelopmentPlanStatus,
+  AyushRoleReadiness,
 } from "@/lib/ayush/types";
 import type { RecommendedInterventionItem } from "@/lib/ayush/interventions";
+import { RoleReadinessCard } from "./role-readiness-card";
 
 // Canonical 5 AYUSH Career Roles for the Intervention Selector
 const AYUSH_ROLE_OPTIONS = [
@@ -96,6 +98,10 @@ export function LearningContainer() {
   const [competencyHistory, setCompetencyHistory] = React.useState<AyushCompetencyHistoryRecord[]>([]);
   const [startingInterventionId, setStartingInterventionId] = React.useState<string | null>(null);
 
+  // Role Readiness state (Step 11)
+  const [readiness, setReadiness] = React.useState<AyushRoleReadiness | null>(null);
+  const [readinessLoading, setReadinessLoading] = React.useState(false);
+
   // Evidence submission modal state
   const [activeEvidencePlan, setActiveEvidencePlan] = React.useState<AyushStudentDevelopmentPlan | null>(null);
   const [selectedPdfFile, setSelectedPdfFile] = React.useState<File | null>(null);
@@ -108,7 +114,7 @@ export function LearningContainer() {
   const [facultyFeedbackInput, setFacultyFeedbackInput] = React.useState<string>("");
   const [isSubmittingFacultyReview, setIsSubmittingFacultyReview] = React.useState(false);
 
-  // Fetch recommendations, active plans, and competency history
+  // Fetch recommendations, active plans, role readiness, and competency history
   const fetchInterventionsData = React.useCallback(async (roleId: string, isRefresh = false) => {
     try {
       if (isRefresh) {
@@ -128,7 +134,21 @@ export function LearningContainer() {
       setRecommendations(json.recommendations || []);
       setActivePlans(json.activePlans || []);
 
-      // 2. Fetch competency progression history
+      // 2. Fetch role readiness (Step 11)
+      try {
+        setReadinessLoading(true);
+        const readRes = await fetch(`/api/student/readiness?roleId=${encodeURIComponent(roleId)}`);
+        if (readRes.ok) {
+          const readJson = await readRes.json();
+          setReadiness(readJson.readiness || null);
+        }
+      } catch (rErr) {
+        console.warn("Could not load role readiness:", rErr);
+      } finally {
+        setReadinessLoading(false);
+      }
+
+      // 3. Fetch competency progression history
       try {
         const histRes = await fetch("/api/student/interventions/competency-history");
         if (histRes.ok) {
@@ -550,6 +570,25 @@ export function LearningContainer() {
       </div>
 
       {/* ------------------------------------------------------------------ */}
+      {/* 2.5. ROLE READINESS CARD (Step 11) */}
+      {/* ------------------------------------------------------------------ */}
+      <RoleReadinessCard
+        readiness={readiness}
+        loading={readinessLoading}
+        onStartIntervention={(interventionId) => {
+          const rec = recommendations.find((r) => r.intervention.id === interventionId);
+          if (rec) {
+            handleStartIntervention(rec);
+          } else {
+            const el = document.getElementById("available-interventions-section");
+            if (el) {
+              el.scrollIntoView({ behavior: "smooth" });
+            }
+          }
+        }}
+      />
+
+      {/* ------------------------------------------------------------------ */}
       {/* 3. ACTIVE STUDENT DEVELOPMENT PLANS & EVIDENCE EVALUATION */}
       {/* ------------------------------------------------------------------ */}
       {activePlans.length > 0 && (
@@ -837,7 +876,7 @@ export function LearningContainer() {
       {/* ------------------------------------------------------------------ */}
       {/* 5. RECOMMENDED INTERVENTIONS LIST */}
       {/* ------------------------------------------------------------------ */}
-      <div className="space-y-4">
+      <div id="available-interventions-section" className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">

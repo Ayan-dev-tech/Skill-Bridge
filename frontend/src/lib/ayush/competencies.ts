@@ -249,15 +249,15 @@ export const AYUSH_TARGET_ROLES: Record<string, AyushTargetRole> = {
     targetMaturity: "Advanced",
     description: "Specialized clinical research role designing, managing, and auditing GCP-compliant clinical trials, safety registries, and translational research across AYUSH systems.",
     competencies: [
-      { competencyId: "comp-ayush-gcp", targetLevel: 4, maturityLevel: "Advanced", importance: "essential" },
-      { competencyId: "comp-ayush-trial-design", targetLevel: 4, maturityLevel: "Advanced", importance: "essential" },
-      { competencyId: "comp-ayush-pvpi", targetLevel: 3, maturityLevel: "Applied", importance: "essential" },
-      { competencyId: "comp-ayush-herb-drug", targetLevel: 4, maturityLevel: "Advanced", importance: "essential" },
-      { competencyId: "comp-ayush-bioethics", targetLevel: 3, maturityLevel: "Applied", importance: "preferred" },
-      { competencyId: "comp-ayush-data-mgmt", targetLevel: 3, maturityLevel: "Applied", importance: "preferred" },
-      { competencyId: "comp-ayush-standardization", targetLevel: 4, maturityLevel: "Advanced", importance: "essential" },
-      { competencyId: "comp-ayush-biostats", targetLevel: 3, maturityLevel: "Applied", importance: "preferred" },
-      { competencyId: "comp-ayush-samhita-epistemology", targetLevel: 4, maturityLevel: "Advanced", importance: "essential" },
+      { competencyId: "comp-ayush-gcp", targetLevel: 4, maturityLevel: "Advanced", importance: "essential", isCritical: true, weight: 0.18 },
+      { competencyId: "comp-ayush-trial-design", targetLevel: 4, maturityLevel: "Advanced", importance: "essential", isCritical: true, weight: 0.18 },
+      { competencyId: "comp-ayush-pvpi", targetLevel: 3, maturityLevel: "Applied", importance: "essential", isCritical: true, weight: 0.14 },
+      { competencyId: "comp-ayush-herb-drug", targetLevel: 4, maturityLevel: "Advanced", importance: "essential", isCritical: false, weight: 0.12 },
+      { competencyId: "comp-ayush-standardization", targetLevel: 4, maturityLevel: "Advanced", importance: "essential", isCritical: false, weight: 0.12 },
+      { competencyId: "comp-ayush-samhita-epistemology", targetLevel: 4, maturityLevel: "Advanced", importance: "essential", isCritical: false, weight: 0.10 },
+      { competencyId: "comp-ayush-bioethics", targetLevel: 3, maturityLevel: "Applied", importance: "preferred", isCritical: false, weight: 0.06 },
+      { competencyId: "comp-ayush-data-mgmt", targetLevel: 3, maturityLevel: "Applied", importance: "preferred", isCritical: false, weight: 0.05 },
+      { competencyId: "comp-ayush-biostats", targetLevel: 3, maturityLevel: "Applied", importance: "preferred", isCritical: false, weight: 0.05 },
     ],
   },
 
@@ -269,13 +269,13 @@ export const AYUSH_TARGET_ROLES: Record<string, AyushTargetRole> = {
     targetMaturity: "Applied",
     description: "Primary bedside patient care, comprehensive diagnostic examination (Nadi Pariksha), authentic Panchakarma administration, and chronic disease protocolization.",
     competencies: [
-      { competencyId: "comp-ayush-bedside-diagnostics", targetLevel: 3, maturityLevel: "Applied", importance: "essential" },
-      { competencyId: "comp-ayush-panchakarma-chikitsa", targetLevel: 3, maturityLevel: "Applied", importance: "essential" },
-      { competencyId: "comp-ayush-chronic-case-mgmt", targetLevel: 4, maturityLevel: "Advanced", importance: "essential" },
-      { competencyId: "comp-ayush-herb-drug", targetLevel: 3, maturityLevel: "Applied", importance: "essential" },
-      { competencyId: "comp-ayush-data-mgmt", targetLevel: 2, maturityLevel: "Foundation", importance: "preferred" },
-      { competencyId: "comp-ayush-pvpi", targetLevel: 2, maturityLevel: "Foundation", importance: "preferred" },
-      { competencyId: "comp-ayush-samhita-epistemology", targetLevel: 3, maturityLevel: "Applied", importance: "essential" },
+      { competencyId: "comp-ayush-bedside-diagnostics", targetLevel: 3, maturityLevel: "Applied", importance: "essential", isCritical: true, weight: 0.25 },
+      { competencyId: "comp-ayush-panchakarma-chikitsa", targetLevel: 3, maturityLevel: "Applied", importance: "essential", isCritical: true, weight: 0.25 },
+      { competencyId: "comp-ayush-chronic-case-mgmt", targetLevel: 4, maturityLevel: "Advanced", importance: "essential", isCritical: true, weight: 0.20 },
+      { competencyId: "comp-ayush-herb-drug", targetLevel: 3, maturityLevel: "Applied", importance: "essential", isCritical: false, weight: 0.10 },
+      { competencyId: "comp-ayush-samhita-epistemology", targetLevel: 3, maturityLevel: "Applied", importance: "essential", isCritical: false, weight: 0.10 },
+      { competencyId: "comp-ayush-data-mgmt", targetLevel: 2, maturityLevel: "Foundation", importance: "preferred", isCritical: false, weight: 0.05 },
+      { competencyId: "comp-ayush-pvpi", targetLevel: 2, maturityLevel: "Foundation", importance: "preferred", isCritical: false, weight: 0.05 },
     ],
   },
 
@@ -287,12 +287,12 @@ export const AYUSH_TARGET_ROLES: Record<string, AyushTargetRole> = {
     targetMaturity: "Foundation",
     description: "Entry-level research support for clinical trials, participant screening, electronic Case Report Form (eCRF) logging, and scientific literature curation.",
     competencies: [
-      { competencyId: "comp-ayush-gcp", targetLevel: 2, maturityLevel: "Foundation", importance: "essential" },
-      { competencyId: "comp-ayush-data-mgmt", targetLevel: 2, maturityLevel: "Foundation", importance: "essential" },
-      { competencyId: "comp-ayush-literature-evidence", targetLevel: 2, maturityLevel: "Foundation", importance: "essential" },
-      { competencyId: "comp-ayush-bioethics", targetLevel: 2, maturityLevel: "Foundation", importance: "preferred" },
-      { competencyId: "comp-ayush-biostats", targetLevel: 2, maturityLevel: "Foundation", importance: "preferred" },
-      { competencyId: "comp-ayush-pvpi", targetLevel: 2, maturityLevel: "Foundation", importance: "preferred" },
+      { competencyId: "comp-ayush-gcp", targetLevel: 2, maturityLevel: "Foundation", importance: "essential", isCritical: true, weight: 0.25 },
+      { competencyId: "comp-ayush-data-mgmt", targetLevel: 2, maturityLevel: "Foundation", importance: "essential", isCritical: true, weight: 0.25 },
+      { competencyId: "comp-ayush-literature-evidence", targetLevel: 2, maturityLevel: "Foundation", importance: "essential", isCritical: true, weight: 0.20 },
+      { competencyId: "comp-ayush-bioethics", targetLevel: 2, maturityLevel: "Foundation", importance: "preferred", isCritical: false, weight: 0.10 },
+      { competencyId: "comp-ayush-biostats", targetLevel: 2, maturityLevel: "Foundation", importance: "preferred", isCritical: false, weight: 0.10 },
+      { competencyId: "comp-ayush-pvpi", targetLevel: 2, maturityLevel: "Foundation", importance: "preferred", isCritical: false, weight: 0.10 },
     ],
   },
 
@@ -304,11 +304,11 @@ export const AYUSH_TARGET_ROLES: Record<string, AyushTargetRole> = {
     targetMaturity: "Applied",
     description: "ASU&H formulation quality verification, HPTLC phytochemical fingerprinting, Schedule T GMP batch inspection, and statutory drug regulatory filings.",
     competencies: [
-      { competencyId: "comp-ayush-standardization", targetLevel: 3, maturityLevel: "Applied", importance: "essential" },
-      { competencyId: "comp-ayush-gmp-schedulet", targetLevel: 3, maturityLevel: "Applied", importance: "essential" },
-      { competencyId: "comp-ayush-regulatory-filing", targetLevel: 4, maturityLevel: "Advanced", importance: "essential" },
-      { competencyId: "comp-ayush-herb-drug", targetLevel: 3, maturityLevel: "Applied", importance: "preferred" },
-      { competencyId: "comp-ayush-pvpi", targetLevel: 3, maturityLevel: "Applied", importance: "essential" },
+      { competencyId: "comp-ayush-standardization", targetLevel: 3, maturityLevel: "Applied", importance: "essential", isCritical: true, weight: 0.25 },
+      { competencyId: "comp-ayush-gmp-schedulet", targetLevel: 3, maturityLevel: "Applied", importance: "essential", isCritical: true, weight: 0.25 },
+      { competencyId: "comp-ayush-regulatory-filing", targetLevel: 4, maturityLevel: "Advanced", importance: "essential", isCritical: true, weight: 0.25 },
+      { competencyId: "comp-ayush-pvpi", targetLevel: 3, maturityLevel: "Applied", importance: "essential", isCritical: false, weight: 0.15 },
+      { competencyId: "comp-ayush-herb-drug", targetLevel: 3, maturityLevel: "Applied", importance: "preferred", isCritical: false, weight: 0.10 },
     ],
   },
 
@@ -320,11 +320,11 @@ export const AYUSH_TARGET_ROLES: Record<string, AyushTargetRole> = {
     targetMaturity: "Applied",
     description: "Designing personalized therapeutic Yoga interventions, autonomic stress recovery protocols, and lifestyle counseling for preventive healthcare.",
     competencies: [
-      { competencyId: "comp-ayush-yoga-chikitsa", targetLevel: 3, maturityLevel: "Applied", importance: "essential" },
-      { competencyId: "comp-ayush-stress-autonomic-regulation", targetLevel: 3, maturityLevel: "Applied", importance: "essential" },
-      { competencyId: "comp-ayush-bedside-diagnostics", targetLevel: 2, maturityLevel: "Foundation", importance: "preferred" },
-      { competencyId: "comp-ayush-data-mgmt", targetLevel: 2, maturityLevel: "Foundation", importance: "preferred" },
-      { competencyId: "comp-ayush-samhita-epistemology", targetLevel: 3, maturityLevel: "Applied", importance: "preferred" },
+      { competencyId: "comp-ayush-yoga-chikitsa", targetLevel: 3, maturityLevel: "Applied", importance: "essential", isCritical: true, weight: 0.30 },
+      { competencyId: "comp-ayush-stress-autonomic-regulation", targetLevel: 3, maturityLevel: "Applied", importance: "essential", isCritical: true, weight: 0.30 },
+      { competencyId: "comp-ayush-bedside-diagnostics", targetLevel: 2, maturityLevel: "Foundation", importance: "preferred", isCritical: false, weight: 0.15 },
+      { competencyId: "comp-ayush-samhita-epistemology", targetLevel: 3, maturityLevel: "Applied", importance: "preferred", isCritical: false, weight: 0.15 },
+      { competencyId: "comp-ayush-data-mgmt", targetLevel: 2, maturityLevel: "Foundation", importance: "preferred", isCritical: false, weight: 0.10 },
     ],
   },
 };
@@ -348,7 +348,13 @@ export function getAllAyushTargetRoles(): AyushTargetRole[] {
 /**
  * Retrieve detailed competencies mapped to a given target role
  */
-export function getAyushRoleCompetencies(roleId: string): (AyushCompetency & { targetLevel: number; maturityLevel: CompetencyMaturityLevel; importance: "essential" | "preferred" })[] {
+export function getAyushRoleCompetencies(roleId: string): (AyushCompetency & {
+  targetLevel: number;
+  maturityLevel: CompetencyMaturityLevel;
+  importance: "essential" | "preferred";
+  isCritical: boolean;
+  weight: number;
+})[] {
   const role = getAyushTargetRole(roleId);
   if (!role) return [];
 
@@ -360,14 +366,24 @@ export function getAyushRoleCompetencies(roleId: string): (AyushCompetency & { t
       if (!comp) return null;
       const targetLevel = mapping.targetLevel;
       const maturityLevel = mapping.maturityLevel || getMaturityFromLevel(targetLevel);
+      const isCritical = mapping.isCritical ?? (mapping.importance === "essential");
+      const weight = mapping.weight ?? (1 / role.competencies.length);
       return {
         ...comp,
         targetLevel,
         maturityLevel,
         importance: mapping.importance,
+        isCritical,
+        weight,
       };
     })
-    .filter(Boolean) as (AyushCompetency & { targetLevel: number; maturityLevel: CompetencyMaturityLevel; importance: "essential" | "preferred" })[];
+    .filter(Boolean) as (AyushCompetency & {
+      targetLevel: number;
+      maturityLevel: CompetencyMaturityLevel;
+      importance: "essential" | "preferred";
+      isCritical: boolean;
+      weight: number;
+    })[];
 }
 
 /**
