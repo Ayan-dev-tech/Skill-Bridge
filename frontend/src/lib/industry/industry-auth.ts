@@ -6,10 +6,14 @@ import { db, User } from "../db";
  */
 export async function getAuthenticatedIndustry(
   request: Request,
-  providedId?: string
+  providedId?: string,
+  options: { allowFallback?: boolean } = { allowFallback: true }
 ): Promise<{ industryUser: User | null; error?: string }> {
-  // 1. Check custom x-industry-id header or providedId
-  let authId = request.headers.get("x-industry-id") || providedId;
+  // 1. Check custom x-industry-id or x-company-id header or providedId
+  let authId =
+    request.headers.get("x-industry-id") ||
+    request.headers.get("x-company-id") ||
+    providedId;
 
   // 2. Check HTTP cookie sb_student_id (generic user session cookie set on login)
   if (!authId) {
@@ -46,12 +50,13 @@ export async function getAuthenticatedIndustry(
     };
   }
 
-  // Fallback: If no explicit industry ID provided, find the primary verified industry user in db
-  // to ensure seamless developer experience when navigating directly in browser
-  const allUsers = await db.getUsers();
-  const defaultIndustryUser = allUsers.find((u) => u.role === "industry");
-  if (defaultIndustryUser) {
-    return { industryUser: defaultIndustryUser };
+  // Fallback: If no explicit industry ID provided, only fallback if allowed
+  if (options.allowFallback !== false) {
+    const allUsers = await db.getUsers();
+    const defaultIndustryUser = allUsers.find((u) => u.role === "industry");
+    if (defaultIndustryUser) {
+      return { industryUser: defaultIndustryUser };
+    }
   }
 
   return {

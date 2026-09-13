@@ -28,6 +28,7 @@ import {
   AuditLogsView,
   SettingsView,
 } from "@/components/admin/views/system-views";
+import { AyushAssistantWidget } from "@/components/ayush/ayush-assistant-widget";
 
 // Master Seed Data (Fallback & Defaults)
 import {
@@ -360,6 +361,9 @@ export default function AdminPortalPage() {
           </ScrollArea>
         </SidebarInset>
       </div>
+
+      {/* Role-Aware AYUSH Ministry & Ecosystem Assistant Widget */}
+      <AyushAssistantWidget role="admin" />
     </SidebarProvider>
   );
 }

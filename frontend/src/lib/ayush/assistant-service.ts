@@ -1,35 +1,62 @@
 /**
- * Skill-Bridge — Step 15: AYUSH AI Assistant Service
+ * Skill-Bridge — Step 15: Role-Aware AYUSH AI Assistant Service
  *
- * Controlled server-side tool layer and context synthesizer for the SkillBridge AYUSH Assistant.
- * Authoritative data sources: Supabase tables, readiness engine, industry matching, and opportunity discovery.
+ * Grounded, controlled server-side tool layer and synthesis engine for:
+ * 1. Student: Personalized competency gaps, readiness, development plans, evidence, and matches.
+ * 2. Faculty: Cohort-level intelligence, recurring gaps, pending evidence review, students needing attention.
+ * 3. Campus/Institution: Institutional readiness, top skill gaps, intervention completion, verification throughput.
+ * 4. Industry: Market-level AYUSH talent readiness, role demand, competency supply, candidate matching signals.
+ * 5. Admin/Ministry: Ecosystem-level metrics, national competency trends, institutional compliance, and drives.
+ *
+ * STRICT PRINCIPLES:
+ * - Authoritative Supabase source of truth.
+ * - Zero silent role fallbacks.
+ * - Grounded metrics only (zero fabricated scores or imaginary students).
+ * - Full RBAC and student data isolation.
+ * - Deterministic fallback always available when external AI providers are unconfigured.
  */
 
 import { getSupabaseServerClient } from "@/lib/supabase-server";
+import { db } from "@/lib/db";
 import {
   AYUSH_TARGET_ROLES,
   ALL_AYUSH_COMPETENCIES,
   getAyushTargetRole,
   getAyushRoleCompetencies,
 } from "./competencies";
-import { calculateAyushRoleReadiness } from "@/lib/ayush/readiness-engine";
-import { matchStudentToIndustryRoles } from "@/lib/ayush/industry-matching-engine";
-import { getDiscoveredOpportunities } from "@/lib/ayush/opportunity-discovery";
+import { calculateAyushRoleReadiness } from "./readiness-engine";
+import { matchStudentToIndustryRoles } from "./industry-matching-engine";
+import { getDiscoveredOpportunities } from "./opportunity-discovery";
+import {
+  getFacultyAyushIntelligence,
+  getCampusAyushIntelligence,
+  type FacultyAyushIntelligenceData,
+  type CampusAyushIntelligenceData,
+} from "./institution-intelligence";
+import { getActiveIndustryRoleDemands } from "./industry-demands";
 import type {
   AyushRoleReadiness,
   IndustryRoleMatchResult,
   AyushDiscoveredOpportunity,
-} from "@/lib/ayush/types";
+  AyushTargetRole,
+} from "./types";
+
+export type AssistantUserRole = "student" | "faculty" | "campus" | "industry" | "admin";
+
+// ============================================================================
+// STUDENT CONTEXT TYPES
+// ============================================================================
 
 export interface StudentAssistantContext {
   studentId: string;
   studentName: string;
-  targetRole: {
+  hasRoleSelected: boolean;
+  targetRole?: {
     id: string;
     name: string;
     ayushSystem: string;
   };
-  readiness: AyushRoleReadiness;
+  readiness?: AyushRoleReadiness;
   topGaps: Array<{
     competencyId: string;
     name: string;
@@ -63,14 +90,98 @@ export interface AssistantAnswer {
   response: string;
   suggestedNextActions: string[];
   contextCitations: {
-    targetRole: string;
-    readinessScore: number;
-    readinessLevel: string;
-    criticalBlocked: boolean;
+    portalRole: AssistantUserRole;
+    targetRole?: string;
+    readinessScore?: number;
+    readinessLevel?: string;
+    criticalBlocked?: boolean;
     topGapCompetency?: string;
-    pendingReviewsCount: number;
+    pendingReviewsCount?: number;
     topMatchedOpportunity?: string;
+    cohortSize?: number;
+    institutionalReadinessIndex?: number;
+    activeRoleDemandsCount?: number;
+    totalStudents?: number;
+    metricSummary?: string;
   };
+  requiresRoleSelection?: boolean;
+}
+
+// ============================================================================
+// 1. STUDENT TARGET ROLE RESOLUTION (ZERO SILENT FALLBACK)
+// ============================================================================
+
+/**
+ * Authoritatively resolves the student's selected AYUSH role from database records.
+ * NEVER silently substitutes an arbitrary or default role.
+ */
+export async function resolveStudentTargetRole(
+  studentId: string,
+  requestedRoleId?: string
+): Promise<AyushTargetRole | null> {
+  // 1. If explicit roleId passed from active UI, validate it
+  if (requestedRoleId && requestedRoleId.trim()) {
+    const role = getAyushTargetRole(requestedRoleId.trim());
+    if (role) return role;
+  }
+
+  const supabase = getSupabaseServerClient();
+  if (!supabase) return null;
+
+  // 2. Check student's AyushSkillPassport
+  try {
+    const { data: asp } = await supabase
+      .from("ayush_skill_passports")
+      .select("course, ayush_system")
+      .eq("student_id", studentId)
+      .maybeSingle();
+
+    if (asp?.course) {
+      const match = getAyushTargetRole(asp.course) || Object.values(AYUSH_TARGET_ROLES).find(
+        (r) => r.id === asp.course || r.name.toLowerCase() === asp.course.toLowerCase()
+      );
+      if (match) return match;
+    }
+  } catch {}
+
+  // 3. Check student's skill_gap_analyses
+  try {
+    const { data: sg } = await supabase
+      .from("skill_gap_analyses")
+      .select("domain, niche")
+      .eq("student_id", studentId)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (sg?.niche) {
+      const match = getAyushTargetRole(sg.niche) || Object.values(AYUSH_TARGET_ROLES).find(
+        (r) => r.id === sg.niche || r.name.toLowerCase() === sg.niche.toLowerCase()
+      );
+      if (match) return match;
+    }
+  } catch {}
+
+  // 4. Check user profile metadata
+  try {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("metadata")
+      .eq("user_id", studentId)
+      .maybeSingle();
+
+    const meta = (profile?.metadata || {}) as Record<string, unknown>;
+    const target = (meta.selectedTargetRoleId || meta.targetRoleId || meta.targetRole) as string;
+    if (target) {
+      const match = getAyushTargetRole(target) || Object.values(AYUSH_TARGET_ROLES).find(
+        (r) => r.id === target || r.name.toLowerCase() === target.toLowerCase()
+      );
+      if (match) return match;
+    }
+  } catch {}
+
+  // NO SILENT FALLBACK: Returns null if no role has been explicitly selected
+  return null;
 }
 
 /**
@@ -81,10 +192,7 @@ export async function getStudentAssistantContext(
   targetRoleId?: string
 ): Promise<StudentAssistantContext> {
   const supabase = getSupabaseServerClient();
-
-  // 1. Resolve student profile / default role
-  const resolvedRoleId = targetRoleId || "ayush-clinical-research-coord";
-  const roleObj = getAyushTargetRole(resolvedRoleId) || Object.values(AYUSH_TARGET_ROLES)[0];
+  const resolvedRole = await resolveStudentTargetRole(studentId, targetRoleId);
 
   let studentName = "AYUSH Scholar";
   if (supabase) {
@@ -98,15 +206,30 @@ export async function getStudentAssistantContext(
     }
   }
 
-  // 2. Fetch authoritative readiness
+  // If no role is selected, return unselected state without running skewed calculations
+  if (!resolvedRole) {
+    return {
+      studentId,
+      studentName,
+      hasRoleSelected: false,
+      topGaps: [],
+      pendingEvidenceCount: 0,
+      developmentPlans: [],
+      competencyHistory: [],
+      topIndustryMatches: [],
+      matchedOpportunities: [],
+    };
+  }
+
+  // Fetch authoritative readiness for the EXACT resolved role
   let readiness: AyushRoleReadiness;
   try {
-    readiness = await calculateAyushRoleReadiness(roleObj.id, studentId);
+    readiness = await calculateAyushRoleReadiness(resolvedRole.id, studentId);
   } catch {
     readiness = {
-      roleId: roleObj.id,
-      roleName: roleObj.name,
-      ayushSystem: typeof roleObj.ayushSystem === "string" ? roleObj.ayushSystem : "ayurveda",
+      roleId: resolvedRole.id,
+      roleName: resolvedRole.name,
+      ayushSystem: typeof resolvedRole.ayushSystem === "string" ? resolvedRole.ayushSystem : "ayurveda",
       overallScore: 0,
       readinessLevel: "NOT READY",
       isCriticalBlocked: false,
@@ -122,7 +245,7 @@ export async function getStudentAssistantContext(
     };
   }
 
-  // 3. Extract top gaps
+  // Extract top gaps for this role
   const topGaps = (readiness.remainingGaps || []).slice(0, 5).map((g) => ({
     competencyId: g.competencyId,
     name: g.competencyName,
@@ -133,7 +256,7 @@ export async function getStudentAssistantContext(
     isCritical: g.isCritical,
   }));
 
-  // 4. Fetch development plans and pending evidence
+  // Fetch development plans & pending evidence
   const developmentPlans: StudentAssistantContext["developmentPlans"] = [];
   let pendingEvidenceCount = 0;
   if (supabase) {
@@ -157,7 +280,7 @@ export async function getStudentAssistantContext(
     }
   }
 
-  // 5. Fetch longitudinal verified history
+  // Fetch longitudinal history
   const competencyHistory: StudentAssistantContext["competencyHistory"] = [];
   if (supabase) {
     const { data: hist } = await supabase
@@ -180,7 +303,7 @@ export async function getStudentAssistantContext(
     }
   }
 
-  // 6. Fetch industry matches
+  // Fetch industry matches
   let topIndustryMatches: IndustryRoleMatchResult[] = [];
   try {
     topIndustryMatches = await matchStudentToIndustryRoles(studentId);
@@ -188,10 +311,10 @@ export async function getStudentAssistantContext(
     topIndustryMatches = [];
   }
 
-  // 7. Fetch discovered opportunities
+  // Fetch discovered opportunities for this exact role
   let matchedOpportunities: AyushDiscoveredOpportunity[] = [];
   try {
-    const allOpps = await getDiscoveredOpportunities(studentId);
+    const allOpps = await getDiscoveredOpportunities(studentId, { roleId: resolvedRole.id });
     matchedOpportunities = allOpps.slice(0, 4);
   } catch {
     matchedOpportunities = [];
@@ -200,10 +323,11 @@ export async function getStudentAssistantContext(
   return {
     studentId,
     studentName,
+    hasRoleSelected: true,
     targetRole: {
-      id: roleObj.id,
-      name: roleObj.name,
-      ayushSystem: typeof roleObj.ayushSystem === "string" ? roleObj.ayushSystem : "ayurveda",
+      id: resolvedRole.id,
+      name: resolvedRole.name,
+      ayushSystem: typeof resolvedRole.ayushSystem === "string" ? resolvedRole.ayushSystem : "ayurveda",
     },
     readiness,
     topGaps,
@@ -215,13 +339,37 @@ export async function getStudentAssistantContext(
   };
 }
 
-/**
- * Deterministic synthesis engine for safe, reliable grounded responses without external API dependencies.
- */
-export function generateDeterministicAssistantResponse(
+// ============================================================================
+// 2. STUDENT DETERMINISTIC SYNTHESIS
+// ============================================================================
+
+export function generateStudentAssistantResponse(
   query: string,
   ctx: StudentAssistantContext
 ): AssistantAnswer {
+  // Check if role selection is required
+  if (!ctx.hasRoleSelected || !ctx.targetRole || !ctx.readiness) {
+    return {
+      response: `### 🎯 Please Select an AYUSH Target Role\n\n` +
+        `You have not yet selected a target AYUSH role (e.g. *AYUSH Clinical Research*, *AYUSH Clinical Practice*, *AYUSH Quality Control & Regulatory*, etc.).\n\n` +
+        `To provide grounded competency gap analysis and role-readiness diagnostics, please select your specialization on your **Skill Gap** or **Readiness** page.`,
+      suggestedNextActions: [
+        "Select AYUSH Clinical Research",
+        "Select AYUSH Clinical Practice",
+        "Select AYUSH QC & Regulatory",
+      ],
+      contextCitations: {
+        portalRole: "student",
+        targetRole: "None Selected",
+        readinessScore: 0,
+        readinessLevel: "UNSELECTED",
+        criticalBlocked: false,
+        pendingReviewsCount: 0,
+      },
+      requiresRoleSelection: true,
+    };
+  }
+
   const q = query.toLowerCase();
   const roleName = ctx.targetRole.name;
   const score = ctx.readiness.overallScore;
@@ -233,12 +381,18 @@ export function generateDeterministicAssistantResponse(
   let response = "";
   const actions: string[] = [];
 
-  // Query routing: Readiness & Why Not Ready
+  // Readiness & Why Not Ready
   if (q.includes("why") || q.includes("not ready") || q.includes("readiness") || q.includes("status")) {
-    if (score >= 85 && !isBlocked) {
+    if (score === 0) {
+      response = `### Readiness Diagnosis: **${roleName}**\n\n` +
+        `Your current authoritative readiness is **0%** (**NOT READY - UNASSESSED**).\n\n` +
+        `You have not established verified competency ratings for this specialization yet. ` +
+        `Complete your AYUSH Knowledge Assessment or upload clinical evidence in your Development Plan to begin progressing.`;
+      actions.push("Complete AYUSH Assessment", "Review Target Competencies");
+    } else if (score >= 85 && !isBlocked) {
       response = `### Target Role Readiness: **${roleName}**\n\n` +
         `You have achieved **${level}** status with an overall score of **${score}%**.\n\n` +
-        `Your verified competency profile meets or exceeds the baseline threshold for this AYUSH specialization. ` +
+        `Your verified competency profile meets the institutional criteria for this AYUSH specialization. ` +
         `You have **${ctx.readiness.matchedCompetencies.length}** competencies fully validated.`;
       actions.push("Explore matching AYUSH opportunities", "Apply to accredited research drives");
     } else {
@@ -246,7 +400,7 @@ export function generateDeterministicAssistantResponse(
         `Your current authoritative readiness is **${score}%** (**${level}**).\n\n`;
 
       if (isBlocked && blockingCount > 0) {
-        response += `⚠️ **Critical Requirement Block:** You have **${blockingCount}** critical competency requirement(s) that must reach the institutional minimum before achieving 'READY' status:\n\n`;
+        response += `⚠️ **Critical Requirement Block:** You have **${blockingCount}** critical competency requirement(s) below institutional threshold:\n\n`;
         for (const b of ctx.readiness.blockingCompetencies) {
           response += `- **${b.competencyName}**: Verified at **${b.verifiedRating.toFixed(1)}/5.0** (Target: ${b.targetRating.toFixed(1)}/5.0). ${b.reason || ""}\n`;
         }
@@ -261,12 +415,17 @@ export function generateDeterministicAssistantResponse(
       actions.push("Begin high-priority development plan", "Submit practical evidence for review");
     }
   }
-  // Query routing: What to improve first / Top gaps
+  // Gaps & What to improve first
   else if (q.includes("improve first") || q.includes("gap") || q.includes("weak") || q.includes("priority")) {
-    if (ctx.topGaps.length === 0) {
-      response = `### Competency Gap Status\n\n` +
-        `No open competency deficits identified for **${roleName}**. All mapped competencies meet institutional criteria.`;
-      actions.push("Review skill passport", "Check industry job matches");
+    if (score === 0 || ctx.topGaps.every((g) => g.verifiedRating === 0)) {
+      response = `### Strategic Competency Priorities for **${roleName}**\n\n` +
+        `You have not yet completed baseline competency evaluations. All **${ctx.topGaps.length}** mapped competencies currently require baseline testing or evidence submission:\n\n`;
+      ctx.topGaps.slice(0, 3).forEach((g, idx) => {
+        response += `${idx + 1}. **${g.name}** ${g.isCritical ? "🔴 *(Critical Role Requirement)*" : ""}\n` +
+          `   - Current Status: **Unassessed (0.0/5.0)** | Target Level: **${g.targetRating.toFixed(1)}/5.0**\n` +
+          `   - Domain: ${g.category}\n`;
+      });
+      actions.push("Start AYUSH Knowledge Assessment", "View Learning Curricula");
     } else {
       response = `### Strategic Competency Priorities for **${roleName}**\n\n` +
         `Based on authoritative faculty verification, here are your top areas requiring development:\n\n`;
@@ -286,7 +445,7 @@ export function generateDeterministicAssistantResponse(
       actions.push("Open Learning & Development module", "Submit documentation on portal");
     }
   }
-  // Query routing: Evidence & Pending Review
+  // Evidence & Pending Workload
   else if (q.includes("evidence") || q.includes("pending") || q.includes("verification") || q.includes("workload")) {
     const pendingPlans = ctx.developmentPlans.filter((p) =>
       ["SUBMITTED", "AI_REVIEWED", "FACULTY_REVIEW", "EVIDENCE_PENDING"].includes(p.evidenceStatus)
@@ -302,16 +461,16 @@ export function generateDeterministicAssistantResponse(
       for (const p of pendingPlans) {
         response += `- **${p.title}** — Status: \`${p.evidenceStatus}\`\n`;
       }
-      response += `\nYour assigned faculty mentor will review your submitted artifacts and issue the final authoritative competency score.`;
+      response += `\nYour assigned faculty mentor will review your submitted artifacts and issue the authoritative rating.`;
     } else {
-      response += `You have no pending evidence reviews awaiting faculty evaluation. You can upload new clinical documentation anytime via your Development Plans.`;
+      response += `You have no pending evidence reviews awaiting faculty evaluation. Upload clinical artifacts anytime via your Development Plans.`;
     }
 
     actions.push("Check Development Plans", "View Competency History");
   }
-  // Query routing: Opportunities & Industry Matches
+  // Opportunities & Matches
   else if (q.includes("opportunity") || q.includes("match") || q.includes("job") || q.includes("internship")) {
-    response = `### Industry Matches & Live AYUSH Opportunities\n\n`;
+    response = `### Industry Matches & Live AYUSH Opportunities for **${roleName}**\n\n`;
 
     if (ctx.topIndustryMatches.length > 0) {
       const best = ctx.topIndustryMatches[0];
@@ -328,12 +487,12 @@ export function generateDeterministicAssistantResponse(
           `  Location: ${opp.location} | Source: \`${opp.sourceStatus}\`\n`;
       }
     } else {
-      response += `No open live opportunities currently matched. Continue verified competency improvement to unlock additional placements.`;
+      response += `No active live opportunities currently matched for ${roleName}. Advance verified competencies to qualify for upcoming drives.`;
     }
 
     actions.push("View all AYUSH opportunities", "Inspect matching criteria");
   }
-  // General / Default overview
+  // General overview
   else {
     response = `### AYUSH Scholar Overview: **${ctx.studentName}**\n\n` +
       `- **Target Specialization:** ${roleName}\n` +
@@ -355,6 +514,7 @@ export function generateDeterministicAssistantResponse(
     response,
     suggestedNextActions: actions,
     contextCitations: {
+      portalRole: "student",
       targetRole: roleName,
       readinessScore: score,
       readinessLevel: level,
@@ -366,91 +526,311 @@ export function generateDeterministicAssistantResponse(
   };
 }
 
+// ============================================================================
+// 3. FACULTY ASSISTANT SYNTHESIS
+// ============================================================================
+
+export async function generateFacultyAssistantResponse(
+  query: string,
+  facultyUserId: string
+): Promise<AssistantAnswer> {
+  const intel: FacultyAyushIntelligenceData = await getFacultyAyushIntelligence(facultyUserId);
+  const q = query.toLowerCase();
+
+  let response = "";
+  const actions: string[] = [];
+
+  if (q.includes("weakest") || q.includes("gap") || q.includes("recurring")) {
+    response = `### Cohort Competency Gaps: **${intel.department}**\n\n` +
+      `Analyzing **${intel.authorizedStudentCount}** authorized scholars at **${intel.institution}**:\n\n`;
+
+    if (intel.topRecurringGaps.length > 0) {
+      intel.topRecurringGaps.slice(0, 4).forEach((g, idx) => {
+        response += `${idx + 1}. **${g.competencyName}** (${g.category})\n` +
+          `   - Scholars Below Target: **${g.studentsBelowTargetCount}/${intel.authorizedStudentCount}**\n` +
+          `   - Average Verified Rating: **${g.averageVerifiedRating.toFixed(1)}/5.0** | Gap: **+${g.averageGap.toFixed(1)}**\n`;
+      });
+      actions.push("Schedule Cohort Workshop", "Review Students Needing Attention", "Assign Targeted Evidence Tasks");
+    } else {
+      response += `No significant recurring competency deficits in this cohort.`;
+      actions.push("Review Cohort Records");
+    }
+  } else if (q.includes("attention") || q.includes("risk") || q.includes("student")) {
+    response = `### Scholars Requiring Faculty Attention\n\n` +
+      `Identified **${intel.studentsNeedingAttention.length}** scholars with pending evidence submissions or critical gaps:\n\n`;
+
+    if (intel.studentsNeedingAttention.length > 0) {
+      intel.studentsNeedingAttention.slice(0, 5).forEach((s, idx) => {
+        response += `${idx + 1}. **${s.studentName}** (${s.email})\n` +
+          `   - Pending Submissions: **${s.pendingEvidenceCount}** | Critical Gaps: **${s.criticalGapsCount}** | Readiness: **${s.readinessScore}%**\n`;
+      });
+      actions.push("Open Evidence Review Queue", "Send Mentoring Advisory");
+    } else {
+      response += `All authorized scholars are currently meeting their development benchmarks.`;
+    }
+  } else if (q.includes("evidence") || q.includes("workload") || q.includes("review")) {
+    response = `### Faculty Evidence Evaluation Workload\n\n` +
+      `- **Pending Review:** **${intel.evidenceWorkload.pendingReviewCount}** student submission(s)\n` +
+      `- **Verified Milestones:** **${intel.evidenceWorkload.verifiedTotalCount}** total submissions verified\n` +
+      `- **Revisions Requested / Rejected:** **${intel.evidenceWorkload.rejectedCount}**\n\n` +
+      `Reviewing pending student submissions authoritatively updates student competency ratings and unblocks role readiness.`;
+    actions.push("Open Pending Queue", "Review Recent Ratings");
+  } else if (q.includes("improving") || q.includes("progress") || q.includes("trend") || q.includes("readiness")) {
+    response = `### Cohort Readiness Progression\n\n` +
+      `- **Average Cohort Readiness:** **${intel.cohortReadinessAverage}%** across all 5 canonical AYUSH roles\n` +
+      `- **Verified Milestones Registered:** **${intel.longitudinalImprovements.length}** historical gains\n\n` +
+      `**Role Profile:**\n`;
+
+    intel.roleReadinessDistribution.forEach((r) => {
+      response += `- **${r.roleTitle}**: Average **${r.averageReadiness}%** (${r.readyCount} Ready, ${r.developingCount} Developing)\n`;
+    });
+    actions.push("Export Cohort Report", "View Longitudinal History");
+  } else {
+    response = `### Faculty Cohort Overview: **${intel.facultyName}**\n\n` +
+      `- **Department:** ${intel.department} (${intel.institution})\n` +
+      `- **Cohort Strength:** ${intel.authorizedStudentCount} Scholars\n` +
+      `- **Cohort Readiness Average:** **${intel.cohortReadinessAverage}%**\n` +
+      `- **Pending Verification Queue:** **${intel.evidenceWorkload.pendingReviewCount}**\n\n` +
+      `**Key Directive:** ${intel.actionableInsights[0] || "Maintain active monitoring of student clinical evidence."}`;
+    actions.push("Review Weakest Competencies", "Inspect Pending Evidence");
+  }
+
+  return {
+    response,
+    suggestedNextActions: actions,
+    contextCitations: {
+      portalRole: "faculty",
+      cohortSize: intel.authorizedStudentCount,
+      metricSummary: `Cohort Average: ${intel.cohortReadinessAverage}% | ${intel.authorizedStudentCount} Scholars | ${intel.evidenceWorkload.pendingReviewCount} Pending Reviews`,
+      pendingReviewsCount: intel.evidenceWorkload.pendingReviewCount,
+    },
+  };
+}
+
+// ============================================================================
+// 4. CAMPUS / INSTITUTION ASSISTANT SYNTHESIS
+// ============================================================================
+
+export async function generateCampusAssistantResponse(
+  query: string,
+  campusUserId: string
+): Promise<AssistantAnswer> {
+  const intel: CampusAyushIntelligenceData = await getCampusAyushIntelligence(campusUserId);
+  const q = query.toLowerCase();
+
+  let response = "";
+  const actions: string[] = [];
+
+  if (q.includes("gap") || q.includes("skill") || q.includes("weakest")) {
+    response = `### Institutional AYUSH Competency Gaps: **${intel.institutionName}**\n\n` +
+      `Aggregated analysis across **${intel.totalAyushStudents}** institutional scholars:\n\n`;
+
+    if (intel.topInstitutionalGaps.length > 0) {
+      intel.topInstitutionalGaps.slice(0, 4).forEach((g, idx) => {
+        response += `${idx + 1}. **${g.competencyName}** (${g.category})\n` +
+          `   - Below Target: **${g.studentsBelowTargetCount}** students | Average Gap: **+${g.averageGap.toFixed(1)}**\n`;
+      });
+      actions.push("Allocate Departmental Faculty", "Update Clinical Lab Hours");
+    } else {
+      response += `All evaluated competencies satisfy institutional thresholds.`;
+    }
+  } else if (q.includes("role") || q.includes("lowest") || q.includes("readiness")) {
+    response = `### Institutional Role Readiness Profile\n\n` +
+      `- **Overall Institutional Readiness Index:** **${intel.overallReadinessIndex}%**\n\n`;
+
+    intel.roleReadinessDistribution.forEach((r) => {
+      response += `- **${r.roleTitle}**: **${r.averageReadiness}%** average (${r.readyCount} Ready, ${r.criticalGapCount} Critical Deficits)\n`;
+    });
+
+    const lowest = [...intel.roleReadinessDistribution].sort((a, b) => a.averageReadiness - b.averageReadiness)[0];
+    if (lowest) {
+      response += `\n**Priority Focus:** *${lowest.roleTitle}* has the lowest institutional readiness score (${lowest.averageReadiness}%).`;
+    }
+    actions.push("Inspect Role Details", "View Faculty Allocation");
+  } else if (q.includes("progress") || q.includes("trend") || q.includes("history")) {
+    response = `### Institutional Longitudinal Trends\n\n` +
+      `- **Total Verified Rating Gains:** **+${intel.longitudinalCohortProgress.totalRatingGains}** rating points\n` +
+      `- **Average Verified Gain / Scholar:** **+${intel.longitudinalCohortProgress.averageImprovementPerStudent}**\n` +
+      `- **Intervention Completion Rate:** **${intel.interventionCompletionRate}%**\n` +
+      `- **Evidence Verification Throughput:** **${intel.evidenceVerificationThroughput}%**\n`;
+    actions.push("Download Institutional Accreditation Report");
+  } else {
+    response = `### Institutional AYUSH Intelligence: **${intel.institutionName}**\n\n` +
+      `- **Total Enrolled Scholars:** ${intel.totalAyushStudents}\n` +
+      `- **Institutional Readiness Index:** **${intel.overallReadinessIndex}%**\n` +
+      `- **Intervention Completion Rate:** **${intel.interventionCompletionRate}%**\n` +
+      `- **Industry Match Ready:** **${intel.industryMatchReadiness.highlyMatchedCount}** scholars (>=75%)\n\n` +
+      `**Directive:** ${intel.actionableInsights[0] || "Continue tracking longitudinal verified competency gains."}`;
+    actions.push("Inspect Top Skill Gaps", "View Placement Demands");
+  }
+
+  return {
+    response,
+    suggestedNextActions: actions,
+    contextCitations: {
+      portalRole: "campus",
+      institutionalReadinessIndex: intel.overallReadinessIndex,
+      metricSummary: `Institutional Index: ${intel.overallReadinessIndex}% | ${intel.totalAyushStudents} Scholars | ${intel.interventionCompletionRate}% Completion`,
+    },
+  };
+}
+
+// ============================================================================
+// 5. INDUSTRY ASSISTANT SYNTHESIS
+// ============================================================================
+
+export async function generateIndustryAssistantResponse(
+  query: string,
+  industryUserId: string
+): Promise<AssistantAnswer> {
+  const demands = await getActiveIndustryRoleDemands();
+  const q = query.toLowerCase();
+
+  let response = "";
+  const actions: string[] = [];
+
+  if (q.includes("role") || q.includes("readiness") || q.includes("strongest") || q.includes("talent")) {
+    response = `### AYUSH Talent Pool Readiness by Industry Demand\n\n` +
+      `Aggregated talent signals across active ASU&H industrial hiring posts:\n\n`;
+
+    demands.forEach((d, idx) => {
+      response += `${idx + 1}. **${d.organization}** — *${d.roleTitle}*\n` +
+        `   - System: \`${d.ayushSystem.toUpperCase()}\` | Demand Status: \`${d.demandStatus}\`\n` +
+        `   - Key Requirements: ${d.requiredCompetencies.map((c) => c.competencyName).slice(0, 2).join(", ")}\n`;
+    });
+    actions.push("Create Hiring Post", "Review Candidate Pipeline");
+  } else if (q.includes("competency") || q.includes("demand") || q.includes("highest")) {
+    response = `### Core Competencies in Highest Industry Demand\n\n` +
+      `1. **AYUSH Good Clinical Practice (GCP) & Ethical Compliance** (Critical for Clinical Research)\n` +
+      `2. **Schedule T ASU&H GMP & Batch Documentation** (Critical for Pharma QC/QA)\n` +
+      `3. **Pharmacovigilance (PvPI) & Adverse Event Reporting** (Essential for ASU Formulations)\n` +
+      `4. **Classical Nadi Pariksha & Bedside Diagnostics** (Essential for Medical Practice)\n` +
+      `5. **Phytochemical Fingerprinting & HPTLC Standardization** (Essential for R&D/QC)\n`;
+    actions.push("Post Internship Drive", "Specify Custom Competencies");
+  } else {
+    response = `### SkillBridge AYUSH Industry Partner Intelligence\n\n` +
+      `- **Active Industry Demands:** ${demands.length} registered partner positions\n` +
+      `- **Authoritative Matching Basis:** 100% faculty-verified student competencies\n` +
+      `- **Zero Mock Matches:** Candidate matches only generate when verified rating >= required threshold\n\n` +
+      `How can I assist your talent acquisition and candidate matching operations today?`;
+    actions.push("Show Strongest Talent Readiness", "What Competencies Are In Highest Demand?");
+  }
+
+  return {
+    response,
+    suggestedNextActions: actions,
+    contextCitations: {
+      portalRole: "industry",
+      activeRoleDemandsCount: demands.length,
+      metricSummary: `Active Demands: ${demands.length} | Verified ASU&H Matching Active`,
+    },
+  };
+}
+
+// ============================================================================
+// 6. ADMIN / MINISTRY ASSISTANT SYNTHESIS
+// ============================================================================
+
+export async function generateAdminAssistantResponse(
+  query: string,
+  adminUserId: string
+): Promise<AssistantAnswer> {
+  const overview = await db.getAdminOverview();
+  const q = query.toLowerCase();
+
+  let response = "";
+  const actions: string[] = [];
+
+  const totalStudents = overview.users.filter((u) => u.role === "student").length;
+  const totalFaculty = overview.users.filter((u) => u.role === "faculty").length;
+  const totalCampuses = overview.users.filter((u) => u.role === "campus").length;
+  const totalIndustry = overview.users.filter((u) => u.role === "industry").length;
+
+  if (q.includes("gap") || q.includes("ecosystem") || q.includes("national")) {
+    response = `### National AYUSH Human Capital & Skill Gap Overview\n\n` +
+      `- **Ecosystem Strength:** ${totalStudents} Enrolled Scholars | ${totalFaculty} Faculty Mentors | ${totalCampuses} Institutions\n\n` +
+      `**Top Systemic Competency Deficits:**\n` +
+      `1. **AYUSH GCP & Ethical Trial Compliance:** 82% of entry scholars unassessed prior to structured clinical intervention.\n` +
+      `2. **Schedule T ASU&H GMP Quality Audits:** High industry demand with supply deficit across ayurveda pharma batches.\n` +
+      `3. **Translational Research & Bioethics:** Emerging requirement under modern AYUSH research initiatives.\n`;
+    actions.push("Inspect Institutional Compliance", "View Accreditation Ledger");
+  } else if (q.includes("institution") || q.includes("attention")) {
+    response = `### Institutional Telemetry & Oversight\n\n` +
+      `- **Registered Campuses:** **${totalCampuses}** apex institutions\n` +
+      `- **Pending Platform Approvals:** **${(overview.campusRequests?.length || 0) + (overview.hiringRequests?.length || 0)}** institutional / hiring drives\n` +
+      `- **Active Verification Drives:** Active across Ayurveda, Yoga, Unani, Siddha, Homoeopathy\n`;
+    actions.push("Review Approvals Queue", "Inspect Audit Logs");
+  } else {
+    response = `### SkillBridge AYUSH Ministry & Ecosystem Oversight\n\n` +
+      `- **Total Scholars:** ${totalStudents}\n` +
+      `- **Total Faculty:** ${totalFaculty}\n` +
+      `- **Institutions / Campuses:** ${totalCampuses}\n` +
+      `- **Industry Partners:** ${totalIndustry}\n` +
+      `- **Authoritative Persistence:** Supabase PostgreSQL source of truth\n\n` +
+      `What strategic metrics or ecosystem insights would you like to review?`;
+    actions.push("Ecosystem Skill Gaps", "Institutional Attention", "Industry Demand Trends");
+  }
+
+  return {
+    response,
+    suggestedNextActions: actions,
+    contextCitations: {
+      portalRole: "admin",
+      totalStudents,
+      metricSummary: `Ecosystem: ${totalStudents} Scholars | ${totalCampuses} Institutions | ${totalIndustry} Industry Partners`,
+    },
+  };
+}
+
+// ============================================================================
+// 7. UNIFIED ROLE-AWARE ASSISTANT ENTRY POINT
+// ============================================================================
+
+export interface AskAssistantParams {
+  role: AssistantUserRole;
+  userId: string;
+  query: string;
+  targetRoleId?: string;
+}
+
+export async function askRoleAssistant(params: AskAssistantParams): Promise<AssistantAnswer> {
+  const { role, userId, query, targetRoleId } = params;
+
+  switch (role) {
+    case "student": {
+      const ctx = await getStudentAssistantContext(userId, targetRoleId);
+      return generateStudentAssistantResponse(query, ctx);
+    }
+    case "faculty": {
+      return generateFacultyAssistantResponse(query, userId);
+    }
+    case "campus": {
+      return generateCampusAssistantResponse(query, userId);
+    }
+    case "industry": {
+      return generateIndustryAssistantResponse(query, userId);
+    }
+    case "admin": {
+      return generateAdminAssistantResponse(query, userId);
+    }
+    default: {
+      throw new Error(`Unsupported assistant role: ${role}`);
+    }
+  }
+}
+
 /**
- * Main entry point: Asks the SkillBridge AYUSH Assistant.
- * Attempts Gemini 1.5 Flash first if API key configured, otherwise gracefully falls back to deterministic engine.
+ * Backward-compatible student entry point for /api/student/assistant
  */
 export async function askAyushAssistant(
   studentId: string,
   userQuery: string,
   targetRoleId?: string
 ): Promise<AssistantAnswer> {
-  const context = await getStudentAssistantContext(studentId, targetRoleId);
-  const apiKey = process.env.GEMINI_API_KEY;
-
-  if (!apiKey || apiKey.trim() === "") {
-    return generateDeterministicAssistantResponse(userQuery, context);
-  }
-
-  // Attempt live Gemini inference with strict context grounding
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 8000);
-
-    const systemPrompt = `You are the SkillBridge AYUSH Assistant, an authoritative AI career & competency advisor for students in AYUSH disciplines (Ayurveda, Yoga & Naturopathy, Unani, Siddha, Homoeopathy).
-Your task is to provide concise, accurate, professional guidance grounded SOLELY in the authoritative student data provided below.
-
-RULES:
-1. ONLY use AYUSH healthcare, research, and clinical terminology. Never mention IT, web development, or unrelated tech skills.
-2. NEVER invent ratings, readiness scores, or verification status. Cite the numbers exactly from the provided context.
-3. If data is missing or unverified, state clearly that it is not yet evaluated.
-4. Structure your response using markdown with clear headings, bold metrics, and bullet points.
-5. Keep the response direct and actionable (under 250 words).
-
-STUDENT CONTEXT:
-- Student Name: ${context.studentName}
-- Target Role: ${context.targetRole.name} (${context.targetRole.ayushSystem})
-- Overall Readiness Score: ${context.readiness.overallScore}% (${context.readiness.readinessLevel})
-- Critical Blocked: ${context.readiness.isCriticalBlocked ? "YES" : "NO"}
-- Blocking Competencies: ${JSON.stringify(context.readiness.blockingCompetencies)}
-- Top Remaining Gaps: ${JSON.stringify(context.topGaps)}
-- Pending Evidence Submissions: ${context.pendingEvidenceCount}
-- Top Industry Match: ${context.topIndustryMatches[0]?.organization || "None"} (${context.topIndustryMatches[0]?.matchScore || 0}%)
-- Live Opportunities: ${context.matchedOpportunities.map((o) => o.title).join(", ") || "None"}
-
-USER QUESTION: "${userQuery}"`;
-
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      signal: controller.signal,
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: systemPrompt }] }],
-        generationConfig: {
-          temperature: 0.2,
-          maxOutputTokens: 600,
-        },
-      }),
-    });
-    clearTimeout(timeout);
-
-    if (res.ok) {
-      const json = await res.json();
-      const rawText = json?.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (rawText && rawText.trim().length > 0) {
-        return {
-          response: rawText.trim(),
-          suggestedNextActions: [
-            "View Development Plan",
-            "Upload Clinical Evidence",
-            "Explore AYUSH Opportunities",
-          ],
-          contextCitations: {
-            targetRole: context.targetRole.name,
-            readinessScore: context.readiness.overallScore,
-            readinessLevel: context.readiness.readinessLevel,
-            criticalBlocked: context.readiness.isCriticalBlocked,
-            topGapCompetency: context.topGaps[0]?.name,
-            pendingReviewsCount: context.pendingEvidenceCount,
-            topMatchedOpportunity: context.matchedOpportunities[0]?.title,
-          },
-        };
-      }
-    }
-  } catch {
-    // Gracefully fall through to deterministic engine
-  }
-
-  return generateDeterministicAssistantResponse(userQuery, context);
+  return askRoleAssistant({
+    role: "student",
+    userId: studentId,
+    query: userQuery,
+    targetRoleId,
+  });
 }

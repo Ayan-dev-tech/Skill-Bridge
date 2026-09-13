@@ -16,6 +16,7 @@ import { FacultyReportsView } from "@/components/faculty/views/faculty-reports-v
 import { FacultyProfileView } from "@/components/faculty/views/faculty-profile-view";
 import { FacultySettingsView } from "@/components/faculty/views/faculty-settings-view";
 import type { FacultyViewType } from "@/lib/faculty/types";
+import { AyushAssistantWidget } from "@/components/ayush/ayush-assistant-widget";
 
 function FacultyPortalContent() {
   const router = useRouter();
@@ -238,6 +239,9 @@ function FacultyPortalContent() {
           </SidebarInset>
         </div>
       </div>
+
+      {/* Role-Aware Faculty Assistant Widget */}
+      <AyushAssistantWidget role="faculty" />
     </SidebarProvider>
   );
 }

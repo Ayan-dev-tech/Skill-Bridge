@@ -14,6 +14,7 @@ import { HiringManagementView } from "@/components/industry/views/hiring-managem
 import { ApplicationScreeningView } from "@/components/industry/views/application-screening-view";
 import { InterviewEvaluationView } from "@/components/industry/views/interview-evaluation-view";
 import { FinalHiringAnalyticsView } from "@/components/industry/views/final-hiring-analytics-view";
+import { AyushAssistantWidget } from "@/components/ayush/ayush-assistant-widget";
 
 function IndustryPortalContent() {
   const router = useRouter();
@@ -188,6 +189,9 @@ function IndustryPortalContent() {
           </SidebarInset>
         </div>
       </div>
+
+      {/* Role-Aware AYUSH Industry Talent Assistant Widget */}
+      <AyushAssistantWidget role="industry" />
     </SidebarProvider>
   );
 }

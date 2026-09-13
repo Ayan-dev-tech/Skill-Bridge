@@ -1,25 +1,31 @@
 /**
- * Skill-Bridge — Step 15: AYUSH AI Assistant Validation Script
+ * Skill-Bridge — Step 15 Patch: Correct AI + Role-Aware Assistant for All User Types Regression Suite
  *
  * Verifies:
- * A. Assistant controlled tools gather authoritative student data
- * B. Grounded synthesis for canonical prompts (Readiness, Gaps, Evidence, Opportunities)
- * C. Citations reflect exact platform metrics (zero fabricated ratings/scores)
- * D. Unauthenticated API access rejected with HTTP 401
- * E. Authenticated API execution returns structured responses with next actions
- * F. Student isolation preserved (only authorized student context accessed)
+ * 1. Student role resolution & no silent fallback
+ * 2. Grounded readiness consistency (no false 100% READY or "no open deficits" on unassessed students)
+ * 3. Faculty assistant generation with cohort-level intelligence
+ * 4. Campus assistant generation with institutional readiness metrics
+ * 5. Industry assistant generation with market demand insights & zero PII exposure
+ * 6. Admin assistant generation with ecosystem-wide AYUSH human capital overview
+ * 7. Unauthenticated requests to /api/ayush/assistant return HTTP 401 across all roles
+ * 8. Authenticated requests to /api/ayush/assistant succeed for student, faculty, campus, industry, admin
+ * 9. Backward compatibility for /api/student/assistant
+ * 10. Cross-role and cross-user data isolation
  */
 
 import {
   getStudentAssistantContext,
-  generateDeterministicAssistantResponse,
+  resolveStudentTargetRole,
+  askRoleAssistant,
   askAyushAssistant,
 } from "../src/lib/ayush/assistant-service";
-import { POST as assistantPostRoute } from "../src/app/api/student/assistant/route";
+import { POST as ayushAssistantRoute } from "../src/app/api/ayush/assistant/route";
+import { POST as studentAssistantRoute } from "../src/app/api/student/assistant/route";
 
-async function runStep15Validation() {
+async function runStep15PatchValidation() {
   console.log("================================================================================");
-  console.log("🚀 STARTING STEP 15: AYUSH AI ASSISTANT VALIDATION");
+  console.log("🚀 STARTING STEP 15 PATCH: ROLE-AWARE AI ASSISTANT REGRESSION SUITE");
   console.log("================================================================================\n");
 
   let passed = 0;
@@ -38,127 +44,262 @@ async function runStep15Validation() {
   }
 
   const testStudentId = "student_user_01";
+  const testFacultyId = "9f777fbc-fc93-49cc-8e9c-cb9aa8953e4f";
+  const testCampusId = "campus-user-1";
+  const testCompanyId = "1f80e367-38a7-43d0-9573-fb3d9215d64a";
+  const testAdminId = "admin-system-account-id";
 
   // ---------------------------------------------------------------------------
-  // TEST A: Context Gathering via Controlled Tools
+  // 1. STUDENT ROLE RESOLUTION & NO SILENT FALLBACK
   // ---------------------------------------------------------------------------
-  console.log("--- TEST A: Controlled Context Tool Gathering ---");
+  console.log("--- TEST 1: Student Role Resolution & No Silent Fallback ---");
   try {
-    const ctx = await getStudentAssistantContext(testStudentId);
-    assert(Boolean(ctx.studentId), "Test A1: Context resolved student ID", ctx.studentId);
-    assert(Boolean(ctx.targetRole.name), "Test A2: Context resolved target role", ctx.targetRole.name);
-    assert(typeof ctx.readiness.overallScore === "number", "Test A3: Authoritative readiness score numeric", `${ctx.readiness.overallScore}%`);
-    assert(Array.isArray(ctx.topGaps), "Test A4: Top gaps array returned", `Count: ${ctx.topGaps.length}`);
-    assert(typeof ctx.pendingEvidenceCount === "number", "Test A5: Pending evidence count numeric", `Count: ${ctx.pendingEvidenceCount}`);
-    assert(Array.isArray(ctx.topIndustryMatches), "Test A6: Industry matches array returned", `Count: ${ctx.topIndustryMatches.length}`);
+    // A student with target role or passport
+    const resolvedRole = await resolveStudentTargetRole(testStudentId, "ayush-clinical-research");
+    assert(resolvedRole?.id === "ayush-clinical-research", "Test 1.1: Explicit valid role resolved correctly", resolvedRole?.name);
+
+    // Non-existent student with no role selected
+    const nonExistentStudentRole = await resolveStudentTargetRole("non_existent_student_9999");
+    assert(nonExistentStudentRole === null, "Test 1.2: No silent fallback when student has no role selected");
+
+    // Context for student with no role selected
+    const unselectedCtx = await getStudentAssistantContext("non_existent_student_9999");
+    assert(unselectedCtx.hasRoleSelected === false, "Test 1.3: Context marks hasRoleSelected = false");
+    
+    // Assistant response prompts role selection instead of silent fallback
+    const unselectedAns = await askRoleAssistant({
+      role: "student",
+      userId: "non_existent_student_9999",
+      query: "Why am I not ready for this role?",
+    });
+    assert(unselectedAns.requiresRoleSelection === true, "Test 1.4: RequiresRoleSelection is true");
+    assert(unselectedAns.response.includes("Select an AYUSH Target Role"), "Test 1.5: Directs student to select an AYUSH role");
   } catch (err) {
-    assert(false, "Test A Failed with exception", String(err));
+    assert(false, "Test 1 Failed with exception", String(err));
   }
 
   // ---------------------------------------------------------------------------
-  // TEST B: Grounded Synthesis for Canonical Queries
+  // 2. GROUNDED READINESS CONSISTENCY (NO FALSE 100% READY)
   // ---------------------------------------------------------------------------
-  console.log("\n--- TEST B: Grounded Synthesis for Canonical Queries ---");
+  console.log("\n--- TEST 2: Grounded Readiness & Gap Consistency ---");
   try {
-    const ctx = await getStudentAssistantContext(testStudentId);
-
-    // Prompt 1: Why am I not ready?
-    const ans1 = generateDeterministicAssistantResponse("Why am I not ready for this role?", ctx);
-    assert(ans1.response.includes("Readiness") || ans1.response.includes("Target Role"), "Test B1: 'Why not ready' generates diagnostic response");
-    assert(ans1.suggestedNextActions.length > 0, "Test B1.1: Next actions provided", ans1.suggestedNextActions.join(" | "));
-
-    // Prompt 2: What should I improve first?
-    const ans2 = generateDeterministicAssistantResponse("What should I improve first?", ctx);
-    assert(ans2.response.includes("Competency") || ans2.response.includes("Priorities"), "Test B2: 'What to improve' prioritizes gaps");
-    assert(Boolean(ans2.contextCitations.targetRole), "Test B2.1: Target role cited", ans2.contextCitations.targetRole);
-
-    // Prompt 3: What evidence is pending?
-    const ans3 = generateDeterministicAssistantResponse("What evidence is still pending?", ctx);
-    assert(ans3.response.includes("Evidence") || ans3.response.includes("Review Status"), "Test B3: 'Pending evidence' lists review workload");
-    assert(typeof ans3.contextCitations.pendingReviewsCount === "number", "Test B3.1: Pending reviews count cited", `Count: ${ans3.contextCitations.pendingReviewsCount}`);
-
-    // Prompt 4: What opportunities match me?
-    const ans4 = generateDeterministicAssistantResponse("What opportunities match me?", ctx);
-    assert(ans4.response.includes("Opportunities") || ans4.response.includes("Industry Matches"), "Test B4: 'Opportunities' surfaces matching roles");
-  } catch (err) {
-    assert(false, "Test B Failed with exception", String(err));
-  }
-
-  // ---------------------------------------------------------------------------
-  // TEST C: Zero Fabricated Numbers / Exact Citations
-  // ---------------------------------------------------------------------------
-  console.log("\n--- TEST C: Data Grounding & Exact Citations ---");
-  try {
-    const ctx = await getStudentAssistantContext(testStudentId);
-    const ans = generateDeterministicAssistantResponse("Show my overall readiness status", ctx);
-
-    assert(ans.contextCitations.readinessScore === ctx.readiness.overallScore, "Test C1: Cited score matches exact readiness score", `${ans.contextCitations.readinessScore}%`);
-    assert(ans.contextCitations.readinessLevel === ctx.readiness.readinessLevel, "Test C2: Cited level matches authoritative level", ans.contextCitations.readinessLevel);
-    assert(ans.contextCitations.criticalBlocked === ctx.readiness.isCriticalBlocked, "Test C3: Critical blocked citation accurate", `Blocked: ${ans.contextCitations.criticalBlocked}`);
-  } catch (err) {
-    assert(false, "Test C Failed with exception", String(err));
-  }
-
-  // ---------------------------------------------------------------------------
-  // TEST D: Unauthenticated Access Blocked (HTTP 401)
-  // ---------------------------------------------------------------------------
-  console.log("\n--- TEST D: Unauthenticated Access Protection ---");
-  try {
-    const unauthReq = new Request("http://localhost:3000/api/student/assistant", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query: "What are my gaps?" }),
+    const studentCtx = await getStudentAssistantContext(testStudentId, "ayush-clinical-research");
+    const readinessAns = await askRoleAssistant({
+      role: "student",
+      userId: testStudentId,
+      query: "Why am I not ready for this role?",
+      targetRoleId: "ayush-clinical-research",
     });
 
-    const res = await assistantPostRoute(unauthReq);
-    assert(res.status === 401, "Test D1: Unauthenticated request rejected with HTTP 401", `Status: ${res.status}`);
+    const score = studentCtx.readiness?.overallScore ?? 0;
+    assert(readinessAns.contextCitations?.readinessScore === score,
+      "Test 2.1: Assistant cited score matches authoritative readiness engine score",
+      `${readinessAns.contextCitations?.readinessScore}% vs ${score}%`
+    );
+
+    // If score is low or unassessed, response must NOT say "No open competency deficits" or "100% READY"
+    if (score < 70) {
+      assert(!readinessAns.response.includes("100% READY"), "Test 2.2: Low score does not claim 100% ready");
+      assert(readinessAns.suggestedNextActions.length > 0, "Test 2.3: Recommended next actions provided");
+    } else {
+      assert(readinessAns.response.includes(`${score}%`), "Test 2.2: Ready score accurately cited");
+    }
   } catch (err) {
-    assert(false, "Test D Failed with exception", String(err));
+    assert(false, "Test 2 Failed with exception", String(err));
   }
 
   // ---------------------------------------------------------------------------
-  // TEST E: Authenticated API Execution
+  // 3. FACULTY ASSISTANT GENERATION
   // ---------------------------------------------------------------------------
-  console.log("\n--- TEST E: Authenticated API Execution ---");
+  console.log("\n--- TEST 3: Faculty Assistant (Cohort Intelligence) ---");
   try {
-    const authReq = new Request("http://localhost:3000/api/student/assistant", {
+    const facultyAns = await askRoleAssistant({
+      role: "faculty",
+      userId: testFacultyId,
+      query: "Which competencies are weakest in my cohort?",
+    });
+
+    assert(Boolean(facultyAns.response), "Test 3.1: Faculty assistant returns grounded response");
+    assert(typeof facultyAns.contextCitations?.cohortSize === "number", "Test 3.2: Cohort size cited", `Students: ${facultyAns.contextCitations?.cohortSize}`);
+    assert(Array.isArray(facultyAns.suggestedNextActions), "Test 3.3: Next actions provided for faculty mentoring");
+    assert(facultyAns.suggestedNextActions.some(a => a.includes("Cohort") || a.includes("Evidence") || a.includes("Students")),
+      "Test 3.4: Actionable mentoring recommendations present"
+    );
+  } catch (err) {
+    assert(false, "Test 3 Failed with exception", String(err));
+  }
+
+  // ---------------------------------------------------------------------------
+  // 4. CAMPUS ASSISTANT GENERATION
+  // ---------------------------------------------------------------------------
+  console.log("\n--- TEST 4: Campus Assistant (Institutional Intelligence) ---");
+  try {
+    const campusAns = await askRoleAssistant({
+      role: "campus",
+      userId: testCampusId,
+      query: "What are our biggest AYUSH skill gaps?",
+    });
+
+    assert(Boolean(campusAns.response), "Test 4.1: Campus assistant returns institutional response");
+    assert(campusAns.response.includes("Institution") || campusAns.response.includes("Campus"), "Test 4.2: Institutional framing verified");
+    assert(typeof campusAns.contextCitations?.institutionalReadinessIndex === "number",
+      "Test 4.3: Institutional readiness index cited",
+      `${campusAns.contextCitations?.institutionalReadinessIndex}%`
+    );
+  } catch (err) {
+    assert(false, "Test 4 Failed with exception", String(err));
+  }
+
+  // ---------------------------------------------------------------------------
+  // 5. INDUSTRY ASSISTANT GENERATION (MARKET DEMAND & ZERO PII)
+  // ---------------------------------------------------------------------------
+  console.log("\n--- TEST 5: Industry Assistant (Talent Signals & Zero PII) ---");
+  try {
+    const industryAns = await askRoleAssistant({
+      role: "industry",
+      userId: testCompanyId,
+      query: "Which AYUSH roles have the strongest talent readiness?",
+    });
+
+    assert(Boolean(industryAns.response), "Test 5.1: Industry assistant returns market response");
+    assert(typeof industryAns.contextCitations?.activeRoleDemandsCount === "number",
+      "Test 5.2: Role demand counts cited",
+      `Demands: ${industryAns.contextCitations?.activeRoleDemandsCount}`
+    );
+    // Ensure no private student phone, email, or Aadhaar leaks
+    assert(!industryAns.response.includes("@gmail.com") && !industryAns.response.includes("Aadhaar"),
+      "Test 5.3: Zero private student PII leaked in industry context"
+    );
+  } catch (err) {
+    assert(false, "Test 5 Failed with exception", String(err));
+  }
+
+  // ---------------------------------------------------------------------------
+  // 6. ADMIN / MINISTRY ASSISTANT GENERATION
+  // ---------------------------------------------------------------------------
+  console.log("\n--- TEST 6: Admin / Ministry Assistant (Ecosystem Intelligence) ---");
+  try {
+    const adminAns = await askRoleAssistant({
+      role: "admin",
+      userId: testAdminId,
+      query: "What are the biggest AYUSH ecosystem skill gaps?",
+    });
+
+    assert(Boolean(adminAns.response), "Test 6.1: Admin assistant returns ecosystem response");
+    assert(typeof adminAns.contextCitations?.totalStudents === "number",
+      "Test 6.2: Platform student human capital count cited",
+      `Students: ${adminAns.contextCitations?.totalStudents}`
+    );
+    assert(adminAns.response.includes("Ecosystem") || adminAns.response.includes("National") || adminAns.response.includes("Systemic"),
+      "Test 6.3: High-level policy and governance framing present"
+    );
+  } catch (err) {
+    assert(false, "Test 6 Failed with exception", String(err));
+  }
+
+  // ---------------------------------------------------------------------------
+  // 7. UNAUTHENTICATED ACCESS BLOCKED (HTTP 401)
+  // ---------------------------------------------------------------------------
+  console.log("\n--- TEST 7: Unauthenticated Access Blocked Across All Roles ---");
+  try {
+    const roles = ["student", "faculty", "campus", "industry", "admin"];
+    for (const r of roles) {
+      const unauthReq = new Request("http://localhost:3000/api/ayush/assistant", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role: r, query: "Show overview" }),
+      });
+
+      const res = await ayushAssistantRoute(unauthReq);
+      assert(res.status === 401, `Test 7.${r}: Unauthenticated ${r} rejected with HTTP 401`, `Status: ${res.status}`);
+    }
+  } catch (err) {
+    assert(false, "Test 7 Failed with exception", String(err));
+  }
+
+  // ---------------------------------------------------------------------------
+  // 8. AUTHENTICATED ACCESS SUCCEEDS FOR ALL ROLES ON /api/ayush/assistant
+  // ---------------------------------------------------------------------------
+  console.log("\n--- TEST 8: Authenticated API Execution for All Roles ---");
+  try {
+    const roleConfigs = [
+      { role: "student", header: "x-student-id", id: testStudentId, query: "What should I improve first?" },
+      { role: "faculty", header: "x-faculty-id", id: testFacultyId, query: "Where is evidence review pending?" },
+      { role: "campus", header: "x-campus-id", id: testCampusId, query: "How is institutional progress trending?" },
+      { role: "industry", header: "x-company-id", id: testCompanyId, query: "What competencies are in highest demand?" },
+      { role: "admin", header: "x-admin-id", id: testAdminId, query: "Which roles are most ready nationally?" },
+    ];
+
+    for (let i = 0; i < roleConfigs.length; i++) {
+      const cfg = roleConfigs[i];
+      const authReq = new Request("http://localhost:3000/api/ayush/assistant", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          [cfg.header]: cfg.id,
+        },
+        body: JSON.stringify({
+          role: cfg.role,
+          query: cfg.query,
+          targetRoleId: cfg.role === "student" ? "ayush-clinical-research" : undefined,
+        }),
+      });
+
+      const res = await ayushAssistantRoute(authReq);
+      assert(res.status === 200, `Test 8.${i + 1}: Authenticated ${cfg.role} returns HTTP 200`, `Status: ${res.status}`);
+      const body = await res.json();
+      assert(body.success === true, `Test 8.${i + 1}b: Authenticated ${cfg.role} returned success`);
+      assert(Boolean(body.data?.response), `Test 8.${i + 1}c: Authenticated ${cfg.role} returned non-empty response`);
+    }
+  } catch (err) {
+    assert(false, "Test 8 Failed with exception", String(err));
+  }
+
+  // ---------------------------------------------------------------------------
+  // 9. BACKWARD COMPATIBILITY: /api/student/assistant
+  // ---------------------------------------------------------------------------
+  console.log("\n--- TEST 9: Backward Compatibility for /api/student/assistant ---");
+  try {
+    const compatReq = new Request("http://localhost:3000/api/student/assistant", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "x-student-id": testStudentId,
       },
-      body: JSON.stringify({ query: "What should I improve first?" }),
+      body: JSON.stringify({
+        query: "What opportunities match me?",
+        targetRoleId: "ayush-clinical-research",
+      }),
     });
 
-    const res = await assistantPostRoute(authReq);
-    assert(res.status === 200, "Test E1: Authenticated request returns HTTP 200", `Status: ${res.status}`);
-
+    const res = await studentAssistantRoute(compatReq);
+    assert(res.status === 200, "Test 9.1: /api/student/assistant route returns HTTP 200", `Status: ${res.status}`);
     const json = await res.json();
-    assert(Boolean(json.success), "Test E2: Response payload indicates success");
-    assert(Boolean(json.data?.response), "Test E3: Assistant response body present");
-    assert(Array.isArray(json.data?.suggestedNextActions), "Test E4: Suggested next actions present", `Actions: ${json.data?.suggestedNextActions?.length}`);
-    assert(Boolean(json.data?.contextCitations?.targetRole), "Test E5: Context citations present in API output", json.data?.contextCitations?.targetRole);
+    assert(Boolean(json.data?.response), "Test 9.2: Legacy endpoint returns structured response");
   } catch (err) {
-    assert(false, "Test E Failed with exception", String(err));
+    assert(false, "Test 9 Failed with exception", String(err));
   }
 
   // ---------------------------------------------------------------------------
-  // TEST F: Student Data Isolation
+  // 10. CROSS-ROLE & CROSS-USER DATA ISOLATION
   // ---------------------------------------------------------------------------
-  console.log("\n--- TEST F: Student Data Isolation ---");
+  console.log("\n--- TEST 10: Cross-Role & Cross-User Data Isolation ---");
   try {
-    const ansStudent1 = await askAyushAssistant("student_user_01", "Show my profile");
-    const ansStudent2 = await askAyushAssistant("student_user_02", "Show my profile");
+    const s1 = await askAyushAssistant("student_user_01", "Show my profile", "ayush-clinical-research");
+    const s2 = await askAyushAssistant("student_user_02", "Show my profile", "ayush-clinical-practice");
 
-    assert(Boolean(ansStudent1.response), "Test F1: Student 1 query executed");
-    assert(Boolean(ansStudent2.response), "Test F2: Student 2 query executed");
-    assert(ansStudent1.contextCitations !== undefined && ansStudent2.contextCitations !== undefined, "Test F3: Both students received isolated context citations");
+    assert(Boolean(s1.response), "Test 10.1: Student 1 query executed");
+    assert(Boolean(s2.response), "Test 10.2: Student 2 query executed");
+    assert(s1.contextCitations?.targetRole !== s2.contextCitations?.targetRole,
+      "Test 10.3: Target roles and citations isolated between students",
+      `${s1.contextCitations?.targetRole} vs ${s2.contextCitations?.targetRole}`
+    );
   } catch (err) {
-    assert(false, "Test F Failed with exception", String(err));
+    assert(false, "Test 10 Failed with exception", String(err));
   }
 
   console.log("\n================================================================================");
-  console.log(`🏁 STEP 15 VALIDATION COMPLETE: ${passed} PASSED | ${failed} FAILED`);
+  console.log(`🏁 STEP 15 PATCH VALIDATION COMPLETE: ${passed} PASSED | ${failed} FAILED`);
   console.log("================================================================================\n");
 
   if (failed > 0) {
@@ -166,7 +307,7 @@ async function runStep15Validation() {
   }
 }
 
-runStep15Validation().catch((err) => {
-  console.error("Step 15 Validation Unhandled Exception:", err);
+runStep15PatchValidation().catch((err) => {
+  console.error("Step 15 Patch Validation Unhandled Exception:", err);
   process.exit(1);
 });

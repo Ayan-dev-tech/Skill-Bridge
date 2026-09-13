@@ -13,6 +13,7 @@ import { CampusIndustryView } from "@/components/campus/views/campus-industry-vi
 import { CampusApplicationsView } from "@/components/campus/views/campus-applications-view";
 import { CampusReportsView } from "@/components/campus/views/campus-reports-view";
 import type { CampusViewType } from "@/lib/campus/types";
+import { AyushAssistantWidget } from "@/components/ayush/ayush-assistant-widget";
 
 function CampusPortalContent() {
   const router = useRouter();
@@ -226,6 +227,9 @@ function CampusPortalContent() {
           </SidebarInset>
         </div>
       </div>
+
+      {/* Role-Aware Institutional Campus Assistant Widget */}
+      <AyushAssistantWidget role="campus" />
     </SidebarProvider>
   );
 }
