@@ -35,3 +35,48 @@ export async function GET(request: Request) {
     );
   }
 }
+
+export async function POST(request: Request) {
+  try {
+    const { student } = await getAuthenticatedStudent(request);
+    if (!student) {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await request.json().catch(() => ({}));
+    const requestedRoleId = typeof body?.targetRoleId === "string" ? body.targetRoleId.trim() : "";
+
+    const { getAyushTargetRole } = await import("@/lib/ayush/competencies");
+    const validRole = getAyushTargetRole(requestedRoleId);
+    if (!validRole) {
+      return NextResponse.json(
+        { success: false, error: `Invalid canonical AYUSH role: "${requestedRoleId}"` },
+        { status: 400 }
+      );
+    }
+
+    let passport = await db.getAyushSkillPassport(student.id);
+    if (!passport) {
+      passport = createDefaultSkillPassport(student.id, student.fullName);
+    }
+
+    // Persist canonical target role onto passport
+    passport.course = validRole.id;
+    passport.ayushSystem = validRole.ayushSystem as any;
+    passport.updatedAt = new Date().toISOString();
+
+    await db.saveAyushSkillPassport(passport);
+
+    return NextResponse.json({
+      success: true,
+      targetRole: validRole,
+      passport,
+    });
+  } catch (error) {
+    console.error("Failed to update target role in AYUSH Skill Passport:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to update target role" },
+      { status: 500 }
+    );
+  }
+}

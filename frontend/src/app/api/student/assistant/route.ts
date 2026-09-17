@@ -14,13 +14,34 @@ export async function POST(request: Request) {
 
     const body = await request.json();
     const query = typeof body?.query === "string" ? body.query.trim() : "";
-    const targetRoleId = typeof body?.targetRoleId === "string" ? body.targetRoleId.trim() : undefined;
+    let targetRoleId = typeof body?.targetRoleId === "string" ? body.targetRoleId.trim() : undefined;
 
     if (!query) {
       return NextResponse.json(
         { success: false, error: "Query parameter is required." },
         { status: 400 }
       );
+    }
+
+    // If a targetRoleId is provided OR query selects an AYUSH role, validate and authoritatively persist
+    const { parseAyushRoleFromText } = await import("@/lib/ayush/assistant-service");
+    const { getAyushTargetRole } = await import("@/lib/ayush/competencies");
+    const validRole = (targetRoleId ? getAyushTargetRole(targetRoleId) : null) || parseAyushRoleFromText(query);
+
+    if (validRole) {
+      targetRoleId = validRole.id;
+      const { db } = await import("@/lib/db");
+      const { createDefaultSkillPassport } = await import("@/lib/ayush/passport");
+      let passport = await db.getAyushSkillPassport(student.id);
+      if (!passport) {
+        passport = createDefaultSkillPassport(student.id, student.fullName);
+      }
+      if (passport.course !== validRole.id) {
+        passport.course = validRole.id;
+        passport.ayushSystem = validRole.ayushSystem as any;
+        passport.updatedAt = new Date().toISOString();
+        await db.saveAyushSkillPassport(passport);
+      }
     }
 
     const answer = await askAyushAssistant(student.id, query, targetRoleId);

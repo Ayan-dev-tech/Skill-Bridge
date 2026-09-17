@@ -52,7 +52,7 @@ export function createDefaultSkillPassport(studentId: string, studentName?: stri
     verifiedExperiences: [],
     researchInterests: ["Herb-Drug Interactions", "Standardization of Classical Formulations", "ABDM Digital Health Integration"],
     industryReadinessScore: 0,
-    industryReadinessBand: "NOT READY",
+    industryReadinessBand: "Not Assessed",
     createdAt: now,
     updatedAt: now,
   };

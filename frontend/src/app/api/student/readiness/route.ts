@@ -20,7 +20,13 @@ export async function GET(request: Request) {
     }
 
     const { searchParams } = new URL(request.url);
-    const roleId = searchParams.get("roleId") || "ayush-clinical-research";
+    let roleId = searchParams.get("roleId");
+
+    if (!roleId) {
+      const { resolveStudentTargetRole } = await import("@/lib/ayush/assistant-service");
+      const resolved = await resolveStudentTargetRole(student.id);
+      roleId = resolved ? resolved.id : "ayush-clinical-research";
+    }
 
     const targetRole = getAyushTargetRole(roleId);
     if (!targetRole) {

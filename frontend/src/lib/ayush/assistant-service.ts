@@ -112,6 +112,42 @@ export interface AssistantAnswer {
 // ============================================================================
 
 /**
+ * Parses and matches any free text or action string (e.g. "Select AYUSH Clinical Practice")
+ * to its canonical AyushTargetRole.
+ */
+export function parseAyushRoleFromText(text: string): AyushTargetRole | null {
+  if (!text || typeof text !== "string") return null;
+  const clean = text.trim();
+  const direct = getAyushTargetRole(clean);
+  if (direct) return direct;
+
+  const lower = clean.toLowerCase();
+  for (const role of Object.values(AYUSH_TARGET_ROLES)) {
+    if (lower === role.id.toLowerCase() || lower === role.name.toLowerCase()) {
+      return role;
+    }
+  }
+
+  if (lower.includes("research assistant")) {
+    return AYUSH_TARGET_ROLES["ayush-research-assistant"] || null;
+  }
+  if (lower.includes("clinical research")) {
+    return AYUSH_TARGET_ROLES["ayush-clinical-research"] || null;
+  }
+  if (lower.includes("clinical practice") || lower.includes("medical officer")) {
+    return AYUSH_TARGET_ROLES["ayush-clinical-practice"] || null;
+  }
+  if (lower.includes("qc") || lower.includes("quality control") || lower.includes("regulatory")) {
+    return AYUSH_TARGET_ROLES["ayush-pharma-quality-regulatory"] || null;
+  }
+  if (lower.includes("wellness") || lower.includes("yoga")) {
+    return AYUSH_TARGET_ROLES["ayush-wellness-yoga-therapy"] || null;
+  }
+
+  return null;
+}
+
+/**
  * Authoritatively resolves the student's selected AYUSH role from database records.
  * NEVER silently substitutes an arbitrary or default role.
  */
@@ -121,55 +157,31 @@ export async function resolveStudentTargetRole(
 ): Promise<AyushTargetRole | null> {
   // 1. If explicit roleId passed from active UI, validate it
   if (requestedRoleId && requestedRoleId.trim()) {
-    const role = getAyushTargetRole(requestedRoleId.trim());
+    const role = getAyushTargetRole(requestedRoleId.trim()) || parseAyushRoleFromText(requestedRoleId.trim());
     if (role) return role;
   }
 
-  const supabase = getSupabaseServerClient();
-  if (!supabase) return null;
-
-  // 2. Check student's AyushSkillPassport
+  // 2. Check canonical database layer (Supabase with JSON fallback)
   try {
-    const { data: asp } = await supabase
-      .from("ayush_skill_passports")
-      .select("course, ayush_system")
-      .eq("student_id", studentId)
-      .maybeSingle();
-
+    const { db } = await import("@/lib/db");
+    const asp = await db.getAyushSkillPassport(studentId);
     if (asp?.course) {
       const match = getAyushTargetRole(asp.course) || Object.values(AYUSH_TARGET_ROLES).find(
         (r) => r.id === asp.course || r.name.toLowerCase() === asp.course.toLowerCase()
       );
       if (match) return match;
     }
-  } catch {}
 
-  // 3. Check student's skill_gap_analyses
-  try {
-    const { data: sg } = await supabase
-      .from("skill_gap_analyses")
-      .select("domain, niche")
-      .eq("student_id", studentId)
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .maybeSingle();
-
-    if (sg?.niche) {
-      const match = getAyushTargetRole(sg.niche) || Object.values(AYUSH_TARGET_ROLES).find(
-        (r) => r.id === sg.niche || r.name.toLowerCase() === sg.niche.toLowerCase()
+    const sg = await db.getSkillGapAnalysisByStudent(studentId);
+    const niche = sg?.nicheId || sg?.nicheTitle;
+    if (niche) {
+      const match = getAyushTargetRole(niche) || Object.values(AYUSH_TARGET_ROLES).find(
+        (r) => r.id === niche || r.name.toLowerCase() === niche.toLowerCase()
       );
       if (match) return match;
     }
-  } catch {}
 
-  // 4. Check user profile metadata
-  try {
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("metadata")
-      .eq("user_id", studentId)
-      .maybeSingle();
-
+    const profile = await db.getProfile(studentId);
     const meta = (profile?.metadata || {}) as Record<string, unknown>;
     const target = (meta.selectedTargetRoleId || meta.targetRoleId || meta.targetRole) as string;
     if (target) {
@@ -178,7 +190,62 @@ export async function resolveStudentTargetRole(
       );
       if (match) return match;
     }
-  } catch {}
+  } catch (err) {
+    console.error("Error resolving student AYUSH target role via db:", err);
+  }
+
+  // 3. Direct Supabase server client checks if initialized
+  const supabase = getSupabaseServerClient();
+  if (supabase) {
+    try {
+      const { data: asp } = await supabase
+        .from("ayush_skill_passports")
+        .select("course, ayush_system")
+        .eq("student_id", studentId)
+        .maybeSingle();
+
+      if (asp?.course) {
+        const match = getAyushTargetRole(asp.course) || Object.values(AYUSH_TARGET_ROLES).find(
+          (r) => r.id === asp.course || r.name.toLowerCase() === asp.course.toLowerCase()
+        );
+        if (match) return match;
+      }
+    } catch {}
+
+    try {
+      const { data: sg } = await supabase
+        .from("skill_gap_analyses")
+        .select("domain, niche")
+        .eq("student_id", studentId)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (sg?.niche) {
+        const match = getAyushTargetRole(sg.niche) || Object.values(AYUSH_TARGET_ROLES).find(
+          (r) => r.id === sg.niche || r.name.toLowerCase() === sg.niche.toLowerCase()
+        );
+        if (match) return match;
+      }
+    } catch {}
+
+    try {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("metadata")
+        .eq("user_id", studentId)
+        .maybeSingle();
+
+      const meta = (profile?.metadata || {}) as Record<string, unknown>;
+      const target = (meta.selectedTargetRoleId || meta.targetRoleId || meta.targetRole) as string;
+      if (target) {
+        const match = getAyushTargetRole(target) || Object.values(AYUSH_TARGET_ROLES).find(
+          (r) => r.id === target || r.name.toLowerCase() === target.toLowerCase()
+        );
+        if (match) return match;
+      }
+    } catch {}
+  }
 
   // NO SILENT FALLBACK: Returns null if no role has been explicitly selected
   return null;
@@ -357,6 +424,8 @@ export function generateStudentAssistantResponse(
         "Select AYUSH Clinical Research",
         "Select AYUSH Clinical Practice",
         "Select AYUSH QC & Regulatory",
+        "Select AYUSH Research Assistant",
+        "Select AYUSH Wellness & Yoga Therapy",
       ],
       contextCitations: {
         portalRole: "student",
@@ -801,8 +870,20 @@ export async function askRoleAssistant(params: AskAssistantParams): Promise<Assi
 
   switch (role) {
     case "student": {
-      const ctx = await getStudentAssistantContext(userId, targetRoleId);
-      return generateStudentAssistantResponse(query, ctx);
+      let effectiveRoleId = targetRoleId;
+      let effectiveQuery = query;
+
+      const detectedRole = parseAyushRoleFromText(query);
+      if (detectedRole) {
+        effectiveRoleId = detectedRole.id;
+        const lowerQ = query.trim().toLowerCase();
+        if (lowerQ.startsWith("select ayush") || lowerQ === detectedRole.id.toLowerCase() || lowerQ === detectedRole.name.toLowerCase()) {
+          effectiveQuery = "What is my readiness and top competency gaps for this role?";
+        }
+      }
+
+      const ctx = await getStudentAssistantContext(userId, effectiveRoleId);
+      return generateStudentAssistantResponse(effectiveQuery, ctx);
     }
     case "faculty": {
       return generateFacultyAssistantResponse(query, userId);

@@ -165,6 +165,15 @@ export function AyushAssistantWidget({
     },
   ]);
 
+  const [selectedRoleId, setSelectedRoleId] = React.useState<string | undefined>(targetRoleId);
+  const [pendingOriginalQuery, setPendingOriginalQuery] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (targetRoleId) {
+      setSelectedRoleId(targetRoleId);
+    }
+  }, [targetRoleId]);
+
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -173,9 +182,133 @@ export function AyushAssistantWidget({
     }
   }, [messages, isOpen]);
 
+  const parseAyushRoleFromAction = (text: string): string | null => {
+    if (!text) return null;
+    const clean = text.trim();
+    const lower = clean.toLowerCase();
+
+    const validIds = [
+      "ayush-clinical-research",
+      "ayush-clinical-practice",
+      "ayush-pharma-quality-regulatory",
+      "ayush-research-assistant",
+      "ayush-wellness-yoga-therapy",
+    ];
+    if (validIds.includes(clean)) return clean;
+
+    if (lower.includes("research assistant")) {
+      return "ayush-research-assistant";
+    }
+    if (lower.includes("clinical research")) {
+      return "ayush-clinical-research";
+    }
+    if (lower.includes("clinical practice") || lower.includes("medical officer")) {
+      return "ayush-clinical-practice";
+    }
+    if (lower.includes("qc") || lower.includes("quality control") || lower.includes("regulatory")) {
+      return "ayush-pharma-quality-regulatory";
+    }
+    if (lower.includes("wellness") || lower.includes("yoga")) {
+      return "ayush-wellness-yoga-therapy";
+    }
+
+    return null;
+  };
+
+  const handleRoleSelection = async (roleId: string, resumeQuery?: string) => {
+    setIsLoading(true);
+    setInputQuery("");
+
+    try {
+      // 1. Authoritatively persist selected role via canonical skill-passport API
+      const saveRes = await fetch("/api/student/skill-passport", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ targetRoleId: roleId }),
+      });
+      const saveJson = await saveRes.json();
+      if (!saveJson.success) {
+        throw new Error(saveJson.error || "Failed to persist target role.");
+      }
+
+      // 2. Immediately update local assistant state
+      setSelectedRoleId(roleId);
+
+      const targetRoleObj = saveJson.targetRole;
+      const roleName = targetRoleObj?.name || roleId;
+
+      // 3. Render user selection message in chat
+      const selectMsg: ChatMessage = {
+        id: `usr-${Date.now()}`,
+        sender: "user",
+        text: `Selected AYUSH Target Role: ${roleName}`,
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      };
+      setMessages((prev) => [...prev, selectMsg]);
+
+      // 4. Automatically continue with user's original query or default readiness diagnosis
+      const effectiveQuery = (resumeQuery && resumeQuery.trim() && !resumeQuery.toLowerCase().startsWith("select ayush"))
+        ? resumeQuery.trim()
+        : "What is my readiness and top competency gaps for this role?";
+
+      const res = await fetch("/api/ayush/assistant", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          query: effectiveQuery,
+          role,
+          targetRoleId: roleId,
+        }),
+      });
+
+      const json = await res.json();
+      if (json.success && json.data) {
+        const assistantMsg: ChatMessage = {
+          id: `ast-${Date.now()}`,
+          sender: "assistant",
+          text: json.data.response,
+          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          answer: json.data,
+        };
+        setMessages((prev) => [...prev, assistantMsg]);
+        setPendingOriginalQuery(null);
+      } else {
+        const errorMsg: ChatMessage = {
+          id: `ast-${Date.now()}`,
+          sender: "assistant",
+          text: `⚠️ **Unable to process query:** ${json.error || "Please verify your session authorization and try again."}`,
+          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        };
+        setMessages((prev) => [...prev, errorMsg]);
+      }
+    } catch (err: unknown) {
+      const errorMsg: ChatMessage = {
+        id: `ast-${Date.now()}`,
+        sender: "assistant",
+        text: `⚠️ **Role Selection Error:** ${err instanceof Error ? err.message : "Failed to persist target role."}`,
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      };
+      setMessages((prev) => [...prev, errorMsg]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleSendMessage = async (queryText: string) => {
     const trimmed = queryText.trim();
     if (!trimmed || isLoading) return;
+
+    // Detect if action or text selects a target role
+    const roleMatch = parseAyushRoleFromAction(trimmed);
+    if (roleMatch) {
+      await handleRoleSelection(roleMatch, pendingOriginalQuery || undefined);
+      return;
+    }
+
+    // If user asks a question before selecting a role, hold it in pending
+    if (!selectedRoleId) {
+      setPendingOriginalQuery(trimmed);
+    }
 
     const userMsg: ChatMessage = {
       id: `usr-${Date.now()}`,
@@ -195,7 +328,7 @@ export function AyushAssistantWidget({
         body: JSON.stringify({
           query: trimmed,
           role,
-          targetRoleId,
+          targetRoleId: selectedRoleId,
         }),
       });
 
@@ -209,6 +342,10 @@ export function AyushAssistantWidget({
           answer: json.data,
         };
         setMessages((prev) => [...prev, assistantMsg]);
+
+        if (json.data.requiresRoleSelection) {
+          setPendingOriginalQuery(trimmed);
+        }
       } else {
         const errorMsg: ChatMessage = {
           id: `ast-${Date.now()}`,
@@ -436,21 +573,44 @@ export function AyushAssistantWidget({
                         </div>
                       )}
 
-                      {/* Suggested Next Actions */}
-                      {msg.answer?.suggestedNextActions && msg.answer.suggestedNextActions.length > 0 && (
-                        <div className="mt-2.5 pt-2 border-t border-border/40 flex flex-wrap gap-1.5">
-                          {msg.answer.suggestedNextActions.map((action, aIdx) => (
-                            <button
-                              key={aIdx}
-                              type="button"
-                              onClick={() => handleSendMessage(action)}
-                              className="text-[11px] font-medium px-2 py-0.5 rounded-md bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 flex items-center gap-1 transition-colors"
-                            >
-                              <span>{action}</span>
-                              <ChevronRight className="w-2.5 h-2.5" />
-                            </button>
-                          ))}
+                      {/* Suggested Next Actions / Role Selection */}
+                      {msg.answer?.requiresRoleSelection ? (
+                        <div className="mt-3 pt-2.5 border-t border-border/50 space-y-2">
+                          <p className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 flex items-center gap-1">
+                            <Compass className="w-3.5 h-3.5" /> Choose your AYUSH Specialization:
+                          </p>
+                          <div className="grid grid-cols-1 gap-1.5">
+                            {msg.answer.suggestedNextActions.map((action, aIdx) => (
+                              <button
+                                key={aIdx}
+                                type="button"
+                                disabled={isLoading}
+                                onClick={() => handleSendMessage(action)}
+                                className="w-full text-left text-xs font-medium px-3 py-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-900 dark:text-emerald-100 border border-emerald-500/30 flex items-center justify-between transition-all group disabled:opacity-50"
+                              >
+                                <span>{action}</span>
+                                <ChevronRight className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 group-hover:translate-x-0.5 transition-transform" />
+                              </button>
+                            ))}
+                          </div>
                         </div>
+                      ) : (
+                        msg.answer?.suggestedNextActions && msg.answer.suggestedNextActions.length > 0 && (
+                          <div className="mt-2.5 pt-2 border-t border-border/40 flex flex-wrap gap-1.5">
+                            {msg.answer.suggestedNextActions.map((action, aIdx) => (
+                              <button
+                                key={aIdx}
+                                type="button"
+                                disabled={isLoading}
+                                onClick={() => handleSendMessage(action)}
+                                className="text-[11px] font-medium px-2 py-0.5 rounded-md bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 flex items-center gap-1 transition-colors disabled:opacity-50"
+                              >
+                                <span>{action}</span>
+                                <ChevronRight className="w-2.5 h-2.5" />
+                              </button>
+                            ))}
+                          </div>
+                        )
                       )}
                     </div>
                   )}

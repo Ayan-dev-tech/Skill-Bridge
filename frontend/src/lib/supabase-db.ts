@@ -2338,7 +2338,9 @@ export const supabaseDb = {
           verified_experiences: passport.verifiedExperiences || [],
           research_interests: passport.researchInterests || [],
           industry_readiness_score: passport.industryReadinessScore != null ? passport.industryReadinessScore : null,
-          industry_readiness_band: passport.industryReadinessBand || null,
+          industry_readiness_band: ["Not Assessed", "Developing", "Emerging", "Industry Ready"].includes(passport.industryReadinessBand as any)
+            ? passport.industryReadinessBand
+            : "Not Assessed",
           created_at: passport.createdAt || now,
           updated_at: now,
         },
