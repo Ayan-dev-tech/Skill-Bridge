@@ -100,14 +100,6 @@ export function StudentFooter() {
               </li>
               <li>
                 <Link
-                  href="/student/resume-checker"
-                  className="text-muted-foreground hover:text-foreground transition-colors duration-150"
-                >
-                  Resume Checker
-                </Link>
-              </li>
-              <li>
-                <Link
                   href="/student/opportunities"
                   className="text-muted-foreground hover:text-foreground transition-colors duration-150"
                 >

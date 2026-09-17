@@ -152,7 +152,7 @@ export interface AyushSkillPassport {
   /** Computed readiness score (0-100) for industry/placement */
   industryReadinessScore: number | null;
   /** Qualitative readiness band */
-  industryReadinessBand: "Not Assessed" | "Developing" | "Emerging" | "Industry Ready" | null;
+  industryReadinessBand: AyushReadinessLevel | "Not Assessed" | "Developing" | "Emerging" | "Industry Ready" | null;
   createdAt: string;
   updatedAt: string;
 }

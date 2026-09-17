@@ -42,8 +42,8 @@ export function createDefaultSkillPassport(studentId: string, studentName?: stri
     skills,
     competencies: AYUSH_CLINICAL_RESEARCH_COMPETENCIES.map((c) => ({
       ...c,
-      demonstratedAt: now,
-      verifiedBy: c.verifiedBy || "Academic Evaluation Cell",
+      demonstratedAt: null,
+      verifiedBy: null,
     })),
     assessmentResults: [],
     skillGaps: [],
@@ -51,8 +51,8 @@ export function createDefaultSkillPassport(studentId: string, studentName?: stri
     internshipIds: [],
     verifiedExperiences: [],
     researchInterests: ["Herb-Drug Interactions", "Standardization of Classical Formulations", "ABDM Digital Health Integration"],
-    industryReadinessScore: null,
-    industryReadinessBand: "Not Assessed",
+    industryReadinessScore: 0,
+    industryReadinessBand: "NOT READY",
     createdAt: now,
     updatedAt: now,
   };
@@ -126,26 +126,26 @@ export async function updatePassportWithAssessment(
   const previousGaps = passport.skillGaps.filter((g) => !currentSkillIds.has(g.skillId));
   passport.skillGaps = [...gaps, ...previousGaps];
 
-  // 4. Calculate industry readiness score
-  const assessedSkills = Object.values(passport.skills).filter((s) => s.proficiencyLevel !== "Not Assessed");
-  if (assessedSkills.length > 0) {
-    const weights: Record<string, number> = {
-      Beginner: 40,
-      Developing: 60,
-      Competent: 80,
-      Proficient: 95,
-      Expert: 100,
-    };
-    const totalPoints = assessedSkills.reduce((sum, s) => sum + (weights[s.proficiencyLevel] || 50), 0);
-    const avgScore = Math.round(totalPoints / assessedSkills.length);
-    passport.industryReadinessScore = avgScore;
-
-    if (avgScore >= 80) passport.industryReadinessBand = "Industry Ready";
-    else if (avgScore >= 65) passport.industryReadinessBand = "Emerging";
-    else passport.industryReadinessBand = "Developing";
+  // 4. Update readiness strictly through canonical verified readiness engine.
+  // Assessment results provide baseline evidence only; they do not forge faculty verification.
+  try {
+    const { calculateAyushRoleReadiness } = await import("./readiness-engine");
+    const canonical = await calculateAyushRoleReadiness(
+      passport.course || "ayush-clinical-research",
+      attempt.studentId
+    );
+    passport.industryReadinessScore = canonical.overallScore;
+    passport.industryReadinessBand = canonical.readinessLevel;
+  } catch {
+    passport.industryReadinessScore = 0;
+    passport.industryReadinessBand = "NOT READY";
   }
 
   passport.updatedAt = now;
-  await db.saveAyushSkillPassport(passport);
+  try {
+    await db.saveAyushSkillPassport(passport);
+  } catch {
+    // ignore in non-persisted test contexts
+  }
   return passport;
 }

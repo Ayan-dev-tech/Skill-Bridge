@@ -3,6 +3,8 @@ import { db } from "@/lib/db";
 import { getAuthenticatedStudent } from "@/lib/student-auth";
 import { defaultStudentProfile, type DashboardCurrentFocus, type DashboardSectionItem } from "@/lib/student-data";
 import { getCanonicalWorkflowState, checkRouteAccess } from "@/lib/workflow/canonical-workflow";
+import { resolveStudentTargetRole } from "@/lib/ayush/assistant-service";
+import { calculateAyushRoleReadiness } from "@/lib/ayush/readiness-engine";
 
 export async function GET(request: Request) {
   try {
@@ -75,32 +77,22 @@ export async function GET(request: Request) {
     } else if (canonicalWorkflow.currentStageId === 6) {
       currentFocus = {
         stage: 6,
-        title: "Resume Checker",
-        subtitle:
-          "Analyze your resume with ATS-style diagnostics, parseability checks, and keyword matching.",
-        actionText: "Analyze Resume",
-        actionHref: "/student/resume-checker",
-        status: canonicalWorkflow.stages[5].status,
-      };
-    } else if (canonicalWorkflow.currentStageId === 7) {
-      currentFocus = {
-        stage: 7,
         title: "Jobs & Internships",
         subtitle:
           "Explore curated institutional campus drives, internships, and opportunities.",
         actionText: "Explore Opportunities",
         actionHref: "/student/opportunities",
-        status: canonicalWorkflow.stages[6].status,
+        status: canonicalWorkflow.stages[5]?.status || "upcoming",
       };
-    } else if (canonicalWorkflow.currentStageId === 8) {
+    } else if (canonicalWorkflow.currentStageId === 7) {
       currentFocus = {
-        stage: 8,
+        stage: 7,
         title: "Track Applications",
         subtitle:
           "Monitor your interview schedules, shortlists, and offer status.",
         actionText: "View Applications",
         actionHref: "/student/applications",
-        status: canonicalWorkflow.stages[7].status,
+        status: canonicalWorkflow.stages[6]?.status || "upcoming",
       };
     }
 
@@ -110,6 +102,21 @@ export async function GET(request: Request) {
 
     // Real job applications count from database
     const jobApplications = await db.getJobApplicationsByStudent(student.id);
+
+    // Compute canonical verified readiness (authoritative single source of truth)
+    let canonicalScore = 0;
+    let canonicalBand = "NOT READY";
+    try {
+      const targetRole = await resolveStudentTargetRole(student.id);
+      if (targetRole) {
+        const canonicalReadiness = await calculateAyushRoleReadiness(targetRole.id, student.id);
+        canonicalScore = canonicalReadiness.overallScore;
+        canonicalBand = canonicalReadiness.readinessLevel;
+      }
+    } catch {
+      canonicalScore = 0;
+      canonicalBand = "NOT READY";
+    }
 
     // Real Statistics (strictly real account data)
     const stats = {
@@ -128,8 +135,8 @@ export async function GET(request: Request) {
           ? latestKnowledgeResult.weaknesses.length
           : 0,
       activeApplicationsCount: jobApplications.length,
-      ayushReadinessScore: ayushPassport?.industryReadinessScore ?? null,
-      ayushReadinessBand: ayushPassport?.industryReadinessBand ?? null,
+      ayushReadinessScore: canonicalScore,
+      ayushReadinessBand: canonicalBand,
       latestAssessmentExamType: latestAssessmentAttempt?.examType ?? null,
     };
 

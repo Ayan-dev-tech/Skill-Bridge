@@ -251,12 +251,12 @@ export function StudentDashboardContainer() {
                 Skill Bridge Student Journey
               </CardTitle>
               <CardDescription className="text-xs text-muted-foreground">
-                Sequential 8-stage career transition roadmap from exploration to industry placement.
+                Sequential career transition roadmap from exploration to industry placement.
               </CardDescription>
             </div>
             <div className="flex items-center gap-3">
               <span className="text-xs font-mono font-medium text-foreground">
-                {completedCount} of 8 Stages Complete ({progressPercent}%)
+                {completedCount} of {sections.length} Stages Complete ({progressPercent}%)
               </span>
             </div>
           </div>
@@ -265,7 +265,7 @@ export function StudentDashboardContainer() {
 
         <CardContent className="px-4 sm:px-6 pb-4 pt-1">
           {/* Milestone timeline steps */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 pt-2">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 pt-2">
             {sections.map((sec) => {
               const isCurrent = sec.stage === currentFocus.stage;
               const isCompleted = sec.status === "completed";

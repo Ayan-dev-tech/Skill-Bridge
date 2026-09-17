@@ -19,8 +19,6 @@ const pageTitles: Record<string, { section: string; title: string }> = {
   "/student/documents": { section: "Getting Started", title: "Document Verification" },
   "/student/skill-gap": { section: "Development", title: "Skill Gap & Suggestions" },
   "/student/learning": { section: "Development", title: "Learning / Mentoring" },
-  "/student/resume": { section: "Development", title: "Resume Checker" },
-  "/student/resume-checker": { section: "Development", title: "Resume Checker" },
   "/student/opportunities": { section: "Opportunities", title: "Jobs & Internships" },
   "/student/jobs": { section: "Opportunities", title: "Jobs & Internships" },
   "/student/applications": { section: "Opportunities", title: "Track Applications" },

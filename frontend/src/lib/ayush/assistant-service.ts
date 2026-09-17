@@ -501,7 +501,10 @@ export function generateStudentAssistantResponse(
       `- **Pending Evidence Reviews:** ${ctx.pendingEvidenceCount}\n\n` +
       `**Suggested Next Step:** `;
 
-    if (isBlocked && topGap) {
+    if (score === 0 || level === "NOT READY") {
+      response += `Complete your initial AYUSH Knowledge Assessment or upload clinical evidence in your Development Plan to begin establishing verified competency ratings.`;
+      actions.push("Start AYUSH Assessment", "View Skill Matrix");
+    } else if (isBlocked && topGap) {
       response += `Address critical requirement **${topGap.name}** through your assigned development plan to unblock your READY status.`;
       actions.push("Open Critical Gap Details", "Upload Evidence");
     } else {

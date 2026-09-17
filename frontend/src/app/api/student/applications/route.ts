@@ -104,20 +104,7 @@ export async function POST(request: Request) {
       }
     }
 
-    // 4. Resume Readiness Requirement: Must have a validated resume in DB
-    const resumeAnalysis = await db.getResumeAnalysisByStudent(student.id);
-    if (!resumeAnalysis) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Resume required. You must upload and validate a PDF resume in Resume Checker before submitting an application.",
-          missingRequirement: "resume",
-        },
-        { status: 400 }
-      );
-    }
-
-    // 5. Job Document Requirements Check
+    // 4. Job Document Requirements Check
     let requiredDocumentTypes: string[] = ["student_id"];
     if (jobId) {
       const job = await db.getJobOrInternshipById(jobId);
@@ -174,7 +161,7 @@ export async function POST(request: Request) {
       applicantFullName: applicantFullName || student.fullName || "Student Applicant",
       applicantEmail: applicantEmail || student.email,
       applicantPhone: applicantPhone,
-      resumeFileName: resumeAnalysis.resumeFileName || "Resume.pdf",
+      resumeFileName: "Profile_Application.pdf",
       submittedDocumentTypes: requiredDocumentTypes,
       coverLetter,
       portfolioUrl,

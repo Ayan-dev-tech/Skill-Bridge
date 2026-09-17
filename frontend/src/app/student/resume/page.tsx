@@ -1,3 +1,5 @@
-import ResumeCheckerPage from "../resume-checker/page";
+import { redirect } from "next/navigation";
 
-export default ResumeCheckerPage;
+export default function ResumePage() {
+  redirect("/student/dashboard");
+}

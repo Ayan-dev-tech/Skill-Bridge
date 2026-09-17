@@ -366,12 +366,6 @@ export default function OpportunitiesPage() {
               Track Applications ({appliedJobIds.size})
             </Link>
           </Button>
-          <Button variant="outline" size="sm" asChild className="text-xs">
-            <Link href="/student/resume-checker">
-              <FileSearch className="w-3.5 h-3.5 mr-1.5" />
-              Resume Checker
-            </Link>
-          </Button>
         </div>
       </div>
 
@@ -766,7 +760,7 @@ export default function OpportunitiesPage() {
                             Your Match Assessment
                           </span>
                           <span className="text-[11px] text-muted-foreground">
-                            Evaluated against your Skill Bridge profile and uploaded resume.
+                            Evaluated against your Skill Bridge profile and verified competency credentials.
                           </span>
                         </div>
                         <Badge
@@ -890,46 +884,6 @@ export default function OpportunitiesPage() {
                           <p className="text-[11px] text-muted-foreground">
                             {readinessData.profile.fullName} &bull; {readinessData.profile.email}
                           </p>
-                        </div>
-                      </div>
-
-                      {/* 2. Resume Checklist Item */}
-                      <div className="p-3.5 rounded-lg border border-border bg-card flex items-start gap-3">
-                        <div className="mt-0.5">
-                          {readinessData.resume.hasResume ? (
-                            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                          ) : (
-                            <AlertCircle className="w-4 h-4 text-destructive" />
-                          )}
-                        </div>
-                        <div className="space-y-1 flex-1">
-                          <span className="text-xs font-semibold text-foreground block">
-                            ATS-Validated Resume (PDF Only)
-                          </span>
-                          {readinessData.resume.hasResume ? (
-                            <div className="space-y-1">
-                              <p className="text-[11px] text-muted-foreground">
-                                Active file: <span className="font-mono text-foreground font-semibold">{readinessData.resume.fileName || "Resume.pdf"}</span>
-                                {readinessData.resume.overallScore && ` • ATS Compatibility: ${readinessData.resume.overallScore}/100`}
-                              </p>
-                              <Button variant="ghost" size="sm" asChild className="text-[11px] h-6 px-2 text-primary">
-                                <Link href="/student/resume-checker" target="_blank">
-                                  Review in Resume Checker &rarr;
-                                </Link>
-                              </Button>
-                            </div>
-                          ) : (
-                            <div className="space-y-1.5">
-                              <p className="text-[11px] text-destructive font-medium">
-                                Resume required. You must upload and validate your PDF resume before applying.
-                              </p>
-                              <Button size="sm" asChild className="text-xs h-7">
-                                <Link href="/student/resume-checker">
-                                  Open Resume Checker
-                                </Link>
-                              </Button>
-                            </div>
-                          )}
                         </div>
                       </div>
 
@@ -1062,7 +1016,7 @@ export default function OpportunitiesPage() {
                       Application Summary & Confirmation
                     </span>
                     <p className="text-[11px] text-muted-foreground">
-                      Applying for <strong>{selectedItem.roleTitle}</strong> at <strong>{selectedItem.companyName}</strong>. Your verified credentials and resume will be securely transmitted to the placement coordinator.
+                      Applying for <strong>{selectedItem.roleTitle}</strong> at <strong>{selectedItem.companyName}</strong>. Your verified credentials and application profile will be securely transmitted to the placement coordinator.
                     </p>
                   </div>
                 </div>

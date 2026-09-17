@@ -92,12 +92,13 @@ export async function calculateAyushRoleReadiness(
     }
 
     // (b) Also inspect student's AyushSkillPassport verified competencies as baseline / fallback
+    // Must strictly be an explicitly verified rating (> 0). Never fall back to targetLevel.
     try {
       const passport = await supabaseDb.getAyushSkillPassport(studentId);
       if (passport && Array.isArray(passport.competencies)) {
         for (const comp of passport.competencies) {
-          if (comp.verifiedBy && comp.targetLevel != null) {
-            const passportRating = Number((comp as any).currentLevel ?? comp.targetLevel);
+          const passportRating = Number((comp as any).currentLevel || 0);
+          if (comp.verifiedBy && passportRating > 0) {
             if (!verifiedRatingsMap.has(comp.id)) {
               verifiedRatingsMap.set(comp.id, passportRating);
             }

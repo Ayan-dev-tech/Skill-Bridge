@@ -26,7 +26,7 @@ export const ALL_AYUSH_COMPETENCIES: AyushCompetency[] = [
     maturityLevel: "Advanced",
     description: "Applying ICMR-AYUSH ethical guidelines, CTRI trial registration, informed consent protocols, and GCP auditing in human clinical research.",
     demonstratedAt: null,
-    verifiedBy: "Central Ethics Committee for AYUSH",
+    verifiedBy: null,
   },
   {
     id: "comp-ayush-trial-design",
@@ -38,7 +38,7 @@ export const ALL_AYUSH_COMPETENCIES: AyushCompetency[] = [
     maturityLevel: "Advanced",
     description: "Protocol design adapting classical whole-system AYUSH interventions to pragmatic and randomized clinical trial (RCT) designs.",
     demonstratedAt: null,
-    verifiedBy: "Clinical Research Directorate",
+    verifiedBy: null,
   },
   {
     id: "comp-ayush-pvpi",
@@ -50,7 +50,7 @@ export const ALL_AYUSH_COMPETENCIES: AyushCompetency[] = [
     maturityLevel: "Applied",
     description: "Identifying, documenting, causality-assessing, and reporting adverse drug reactions under the National Pharmacovigilance Programme for ASU&H Drugs.",
     demonstratedAt: null,
-    verifiedBy: "Pharmacovigilance Intermediary Centre",
+    verifiedBy: null,
   },
   {
     id: "comp-ayush-herb-drug",
@@ -62,7 +62,7 @@ export const ALL_AYUSH_COMPETENCIES: AyushCompetency[] = [
     maturityLevel: "Advanced",
     description: "Evaluating cytochrome P450 interactions, metabolic clearance pathways, and contraindications between classical formulations and conventional drugs.",
     demonstratedAt: null,
-    verifiedBy: "Drug Safety & Toxicology Board",
+    verifiedBy: null,
   },
   {
     id: "comp-ayush-bioethics",
@@ -74,7 +74,7 @@ export const ALL_AYUSH_COMPETENCIES: AyushCompetency[] = [
     maturityLevel: "Applied",
     description: "Drafting patient information sheets, investigator brochures, vulnerability safeguards, and regulatory submissions for institutional review boards.",
     demonstratedAt: null,
-    verifiedBy: "Institutional Ethics Committee",
+    verifiedBy: null,
   },
   {
     id: "comp-ayush-data-mgmt",
@@ -86,7 +86,7 @@ export const ALL_AYUSH_COMPETENCIES: AyushCompetency[] = [
     maturityLevel: "Applied",
     description: "Designing electronic Case Report Forms (eCRFs), conducting source data verification, and managing clinical databases aligned with Ayush Grid standards.",
     demonstratedAt: null,
-    verifiedBy: "Ayush Grid Health Informatics Cell",
+    verifiedBy: null,
   },
   {
     id: "comp-ayush-standardization",
@@ -98,7 +98,7 @@ export const ALL_AYUSH_COMPETENCIES: AyushCompetency[] = [
     maturityLevel: "Advanced",
     description: "Verifying botanical authentication, phytochemical marker assay (HPTLC/HPLC), and heavy metal/microbial limits per Ayurvedic Pharmacopoeia of India (API) standards.",
     demonstratedAt: null,
-    verifiedBy: "Pharmacopoeia Commission for Indian Medicine & Homoeopathy",
+    verifiedBy: null,
   },
   {
     id: "comp-ayush-biostats",
@@ -110,7 +110,7 @@ export const ALL_AYUSH_COMPETENCIES: AyushCompetency[] = [
     maturityLevel: "Applied",
     description: "Performing parametric/non-parametric medical statistics, sample size calculation, meta-analyses, and systematic Cochrane-style reviews for AYUSH evidence.",
     demonstratedAt: null,
-    verifiedBy: "Epidemiology & Biostatistics Department",
+    verifiedBy: null,
   },
   {
     id: "comp-ayush-samhita-epistemology",
@@ -122,7 +122,7 @@ export const ALL_AYUSH_COMPETENCIES: AyushCompetency[] = [
     maturityLevel: "Advanced",
     description: "Correlating classical Aptopadesha, Pratyaksha, and Anumana epistemological evidence models with modern hierarchy of clinical evidence.",
     demonstratedAt: null,
-    verifiedBy: "Academic Council of Samhita & Siddhanta",
+    verifiedBy: null,
   },
 
   // --- Broader Clinical & Healthcare Competencies ---
@@ -136,7 +136,7 @@ export const ALL_AYUSH_COMPETENCIES: AyushCompetency[] = [
     maturityLevel: "Applied",
     description: "Systematic Rogi-Roga Pariksha, eight-fold clinical pulse palpation (Ashtavidha Pariksha), and doshic differential diagnosis.",
     demonstratedAt: null,
-    verifiedBy: "Clinical Medicine Examination Board",
+    verifiedBy: null,
   },
   {
     id: "comp-ayush-panchakarma-chikitsa",
@@ -148,7 +148,7 @@ export const ALL_AYUSH_COMPETENCIES: AyushCompetency[] = [
     maturityLevel: "Applied",
     description: "Administering classical Panchakarma procedures, Snehana-Swedana preparatory lines, and Samsarjana Krama dietary recovery.",
     demonstratedAt: null,
-    verifiedBy: "Department of Panchakarma",
+    verifiedBy: null,
   },
   {
     id: "comp-ayush-chronic-case-mgmt",
@@ -160,7 +160,7 @@ export const ALL_AYUSH_COMPETENCIES: AyushCompetency[] = [
     maturityLevel: "Advanced",
     description: "Managing complex lifestyle, autoimmune, and non-communicable disorders through integrative AYUSH care guidelines.",
     demonstratedAt: null,
-    verifiedBy: "Tertiary Hospital Clinical Board",
+    verifiedBy: null,
   },
 
   // --- Research Assistance & Evidence Synthesis ---
@@ -174,7 +174,7 @@ export const ALL_AYUSH_COMPETENCIES: AyushCompetency[] = [
     maturityLevel: "Foundation",
     description: "Structured literature retrieval from DHARA, PubMed, and AYUSH Research Portal with critical appraisal of evidence quality.",
     demonstratedAt: null,
-    verifiedBy: "Health Informatics & Library Resource Cell",
+    verifiedBy: null,
   },
 
   // --- Quality Control, GMP & Regulatory ---
@@ -188,7 +188,7 @@ export const ALL_AYUSH_COMPETENCIES: AyushCompetency[] = [
     maturityLevel: "Applied",
     description: "Authoring and verifying Batch Manufacturing Records (BMR), in-process QA controls, and Schedule T plant hygiene compliance.",
     demonstratedAt: null,
-    verifiedBy: "ASU&H Manufacturing Quality Audit Committee",
+    verifiedBy: null,
   },
   {
     id: "comp-ayush-regulatory-filing",
@@ -200,7 +200,7 @@ export const ALL_AYUSH_COMPETENCIES: AyushCompetency[] = [
     maturityLevel: "Advanced",
     description: "Preparing AYUSH Form 25/26D licensing dossiers, Certificate of Pharmaceutical Product (CoPP) documentation, and export submissions.",
     demonstratedAt: null,
-    verifiedBy: "State Licensing Authority & Export Promotion Council",
+    verifiedBy: null,
   },
 
   // --- Wellness & Yoga Therapy ---
@@ -214,7 +214,7 @@ export const ALL_AYUSH_COMPETENCIES: AyushCompetency[] = [
     maturityLevel: "Applied",
     description: "Prescribing disease-specific therapeutic asana alignments, breath-sound modulation, and therapeutic pranayama protocols aligned with YCB guidelines.",
     demonstratedAt: null,
-    verifiedBy: "Yoga Certification Board (YCB)",
+    verifiedBy: null,
   },
   {
     id: "comp-ayush-stress-autonomic-regulation",
@@ -226,7 +226,7 @@ export const ALL_AYUSH_COMPETENCIES: AyushCompetency[] = [
     maturityLevel: "Applied",
     description: "Guiding clinical relaxation (Yoga Nidra), Heart Rate Variability (HRV) stabilization, and classical Shatkarma visceral cleansing.",
     demonstratedAt: null,
-    verifiedBy: "Clinical Naturopathy & Yoga Therapy Directorate",
+    verifiedBy: null,
   },
 ];
 

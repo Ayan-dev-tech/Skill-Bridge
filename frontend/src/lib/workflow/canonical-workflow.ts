@@ -66,20 +66,13 @@ export const CANONICAL_STAGE_DEFINITIONS = [
   },
   {
     id: 6,
-    slug: "resume",
-    name: "Resume Checker",
-    shortDescription: "Analyze your resume with ATS-style diagnostics, parseability checks, and keyword matching",
-    route: "/student/resume-checker",
-  },
-  {
-    id: 7,
     slug: "opportunities",
     name: "Jobs & Internships",
     shortDescription: "Explore curated institutional campus drives and internships",
     route: "/student/opportunities",
   },
   {
-    id: 8,
+    id: 7,
     slug: "applications",
     name: "Track Applications",
     shortDescription: "Monitor interview schedules, shortlists, and offer status",
@@ -149,10 +142,6 @@ export async function getCanonicalWorkflowState(
   const isOpportunitiesCompleted = false;
   const isJobAccessUnlocked = isAdvancedVerified || isSkillGapCompleted;
 
-  // Check if resume analysis exists
-  const resumeAnalysis = await db.getResumeAnalysisByStudent(studentId);
-  const isResumeAnalysisPresent = Boolean(resumeAnalysis);
-
   // Check if job applications exist
   const applications = await db.getJobApplicationsByStudent(studentId);
   const hasApplications = applications.length > 0;
@@ -167,12 +156,10 @@ export async function getCanonicalWorkflowState(
     currentStageId = 4;
   } else if (!isLearningCompleted) {
     currentStageId = 5;
-  } else if (!isResumeAnalysisPresent) {
-    currentStageId = 6;
   } else if (!isOpportunitiesCompleted) {
-    currentStageId = 7;
+    currentStageId = 6;
   } else {
-    currentStageId = 8;
+    currentStageId = 7;
   }
 
   const allowedRoutes: string[] = [
@@ -185,8 +172,6 @@ export async function getCanonicalWorkflowState(
     "/student/knowledge-testing", // Stage 2/3 Assessment Center accessible after verification
     "/student/interest-finder", // Route alias to Assessment Center
     "/student/skill-gap", // Skill Gap
-    "/student/resume-checker", // Available from the beginning
-    "/student/resume", // Route alias
     "/student/applications", // Track Applications visible and accessible from the beginning
   ];
 
@@ -336,17 +321,6 @@ export async function getCanonicalWorkflowState(
     },
     {
       id: 6,
-      slug: "resume",
-      name: "Resume Checker",
-      shortDescription: "Analyze your resume with ATS-style diagnostics, parseability checks, and keyword matching",
-      route: "/student/resume-checker",
-      status: isResumeAnalysisPresent ? "completed" : "available",
-      statusLabel: isResumeAnalysisPresent ? "Analyzed" : "Available",
-      isLocked: false,
-      actionText: isResumeAnalysisPresent ? "View Analysis" : "Check Resume",
-    },
-    {
-      id: 7,
       slug: "opportunities",
       name: "Jobs & Internships",
       shortDescription: "Explore curated institutional campus drives and internships",
@@ -370,7 +344,7 @@ export async function getCanonicalWorkflowState(
       actionText: isJobAccessUnlocked ? "Explore Opportunities" : "Locked",
     },
     {
-      id: 8,
+      id: 7,
       slug: "applications",
       name: "Track Applications",
       shortDescription: "Monitor interview schedules, shortlists, and offer status",
@@ -522,12 +496,16 @@ export async function checkRouteAccess(
     return { allowed: true };
   }
 
-  // Stage 6: Resume Checker is ALWAYS available for ALL students from the start
+  // Stage 6: Resume Checker is retired
   if (
     pathname.startsWith("/student/resume-checker") ||
     pathname.startsWith("/student/resume")
   ) {
-    return { allowed: true };
+    return {
+      allowed: false,
+      redirectUrl: "/student/dashboard",
+      reason: "Resume Checker has been removed.",
+    };
   }
 
   // Stage 8: Track Applications is ALWAYS visible and accessible even with 0 applications

@@ -45,10 +45,10 @@ interface RoleConfig {
 
 const ROLE_CONFIGS: Record<AssistantUserRole, RoleConfig> = {
   student: {
-    title: "SkillBridge AYUSH Assistant",
-    badge: "Scholar AI",
+    title: "AYUSH Assistant",
+    badge: "AYUSH Assistant",
     subtitle: "Competency Gaps, Readiness & Opportunities",
-    placeholder: "Ask about your competency gaps, readiness, interventions, or jobs...",
+    placeholder: "Ask AYUSH Assistant about your competency gaps, readiness, interventions, or jobs...",
     prompts: [
       "Why am I not ready for this role?",
       "What should I improve first?",
@@ -56,7 +56,7 @@ const ROLE_CONFIGS: Record<AssistantUserRole, RoleConfig> = {
       "What opportunities match me?",
       "What evidence is still pending?",
     ],
-    greeting: `### Welcome to SkillBridge AYUSH Assistant! 🌿\n\nI am your authoritative competency and career advisor across Ayurveda, Yoga, Unani, Siddha, and Homoeopathy. Choose a quick question below or ask me anything about your readiness.`,
+    greeting: `### Welcome to AYUSH Assistant! 🌿\n\nI am your authoritative competency and career advisor across Ayurveda, Yoga, Unani, Siddha, and Homoeopathy. Choose a quick question below or ask me anything about your readiness.`,
     icon: Sparkles,
     quickLinks: [
       { label: "Skill Gaps →", href: "/student/skill-gap" },
@@ -295,6 +295,8 @@ export function AyushAssistantWidget({
           <button
             type="button"
             onClick={() => setIsOpen(true)}
+            aria-label="AYUSH Assistant"
+            title="AYUSH Assistant"
             className="group relative flex items-center gap-2.5 px-4 py-3 bg-emerald-700 hover:bg-emerald-800 text-white rounded-full shadow-xl hover:shadow-2xl transition-all duration-200 hover:scale-105 active:scale-95 border border-emerald-500/40"
           >
             <span className="relative flex h-3 w-3">
@@ -303,7 +305,7 @@ export function AyushAssistantWidget({
             </span>
             <RoleIcon className="w-4 h-4 text-emerald-200 group-hover:rotate-12 transition-transform" />
             <span className="text-xs md:text-sm font-semibold tracking-wide">
-              {config.badge} Assistant
+              {role === "student" ? "AYUSH Assistant" : `${config.badge} Assistant`}
             </span>
           </button>
         </div>

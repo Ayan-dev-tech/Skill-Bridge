@@ -119,7 +119,6 @@ export async function GET(request: Request) {
     const isReady =
       hasOpportunityAccess &&
       profileComplete &&
-      hasValidResume &&
       allDocumentsPresent &&
       !alreadyApplied;
 

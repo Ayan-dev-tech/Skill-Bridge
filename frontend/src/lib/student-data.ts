@@ -106,14 +106,6 @@ export const studentWorkflowStages: WorkflowStage[] = [
   },
   {
     id: 6,
-    slug: "resume",
-    name: "Resume Checker",
-    shortDescription: "Analyze your medical/clinical profile with diagnostics and verification",
-    status: "available",
-    route: "/student/resume-checker",
-  },
-  {
-    id: 7,
     slug: "opportunities",
     name: "Jobs & Internships",
     shortDescription: "Explore verified institutional hospital postings, clinical trials, and internships",
@@ -121,7 +113,7 @@ export const studentWorkflowStages: WorkflowStage[] = [
     route: "/student/opportunities",
   },
   {
-    id: 8,
+    id: 7,
     slug: "applications",
     name: "Track Applications",
     shortDescription: "Monitor interview schedules, hospital shortlists, and placement status",

@@ -65,12 +65,13 @@ export async function matchStudentToIndustryRoles(
     }
 
     // (b) Also inspect student's AyushSkillPassport as baseline / fallback
+    // Must strictly be an explicitly verified rating (> 0). Never fall back to targetLevel.
     try {
       const passport = await supabaseDb.getAyushSkillPassport(studentId);
       if (passport && Array.isArray(passport.competencies)) {
         for (const comp of passport.competencies) {
-          if (comp.verifiedBy && comp.targetLevel != null) {
-            const rating = Number((comp as any).currentLevel ?? comp.targetLevel);
+          const rating = Number((comp as any).currentLevel || 0);
+          if (comp.verifiedBy && rating > 0) {
             if (!verifiedRatingsMap.has(comp.id)) {
               verifiedRatingsMap.set(comp.id, rating);
             }
