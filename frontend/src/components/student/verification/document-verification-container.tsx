@@ -528,9 +528,9 @@ export function DocumentVerificationContainer() {
                 );
               })}
 
-            {/* 2. Resume & Competitive Exam Score */}
+            {/* 2. Competitive Exam Score */}
             {optionalCategories
-              .filter((c) => c.id === "resume" || c.id === "competitive_exam")
+              .filter((c) => c.id === "competitive_exam")
               .map((cat) => {
                 const docsForCategory = uploadedDocs.filter((d) => d.documentType === cat.id);
                 return (

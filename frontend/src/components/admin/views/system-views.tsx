@@ -245,7 +245,7 @@ export function AdminsView() {
   const [search, setSearch] = React.useState("");
 
   const handleToggleAdminStatus = (adm: AdminUser) => {
-    if (adm.email === "admin@gmail.com") {
+    if (adm.role === "Super Admin") {
       alert("Super Admin root account cannot be suspended.");
       return;
     }
@@ -334,7 +334,7 @@ export function AdminsView() {
                       {adm.lastLogin}
                     </td>
                     <td className="p-3 pr-6 text-right">
-                      {adm.email !== "admin@gmail.com" && (
+                      {adm.role !== "Super Admin" && (
                         <Button
                           variant={adm.status === "active" ? "destructive" : "default"}
                           size="xs"

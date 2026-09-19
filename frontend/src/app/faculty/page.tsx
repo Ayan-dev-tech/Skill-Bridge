@@ -80,7 +80,7 @@ function FacultyPortalContent() {
           setUser({
             name: sessionUser.fullName || (isAdmin ? "Administrator" : "Professor Jordan Lee"),
             meta: isAdmin ? "ADMINISTRATOR" : (sessionUser.role ? sessionUser.role.toUpperCase() : "Faculty Mentor"),
-            email: sessionUser.email || (isAdmin ? "admin@gmail.com" : "faculty@institution.edu"),
+            email: sessionUser.email || (isAdmin ? "admin@institution.edu" : "faculty@institution.edu"),
           });
         }
 

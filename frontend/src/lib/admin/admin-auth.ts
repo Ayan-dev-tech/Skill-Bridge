@@ -32,24 +32,16 @@ export async function getAuthenticatedAdmin(
 
   if (authId && authId !== "anonymous") {
     const user = await db.getUserById(authId);
-    if (user && (user.isAdmin || user.email === "admin@gmail.com")) {
+    if (user && (user.isAdmin || (user.role as string) === "admin")) {
       return { adminUser: user };
     }
 
     const allUsers = await db.getUsers();
     const foundAdmin = allUsers.find(
-      (u) => (u.id === authId || u.email === authId) && (u.isAdmin || u.email === "admin@gmail.com")
+      (u) => (u.id === authId || u.email === authId) && (u.isAdmin || (u.role as string) === "admin")
     );
     if (foundAdmin) {
       return { adminUser: foundAdmin };
-    }
-  }
-
-  if (hasAdminCookie) {
-    const allUsers = await db.getUsers();
-    const defaultAdmin = allUsers.find((u) => u.isAdmin || u.email === "admin@gmail.com");
-    if (defaultAdmin) {
-      return { adminUser: defaultAdmin };
     }
   }
 

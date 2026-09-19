@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 import { db } from "@/lib/db";
@@ -76,27 +75,6 @@ export async function POST(request: Request) {
       }
     } catch (storageErr) {
       console.warn("Supabase Storage upload error:", storageErr);
-    }
-
-    // Preserve local copy as temporary rollback source
-    try {
-      const uploadsDir = path.join(
-        process.cwd(),
-        "data",
-        "storage",
-        "verification-documents",
-        "student",
-        student.id,
-        "documents",
-        documentType,
-        documentId
-      );
-      if (!fs.existsSync(uploadsDir)) {
-        fs.mkdirSync(uploadsDir, { recursive: true });
-      }
-      fs.writeFileSync(path.join(uploadsDir, safeFileName), buffer);
-    } catch (fsErr) {
-      console.warn("Local storage fallback write error:", fsErr);
     }
 
     // 3. Save Document Metadata to Database Record (Zero OCR)

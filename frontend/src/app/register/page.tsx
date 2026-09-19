@@ -162,7 +162,7 @@ export default function RegisterPage() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
   const [infoMessage, setInfoMessage] = React.useState<string | null>(null);
-  const [devOtpHint, setDevOtpHint] = React.useState<string | null>(null);
+
 
   // Timer for resend cooldown
   React.useEffect(() => {
@@ -222,14 +222,15 @@ export default function RegisterPage() {
         return;
       }
 
-      // Successful registration: transition to OTP step
-      setStep("otp");
-      setResendCooldown(60);
-      setInfoMessage(`Verification code sent to ${email}.`);
-      if (data.devOtp) {
-        setDevOtpHint(data.devOtp);
+      // Successful registration: check if OTP is required by server
+      if (data.requiresOtp) {
+        setStep("otp");
+        setResendCooldown(60);
+        setInfoMessage(`Verification code sent to ${email}.`);
+      } else {
+        setStep("success");
       }
-    } catch (err) {
+    } catch {
       setErrorMessage("Network error occurred. Please check your connection.");
     } finally {
       setIsLoading(false);
@@ -339,9 +340,7 @@ export default function RegisterPage() {
 
       setResendCooldown(60);
       setInfoMessage("A fresh verification code has been dispatched.");
-      if (data.devOtp) {
-        setDevOtpHint(data.devOtp);
-      }
+
     } catch {
       setErrorMessage("Network error resending code.");
     } finally {
@@ -531,11 +530,7 @@ export default function RegisterPage() {
                   </div>
                 )}
 
-                {devOtpHint && (
-                  <div className="p-2.5 rounded-lg border border-dashed border-border bg-muted/20 text-xs text-muted-foreground font-mono text-center">
-                    Dev Test Code: <span className="font-bold text-foreground">{devOtpHint}</span>
-                  </div>
-                )}
+
 
                 <form onSubmit={handleVerifyOtp} className="space-y-4">
                   <div className="space-y-2">

@@ -106,7 +106,7 @@ export function useAdminLiveUpdates() {
           const newActivityItem: AdminActivityItem = {
             id: `act-${Date.now()}`,
             eventType: "admin_action",
-            actor: "Admin (admin@gmail.com)",
+            actor: "Admin (admin@skillbridge.edu)",
             action: `${decision === "approved" ? "Approved" : "Rejected"} ${item.type}`,
             resource: item.title,
             timestamp: new Date().toISOString(),
@@ -191,7 +191,7 @@ export function useAdminLiveUpdates() {
           const newLog: AdminActivityItem = {
             id: `act-${Date.now()}`,
             eventType: type === "company" ? "industry_freeze_toggled" : "campus_freeze_toggled",
-            actor: "Admin (admin@gmail.com)",
+            actor: "Admin (admin@skillbridge.edu)",
             action: willFreeze ? `${type === "company" ? "Company" : "Campus"} Suspended` : `${type === "company" ? "Company" : "Campus"} Restored`,
             resource: entityName,
             timestamp: new Date().toISOString(),

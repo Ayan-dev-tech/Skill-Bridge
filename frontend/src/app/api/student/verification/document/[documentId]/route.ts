@@ -1,6 +1,4 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
 import { db } from "@/lib/db";
 import { getAuthenticatedStudent } from "@/lib/student-auth";
 
@@ -56,22 +54,12 @@ export async function GET(
         fileBuffer = Buffer.from(await data.arrayBuffer());
       }
     } catch (storageErr) {
-      console.warn("Supabase storage download fallback:", storageErr);
-    }
-
-    // 2. Safe Fallback to local storage if not available from Supabase
-    if (!fileBuffer) {
-      const baseStorageDir = path.join(process.cwd(), "data", "storage", "verification-documents");
-      const safeFilePath = path.resolve(baseStorageDir, storageRef);
-
-      if (safeFilePath.startsWith(baseStorageDir) && fs.existsSync(safeFilePath)) {
-        fileBuffer = fs.readFileSync(safeFilePath);
-      }
+      console.warn("Supabase storage download error:", storageErr);
     }
 
     if (!fileBuffer) {
       return NextResponse.json(
-        { success: false, error: "File not found in storage." },
+        { success: false, error: "File not found in Supabase storage." },
         { status: 404 }
       );
     }

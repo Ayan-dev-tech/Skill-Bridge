@@ -16,7 +16,6 @@ export type DocumentCategoryId =
   | "academic_certifications"
   | "skill_certifications"
   | "abc_id"
-  | "resume"
   | "social_profiles"
   | "competitive_exam";
 
@@ -120,20 +119,7 @@ export const DOCUMENT_CATEGORIES: DocumentCategoryConfig[] = [
     sizeLimitLabel: "Images ≤ 2 MB, PDF ≤ 5 MB",
     iconName: "FileCheck",
   },
-  // 7. Resume (Optional, Single)
-  {
-    id: "resume",
-    title: "Resume",
-    description: "Upload your current resume if you have one.",
-    required: false,
-    isGrouped: false,
-    acceptedFormats: ["PNG", "JPG", "JPEG", "PDF"],
-    acceptedMimeTypes: ["image/png", "image/jpeg", "image/jpg", "application/pdf"],
-    maxSizeImageBytes: 2 * 1024 * 1024,
-    maxSizePdfBytes: 5 * 1024 * 1024,
-    sizeLimitLabel: "Images ≤ 2 MB, PDF ≤ 5 MB",
-    iconName: "FileText",
-  },
+
   // 8. Professional Profiles / LinkedIn (Optional, Profile Links)
   {
     id: "social_profiles",

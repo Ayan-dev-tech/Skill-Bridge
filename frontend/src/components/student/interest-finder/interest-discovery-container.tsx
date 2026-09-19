@@ -510,10 +510,10 @@ export function InterestDiscoveryContainer() {
           </h1>
 
           <p className="text-xs md:text-sm text-muted-foreground max-w-3xl leading-relaxed">
-            Students frequently know they are interested in technology, but do not know whether
-            their real calling is Security, AI/ML, Cloud, Web, or Core Software Systems.
+            Students frequently know they are interested in AYUSH medicine, but do not know whether
+            their real calling is Ayurveda, Yoga &amp; Naturopathy, Unani, Siddha, or Homeopathy.
             Interest Finder does not ask you to guess your career. Instead, it presents realistic
-            engineering challenges to discover your natural instincts.
+            clinical scenarios to discover your natural diagnostic instincts.
           </p>
         </div>
 

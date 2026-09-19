@@ -50,7 +50,7 @@ COMPLEXITY DISTRIBUTION REQUIREMENTS (EXACTLY 10 QUESTIONS):
 
 CRITICAL OPTION QUALITY & DISTRACTOR RULES:
 1. Every question must have exactly 4 options labeled "A", "B", "C", "D".
-2. SAME CONCEPTUAL NEIGHBORHOOD: All 4 options must belong to the exact same technical domain and specific concept. (E.g. if the question is about XSS, all options must be browser/script/DOM behaviors; if about SQL injection, all must be database/query behaviors). Never use unrelated technologies or joke distractors.
+2. SAME CONCEPTUAL NEIGHBORHOOD: All 4 options must belong to the exact same technical domain and specific concept. (E.g. if the question is about Dosha imbalance, all options must be physiological/clinical manifestations; if about Panchakarma procedures, all must be classical detoxification protocols). Never use unrelated technologies or joke distractors.
 3. COMPARABLE SPECIFICITY & LENGTH: All 4 options must be similar in level of detail, technical depth, and character length (within 15-20% of each other). The correct answer must NOT be noticeably longer, more detailed, or more technical than the distractors.
 4. PLAUSIBLE DISTRACTORS: Distractors must represent real-world misconceptions, similar mechanisms, or plausible alternatives that require genuine understanding to distinguish.
 5. ANSWER POSITION VARIANCE: Distribute correct answers across A, B, C, and D across the 10 questions. Do NOT concentrate correct answers on option B or any single position.

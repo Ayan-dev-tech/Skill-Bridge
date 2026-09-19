@@ -39,14 +39,6 @@ export async function getAuthenticatedFaculty(
 
   // No authentication identity provided
   if (!authId || authId === "anonymous") {
-    // If admin cookie is set, allow admin oversight access
-    if (hasAdminCookie) {
-      const allUsers = await db.getUsers();
-      const adminUser = allUsers.find((u) => u.isAdmin || u.email === "admin@gmail.com");
-      if (adminUser) {
-        return { facultyUser: adminUser, status: 200 };
-      }
-    }
     return {
       facultyUser: null,
       error: "Unauthorized. Please sign in to access Faculty portal.",
@@ -58,18 +50,10 @@ export async function getAuthenticatedFaculty(
   let user = await db.getUserById(authId);
   if (!user && authId.includes("@")) {
     const usersByEmail = await db.findUsersByEmail(authId);
-    user = usersByEmail.find((u) => u.role === "faculty") || usersByEmail[0] || null;
+    user = usersByEmail.find((u) => u.role === "faculty") || null;
   }
 
   if (!user) {
-    // Fallback: if caller has admin cookie, resolve admin
-    if (hasAdminCookie) {
-      const allUsers = await db.getUsers();
-      const adminUser = allUsers.find((u) => u.isAdmin || u.email === "admin@gmail.com");
-      if (adminUser) {
-        return { facultyUser: adminUser, status: 200 };
-      }
-    }
     return {
       facultyUser: null,
       error: "Unauthorized. Faculty account not found.",
@@ -78,7 +62,7 @@ export async function getAuthenticatedFaculty(
   }
 
   // 5. Admin Authorization (Admins have academic oversight permissions)
-  const isAdmin = Boolean(user.isAdmin || user.email === "admin@gmail.com" || hasAdminCookie);
+  const isAdmin = Boolean(user.isAdmin || (user.role as string) === "admin");
   if (isAdmin) {
     return { facultyUser: user, status: 200 };
   }

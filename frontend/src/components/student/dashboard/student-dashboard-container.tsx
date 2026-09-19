@@ -103,7 +103,6 @@ const SECTION_ICONS: Record<string, React.ComponentType<{ className?: string }>>
   documents: FileCheck,
   "skill-gap": TrendingUp,
   learning: BookOpen,
-  resume: FileText,
   opportunities: Briefcase,
   applications: Send,
 };

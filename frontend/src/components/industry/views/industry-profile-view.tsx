@@ -268,7 +268,7 @@ export function IndustryProfileView() {
                   id="industryDomain"
                   value={formData.industryDomain}
                   onChange={(e) => setFormData({ ...formData, industryDomain: e.target.value })}
-                  placeholder="e.g. Software & Cloud Services, AI Research"
+                  placeholder="e.g. Ayurvedic Healthcare & Formulations, AYUSH Wellness"
                   className="text-xs h-9"
                 />
               </div>

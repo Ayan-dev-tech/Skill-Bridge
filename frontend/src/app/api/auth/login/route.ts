@@ -67,7 +67,7 @@ export async function POST(request: Request) {
     }
 
     // 5. Success
-    const isAdmin = Boolean(user.isAdmin || user.email === "admin@gmail.com");
+    const isAdmin = Boolean(user.isAdmin);
     let redirectUrl: string | undefined = undefined;
 
     if (isAdmin) {
@@ -117,6 +117,14 @@ export async function POST(request: Request) {
 
     if (user.role === "faculty") {
       response.cookies.set("sb_faculty_id", user.id, {
+        path: "/",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 7,
+      });
+    }
+
+    if (user.role === "industry") {
+      response.cookies.set("sb_industry_id", user.id, {
         path: "/",
         sameSite: "lax",
         maxAge: 60 * 60 * 24 * 7,

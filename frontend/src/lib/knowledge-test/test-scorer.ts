@@ -40,7 +40,7 @@ function humanizeConceptTag(tag: string): string {
     .map((word) => {
       // Keep common acronyms uppercase
       const upper = word.toUpperCase();
-      if (["SQL", "API", "HTTP", "CSS", "HTML", "DNS", "TCP", "UDP", "IP", "XSS", "CSRF", "JWT", "SSH", "TLS", "SSL", "CORS", "CICD", "CI", "CD", "OWASP", "SIEM", "SOC", "IDS", "IPS", "ML", "AI", "NLP", "CNN", "RNN", "GAN", "REST", "GRPC", "AWS", "GCP", "K8S", "IAM", "VPC", "CDN", "WAF"].includes(upper)) {
+      if (["AYUSH", "BAMS", "BHMS", "BUMS", "BNYS", "BSMS", "CCIM", "NCISM", "NCH", "NAM", "OPD", "IPD", "GMP", "WHO", "NABH", "API", "HPI", "UPI", "SIDDHA", "UNANI", "SOWARIGPA"].includes(upper)) {
         return upper;
       }
       return word.charAt(0).toUpperCase() + word.slice(1);

@@ -114,8 +114,8 @@ export function SkillGapsView() {
           <CardContent className="p-4 space-y-1">
             <p className="text-xs text-muted-foreground">Top Deficit Domain</p>
             <div className="flex items-baseline justify-between">
-              <p className="text-lg font-bold truncate">Cloud & DevOps</p>
-              <span className="text-[11px] font-mono text-muted-foreground">402 students</span>
+              <p className="text-lg font-bold truncate">Clinical Diagnostics</p>
+              <span className="text-[11px] font-mono text-muted-foreground">210 students</span>
             </div>
           </CardContent>
         </Card>

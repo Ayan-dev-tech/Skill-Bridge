@@ -1791,6 +1791,15 @@
       "fullName": "AYUSH",
       "isVerified": false,
       "createdAt": "2026-09-17T06:00:18.053Z"
+    },
+    {
+      "id": "0ee651c3-0cd2-4d1f-9d75-7e919790e0a6",
+      "email": "shreyanshbosamiya99@gmail.com",
+      "role": "student",
+      "passwordHash": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+      "fullName": "AYUSH",
+      "isVerified": false,
+      "createdAt": "2026-09-17T06:17:04.382Z"
     }
   ],
   "profiles": [
@@ -3336,6 +3345,15 @@
         "degree": "bams",
         "graduationYear": "2028"
       }
+    },
+    {
+      "userId": "0ee651c3-0cd2-4d1f-9d75-7e919790e0a6",
+      "role": "student",
+      "metadata": {
+        "institution": "ch",
+        "degree": "bams",
+        "graduationYear": "2028"
+      }
     }
   ],
   "otps": [
@@ -4351,6 +4369,16 @@
       "attempts": 0,
       "verified": false,
       "createdAt": "2026-09-17T06:00:18.201Z"
+    },
+    {
+      "id": "42e1f3e8-1227-40c9-b33b-a848b6eea0d3",
+      "email": "shreyanshbosamiya99@gmail.com",
+      "role": "student",
+      "otpCode": "272999",
+      "expiresAt": "2026-09-17T06:27:04.527Z",
+      "attempts": 0,
+      "verified": false,
+      "createdAt": "2026-09-17T06:17:04.527Z"
     }
   ],
   "hiringRequests": [

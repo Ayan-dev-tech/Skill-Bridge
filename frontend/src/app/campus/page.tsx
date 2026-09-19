@@ -74,7 +74,7 @@ function CampusPortalContent() {
           setUser({
             name: sessionUser.fullName || (isAdmin ? "Administrator" : "Campus Placement Director"),
             meta: isAdmin ? "ADMINISTRATOR" : (sessionUser.role ? sessionUser.role.toUpperCase() : "Institutional Lead"),
-            email: sessionUser.email || (isAdmin ? "admin@gmail.com" : "placement@campus.edu"),
+            email: sessionUser.email || (isAdmin ? "admin@institution.edu" : "placement@campus.edu"),
           });
         }
 

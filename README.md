@@ -67,7 +67,7 @@ The platform creates a continuous connection between academic competency develop
 - Skill-gap analysis with personalized recommendations
 - Interest discovery and career path exploration
 - Learning recommendations (YouTube-based educational resources)
-- Resume builder and ATS compatibility analysis
+- AYUSH Skill Passport & Verified Competency Evaluation
 - Document upload, verification, and face verification
 - Jobs and internship discovery with readiness checks
 - Application submission and tracking
@@ -340,10 +340,10 @@ The Ministry dashboard will provide aggregate indicators across:
                    +----------------+----------------+
                    |                |                |
                    v                v                v
-              Supabase          Storage            Auth
-                   |          (Documents,       (OTP-based,
-                   v           Resumes)        Role-based)
-              PostgreSQL
+               Supabase          Storage            Auth
+                    |          (Credentials,     (Role-based,
+                    v          Certificates)     OTP optional)
+               PostgreSQL
                    |
                 pgvector
                    |
@@ -389,7 +389,7 @@ The Ministry dashboard will provide aggregate indicators across:
 | PostgreSQL | Primary relational database |
 | Supabase | Database platform, auth, and storage |
 | pgvector | Vector storage for semantic matching |
-| Supabase Storage | Document and resume file storage |
+| Supabase Storage | Document and credential file storage |
 
 ### Authentication & Security
 
@@ -435,7 +435,7 @@ The Ministry dashboard will provide aggregate indicators across:
 | Question Bank (200K+ general-purpose data) | ✅ Implemented |
 | Skill-Gap Analysis Engine | ✅ Implemented |
 | Learning Recommendations (YouTube-based) | ✅ Implemented |
-| Resume Builder / ATS Analyzer | ✅ Implemented |
+| AYUSH Skill Passport & Readiness Engine | ✅ Implemented |
 | Document Upload & OCR Verification | ✅ Implemented |
 | Face Verification (Biometric quality check) | ✅ Implemented |
 | Job & Internship Listings | ✅ Implemented |
@@ -486,7 +486,7 @@ Skill gaps are identified with personalized recommendations
         ↓
 Accesses curated learning resources
         ↓
-Builds ATS-compatible resume
+Verifies AYUSH Skill Passport & Readiness
         ↓
 Discovers relevant jobs and internships
         ↓
@@ -563,7 +563,7 @@ R&D and innovation activity
 |---|---|
 | **Skill Mapping** | AYUSH Skill Passport + Knowledge Assessment + Skill-Gap Analysis + Interest Discovery Engine |
 | **Internship Matching** | Verified AYUSH Internship Ecosystem + Readiness Checks + Skill-Based Matching |
-| **Placement** | Job Discovery + ATS Resume Analysis + Application Pipeline + Hiring Management |
+| **Placement** | Job Discovery + AYUSH Readiness Engine + Application Pipeline + Hiring Management |
 | **Academia–Industry Collaboration** | Industry Portal + Institution Portal + R&D Hub + Question Bank Collaboration |
 | **Industry Skill Demand** | Skill Demand Intelligence (aggregate demand vs supply analysis) |
 | **National Intelligence** | Ministry Dashboard (aggregate AYUSH skill, placement, and R&D indicators) |
@@ -591,14 +591,15 @@ Skill-Bridge/
 │   │       ├── knowledge-test/ # Assessment engine
 │   │       ├── skill-gap/      # Skill-gap analysis engine
 │   │       ├── interest-engine/ # Interest discovery
-│   │       ├── resume/         # ATS analysis
 │   │       ├── learning/       # Learning recommendations
 │   │       ├── verification/   # Document verification
 │   │       ├── workflow/       # Student onboarding workflow
 │   │       ├── applications/   # Job applications
 │   │       ├── industry/       # Industry logic
 │   │       └── db.ts           # Database layer
-│   └── supabase/              # Database schema (schema.sql)
+│   └── public/                # Static assets
+├── supabase/
+│   └── migrations/            # Database schema & migrations
 ├── backend/                   # Python FastAPI service
 │   └── app/
 │       ├── main.py            # API endpoints

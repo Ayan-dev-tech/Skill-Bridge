@@ -29,35 +29,25 @@ export async function getAuthenticatedStudent(
   }
 
   if (authId && authId !== "anonymous") {
-    const data = await db.getAdminOverview();
-    const found = data.users.find(
-      (u) => (u.id === authId || u.email === authId) && u.role === "student"
-    );
-    if (found) {
+    let user = await db.getUserById(authId);
+    if (!user && authId.includes("@")) {
+      const users = await db.findUsersByEmail(authId);
+      user = users.find((u) => u.role === "student") || null;
+    }
+
+    if (user && user.role === "student") {
       return {
         student: {
-          id: found.id,
-          fullName: found.fullName,
-          email: found.email,
+          id: user.id,
+          fullName: user.fullName,
+          email: user.email,
         },
       };
     }
-    // Allow authenticated student ID recorded in session
-    return {
-      student: {
-        id: authId,
-        fullName: "Student",
-        email: `${authId}@university.edu`,
-      },
-    };
   }
 
   return {
-    student: {
-      id: "unauthenticated_guest",
-      fullName: "Guest Student",
-      email: "",
-    },
-    error: "Authentication required",
+    student: null as any,
+    error: "Authentication required. Valid student session not found.",
   };
 }

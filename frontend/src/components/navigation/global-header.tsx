@@ -125,11 +125,11 @@ export function GlobalHeader({
             meta: parsed.role ? parsed.role.toUpperCase() : undefined,
             email: parsed.email,
           });
-        } else if (sessionStorage.getItem("skill_bridge_admin")) {
+        } else if (sessionStorage.getItem("skill_bridge_admin") || document.cookie.includes("sb_admin=true")) {
           setDetectedUser({
-            name: "admin@gmail.com",
+            name: "Administrator",
             meta: "Super Admin",
-            email: "admin@gmail.com",
+            email: "admin@skillbridge.edu",
           });
         }
       } catch {

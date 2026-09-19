@@ -805,7 +805,7 @@ export const initialApprovals: ApprovalQueueItem[] = [
 export const initialAuditLogs: AuditLogItem[] = [
   {
     id: "log-1",
-    actor: "Admin (admin@gmail.com)",
+    actor: "Admin (admin@skillbridge.edu)",
     action: "Company Hiring Frozen",
     resource: "Unverified Herbal Exporter (ID: hire-req-1)",
     timestamp: "2024-09-05 23:29:05",
@@ -813,7 +813,7 @@ export const initialAuditLogs: AuditLogItem[] = [
   },
   {
     id: "log-2",
-    actor: "Admin (admin@gmail.com)",
+    actor: "Admin (admin@skillbridge.edu)",
     action: "Campus Activities Suspended",
     resource: "Unaccredited Private College (ID: campus-req-1)",
     timestamp: "2024-09-05 23:29:10",
@@ -821,7 +821,7 @@ export const initialAuditLogs: AuditLogItem[] = [
   },
   {
     id: "log-3",
-    actor: "Admin (admin@gmail.com)",
+    actor: "Admin (admin@skillbridge.edu)",
     action: "Approved Student Registration",
     resource: "Ananya Sharma (ananya.sharma@aiia.ac.in)",
     timestamp: "2024-09-05 22:58:30",
@@ -829,7 +829,7 @@ export const initialAuditLogs: AuditLogItem[] = [
   },
   {
     id: "log-4",
-    actor: "Admin (admin@gmail.com)",
+    actor: "Admin (admin@skillbridge.edu)",
     action: "Published Diagnostic Assessment",
     resource: "AIAPGET Ayurveda Benchmark (ID: asm-1)",
     timestamp: "2024-09-04 14:15:00",
@@ -841,7 +841,7 @@ export const initialAdmins: AdminUser[] = [
   {
     id: "adm-1",
     name: "Ayush System Administrator",
-    email: "admin@gmail.com",
+    email: "admin@skillbridge.edu",
     role: "Super Admin",
     status: "active",
     lastLogin: "Active Now",

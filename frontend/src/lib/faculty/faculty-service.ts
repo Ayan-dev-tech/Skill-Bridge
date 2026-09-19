@@ -1,5 +1,3 @@
-import fs from "fs";
-import path from "path";
 import { db } from "../db";
 import { getSupabaseServerClient, isSupabasePersistenceActive } from "../supabase-server";
 import { supabaseDb } from "../supabase-db";
@@ -16,9 +14,6 @@ import type {
   FacultyPlacementOverview,
   FacultyReportsData,
 } from "./types";
-
-const DATA_DIR = path.join(process.cwd(), "data");
-const DB_FILE = path.join(DATA_DIR, "skill_bridge.json");
 
 interface RawDatabase {
   users: Array<{
@@ -209,27 +204,10 @@ async function loadFacultyData(): Promise<RawDatabase> {
         })),
       };
     } catch (err) {
-      console.warn("Supabase loadFacultyData fallback to JSON:", err);
+      console.warn("Supabase loadFacultyData error:", err);
     }
   }
-  return loadDb();
-}
-
-function loadDb(): RawDatabase {
-  try {
-    const raw = fs.readFileSync(DB_FILE, "utf-8");
-    return JSON.parse(raw);
-  } catch {
-    return { users: [], profiles: [] };
-  }
-}
-
-function saveDb(data: RawDatabase): void {
-  try {
-    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), "utf-8");
-  } catch (err) {
-    console.error("Failed to save DB in faculty service:", err);
-  }
+  return { users: [], profiles: [] };
 }
 
 /**
@@ -262,8 +240,8 @@ export async function getFacultyProfileData(facultyUserId: string): Promise<Facu
     assignedStudentCount: list.totalCount,
     joinedDate: user?.createdAt || new Date().toISOString(),
     phone: (meta.phone as string) || "+1 (555) 234-5678",
-    officeLocation: (meta.officeLocation as string) || "Turing Hall, Room 402",
-    bio: (meta.bio as string) || "Faculty mentor focusing on algorithms, distributed computing, and student career readiness.",
+    officeLocation: (meta.officeLocation as string) || "Charaka Block, Room 204",
+    bio: (meta.bio as string) || "Faculty mentor focusing on classical AYUSH therapeutics, clinical diagnostics, and student readiness.",
   };
 }
 
@@ -311,9 +289,9 @@ export async function getAuthorizedStudents(
   const facultyProfile = data.profiles.find((p) => p.userId === facultyUserId);
   const fMeta = (facultyProfile?.metadata || {}) as Record<string, unknown>;
 
-  const isAdmin = Boolean(facultyUser?.isAdmin || facultyUser?.email === "admin@gmail.com");
-  const fDept = (fMeta.department as string) || "Computer Science";
-  const fInst = (fMeta.institution as string) || "MIT";
+  const isAdmin = Boolean(facultyUser?.isAdmin || facultyUser?.role === "admin");
+  const fDept = (fMeta.department as string) || "Dravyaguna Vigyan";
+  const fInst = (fMeta.institution as string) || "National Institute of Ayurveda";
 
   const allVerifiedStudents = data.users.filter((u) => u.role === "student" && u.isVerified);
   const mapped: FacultyStudentRecord[] = [];
@@ -553,7 +531,7 @@ export async function getFacultyStudentDetail(
       cgpa: (sMeta.cgpa as string) || "8.7 / 10.0",
       subjects: Array.isArray(sMeta.subjects) && sMeta.subjects.length > 0
         ? (sMeta.subjects as string[])
-        : ["Data Structures & Algorithms", "Operating Systems", "Cloud Computing", "Database Management Systems"],
+        : ["Kayachikitsa", "Dravyaguna", "Rasa Shastra", "Panchakarma"],
     },
     interestProfile: interest
       ? {
@@ -954,46 +932,16 @@ export async function updateFacultyProfile(
   facultyUserId: string,
   updates: Partial<FacultyProfileData>
 ): Promise<FacultyProfileData> {
-  if (isSupabasePersistenceActive()) {
-    try {
-      const existing = await supabaseDb.getProfileByUserId(facultyUserId);
-      const metaUpdates: Record<string, any> = {
-        ...(existing?.metadata || {}),
-        ...(updates.phone !== undefined ? { phone: updates.phone } : {}),
-        ...(updates.officeLocation !== undefined ? { officeLocation: updates.officeLocation } : {}),
-        ...(updates.bio !== undefined ? { bio: updates.bio } : {}),
-        ...(updates.subjects !== undefined ? { subjects: updates.subjects } : {}),
-        ...(updates.department !== undefined ? { department: updates.department } : {}),
-        ...(updates.designation !== undefined ? { designation: updates.designation } : {}),
-      };
-      await supabaseDb.updateUserProfile(facultyUserId, metaUpdates);
-      return getFacultyProfileData(facultyUserId);
-    } catch (err) {
-      console.warn("Supabase updateFacultyProfile fallback to JSON:", err);
-    }
-  }
-
-  const data = await loadFacultyData();
-  let profile = data.profiles.find((p) => p.userId === facultyUserId);
-
-  if (!profile) {
-    profile = {
-      userId: facultyUserId,
-      role: "faculty",
-      metadata: {},
-    };
-    data.profiles.push(profile);
-  }
-
-  profile.metadata = {
-    ...profile.metadata,
+  const existing = await supabaseDb.getProfileByUserId(facultyUserId);
+  const metaUpdates: Record<string, any> = {
+    ...(existing?.metadata || {}),
     ...(updates.phone !== undefined ? { phone: updates.phone } : {}),
     ...(updates.officeLocation !== undefined ? { officeLocation: updates.officeLocation } : {}),
     ...(updates.bio !== undefined ? { bio: updates.bio } : {}),
     ...(updates.subjects !== undefined ? { subjects: updates.subjects } : {}),
-    updatedAt: new Date().toISOString(),
+    ...(updates.department !== undefined ? { department: updates.department } : {}),
+    ...(updates.designation !== undefined ? { designation: updates.designation } : {}),
   };
-
-  saveDb(data);
+  await supabaseDb.updateUserProfile(facultyUserId, metaUpdates);
   return getFacultyProfileData(facultyUserId);
 }

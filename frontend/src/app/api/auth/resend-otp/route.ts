@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limiter";
 import { db, generateSixDigitOtp } from "@/lib/db";
+import { sendOtpEmail, isSmtpConfigured } from "@/lib/email";
 
 export async function POST(request: Request) {
   try {
@@ -51,7 +52,15 @@ export async function POST(request: Request) {
       );
     }
 
-    // 3. Check user exists specifically for this role
+    // 3. Check SMTP is configured
+    if (!isSmtpConfigured()) {
+      return NextResponse.json(
+        { error: "Email delivery is not configured. Please contact the administrator." },
+        { status: 503 }
+      );
+    }
+
+    // 4. Check user exists specifically for this role
     const user = await db.findUserByEmailAndRole(normalizedEmail, role);
     if (!user) {
       return NextResponse.json(
@@ -67,21 +76,26 @@ export async function POST(request: Request) {
       );
     }
 
-    // 4. Generate new OTP and save for this (email, role)
+    // 5. Generate new OTP and save for this (email, role) — invalidates previous OTP
     const newOtp = generateSixDigitOtp();
     await db.createOrUpdateOtp(normalizedEmail, role, newOtp, 10);
 
-    console.log(`\n======================================================`);
-    console.log(`[Skill-Bridge Resend OTP] Destination: ${normalizedEmail} | Role: ${role}`);
-    console.log(`[Skill-Bridge Resend OTP] Verification Code: ${newOtp}`);
-    console.log(`======================================================\n`);
+    // 6. Send OTP via real SMTP email
+    try {
+      await sendOtpEmail(normalizedEmail, newOtp, 10);
+    } catch (smtpError) {
+      console.error("[Skill-Bridge] SMTP resend failed:", smtpError);
+      return NextResponse.json(
+        { error: "Failed to send verification email. Please try again." },
+        { status: 502 }
+      );
+    }
 
     return NextResponse.json({
       success: true,
       message: `A fresh verification code has been sent for your ${role} registration.`,
       email: normalizedEmail,
       role,
-      devOtp: process.env.NODE_ENV !== "production" ? newOtp : undefined,
     });
   } catch (error) {
     console.error("Resend OTP error:", error);

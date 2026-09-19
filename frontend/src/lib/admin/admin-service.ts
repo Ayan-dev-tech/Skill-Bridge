@@ -1,5 +1,3 @@
-import fs from "fs";
-import path from "path";
 import {
   AdminLiveOverviewData,
   AdminActivityItem,
@@ -8,53 +6,21 @@ import {
   AdminCampusRecord,
 } from "./types";
 import { getRealtimeStatus } from "./admin-realtime";
-import { getSupabaseServerClient, isSupabasePersistenceActive } from "../supabase-server";
+import { getSupabaseServerClient } from "../supabase-server";
 import { supabaseDb } from "../supabase-db";
 
-const DB_PATH = path.join(process.cwd(), "data", "skill_bridge.json");
-
 async function loadAdminDatabase(): Promise<any> {
-  if (isSupabasePersistenceActive()) {
-    try {
-      const overview = await supabaseDb.getAdminOverview();
-      return {
-        users: overview.users,
-        profiles: overview.profiles,
-        hiringRequests: overview.hiringRequests,
-        campusRequests: overview.campusRequests,
-        studentVerifications: overview.studentVerifications,
-        industryHiringPosts: overview.industryHiringPosts,
-        jobApplications: overview.jobApplications,
-        educationPrograms: overview.educationPrograms,
-      };
-    } catch (err) {
-      console.warn("Supabase loadAdminDatabase fallback to JSON:", err);
-    }
-  }
-  return readDatabase();
-}
-
-function readDatabase(): any {
-  if (!fs.existsSync(DB_PATH)) {
-    return {};
-  }
-  try {
-    const raw = fs.readFileSync(DB_PATH, "utf-8");
-    return JSON.parse(raw);
-  } catch (err) {
-    console.error("Error reading database file:", err);
-    return {};
-  }
-}
-
-function writeDatabase(data: any): boolean {
-  try {
-    fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2), "utf-8");
-    return true;
-  } catch (err) {
-    console.error("Error writing database file:", err);
-    return false;
-  }
+  const overview = await supabaseDb.getAdminOverview();
+  return {
+    users: overview.users,
+    profiles: overview.profiles,
+    hiringRequests: overview.hiringRequests,
+    campusRequests: overview.campusRequests,
+    studentVerifications: overview.studentVerifications,
+    industryHiringPosts: overview.industryHiringPosts,
+    jobApplications: overview.jobApplications,
+    educationPrograms: overview.educationPrograms,
+  };
 }
 
 export const AdminLiveService = {
@@ -326,104 +292,63 @@ export const AdminLiveService = {
     decision: "approved" | "rejected",
     reason?: string
   ): Promise<{ success: boolean; item?: any; error?: string }> {
-    if (isSupabasePersistenceActive()) {
-      try {
-        const supabase = getSupabaseServerClient();
-        const now = new Date().toISOString();
+    try {
+      const supabase = getSupabaseServerClient();
+      const now = new Date().toISOString();
 
-        if (rawType === "hiring") {
-          const { data, error } = await supabase
-            .from("hiring_requests")
-            .update({
-              status: decision === "approved" ? "active" : "rejected",
-              ...(decision === "rejected" && reason ? { freeze_reason: reason } : {}),
-              updated_at: now,
-            })
-            .eq("id", entityId)
-            .select("*")
-            .single();
+      if (rawType === "hiring") {
+        const { data, error } = await supabase
+          .from("hiring_requests")
+          .update({
+            status: decision === "approved" ? "active" : "rejected",
+            ...(decision === "rejected" && reason ? { freeze_reason: reason } : {}),
+            updated_at: now,
+          })
+          .eq("id", entityId)
+          .select("*")
+          .single();
 
-          if (error || !data) return { success: false, error: error?.message || "Hiring request not found" };
-          return { success: true, item: data };
-        }
-
-        if (rawType === "campus") {
-          const { data, error } = await supabase
-            .from("campus_requests")
-            .update({
-              status: decision === "approved" ? "active" : "rejected",
-              ...(decision === "rejected" && reason ? { freeze_reason: reason } : {}),
-              updated_at: now,
-            })
-            .eq("id", entityId)
-            .select("*")
-            .single();
-
-          if (error || !data) return { success: false, error: error?.message || "Campus request not found" };
-          return { success: true, item: data };
-        }
-
-        if (rawType === "verification") {
-          const { data, error } = await supabase
-            .from("student_verifications")
-            .update({
-              verification_status: decision === "approved" ? "VERIFIED" : "REJECTED",
-              ...(decision === "approved" ? { completed_at: now } : {}),
-              ...(decision === "rejected" && reason ? { rejection_reason: reason } : {}),
-              updated_at: now,
-            })
-            .eq("student_id", entityId)
-            .select("*")
-            .single();
-
-          if (error || !data) return { success: false, error: error?.message || "Verification record not found" };
-          return { success: true, item: data };
-        }
-
-        return { success: false, error: "Unsupported approval entity type" };
-      } catch (err: any) {
-        console.warn("Supabase approval decision error, attempting fallback:", err);
+        if (error || !data) return { success: false, error: error?.message || "Hiring request not found" };
+        return { success: true, item: data };
       }
-    }
 
-    const db = readDatabase();
+      if (rawType === "campus") {
+        const { data, error } = await supabase
+          .from("campus_requests")
+          .update({
+            status: decision === "approved" ? "active" : "rejected",
+            ...(decision === "rejected" && reason ? { freeze_reason: reason } : {}),
+            updated_at: now,
+          })
+          .eq("id", entityId)
+          .select("*")
+          .single();
 
-    if (rawType === "hiring") {
-      const item = (db.hiringRequests || []).find((h: any) => h.id === entityId);
-      if (!item) return { success: false, error: "Hiring request not found" };
-      item.status = decision === "approved" ? "active" : "rejected";
-      item.updatedAt = new Date().toISOString();
-      if (decision === "rejected" && reason) {
-        item.rejectionReason = reason;
+        if (error || !data) return { success: false, error: error?.message || "Campus request not found" };
+        return { success: true, item: data };
       }
-      writeDatabase(db);
-      return { success: true, item };
-    }
 
-    if (rawType === "campus") {
-      const item = (db.campusRequests || []).find((c: any) => c.id === entityId);
-      if (!item) return { success: false, error: "Campus request not found" };
-      item.status = decision === "approved" ? "active" : "rejected";
-      item.updatedAt = new Date().toISOString();
-      if (decision === "rejected" && reason) {
-        item.rejectionReason = reason;
+      if (rawType === "verification") {
+        const { data, error } = await supabase
+          .from("student_verifications")
+          .update({
+            verification_status: decision === "approved" ? "VERIFIED" : "REJECTED",
+            ...(decision === "approved" ? { completed_at: now } : {}),
+            ...(decision === "rejected" && reason ? { rejection_reason: reason } : {}),
+            updated_at: now,
+          })
+          .eq("student_id", entityId)
+          .select("*")
+          .single();
+
+        if (error || !data) return { success: false, error: error?.message || "Verification record not found" };
+        return { success: true, item: data };
       }
-      writeDatabase(db);
-      return { success: true, item };
-    }
 
-    if (rawType === "verification") {
-      const item = (db.studentVerifications || []).find((v: any) => v.studentId === entityId);
-      if (!item) return { success: false, error: "Verification record not found" };
-      item.verificationStatus = decision === "approved" ? "VERIFIED" : "REJECTED";
-      item.updatedAt = new Date().toISOString();
-      if (decision === "approved") {
-        item.completedAt = new Date().toISOString();
-      }
-      writeDatabase(db);
-      return { success: true, item };
+      return { success: false, error: "Unsupported approval entity type" };
+    } catch (err: any) {
+      console.warn("Supabase approval decision error:", err);
+      return { success: false, error: err?.message || "Failed to process approval decision" };
     }
-
-    return { success: false, error: "Unsupported approval entity type" };
   },
 };

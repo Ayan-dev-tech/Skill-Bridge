@@ -24,29 +24,29 @@ import {
 export function AnalyticsView() {
   const [timeRange, setTimeRange] = React.useState<"30d" | "90d" | "1y">("90d");
 
-  // Mock analytics dataset
+  // Analytics dataset
   const skillDemandTrend = [
-    { skill: "Python & Data APIs", demand: 94, studentsEquipped: 78, delta: "+18%" },
-    { skill: "AWS / Cloud Infrastructure", demand: 91, studentsEquipped: 42, delta: "+24%" },
-    { skill: "Docker & Container Ops", demand: 86, studentsEquipped: 38, delta: "+15%" },
-    { skill: "PostgreSQL & Vector Indexes", demand: 82, studentsEquipped: 64, delta: "+12%" },
-    { skill: "PyTorch & Deep Learning", demand: 79, studentsEquipped: 31, delta: "+35%" },
-    { skill: "React & Next.js Systems", demand: 75, studentsEquipped: 85, delta: "+8%" },
+    { skill: "Kayachikitsa & Clinical Protocol", demand: 94, studentsEquipped: 78, delta: "+18%" },
+    { skill: "Dravyaguna & Herbal Standardization", demand: 91, studentsEquipped: 42, delta: "+24%" },
+    { skill: "Panchakarma Procedures", demand: 86, studentsEquipped: 38, delta: "+15%" },
+    { skill: "Rasa Shastra Quality Testing", demand: 82, studentsEquipped: 64, delta: "+12%" },
+    { skill: "Pulse & Diagnostic Evaluation (Nadi)", demand: 79, studentsEquipped: 31, delta: "+35%" },
+    { skill: "AYUSH Pharmacovigilance & Safety", demand: 75, studentsEquipped: 85, delta: "+8%" },
   ];
 
   const placementPipeline = [
     { stage: "Total Registered Eligible Students", count: 1240, percentage: 100 },
-    { stage: "Skill Assessment Cleared (>70%)", count: 860, percentage: 69.3 },
-    { stage: "Industry Resume Shortlisted", count: 520, percentage: 41.9 },
+    { stage: "Competency Assessment Cleared (>70%)", count: 860, percentage: 69.3 },
+    { stage: "Industry Candidate Shortlisted", count: 520, percentage: 41.9 },
     { stage: "Interview Round Completed", count: 310, percentage: 25.0 },
     { stage: "Offers Extended & Accepted", count: 218, percentage: 17.5 },
   ];
 
   const departmentPerformance = [
-    { dept: "Computer Science", avgScore: 84.2, placedRate: 88, certifications: 340 },
-    { dept: "Information Technology", avgScore: 79.5, placedRate: 82, certifications: 215 },
-    { dept: "Artificial Intelligence", avgScore: 82.1, placedRate: 85, certifications: 160 },
-    { dept: "Computer Applications", avgScore: 71.8, placedRate: 64, certifications: 98 },
+    { dept: "Ayurveda (BAMS)", avgScore: 84.2, placedRate: 88, certifications: 340 },
+    { dept: "Homeopathy (BHMS)", avgScore: 79.5, placedRate: 82, certifications: 215 },
+    { dept: "Unani Medicine (BUMS)", avgScore: 82.1, placedRate: 85, certifications: 160 },
+    { dept: "Yoga & Naturopathy (BNYS)", avgScore: 71.8, placedRate: 64, certifications: 98 },
   ];
 
   return (

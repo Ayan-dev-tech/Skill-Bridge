@@ -48,14 +48,6 @@ export async function getAuthenticatedCampus(
 
   // No authentication identity provided
   if (!authId || authId === "anonymous") {
-    // If admin cookie is set, allow admin access
-    if (hasAdminCookie) {
-      const allUsers = await db.getUsers();
-      const adminUser = allUsers.find((u) => u.isAdmin || u.email === "admin@gmail.com");
-      if (adminUser) {
-        return { campusUser: adminUser, status: 200 };
-      }
-    }
     return {
       campusUser: null,
       error: "Unauthorized. Please sign in to access Campus portal.",
@@ -67,7 +59,7 @@ export async function getAuthenticatedCampus(
   let user = await db.getUserById(authId);
   if (!user && authId.includes("@")) {
     const usersByEmail = await db.findUsersByEmail(authId);
-    user = usersByEmail.find((u) => u.role === "campus") || usersByEmail[0] || null;
+    user = usersByEmail.find((u) => u.role === "campus") || null;
   }
 
   if (!user) {
@@ -79,7 +71,7 @@ export async function getAuthenticatedCampus(
   }
 
   // 5. Admin Authorization (Admins can inspect campus data per existing architecture)
-  const isAdmin = Boolean(user.isAdmin || user.email === "admin@gmail.com" || hasAdminCookie);
+  const isAdmin = Boolean(user.isAdmin || (user.role as string) === "admin");
   if (isAdmin) {
     return { campusUser: user, status: 200 };
   }

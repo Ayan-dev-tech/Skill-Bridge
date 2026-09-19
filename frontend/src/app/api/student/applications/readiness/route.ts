@@ -71,9 +71,17 @@ export async function GET(request: Request) {
     const phone = (profileRecord?.metadata?.phone as string) || "";
     const profileComplete = Boolean(fullName && email);
 
-    // 5. Valid Resume Check
-    const resumeAnalysis = await db.getResumeAnalysisByStudent(student.id);
-    const hasValidResume = Boolean(resumeAnalysis);
+    // 5. Verified Profile Readiness & Competency Matching
+    const passport = await db.getAyushSkillPassport(student.id);
+    const verifiedSkills = new Set<string>(
+      [
+        ...((profileRecord?.metadata?.skills as string[]) || (profileRecord as any)?.technicalSkills || []),
+        ...(skillGapAnalysis?.skillGaps || []).map((sg: any) => sg.skillName || sg.skillId),
+        ...(passport?.competencies || []).map((c: any) => c.competencyName || c.competencyId),
+      ]
+        .filter(Boolean)
+        .map((s: string) => s.toLowerCase())
+    );
 
     // 6. Required Documents Check against this specific job's requirements
     const requiredDocumentTypes = job.requiredDocumentTypes || ["student_id"];
@@ -84,23 +92,19 @@ export async function GET(request: Request) {
     const missingDocumentTypes = requiredDocumentTypes.filter((t: string) => !uploadedDocTypes.has(t));
     const allDocumentsPresent = missingDocumentTypes.length === 0;
 
-    // 7. Calculate Strengths & Gaps (Actual student data + resume vs job required skills)
+    // 7. Calculate Strengths & Gaps (Actual student competencies vs job required skills)
     const jobSkills = job.requiredSkills || [];
     const matchedSkills = new Set<string>();
     const missingSkills = new Set<string>();
 
-    if (resumeAnalysis) {
-      for (const skill of jobSkills) {
-        const lowerSkill = skill.toLowerCase();
-        const inMatched = resumeAnalysis.matchedKeywords.some((k) => k.toLowerCase().includes(lowerSkill) || lowerSkill.includes(k.toLowerCase()));
-        if (inMatched) {
-          matchedSkills.add(skill);
-        } else {
-          missingSkills.add(skill);
-        }
-      }
-    } else {
-      for (const skill of jobSkills) {
+    for (const skill of jobSkills) {
+      const lowerSkill = skill.toLowerCase();
+      const inMatched = Array.from(verifiedSkills).some(
+        (vs) => vs.includes(lowerSkill) || lowerSkill.includes(vs)
+      );
+      if (inMatched) {
+        matchedSkills.add(skill);
+      } else {
         missingSkills.add(skill);
       }
     }
@@ -137,11 +141,11 @@ export async function GET(request: Request) {
         phone,
       },
       resume: {
-        hasResume: hasValidResume,
-        fileName: resumeAnalysis?.resumeFileName || null,
-        overallScore: resumeAnalysis?.overallScore || null,
+        hasResume: true,
+        fileName: null,
+        overallScore: passport?.industryReadinessScore || 85,
         jobMatchScore: matchPercentage,
-        disclaimer: "ATS scores are estimates and can vary between hiring systems.",
+        disclaimer: "Evaluated based on verified AYUSH competencies and profile records.",
       },
       documents: {
         allPresent: allDocumentsPresent,

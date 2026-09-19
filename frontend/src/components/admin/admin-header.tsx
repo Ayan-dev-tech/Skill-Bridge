@@ -72,9 +72,9 @@ export function AdminHeader({
       portal="admin"
       breadcrumb={currentMeta}
       user={{
-        name: "admin@gmail.com",
+        name: "Administrator",
         meta: "Super Admin",
-        email: "admin@gmail.com",
+        email: "admin@skillbridge.edu",
       }}
       onOpenMobile={onOpenMobile}
       onLogout={onLogout}

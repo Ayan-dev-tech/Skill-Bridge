@@ -50,15 +50,6 @@ export async function getAuthenticatedIndustry(
     };
   }
 
-  // Fallback: If no explicit industry ID provided, only fallback if allowed
-  if (options.allowFallback !== false) {
-    const allUsers = await db.getUsers();
-    const defaultIndustryUser = allUsers.find((u) => u.role === "industry");
-    if (defaultIndustryUser) {
-      return { industryUser: defaultIndustryUser };
-    }
-  }
-
   return {
     industryUser: null,
     error: "Unauthorized. Please sign in with an Industry partner account.",

@@ -1,5 +1,3 @@
-import fs from "fs";
-import path from "path";
 import crypto from "crypto";
 import { supabaseDb } from "./supabase-db";
 import { isSupabasePersistenceActive } from "./supabase-server";
@@ -30,7 +28,6 @@ import type {
   LearningResourceRecord,
   LearningResourceItem,
 } from "./learning/types";
-import type { ResumeAnalysisRecord } from "./resume/types";
 import type { JobApplicationRecord, SubmitApplicationParams } from "./applications/types";
 import type {
   CampusDashboardSummary,
@@ -385,7 +382,6 @@ interface DatabaseSchema {
   educationPrograms: EducationProgram[];
   learningResources: LearningResourceRecord[];
   jobApplications: JobApplicationRecord[];
-  resumeAnalyses: ResumeAnalysisRecord[];
   industryQuestions: IndustryQuestionRecord[];
   industryHiringPosts: IndustryHiringPostRecord[];
   // Assessment infrastructure (Prompt 2)
@@ -396,9 +392,6 @@ interface DatabaseSchema {
   ayushSkillPassports: AyushSkillPassport[];
 }
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const DB_FILE = path.join(DATA_DIR, "skill_bridge.json");
-
 export function hashPassword(password: string): string {
   return crypto.createHash("sha256").update(password).digest("hex");
 }
@@ -407,221 +400,107 @@ export function generateSixDigitOtp(): string {
   return crypto.randomInt(100000, 999999).toString();
 }
 
+let inMemoryDbInstance: DatabaseSchema | null = null;
+
 function ensureDbExists(): DatabaseSchema {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
+  if (inMemoryDbInstance) {
+    return inMemoryDbInstance;
   }
 
-  let data: DatabaseSchema;
-
-  if (!fs.existsSync(DB_FILE)) {
-    data = {
-      users: [],
-      profiles: [],
-      otps: [],
-      hiringRequests: [],
-      campusRequests: [],
-      interestProfiles: [],
-      interestSessions: [],
-      knowledgeTestSessions: [],
-      knowledgeTestResults: [],
-      studentVerifications: [],
-      skillGapAnalyses: [],
-      educators: [...SAMPLE_EDUCATORS],
-      educationPrograms: [...SAMPLE_EDUCATION_PROGRAMS],
-      learningResources: [],
-      jobApplications: [],
-      resumeAnalyses: [],
-      industryQuestions: [],
-      industryHiringPosts: [],
-      assessmentQuestions: [],
-      assessmentConfigs: [],
-      assessmentAttempts: [],
-      ayushSkillPassports: [],
-    };
-  } else {
-    try {
-      const content = fs.readFileSync(DB_FILE, "utf-8");
-      data = JSON.parse(content) as DatabaseSchema;
-      if (!data.hiringRequests) data.hiringRequests = [];
-      if (!data.campusRequests) data.campusRequests = [];
-      if (!data.interestProfiles) data.interestProfiles = [];
-      if (!data.interestSessions) data.interestSessions = [];
-      if (!data.knowledgeTestSessions) data.knowledgeTestSessions = [];
-      if (!data.knowledgeTestResults) data.knowledgeTestResults = [];
-      if (!data.studentVerifications) data.studentVerifications = [];
-      if (!data.skillGapAnalyses) data.skillGapAnalyses = [];
-      if (!data.learningResources) data.learningResources = [];
-      if (!data.jobApplications) data.jobApplications = [];
-      if (!data.resumeAnalyses) data.resumeAnalyses = [];
-      if (!data.industryQuestions) data.industryQuestions = [];
-      if (!data.industryHiringPosts) data.industryHiringPosts = [];
-      if (!data.assessmentQuestions) data.assessmentQuestions = [];
-      if (!data.assessmentConfigs) data.assessmentConfigs = [];
-      if (!data.assessmentAttempts) data.assessmentAttempts = [];
-      if (!data.ayushSkillPassports) data.ayushSkillPassports = [];
-      if (!data.educators || data.educators.length === 0) data.educators = [...SAMPLE_EDUCATORS];
-      if (!data.educationPrograms || data.educationPrograms.length === 0)
-        data.educationPrograms = [...SAMPLE_EDUCATION_PROGRAMS];
-    } catch {
-      data = {
-        users: [],
-        profiles: [],
-        otps: [],
-        hiringRequests: [],
-        campusRequests: [],
-        interestProfiles: [],
-        interestSessions: [],
-        knowledgeTestSessions: [],
-        knowledgeTestResults: [],
-        studentVerifications: [],
-        skillGapAnalyses: [],
-        educators: [...SAMPLE_EDUCATORS],
-        educationPrograms: [...SAMPLE_EDUCATION_PROGRAMS],
-        learningResources: [],
-        jobApplications: [],
-        resumeAnalyses: [],
-        industryQuestions: [],
-        industryHiringPosts: [],
-        assessmentQuestions: [],
-        assessmentConfigs: [],
-        assessmentAttempts: [],
-        ayushSkillPassports: [],
-      };
-    }
-  }
-
-  let modified = false;
-
-  // 1. Ensure Hidden Admin Account exists in student role
-  const adminEmail = "admin@gmail.com";
-  const existingAdmin = data.users.find(
-    (u) => u.email.toLowerCase() === adminEmail && u.role === "student"
-  );
-
-  if (!existingAdmin) {
-    const adminUser: User = {
-      id: "admin-system-account-id",
-      email: adminEmail,
-      role: "student",
-      passwordHash: hashPassword("admin@123"),
-      fullName: "System Administrator",
-      isVerified: true,
-      isAdmin: true,
-      createdAt: new Date().toISOString(),
-    };
-    data.users.unshift(adminUser);
-
-    const adminProfile: Profile = {
-      userId: adminUser.id,
-      role: "student",
-      metadata: {
-        institution: "Skill-Bridge Central Administration",
-        degree: "Executive Administration",
-        graduationYear: "Permanent",
-      },
-    };
-    data.profiles.unshift(adminProfile);
-    modified = true;
-  } else {
-    // Ensure password and admin status are active
-    if (!existingAdmin.isAdmin || existingAdmin.passwordHash !== hashPassword("admin@123")) {
-      existingAdmin.isAdmin = true;
-      existingAdmin.isVerified = true;
-      existingAdmin.passwordHash = hashPassword("admin@123");
-      modified = true;
-    }
-  }
-
-  // 2. Seed realistic Hiring Requests if empty
-  if (data.hiringRequests.length === 0) {
-    data.hiringRequests = [
+  inMemoryDbInstance = {
+    users: [],
+    profiles: [],
+    otps: [],
+    hiringRequests: [
       {
         id: "hire-req-1",
-        companyName: "Infosys Technologies",
-        industryDomain: "Software & Cloud Services",
-        jobTitle: "Systems Engineer (Fresher 2025/2026)",
-        positions: 45,
-        applicants: 128,
+        companyName: "Patanjali Research Foundation",
+        industryDomain: "Ayurvedic Healthcare & Formulations",
+        jobTitle: "Clinical Research Associate - Dravyaguna",
+        positions: 15,
+        applicants: 42,
         status: "active",
         isFrozen: false,
         updatedAt: new Date().toISOString(),
       },
       {
         id: "hire-req-2",
-        companyName: "Apex Dynamics Corp",
-        industryDomain: "AI Research & Data Systems",
-        jobTitle: "Junior ML Pipeline Specialist",
+        companyName: "Dabur India AYUSH Division",
+        industryDomain: "Herbal Pharmaceuticals & Quality Control",
+        jobTitle: "AYUSH Quality & Standardization Officer",
         positions: 8,
-        applicants: 34,
+        applicants: 29,
         status: "active",
         isFrozen: false,
         updatedAt: new Date().toISOString(),
       },
       {
         id: "hire-req-3",
-        companyName: "Zenith Financial Solutions",
-        industryDomain: "FinTech & Payments",
-        jobTitle: "Backend Developer - Go / Python",
+        companyName: "Kottakkal Arya Vaidya Sala",
+        industryDomain: "Panchakarma & Classical Therapeutics",
+        jobTitle: "Resident Medical Officer - Kayachikitsa",
         positions: 12,
-        applicants: 62,
+        applicants: 35,
         status: "active",
         isFrozen: false,
         updatedAt: new Date().toISOString(),
       },
-    ];
-    modified = true;
-  }
-
-  // 3. Seed realistic Campus Requests if empty
-  if (data.campusRequests.length === 0) {
-    data.campusRequests = [
+    ],
+    campusRequests: [
       {
         id: "campus-req-1",
-        campusName: "Delhi Technological University (DTU)",
+        campusName: "National Institute of Ayurveda (NIA), Jaipur",
         code: "C-18492",
         requestType: "Placement Drive",
-        studentsEnrolled: 820,
+        studentsEnrolled: 320,
         status: "active",
         isFrozen: false,
         updatedAt: new Date().toISOString(),
       },
       {
         id: "campus-req-2",
-        campusName: "National Institute of Technology, Trichy",
+        campusName: "All India Institute of Ayurveda (AIIA), New Delhi",
         code: "C-29381",
         requestType: "Curriculum Verification",
-        studentsEnrolled: 640,
+        studentsEnrolled: 240,
         status: "active",
         isFrozen: false,
         updatedAt: new Date().toISOString(),
       },
       {
         id: "campus-req-3",
-        campusName: "Birla Institute of Technology and Science",
+        campusName: "Institute of Teaching and Research in Ayurveda (ITRA), Jamnagar",
         code: "C-30114",
         requestType: "Student Batch Upload",
-        studentsEnrolled: 490,
+        studentsEnrolled: 190,
         status: "active",
         isFrozen: false,
         updatedAt: new Date().toISOString(),
       },
-    ];
-    modified = true;
-  }
+    ],
+    interestProfiles: [],
+    interestSessions: [],
+    knowledgeTestSessions: [],
+    knowledgeTestResults: [],
+    studentVerifications: [],
+    skillGapAnalyses: [],
+    educators: [...SAMPLE_EDUCATORS],
+    educationPrograms: [...SAMPLE_EDUCATION_PROGRAMS],
+    learningResources: [],
+    jobApplications: [],
+    industryQuestions: [],
+    industryHiringPosts: [],
+    assessmentQuestions: [],
+    assessmentConfigs: [],
+    assessmentAttempts: [],
+    ayushSkillPassports: [],
+  };
 
-  if (modified) {
-    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), "utf-8");
-  }
-
-  return data;
+  return inMemoryDbInstance;
 }
 
-function saveDb(data: DatabaseSchema): void {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
-  fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), "utf-8");
+function saveDb(_data: DatabaseSchema): void {
+  // Filesystem persistence disabled - Supabase is single source of truth
 }
 
 export const db = {
@@ -709,11 +588,12 @@ export const db = {
       password: string;
       fullName: string;
     },
-    metadata: Record<string, string | number | undefined>
+    metadata: Record<string, string | number | undefined> = {},
+    isVerified = false
   ): Promise<{ user: User; profile: Profile }> {
     if (isSupabasePersistenceActive()) {
       try {
-        return await supabaseDb.createOrUpdatePendingUser(userData, metadata);
+        return await supabaseDb.createOrUpdatePendingUser(userData, metadata, isVerified);
       } catch (err) {
         console.warn("Supabase createOrUpdatePendingUser fallback:", err);
       }
@@ -1955,18 +1835,7 @@ export const db = {
         isCurrentFocus: currentFocusStageId === 5,
         actionText: isSkillGapCompleted ? "Explore Resources" : "Locked",
       },
-      {
-        id: 6,
-        slug: "resume",
-        name: "Resume Checker",
-        shortDescription: "Analyze your resume with ATS-style diagnostics and keyword matching.",
-        route: "/student/resume-checker",
-        iconName: "FileText",
-        status: "available",
-        statusLabel: "Available",
-        isLocked: false,
-        actionText: "Analyze Resume",
-      },
+
       {
         id: 7,
         slug: "opportunities",
@@ -2018,84 +1887,7 @@ export const db = {
     );
   },
 
-  // ================= RESUME ANALYSIS OPERATIONS =================
-  async getResumeAnalysisByStudent(
-    studentId: string
-  ): Promise<ResumeAnalysisRecord | null> {
-    if (isSupabasePersistenceActive()) {
-      try {
-        return await supabaseDb.getResumeAnalysisByStudent(studentId);
-      } catch (err) {
-        console.warn("Supabase getResumeAnalysisByStudent fallback:", err);
-      }
-    }
-    const data = ensureDbExists();
-    if (!data.resumeAnalyses) return null;
-    const records = data.resumeAnalyses
-      .filter((a) => a.studentId === studentId)
-      .sort(
-        (a, b) =>
-          new Date(b.analyzedAt).getTime() - new Date(a.analyzedAt).getTime()
-      );
-    return records.length > 0 ? records[0] : null;
-  },
 
-  async saveResumeAnalysis(
-    recordOrStudentId: ResumeAnalysisRecord | string,
-    recordParam?: ResumeAnalysisRecord
-  ): Promise<void> {
-    if (isSupabasePersistenceActive()) {
-      try {
-        await supabaseDb.saveResumeAnalysis(recordOrStudentId, recordParam);
-        return;
-      } catch (err) {
-        console.warn("Supabase saveResumeAnalysis fallback:", err);
-      }
-    }
-    const data = ensureDbExists();
-    if (!data.resumeAnalyses) data.resumeAnalyses = [];
-    const record: ResumeAnalysisRecord =
-      typeof recordOrStudentId === "string"
-        ? { ...recordParam!, studentId: recordOrStudentId }
-        : recordOrStudentId;
-
-    const existingIdx = data.resumeAnalyses.findIndex(
-      (a) =>
-        a.id === record.id ||
-        (a.studentId === record.studentId &&
-          a.jobTitle === record.jobTitle &&
-          a.hasJobDescription === record.hasJobDescription)
-    );
-    if (existingIdx >= 0) {
-      data.resumeAnalyses[existingIdx] = record;
-    } else {
-      data.resumeAnalyses.unshift(record);
-    }
-    saveDb(data);
-  },
-
-  async deleteResumeAnalysis(studentId: string, analysisId?: string): Promise<void> {
-    if (isSupabasePersistenceActive()) {
-      try {
-        await supabaseDb.deleteResumeAnalysis(studentId, analysisId);
-        return;
-      } catch (err) {
-        console.warn("Supabase deleteResumeAnalysis fallback:", err);
-      }
-    }
-    const data = ensureDbExists();
-    if (!data.resumeAnalyses) return;
-    if (analysisId) {
-      data.resumeAnalyses = data.resumeAnalyses.filter(
-        (a) => !(a.studentId === studentId && a.id === analysisId)
-      );
-    } else {
-      data.resumeAnalyses = data.resumeAnalyses.filter(
-        (a) => a.studentId !== studentId
-      );
-    }
-    saveDb(data);
-  },
 
   // ================= JOB APPLICATIONS OPERATIONS =================
   async getJobApplicationsByStudent(
@@ -3926,7 +3718,7 @@ export const db = {
         batchYear: base.batchYear,
         institution: base.institution,
         cgpa: (meta.cgpa as string) || "8.5 / 10.0",
-        subjects: (meta.subjects as string[]) || ["Data Structures & Algorithms", "Operating Systems", "Cloud Computing", "Database Systems"],
+        subjects: (meta.subjects as string[]) || ["Kayachikitsa", "Dravyaguna", "Rasa Shastra", "Panchakarma"],
       },
       skills: base.technicalSkills.map((name) => ({
         name,

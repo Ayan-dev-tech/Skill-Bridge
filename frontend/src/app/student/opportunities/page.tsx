@@ -517,26 +517,7 @@ export default function OpportunitiesPage() {
                     </span>
 
                     <div className="flex items-center gap-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        asChild
-                        className="text-xs h-7 px-2 gap-1 text-primary hover:text-primary"
-                      >
-                        <Link
-                          href={`/student/resume-checker?jobId=${job.id}&jobRole=${encodeURIComponent(
-                            job.roleTitle
-                          )}&jobDesc=${encodeURIComponent(
-                            `${job.roleTitle} at ${job.companyName}. Required skills: ${job.requiredSkills.join(
-                              ", "
-                            )}. Responsibilities: ${job.description}`
-                          )}`}
-                        >
-                          <FileSearch className="w-3.5 h-3.5" />
-                          Check Resume Against Job
-                        </Link>
-                      </Button>
-                    </div>
+                      </div>
                   </div>
                 </CardContent>
               </Card>
@@ -622,26 +603,7 @@ export default function OpportunitiesPage() {
                       Application Deadline: {new Date(internship.deadline).toLocaleDateString()}
                     </span>
 
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      asChild
-                      className="text-xs h-7 px-2 gap-1 text-primary hover:text-primary"
-                    >
-                      <Link
-                        href={`/student/resume-checker?jobId=${internship.id}&jobRole=${encodeURIComponent(
-                          internship.roleTitle
-                        )}&jobDesc=${encodeURIComponent(
-                          `${internship.roleTitle} at ${internship.companyName}. Required skills: ${internship.requiredSkills.join(
-                            ", "
-                          )}. Responsibilities: ${internship.description}`
-                        )}`}
-                      >
-                        <FileSearch className="w-3.5 h-3.5" />
-                        Check Resume Against Job
-                      </Link>
-                    </Button>
-                  </div>
+                    </div>
                 </CardContent>
               </Card>
             );
@@ -991,9 +953,9 @@ export default function OpportunitiesPage() {
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="font-medium text-foreground">Attached Resume</label>
-                      <div className="p-2 rounded border border-border bg-muted/20 font-mono text-[11px] truncate">
-                        {readinessData?.resume?.fileName || "Resume.pdf"} &bull; Verified
+                      <label className="font-medium text-foreground">Verified Student Profile</label>
+                      <div className="p-2 rounded border border-border bg-muted/20 font-mono text-[11px] truncate text-success">
+                        AYUSH Competency Profile &bull; Ready
                       </div>
                     </div>
                   </div>

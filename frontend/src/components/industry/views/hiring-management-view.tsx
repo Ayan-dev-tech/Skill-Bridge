@@ -155,29 +155,29 @@ export function HiringManagementView({ onNavigateToQuestionBank, onNavigateToScr
     setActivePost(null);
     setRoleTitle("");
     setHiringType("Full-time");
-    setIndustryDomain("Technology & Software");
-    setLocation("Bengaluru, India (Hybrid)");
-    setWorkMode("Hybrid");
-    setSalaryRange("₹8,00,000 - ₹12,00,000 / year");
+    setIndustryDomain("Ayurvedic Healthcare & Formulations");
+    setLocation("New Delhi / Haridwar (On-site)");
+    setWorkMode("On-site");
+    setSalaryRange("₹6,00,000 - ₹9,00,000 / year");
     setExperienceRequirement("Fresher / 0-1 Years");
     setOpenings(2);
     setDeadline(new Date(Date.now() + 30 * 86400000).toISOString().split("T")[0]);
     setDescription(
-      "We are seeking motivated engineers to contribute to scalable cloud microservices, maintain data pipelines, and collaborate with cross-functional software teams."
+      "We are seeking dedicated AYUSH practitioners to contribute to holistic patient care, clinical research, and herbal formulation quality."
     );
     setResponsibilities([
-      "Design, implement, and maintain scalable back-end microservices.",
-      "Collaborate with product and testing teams to deliver robust features.",
-      "Participate in agile sprint ceremonies and code reviews.",
+      "Conduct patient consultations and classical diagnosis.",
+      "Formulate standardized treatment plans following classical texts.",
+      "Collaborate with clinical research and pharmacology teams.",
     ]);
-    setRequiredSkills(["TypeScript", "React", "Node.js"]);
-    setPreferredSkills(["PostgreSQL", "Docker", "REST APIs"]);
-    setRequiredQualifications(["Bachelor's degree in Computer Science, IT, or related STEM discipline."]);
-    setPreferredQualifications(["Prior internship experience or open source contributions."]);
+    setRequiredSkills(["Kayachikitsa", "Dravyaguna", "Clinical Diagnosis"]);
+    setPreferredSkills(["Panchakarma Protocols", "Pharmacovigilance", "Herbal Standardization"]);
+    setRequiredQualifications(["BAMS / BHMS / BUMS degree from an NCISM/NCH recognized institution."]);
+    setPreferredQualifications(["Clinical internship or hospital residency experience."]);
     setInterviewMode("Virtual");
-    setInterviewType("Technical & Behavioral");
+    setInterviewType("Panel Interview");
     setEstimatedRounds(2);
-    setInterviewInstructions("Shortlisted candidates will receive round meeting links via email.");
+    setInterviewInstructions("Shortlisted candidates will receive interview round meeting links via email.");
     setFormStep(1);
     setMode("edit");
   };
@@ -986,7 +986,7 @@ export function HiringManagementView({ onNavigateToQuestionBank, onNavigateToScr
                   <label className="font-semibold text-foreground">Required Skills *</label>
                   <div className="flex gap-2">
                     <Input
-                      placeholder="Add a required skill (e.g. TypeScript, OWASP Top 10, SIEM)"
+                      placeholder="Add a required competency (e.g. Kayachikitsa, Dravyaguna, Panchakarma)"
                       value={reqSkillInput}
                       onChange={(e) => setReqSkillInput(e.target.value)}
                       onKeyDown={(e) => {
@@ -1170,7 +1170,7 @@ export function HiringManagementView({ onNavigateToQuestionBank, onNavigateToScr
                     onClick={() =>
                       setPreferredQualifications([
                         ...preferredQualifications,
-                        "Relevant cloud or security certification (AWS, Azure, CompTIA, CEH).",
+                        "Relevant AYUSH board certification or clinical licensure.",
                       ])
                     }
                     className="text-xs h-7"

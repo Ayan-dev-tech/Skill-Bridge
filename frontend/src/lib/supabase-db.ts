@@ -30,7 +30,6 @@ import {
   SAMPLE_EDUCATION_PROGRAMS,
 } from "./skill-gap/educator-catalog-data";
 import type { LearningResourceRecord, LearningResourceItem } from "./learning/types";
-import type { ResumeAnalysisRecord } from "./resume/types";
 import type { JobApplicationRecord, SubmitApplicationParams } from "./applications/types";
 import type {
   IndustryQuestionRecord,
@@ -240,36 +239,6 @@ function mapSkillGapAnalysis(row: any): SkillGapAnalysisRecord {
   };
 }
 
-function mapResumeAnalysis(row: any): ResumeAnalysisRecord {
-  return {
-    id: row.id,
-    studentId: row.student_id,
-    resumeFileName: row.resume_file_name,
-    jobTitle: row.job_title,
-    targetRole: row.target_role,
-    hasJobDescription: Boolean(row.has_job_description),
-    overallScore: Number(row.overall_score || 0),
-    jobMatchScore: row.job_match_score != null ? Number(row.job_match_score) : null,
-    strengthTier: row.strength_tier || "Needs Improvement",
-    summary: row.summary || "",
-    categoryScores: row.category_scores || {
-      parseability: 0,
-      structure: 0,
-      skillsKeywordCoverage: 0,
-      keywordCoverage: 0,
-      jobMatch: null,
-      contentQuality: 0,
-    },
-    matchedKeywords: row.matched_keywords || [],
-    missingKeywords: row.missing_keywords || [],
-    detectedSections: row.detected_sections || [],
-    missingSections: row.missing_sections || [],
-    issues: row.issues || [],
-    recommendations: row.recommendations || [],
-    analyzedAt: row.analyzed_at || row.created_at || new Date().toISOString(),
-    disclaimer: row.disclaimer,
-  };
-}
 
 function mapJobApplication(row: any): JobApplicationRecord {
   return {
@@ -673,7 +642,8 @@ export const supabaseDb = {
       password: string;
       fullName: string;
     },
-    metadata: Record<string, string | number | undefined> = {}
+    metadata: Record<string, string | number | undefined> = {},
+    isVerified = false
   ): Promise<{ user: User; profile: Profile }> {
     const supabase = getSupabaseServerClient();
     const normalized = userData.email.toLowerCase().trim();
@@ -691,7 +661,7 @@ export const supabaseDb = {
           full_name: userData.fullName || normalized,
           role: userData.role,
           password_hash: passwordHash,
-          is_verified: false,
+          is_verified: isVerified,
           is_admin: false,
           updated_at: now,
           ...(existing ? {} : { created_at: now }),
@@ -1364,70 +1334,6 @@ export const supabaseDb = {
     }));
   },
 
-  // 6. Resume Analysis Operations
-  async getResumeAnalysisByStudent(studentId: string): Promise<ResumeAnalysisRecord | null> {
-    const supabase = getSupabaseServerClient();
-    const { data, error } = await supabase
-      .from("resume_analyses")
-      .select("*")
-      .eq("student_id", studentId)
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .maybeSingle();
-
-    if (error || !data) return null;
-    return mapResumeAnalysis(data);
-  },
-
-  async saveResumeAnalysis(
-    recordOrStudentId: ResumeAnalysisRecord | string,
-    recordParam?: ResumeAnalysisRecord
-  ): Promise<void> {
-    const supabase = getSupabaseServerClient();
-    const record: ResumeAnalysisRecord =
-      typeof recordOrStudentId === "string"
-        ? { ...recordParam!, studentId: recordOrStudentId }
-        : recordOrStudentId;
-
-    const id = record.id || `ra_${record.studentId}_${Date.now()}`;
-    const { error } = await supabase
-      .from("resume_analyses")
-      .upsert(
-        {
-          id,
-          student_id: record.studentId,
-          resume_file_name: record.resumeFileName || null,
-          job_title: record.jobTitle || null,
-          target_role: record.targetRole || null,
-          has_job_description: record.hasJobDescription,
-          overall_score: record.overallScore,
-          job_match_score: record.jobMatchScore,
-          strength_tier: record.strengthTier,
-          summary: record.summary,
-          category_scores: record.categoryScores,
-          matched_keywords: record.matchedKeywords || [],
-          missing_keywords: record.missingKeywords || [],
-          detected_sections: record.detectedSections || [],
-          missing_sections: record.missingSections || [],
-          issues: record.issues || [],
-          recommendations: record.recommendations || [],
-          analyzed_at: record.analyzedAt || new Date().toISOString(),
-          disclaimer: record.disclaimer || null,
-        },
-        { onConflict: "id" }
-      );
-
-    if (error) throw error;
-  },
-
-  async deleteResumeAnalysis(studentId: string, analysisId?: string): Promise<void> {
-    const supabase = getSupabaseServerClient();
-    let query = supabase.from("resume_analyses").delete().eq("student_id", studentId);
-    if (analysisId) {
-      query = query.eq("id", analysisId);
-    }
-    await query;
-  },
 
   // 7. Job Application Operations
   async getJobApplicationsByStudent(studentId: string): Promise<JobApplicationRecord[]> {
